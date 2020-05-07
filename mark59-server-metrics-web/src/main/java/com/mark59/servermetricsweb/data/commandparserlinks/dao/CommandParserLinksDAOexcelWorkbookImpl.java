@@ -1,0 +1,100 @@
+/*
+ *  Copyright 2019 Insurance Australia Group Limited
+ *  
+ *  Licensed under the Apache License, Version 2.0 (the "License"); 
+ *  you may not use this file except in compliance with the License. 
+ *  You may obtain a copy of the License at
+ *  
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *      
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package com.mark59.servermetricsweb.data.commandparserlinks.dao;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+
+import com.mark59.servermetricsweb.data.beans.CommandParserLink;
+
+/**
+ * @author Philip Webb
+ * Written: Australian Autumn 2020  
+ */
+public class CommandParserLinksDAOexcelWorkbookImpl implements CommandParserLinksDAO 
+{
+	
+	Sheet commandparserlinksSheet;
+
+	public CommandParserLinksDAOexcelWorkbookImpl(Sheet commandparserlinksSheet) {
+		this.commandparserlinksSheet = commandparserlinksSheet;
+	}
+
+	@Override
+	public List<CommandParserLink> findCommandParserLinksForCommand(String commandName){
+
+		List<CommandParserLink> commandParserLinkList = new ArrayList<CommandParserLink>();
+
+		Iterator<Row> iterator = commandparserlinksSheet.iterator();
+		iterator.next(); // a header row is assumed and bypassed
+
+		while (iterator.hasNext()) {
+			Row commandparserlinksRow = iterator.next();
+			// System.out.println("commandparserlinks key =" + commandparserlinksRow.getCell(0).getStringCellValue());
+
+			if (commandparserlinksRow.getCell(0).getStringCellValue().equalsIgnoreCase(commandName)) {
+				CommandParserLink commandParserLink = new CommandParserLink();
+				commandParserLink.setCommandName(commandparserlinksRow.getCell(0).getStringCellValue());
+				commandParserLink.setScriptName	(commandparserlinksRow.getCell(1).getStringCellValue());
+				commandParserLinkList.add(commandParserLink);
+			}
+
+		}	
+		return commandParserLinkList;
+	}
+
+	
+	@Override
+	public CommandParserLink findCommandParserLink(String commandName, String scriptName) {
+		return null;
+	}
+
+	@Override
+	public List<CommandParserLink> findCommandParserLinks() {
+		return null;
+	}
+
+	@Override
+	public List<CommandParserLink> findCommandParserLinks(String selectionCol, String selectionValue) {
+		return null;
+	}
+
+	@Override
+	public void insertCommandParserLink(CommandParserLink commandParserLink) {
+	}
+
+	@Override
+	public void updateCommandParserLinksForCommandName(String commandName, List<String> scriptNames) {
+	}
+
+	@Override
+	public void deleteCommandParserLink(CommandParserLink commandParserLink) {
+	}
+
+	@Override
+	public void deleteCommandParserLinksForCommandName(String commandName) {
+	}
+
+	@Override
+	public void deleteCommandParserLinksForScriptName(String scriptName) {
+	}
+	
+}

@@ -1,0 +1,53 @@
+package com.mark59.servermetricsweb.utils;
+
+import java.util.List;
+
+import groovy.lang.Binding;
+import groovy.lang.GroovyShell;
+
+public class ServerMetricsWebUtils {
+
+	
+	public static String obtainOperatingSystemForLocalhost() {	
+	
+		String operatingSystem = System.getProperty("os.name", AppConstantsServerMetricsWeb.UNKNOWN).toUpperCase();
+
+		if ( operatingSystem.contains("WIN")) {
+			operatingSystem = AppConstantsServerMetricsWeb.WINDOWS;
+		} else if ( operatingSystem.contains("LINUX")) {
+			operatingSystem = AppConstantsServerMetricsWeb.LINUX;
+		} else if ( operatingSystem.contains("UNIX")) {
+			operatingSystem = AppConstantsServerMetricsWeb.UNIX;
+		} else {
+			operatingSystem = AppConstantsServerMetricsWeb.UNKNOWN;
+		}
+		return operatingSystem;
+	}
+
+	
+	public static Object runGroovyScript(String commandResponseParserScript, String commandResponse) {
+		Binding binding = new Binding();
+	    binding.setVariable("commandResponse", commandResponse);
+		GroovyShell shell = new GroovyShell(binding);
+		Object result = shell.evaluate(commandResponseParserScript);
+		return result;
+	}
+
+
+
+	public static String createMultiLineLiteral(List<String> multiLineStringList) {
+		
+		String [] multiLineStringArray = multiLineStringList.toArray(new String[0]);
+		StringBuilder sb = new StringBuilder();
+		
+		for (int i = 0; i < multiLineStringArray.length; i++) {
+			sb.append(multiLineStringArray[i]); 
+			if ( i < multiLineStringArray.length - 1 ) {
+				sb.append("\n");
+			}
+		}
+		return sb.toString();
+	}
+
+
+}

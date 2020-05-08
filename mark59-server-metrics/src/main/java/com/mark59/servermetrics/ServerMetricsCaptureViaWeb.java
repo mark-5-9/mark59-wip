@@ -77,8 +77,9 @@ public class ServerMetricsCaptureViaWeb  extends AbstractJavaSamplerClient {
 		Map<String,String> staticMap = new LinkedHashMap<String,String>();
 	
 		staticMap.put("______________________ web service setup: ________________", "Notes : please replace the default url with your actual.");	
-		staticMap.put("_"                                                         , "          : server of 'localhost' only reports metrics of the mark59-server-metrics-web machine!");	
-		staticMap.put("-"                                                         , "");		
+		staticMap.put("_"                                                         , "          : server profile of 'localhost' only reports metrics of the mark59-server-metrics-web machine!");	
+		staticMap.put("-"                                                         , "          : - use actual machine name or (better) '..viaExcel' 'localhost_HOSTID' entry instead (see Mark59 User Guide)");	
+		staticMap.put("."                                                         , "");		
 		staticMap.put(MARK59_SERVER_METRICS_WEB_URL, DEFAULT_MARK59_SERVER_METRICS_WEB_URL );
 		staticMap.put(SERVER_PROFILE_NAME, "localhost" );
 

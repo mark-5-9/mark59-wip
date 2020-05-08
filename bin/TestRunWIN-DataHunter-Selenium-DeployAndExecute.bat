@@ -1,8 +1,10 @@
 REM   -------------------------------------------------------------------------------------------------------------------------------------------------
 REM   | Deploy Artifacts and Run JMeter DataHunter Selenium Test.
 REM   |
-REM   | NOTE you may need to ensure the chromedriver.exe file at root of dataHunterPerformanceTestSamples project is compatible with your Chrome version
-REM   |      (see Mark59 user guide for details)  
+REM   | NOTE - you may need to ensure the chromedriver.exe file at root of dataHunterPerformanceTestSamples project is compatible with your Chrome version
+REM   |        (see Mark59 user guide for details).  
+REM   |      - mark59serverprofiles.xlsx is not copied. Before you run the '..usingExcel' testplan, copy it manually to the JMeter bin directory
+REM   |        (not necessary before running this bat file - it runs the DataHunterSeleniumTestPlan which doesn't use the spreadsheet).
 REM   |
 REM   |  An instance of JMeter is expected at C:\apache-jmeter
 REM   |
@@ -10,7 +12,7 @@ REM   |  Alternative to running this .bat
 REM   |		 - login  to the server-metrics-web application  "http://localhost:8085/mark59-server-metrics-web" 
 REM   |		 - run the DemoWIN-DataHunter-Selenium-DeployAndExecute profile. 
 REM   |
-REM   |  The only database considerations are that whenthe test is running server metrics are obtained invoking the 'localhost' profile  from the running
+REM   |  The only database considerations are that when the test is running server metrics are obtained invoking the 'localhost' profile  from the running
 REM   |      server-metrics-web application (ie via whatever DB it is connected to), and also the datahunter application will be writing to its database.
 REM   |
 REM   |  logging at  C:\apache-jmeter\bin\jmeter.log

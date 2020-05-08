@@ -2,6 +2,8 @@ REM   --------------------------------------------------------------------------
 REM   |  Use this file to copy artifacts from  Eclipse build target after Maven builds have been executed on the dataHunterPVtest and mark59-server-metrics projects,
 REM   |  into the target Jmeter instance  
 REM   | 
+REM   |  Note that mark59serverprofiles.xlsx is NOT copied. To run the '..usingExcel' testplan, copy it manually to the JMeter bin directory.
+REM   | 
 REM   |  Sample Usage.
 REM   |  ------------
 REM   |  Assumes your target Jmeter instance is at C:\apache-jmeter

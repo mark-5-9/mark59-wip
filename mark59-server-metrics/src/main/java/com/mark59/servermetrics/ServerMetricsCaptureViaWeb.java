@@ -61,7 +61,7 @@ public class ServerMetricsCaptureViaWeb  extends AbstractJavaSamplerClient {
 	private static final Logger LOG = LogManager.getLogger(ServerMetricsCaptureViaExcel.class);
 	
 	public static final String MARK59_SERVER_METRICS_WEB_URL 	= "MARK59_SERVER_METRICS_WEB_URL";
-	public static final String DEFAULT_MARK59_SERVER_METRICS_WEB_URL 	= "http://localhost:8083/mark59-server-metrics-web";
+	public static final String DEFAULT_MARK59_SERVER_METRICS_WEB_URL 	= "http://localhost:8085/mark59-server-metrics-web";
 
 	public static final String SERVER_PROFILE_NAME 	= "SERVER_PROFILE_NAME";
 	
@@ -131,12 +131,13 @@ public class ServerMetricsCaptureViaWeb  extends AbstractJavaSamplerClient {
 		BufferedReader in = null;
 		Integer repsonseCode = null;
 		WebServerMetricsResponsePojo response = null;
+		String webServiceUrl = null;
 		
 		try {
 			
 			String reqServerProfileName = context.getParameter(SERVER_PROFILE_NAME); 
 			
-			String webServiceUrl = context.getParameter(MARK59_SERVER_METRICS_WEB_URL) 	+ "/api/metric?reqServerProfileName=" + reqServerProfileName;
+			webServiceUrl = context.getParameter(MARK59_SERVER_METRICS_WEB_URL) 	+ "/api/metric?reqServerProfileName=" + reqServerProfileName;
 				
 			URL url = new URL(webServiceUrl);
 			HttpURLConnection con = (HttpURLConnection) url.openConnection();
@@ -184,7 +185,7 @@ public class ServerMetricsCaptureViaWeb  extends AbstractJavaSamplerClient {
 		} catch (Exception | AssertionError e) {
 			StringWriter stackTrace = new StringWriter();
 			e.printStackTrace(new PrintWriter(stackTrace));
-			String errorMsg = "Error: Unexpected Failure calling the Server Metrics Service.\n" + e.getMessage() + "\n" + stackTrace.toString();
+			String errorMsg = "Error: Unexpected Failure calling the Server Metrics Service at " + webServiceUrl + " message : \n" + e.getMessage() + "\n" + stackTrace.toString();
 			LOG.error(errorMsg);
 			System.out.println(errorMsg);
 			if (response != null) {

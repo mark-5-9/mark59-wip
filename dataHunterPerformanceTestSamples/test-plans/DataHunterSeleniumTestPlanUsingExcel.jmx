@@ -56,9 +56,9 @@ OUT.println (&quot;------------------------------------------------------------&
             <stringProp name="Argument.value">25 5</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
-          <elementProp name="serverMetricsWebUrlHostPort" elementType="Argument">
-            <stringProp name="Argument.name">serverMetricsWebUrlHostPort</stringProp>
-            <stringProp name="Argument.value">${__P(ServerMetricsWebUrlHostPort,http://localhost:8085)}</stringProp>
+          <elementProp name="mark59ServerMetricsWebUrl" elementType="Argument">
+            <stringProp name="Argument.name">mark59ServerMetricsWebUrl</stringProp>
+            <stringProp name="Argument.value">${__P(Mark59ServerMetricsWebUrl,http://localhost:8085/mark59-server-metrics-web)}</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
         </collectionProp>
@@ -263,7 +263,7 @@ return 0;</stringProp>
               </elementProp>
               <elementProp name="script build information: " elementType="Argument">
                 <stringProp name="Argument.name">script build information: </stringProp>
-                <stringProp name="Argument.value">using mark59-selenium-implementation version 2.2</stringProp>
+                <stringProp name="Argument.value">using mark59-selenium-implementation version 3.0</stringProp>
                 <stringProp name="Argument.metadata">=</stringProp>
               </elementProp>
             </collectionProp>
@@ -436,7 +436,7 @@ return 0;</stringProp>
               </elementProp>
               <elementProp name="script build information: " elementType="Argument">
                 <stringProp name="Argument.name">script build information: </stringProp>
-                <stringProp name="Argument.value">using mark59-selenium-implementation version 2.2</stringProp>
+                <stringProp name="Argument.value">using mark59-selenium-implementation version 3.0</stringProp>
                 <stringProp name="Argument.metadata">=</stringProp>
               </elementProp>
             </collectionProp>
@@ -495,7 +495,7 @@ return 0;</stringProp>
               </elementProp>
               <elementProp name="MARK59_SERVER_METRICS_WEB_URL" elementType="Argument">
                 <stringProp name="Argument.name">MARK59_SERVER_METRICS_WEB_URL</stringProp>
-                <stringProp name="Argument.value">${serverMetricsWebUrlHostPort}/mark59-server-metrics-web</stringProp>
+                <stringProp name="Argument.value">${mark59ServerMetricsWebUrl}</stringProp>
                 <stringProp name="Argument.metadata">=</stringProp>
               </elementProp>
               <elementProp name="SERVER_PROFILE_NAME" elementType="Argument">

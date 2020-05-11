@@ -445,7 +445,71 @@ return 0;</stringProp>
         </JavaSampler>
         <hashTree/>
       </hashTree>
-      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="ServerMetrics_localhost_via_web" enabled="true">
+      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="ServerMetrics_localhost_HOSTID_Excel" enabled="true">
+        <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
+        <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller" enabled="true">
+          <boolProp name="LoopController.continue_forever">false</boolProp>
+          <intProp name="LoopController.loops">-1</intProp>
+        </elementProp>
+        <stringProp name="ThreadGroup.num_threads">1</stringProp>
+        <stringProp name="ThreadGroup.ramp_time">0</stringProp>
+        <boolProp name="ThreadGroup.scheduler">true</boolProp>
+        <stringProp name="ThreadGroup.duration">${__P(Duration,80)}</stringProp>
+        <stringProp name="ThreadGroup.delay"></stringProp>
+        <boolProp name="ThreadGroup.same_user_on_next_iteration">true</boolProp>
+        <stringProp name="TestPlan.comments">this captures metrics for machine running the this test plan</stringProp>
+      </ThreadGroup>
+      <hashTree>
+        <ConstantThroughputTimer guiclass="TestBeanGUI" testclass="ConstantThroughputTimer" testname="Constant Throughput Timer" enabled="true">
+          <doubleProp>
+            <name>throughput</name>
+            <value>4.0</value>
+            <savedValue>0.0</savedValue>
+          </doubleProp>
+          <intProp name="calcMode">0</intProp>
+        </ConstantThroughputTimer>
+        <hashTree/>
+        <JavaSampler guiclass="JavaTestSamplerGui" testclass="JavaSampler" testname="JR_ServerMetricsViaExcel" enabled="true">
+          <stringProp name="TestPlan.comments">localhost_HOSTID - will override txn name from &apos;localhost&apos; to the actual machine name runing this test</stringProp>
+          <elementProp name="arguments" elementType="Arguments" guiclass="ArgumentsPanel" testclass="Arguments" enabled="true">
+            <collectionProp name="Arguments.arguments">
+              <elementProp name="SERVER_PROFILE_NAME" elementType="Argument">
+                <stringProp name="Argument.name">SERVER_PROFILE_NAME</stringProp>
+                <stringProp name="Argument.value">localhost_HOSTID</stringProp>
+                <stringProp name="Argument.metadata">=</stringProp>
+              </elementProp>
+              <elementProp name="______________________ miscellaneous: ____________________" elementType="Argument">
+                <stringProp name="Argument.name">______________________ miscellaneous: ____________________</stringProp>
+                <stringProp name="Argument.value"></stringProp>
+                <stringProp name="Argument.metadata">=</stringProp>
+              </elementProp>
+              <elementProp name="OVERRIDE_PROPERTY_MARK59_SERVER_PROFILES_EXCEL_FILE_PATH" elementType="Argument">
+                <stringProp name="Argument.name">OVERRIDE_PROPERTY_MARK59_SERVER_PROFILES_EXCEL_FILE_PATH</stringProp>
+                <stringProp name="Argument.value"></stringProp>
+                <stringProp name="Argument.metadata">=</stringProp>
+              </elementProp>
+              <elementProp name="Restrict_To_Only_Run_On_IPs_List" elementType="Argument">
+                <stringProp name="Argument.name">Restrict_To_Only_Run_On_IPs_List</stringProp>
+                <stringProp name="Argument.value"></stringProp>
+                <stringProp name="Argument.metadata">=</stringProp>
+              </elementProp>
+              <elementProp name="______________" elementType="Argument">
+                <stringProp name="Argument.name">______________</stringProp>
+                <stringProp name="Argument.value"></stringProp>
+                <stringProp name="Argument.metadata">=</stringProp>
+              </elementProp>
+              <elementProp name="build information: " elementType="Argument">
+                <stringProp name="Argument.name">build information: </stringProp>
+                <stringProp name="Argument.value">mark59-server-metrics version 3.0.0</stringProp>
+                <stringProp name="Argument.metadata">=</stringProp>
+              </elementProp>
+            </collectionProp>
+          </elementProp>
+          <stringProp name="classname">com.mark59.servermetrics.ServerMetricsCaptureViaExcel</stringProp>
+        </JavaSampler>
+        <hashTree/>
+      </hashTree>
+      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="ServerMetrics_localhost_web" enabled="true">
         <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
         <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller" enabled="true">
           <boolProp name="LoopController.continue_forever">false</boolProp>
@@ -469,8 +533,7 @@ return 0;</stringProp>
           <intProp name="calcMode">0</intProp>
         </ConstantThroughputTimer>
         <hashTree/>
-        <JavaSampler guiclass="JavaTestSamplerGui" testclass="JavaSampler" testname="localhost_via_web" enabled="true">
-          <stringProp name="TestPlan.comments">this actually captures metrics for whatever server runs mark59-server-metrics-web ! </stringProp>
+        <JavaSampler guiclass="JavaTestSamplerGui" testclass="JavaSampler" testname="JR_ServerMetricsViaWeb" enabled="true">
           <elementProp name="arguments" elementType="Arguments" guiclass="ArgumentsPanel" testclass="Arguments" enabled="true">
             <collectionProp name="Arguments.arguments">
               <elementProp name="______________________ web service setup: ________________" elementType="Argument">
@@ -526,70 +589,6 @@ return 0;</stringProp>
             </collectionProp>
           </elementProp>
           <stringProp name="classname">com.mark59.servermetrics.ServerMetricsCaptureViaWeb</stringProp>
-        </JavaSampler>
-        <hashTree/>
-      </hashTree>
-      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="ServerMetrics_localhost_HOSTID_vai_Excel" enabled="true">
-        <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
-        <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller" enabled="true">
-          <boolProp name="LoopController.continue_forever">false</boolProp>
-          <intProp name="LoopController.loops">-1</intProp>
-        </elementProp>
-        <stringProp name="ThreadGroup.num_threads">1</stringProp>
-        <stringProp name="ThreadGroup.ramp_time">0</stringProp>
-        <boolProp name="ThreadGroup.scheduler">true</boolProp>
-        <stringProp name="ThreadGroup.duration">${__P(Duration,80)}</stringProp>
-        <stringProp name="ThreadGroup.delay"></stringProp>
-        <boolProp name="ThreadGroup.same_user_on_next_iteration">true</boolProp>
-        <stringProp name="TestPlan.comments">this captures metrics for machine running the this test plan</stringProp>
-      </ThreadGroup>
-      <hashTree>
-        <ConstantThroughputTimer guiclass="TestBeanGUI" testclass="ConstantThroughputTimer" testname="Constant Throughput Timer" enabled="true">
-          <doubleProp>
-            <name>throughput</name>
-            <value>4.0</value>
-            <savedValue>0.0</savedValue>
-          </doubleProp>
-          <intProp name="calcMode">0</intProp>
-        </ConstantThroughputTimer>
-        <hashTree/>
-        <JavaSampler guiclass="JavaTestSamplerGui" testclass="JavaSampler" testname="localhost_via_excel" enabled="true">
-          <stringProp name="TestPlan.comments">localhost_HOSTID - will override txn name from &apos;localhost&apos; to the actual machine name runing this test</stringProp>
-          <elementProp name="arguments" elementType="Arguments" guiclass="ArgumentsPanel" testclass="Arguments" enabled="true">
-            <collectionProp name="Arguments.arguments">
-              <elementProp name="SERVER_PROFILE_NAME" elementType="Argument">
-                <stringProp name="Argument.name">SERVER_PROFILE_NAME</stringProp>
-                <stringProp name="Argument.value">localhost_HOSTID</stringProp>
-                <stringProp name="Argument.metadata">=</stringProp>
-              </elementProp>
-              <elementProp name="______________________ miscellaneous: ____________________" elementType="Argument">
-                <stringProp name="Argument.name">______________________ miscellaneous: ____________________</stringProp>
-                <stringProp name="Argument.value"></stringProp>
-                <stringProp name="Argument.metadata">=</stringProp>
-              </elementProp>
-              <elementProp name="OVERRIDE_PROPERTY_MARK59_SERVER_PROFILES_EXCEL_FILE_PATH" elementType="Argument">
-                <stringProp name="Argument.name">OVERRIDE_PROPERTY_MARK59_SERVER_PROFILES_EXCEL_FILE_PATH</stringProp>
-                <stringProp name="Argument.value"></stringProp>
-                <stringProp name="Argument.metadata">=</stringProp>
-              </elementProp>
-              <elementProp name="Restrict_To_Only_Run_On_IPs_List" elementType="Argument">
-                <stringProp name="Argument.name">Restrict_To_Only_Run_On_IPs_List</stringProp>
-                <stringProp name="Argument.value"></stringProp>
-                <stringProp name="Argument.metadata">=</stringProp>
-              </elementProp>
-              <elementProp name="______________" elementType="Argument">
-                <stringProp name="Argument.name">______________</stringProp>
-                <stringProp name="Argument.value"></stringProp>
-                <stringProp name="Argument.metadata">=</stringProp>
-              </elementProp>
-              <elementProp name="build information: " elementType="Argument">
-                <stringProp name="Argument.name">build information: </stringProp>
-                <stringProp name="Argument.value">mark59-server-metrics version 3.0.0</stringProp>
-                <stringProp name="Argument.metadata">=</stringProp>
-              </elementProp>
-            </collectionProp>
-          </elementProp>
-          <stringProp name="classname">com.mark59.servermetrics.ServerMetricsCaptureViaExcel</stringProp>
         </JavaSampler>
         <hashTree/>
       </hashTree>

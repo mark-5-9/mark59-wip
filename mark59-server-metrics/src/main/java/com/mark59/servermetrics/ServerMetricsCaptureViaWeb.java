@@ -140,7 +140,9 @@ public class ServerMetricsCaptureViaWeb  extends AbstractJavaSamplerClient {
 			webServiceUrl = context.getParameter(MARK59_SERVER_METRICS_WEB_URL) 	+ "/api/metric?reqServerProfileName=" + reqServerProfileName;
 				
 			LOG.debug("webServiceUrl : " + webServiceUrl);
+			LOG.info("*************** ");			
 			LOG.info("webServiceUrl : " + webServiceUrl);
+			LOG.info("*************** ");				
 			
 			URL url = new URL(webServiceUrl);
 			HttpURLConnection con = (HttpURLConnection) url.openConnection();

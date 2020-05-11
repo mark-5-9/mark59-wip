@@ -47,7 +47,7 @@ public class CommandResponseParsersDAOexcelWorkbookImpl implements CommandRespon
 		
         while (iterator.hasNext() && notFound ) {
             Row commandResponseParserRow = iterator.next();
-            System.out.println("findServerProfile key=" + commandResponseParserRow.getCell(0).getStringCellValue());
+            // System.out.println("findServerProfile key=" + commandResponseParserRow.getCell(0).getStringCellValue());
             
             if (commandResponseParserRow.getCell(0).getStringCellValue().equalsIgnoreCase(scriptName)){
             	notFound=false;

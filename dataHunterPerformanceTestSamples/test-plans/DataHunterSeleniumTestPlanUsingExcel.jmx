@@ -56,6 +56,11 @@ OUT.println (&quot;------------------------------------------------------------&
             <stringProp name="Argument.value">25 5</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
+          <elementProp name="serverMetricsWebUrlHostPort" elementType="Argument">
+            <stringProp name="Argument.name">serverMetricsWebUrlHostPort</stringProp>
+            <stringProp name="Argument.value">${__P(ServerMetricsWebUrlHostPort,http://localhost:8085)}</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
         </collectionProp>
       </Arguments>
       <hashTree/>
@@ -490,7 +495,7 @@ return 0;</stringProp>
               </elementProp>
               <elementProp name="MARK59_SERVER_METRICS_WEB_URL" elementType="Argument">
                 <stringProp name="Argument.name">MARK59_SERVER_METRICS_WEB_URL</stringProp>
-                <stringProp name="Argument.value">http://localhost:8085/mark59-server-metrics-web</stringProp>
+                <stringProp name="Argument.value">${serverMetricsWebUrlHostPort}/mark59-server-metrics-web</stringProp>
                 <stringProp name="Argument.metadata">=</stringProp>
               </elementProp>
               <elementProp name="SERVER_PROFILE_NAME" elementType="Argument">

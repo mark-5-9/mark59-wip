@@ -9,6 +9,12 @@ MODE con:cols=180 lines=500
 
 ECHO The database has been set to %DATABASE%
 
+IF [%DATABASE%] == [] (
+	ECHO 'DATABASE' variable not set, assuming H2 
+	rem Using H2 Database.  Starting the DataHunter Web Application (default values) 
+	java -jar ./target/dataHunter.war  --spring.profiles.active=h2 --port=8081
+)
+
 IF "%DATABASE%" == "H2" (
 	rem Using H2 Database.  Starting the DataHunter Web Application (default values) 
 	java -jar ./target/dataHunter.war  --spring.profiles.active=h2 --port=8081

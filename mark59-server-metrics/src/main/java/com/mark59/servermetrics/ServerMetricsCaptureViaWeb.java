@@ -58,10 +58,10 @@ import com.mark59.servermetricsweb.utils.AppConstantsServerMetricsWeb;
  */
 public class ServerMetricsCaptureViaWeb  extends AbstractJavaSamplerClient { 
 
-	private static final Logger LOG = LogManager.getLogger(ServerMetricsCaptureViaExcel.class);
+	private static final Logger LOG = LogManager.getLogger(ServerMetricsCaptureViaWeb.class);
 	
 	public static final String MARK59_SERVER_METRICS_WEB_URL 	= "MARK59_SERVER_METRICS_WEB_URL";
-	public static final String DEFAULT_MARK59_SERVER_METRICS_WEB_URL 	= "http://localhost:8085/mark59-server-metrics-web";
+	public static final String DEFAULT_MARK59_SERVER_METRICS_WEB_URL 	= "http://localhost:8085/mark59-server-metrics-web-default";
 
 	public static final String SERVER_PROFILE_NAME 	= "SERVER_PROFILE_NAME";
 	
@@ -138,11 +138,7 @@ public class ServerMetricsCaptureViaWeb  extends AbstractJavaSamplerClient {
 			String reqServerProfileName = context.getParameter(SERVER_PROFILE_NAME); 
 			
 			webServiceUrl = context.getParameter(MARK59_SERVER_METRICS_WEB_URL) 	+ "/api/metric?reqServerProfileName=" + reqServerProfileName;
-				
 			LOG.debug("webServiceUrl : " + webServiceUrl);
-			LOG.info("*************** ");			
-			LOG.info("webServiceUrl : " + webServiceUrl);
-			LOG.info("*************** ");				
 			
 			URL url = new URL(webServiceUrl);
 			HttpURLConnection con = (HttpURLConnection) url.openConnection();
@@ -212,13 +208,10 @@ public class ServerMetricsCaptureViaWeb  extends AbstractJavaSamplerClient {
 	
 	public static void main(String[] args) {
 		Log4jConfigurationHelper.init(Level.INFO);
-				
 		ServerMetricsCaptureViaWeb thistest = new ServerMetricsCaptureViaWeb();
-
-		additionalTestParametersMap.put(MARK59_SERVER_METRICS_WEB_URL, DEFAULT_MARK59_SERVER_METRICS_WEB_URL);	
+		additionalTestParametersMap.put(MARK59_SERVER_METRICS_WEB_URL, "http://localhost:8085/mark59-server-metrics-web");	
 		additionalTestParametersMap.put(SERVER_PROFILE_NAME, "localhost_HOSTID");	
-//		additionalTestParametersMap.put(SERVER_PROFILE_NAME, "localhost");	
-
+		//additionalTestParametersMap.put(SERVER_PROFILE_NAME, "localhost");	
 		JavaSamplerContext context = new JavaSamplerContext( thistest.getDefaultParameters()  );
 		thistest.setupTest(context);
 		thistest.runTest(context);

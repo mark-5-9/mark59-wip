@@ -18,6 +18,7 @@ package com.mark59.metricsruncheck;
 
 import java.io.IOException;
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.TimeZone;
@@ -92,6 +93,7 @@ public class Runcheck  implements CommandLineRunner
 	ApplicationContext context;
 
 
+	
 	private static String argTool;
 	private static String argApplication;
 	private static String argInput;
@@ -100,6 +102,8 @@ public class Runcheck  implements CommandLineRunner
 	private static String argExcludestart;
 	private static String argCaptureperiod;
 	private static String argTimeZone;
+
+	private List<MetricSlaResult> metricSlaResults = new ArrayList<MetricSlaResult>();
 
 	
 	public static void parseArguments(String[] args) {
@@ -299,7 +303,7 @@ public class Runcheck  implements CommandLineRunner
 			System.out.println( "Runcheck:  No transactionalSLA has been marked as failed, as recorded on the SLA Reference Database");
 		} 
 		
-		List<MetricSlaResult> metricSlaResults = new MetricSlaChecker().listFailedMetricSLAs(application, runTime, null, metricSlaDAO, transactionDAO);
+		metricSlaResults = new MetricSlaChecker().listFailedMetricSLAs(application, runTime, null, metricSlaDAO, transactionDAO);
 		printMetricSlaResults(metricSlaResults);
 	}
 	
@@ -361,5 +365,15 @@ public class Runcheck  implements CommandLineRunner
 		}
 	}
 
+	/**
+	 * for testing purposes
+	 * @return metricSlaResults
+	 */
+	public List<MetricSlaResult> getMetricSlaResults() {
+		return metricSlaResults;
+	}
 
+
+	
+	
 }

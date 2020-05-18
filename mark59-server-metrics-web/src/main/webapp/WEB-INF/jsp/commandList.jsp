@@ -87,7 +87,7 @@
      		<tr><td><a href="viewCommandResponseParser?&reqScriptName=${scriptName}">${scriptName}</a></td></tr>
         </c:forEach>
         </table> 
-      <td>  
+      </td>  
     </tr>
    </c:forEach>
   </table>

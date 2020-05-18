@@ -1,5 +1,6 @@
 REM   -------------------------------------------------------------------------------------------------------------------------------------------------
-REM   |  Splits JMeter Mark59-framework produced csv results files by data-type (if requested)   
+REM   |  Splits JMeter Mark59-framework produced csv results files by data-type (if requested)  
+REM   |                    - written to process the datahunter JMeter test results file    
 REM   |                    - csv file(s) output to  C:\Mark59_Runs\Jmeter_Results\DataHunter\MERGED
 REM   | 
 REM   |  It then runs JMeter report generation on the resultant files (one report per data-type/file) 

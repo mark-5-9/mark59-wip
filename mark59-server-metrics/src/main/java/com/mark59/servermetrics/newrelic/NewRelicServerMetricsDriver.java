@@ -40,6 +40,7 @@ import com.mark59.servermetrics.v2legacy.ServerMetricsDriverInterface;
 * @author Michael Cohen
 * Written: Australian Winter 2019   
 */
+@SuppressWarnings("deprecation")
 public class NewRelicServerMetricsDriver implements ServerMetricsDriverInterface<NewRelicServerMetricsDriverConfig> {
 
 	private static final Logger LOG = Logger.getLogger(NewRelicServerMetricsDriver.class);

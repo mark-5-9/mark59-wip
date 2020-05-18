@@ -1,6 +1,7 @@
-<?xml version="1.0" encoding="UTF-8"?>
-
-<!-- Included as a sample only.  Please refer to the mark59 core clasee Log4jConfigurationHelper  -->
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE xml>
+<!-- "DOCTYPE xml" just for eclipse warnings" https://stackoverflow.com/questions/4551783/no-grammar-constraints-dtd-or-xml-schema-detected-for-the-document -->
+<!-- log4j.xml (as txt file) included for junit testing only.  (Please refer to the mark59 core class Log4jConfigurationHelper for user tests)  -->
 
 <Configuration status="INFO">
 

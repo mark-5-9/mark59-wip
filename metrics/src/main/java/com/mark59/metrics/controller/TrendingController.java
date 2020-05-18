@@ -17,7 +17,6 @@
 package com.mark59.metrics.controller;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;

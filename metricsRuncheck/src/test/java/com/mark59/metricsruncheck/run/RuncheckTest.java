@@ -1,5 +1,7 @@
 package com.mark59.metricsruncheck.run;
 
+import java.util.List;
+
 import javax.sql.DataSource;
 
 import org.junit.Test;
@@ -12,11 +14,11 @@ import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabase;
+import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
+import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
 
 import com.mark59.metrics.data.application.dao.ApplicationDAO;
 import com.mark59.metrics.data.application.dao.ApplicationDAOjdbcTemplateImpl;
-import com.mark59.metrics.data.beans.DateRangeBean;
-import com.mark59.metrics.data.beans.Run;
 import com.mark59.metrics.data.eventMapping.dao.EventMappingDAO;
 import com.mark59.metrics.data.eventMapping.dao.EventMappingDAOjdbcTemplateImpl;
 import com.mark59.metrics.data.graphMapping.dao.GraphMappingDAO;
@@ -31,14 +33,16 @@ import com.mark59.metrics.data.testTransactions.dao.TestTransactionsDAO;
 import com.mark59.metrics.data.testTransactions.dao.TestTransactionsDAOjdbcTemplateImpl;
 import com.mark59.metrics.data.transaction.dao.TransactionDAO;
 import com.mark59.metrics.data.transaction.dao.TransactionDAOjdbcTemplateImpl;
+import com.mark59.metrics.metricSla.MetricSlaResult;
 import com.mark59.metrics.services.SlaService;
 import com.mark59.metrics.services.SlaServiceImpl;
+import com.mark59.metricsruncheck.Runcheck;
 
 import junit.framework.TestCase;
 
 
 
-public class PerformanceTestTest extends TestCase {
+public class RuncheckTest extends TestCase {
 
 	@Autowired
 	DataSource dataSource;
@@ -59,9 +63,15 @@ public class PerformanceTestTest extends TestCase {
 	@Autowired
 	ApplicationContext context;
 	
+	@SuppressWarnings("rawtypes")
 	@Bean
 	public DataSource dataSource() {
-		return DataSourceBuilder.create().build()  ;
+		DataSourceBuilder dataSourceBuilder = DataSourceBuilder.create();
+		dataSourceBuilder.driverClassName("org.h2.Driver");
+		dataSourceBuilder.url("jdbc:h2:mem:metricsmem");
+		dataSourceBuilder.username("SA");
+		dataSourceBuilder.password("");
+		return dataSourceBuilder.build();
 	};
 		
     @Value("h2")
@@ -87,44 +97,34 @@ public class PerformanceTestTest extends TestCase {
 	@Bean
 	public TestTransactionsDAO testTransactionsDAO() {return new TestTransactionsDAOjdbcTemplateImpl();	}
 	
-	
-	PerformanceTest performanceTest;
+
 	EmbeddedDatabase db; 
+	String jmeterResultsFileName;
 	
 	public void setUp() {
-		String applicationId = "testApplicationId";
-		String runReferenceArg = "testRunReferenceArg";
-		SpringApplication springApplication = new SpringApplication(PerformanceTestTest.class);
+		db = new EmbeddedDatabaseBuilder()
+				.setType(EmbeddedDatabaseType.H2)
+				.setName("metricsmem;MODE=MySQL;")    // for multiple tests?:  DB_CLOSE_DELAY=-1;")
+				.addScript("copyofschema.sql")
+				.build();
+	}
+	
+	@Test
+	public void testRuncheckTest() {
+		//TODO: needs to be expanded !! 
+		Runcheck.parseArguments(new String[] { "-a", "DataHunter", "-i", "./src/test/resources/JmeterResults", "-d","h2", "-s","metricsmem" });
+		SpringApplication springApplication = new SpringApplication(Runcheck.class);
 		springApplication.setWebApplicationType(WebApplicationType.NONE);
-		springApplication.setBannerMode(Banner.Mode.OFF);
+		springApplication.setBannerMode(Banner.Mode.OFF);	
 		context = springApplication.run();
-		performanceTest = new PerformanceTest(context, applicationId, runReferenceArg);	
+		
+		Runcheck runcheck = (Runcheck) context.getBean("runcheck");		
+		List<MetricSlaResult> metricSlaResults = runcheck.getMetricSlaResults();
+		assertEquals(1, metricSlaResults.size() );
+		assertEquals("Metric SLA Failed Warning  : metric out of expected range for CPU_UTIL Average on localhost.  Range is set as 5.0 to 60.0, actual was 65.25"
+						, metricSlaResults.get(0).getMessageText()  );
+		
+		
 	}
-	
-	@Test
-	public void testPerformanceTestRunSummaryTest() {
-		Run run = performanceTest.getRunSummary();
-		assertTrue("testApplicationId".equals(run.getApplication()));
-		assertTrue("testRunReferenceArg".equals(run.getRunReference()));
-		assertTrue("N".equals(run.getBaselineRun()));
-	}
-	
-	@Test
-	public void testPerformanceTestCalculateAndSetRunTimesUsingEpochStartAndEndTest() {
-		DateRangeBean dateRangeBean= new DateRangeBean(1600000000000L, 1610000000000L);
-		Run run = performanceTest.getRunSummary();
-		run = performanceTest.calculateAndSetRunTimesUsingEpochStartAndEnd(run, dateRangeBean);
-		assertTrue("testApplicationId".equals(run.getApplication()));
-		assertTrue("testRunReferenceArg".equals(run.getRunReference()));
-		assertTrue("N".equals(run.getBaselineRun()));
-		assertTrue("166666".equals(run.getDuration()));
-		assertTrue("202009132226".equals(run.getRunTime()));
-	}
-	
-	
-//	URL url = this.getClass().getResource("/test.wsdl");
-//	File testWsdl = new File(url.getFile());	
-	
-	
 	
 }

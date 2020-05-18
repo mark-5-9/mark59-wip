@@ -2,9 +2,9 @@ REM   --------------------------------------------------------------------------
 REM   |  Load DataHunter Test Results to Mark59 Metrics (Trend Analysis) database.
 REM   | 
 REM   |  This bat assumes - the metricsRuncheck.jar file exists in the ./target directory (relative to this file) 
-REM   |                   - when using a MySQL or Postgres database, the metricsbb database exists locally (using defaults)
+REM   |                   - when using a MySQL or Postgres database, the metricsdb database exists locally (using defaults)
 REM   |
-REM   |  Notes : the use of double quotes n a few places, required to cater for the & (ampersand) char, or to enter a space (equates to a blank blank here). 
+REM   |  Notes : the use of double quotes in a few places, required to cater for the & (ampersand) char, or to enter a space (equates to a blank here). 
 REM   |          the current time is use as the reference..
 REM   |
 REM   |  To directly execute :

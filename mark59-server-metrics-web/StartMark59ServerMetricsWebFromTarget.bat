@@ -6,6 +6,7 @@ REM   |  Note the use of double quotes n a few places, required to cater for the
 REM   -------------------------------------------------------------------------------------------------------------------------------------------------
 @echo off
 MODE con:cols=180 lines=500
+rem SET "DATABASE=MYSQL"
 
 ECHO The database has been set to %DATABASE%
 

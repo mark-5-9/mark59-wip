@@ -36,8 +36,6 @@ import com.mark59.metrics.data.testTransactions.dao.TestTransactionsDAO;
 import com.mark59.metrics.data.testTransactions.dao.TestTransactionsDAOjdbcTemplateImpl;
 import com.mark59.metrics.data.transaction.dao.TransactionDAO;
 import com.mark59.metrics.data.transaction.dao.TransactionDAOjdbcTemplateImpl;
-import com.mark59.metrics.graphic.data.VisGraphicDataProduction;
-import com.mark59.metrics.graphic.data.VisGraphicDataProductionInterface;
 import com.mark59.metrics.services.SlaService;
 import com.mark59.metrics.services.SlaServiceImpl;
 

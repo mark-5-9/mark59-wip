@@ -93,7 +93,7 @@
         <c:forEach var="commandName" items="${serverProfileWithCommands.commandNames}">
 			<a href="editCommand?&reqCommandName=${commandName}">${commandName}</a><br>
         </c:forEach>
-     <td>       
+     </td>       
     
     </tr>
     </c:forEach>

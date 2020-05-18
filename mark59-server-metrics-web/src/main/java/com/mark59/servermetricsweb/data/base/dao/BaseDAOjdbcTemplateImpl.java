@@ -25,8 +25,6 @@ import javax.sql.DataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 
-import com.mark59.servermetricsweb.data.commandparserlinks.dao.CommandParserLinksDAOjdbcTemplateImpl;
-
 /**
  * @author Philip Webb
  * Written: Australian Summer 2020  

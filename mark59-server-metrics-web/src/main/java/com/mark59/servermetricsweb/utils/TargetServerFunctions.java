@@ -5,11 +5,9 @@ import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import com.mark59.core.utils.Log4jConfigurationHelper;
 import com.mark59.core.utils.Mark59Utils;
 import com.mark59.servermetricsweb.controller.ServerMetricRestController;
 import com.mark59.servermetricsweb.data.beans.Command;
@@ -242,18 +240,5 @@ public class TargetServerFunctions {
 		}	
 		return testModeResult;
 	}
-
-	
-	public static void main(String[] args) {
-		Log4jConfigurationHelper.init(Level.INFO);
-				
-		TargetServerFunctions thistest = new TargetServerFunctions();
-	
-//		additionalTestParametersMap.put(SERVER_PROFILE_NAME, "localhost_HOSTID");	
-//		additionalTestParametersMap.put(SERVER_PROFILE_NAME, "localhost");	
-	}
-
-	
-	
 
 }

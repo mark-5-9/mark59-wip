@@ -2,7 +2,7 @@ REM   --------------------------------------------------------------------------
 REM   |  This bat assumes - the metrics.war file exists in the ./target directory (relative to this file) 
 REM   |                   - when using a mySQL database, the metricsdb database exists locally (using defaults)
 REM   |
-REM   |  Alternative to running this .bat (H2 databse ONLY)
+REM   |  Alternative to running this .bat (H2 database ONLY)
 REM   |		 - login  to the server-metrics-web application  "http://localhost:8085/mark59-server-metrics-web" 
 REM   |		 - run the DemoWIN-DataHunter-Selenium-metricsRunCheck profile. 
 REM   |
@@ -10,6 +10,8 @@ REM   |  Note the use of double quotes n a few places, required to cater for the
 REM   -------------------------------------------------------------------------------------------------------------------------------------------------
 @echo off
 MODE con:cols=180 lines=500
+rem SET "DATABASE=MYSQL"
+
 
 ECHO The database has been set to %DATABASE%
 

@@ -81,7 +81,7 @@
 <table style="width:100%;">
   <tr>
     <td>
-    	<table width="100%" >
+    	<table style="width:100%;">
     		<tr>
     			<td width="100%">
 				    <div id=graphdiv></div>
@@ -130,7 +130,8 @@
 	 </tr> 
 
 	 <tr>
-	   <td> <table width="100%" border="0" cellspacing="0" >
+	   <td> 
+	   		<table style="width:100%; text-align:left; border: 0">
 	   		  <tr>
 				<td width="8%"><div  style='vertical-align:centre;'>Manually Select Txns: </div></td>
 	   	    	<td width="1%"><form:checkbox path="manuallySelectTxns"  onclick="setElementReadonlyIfCheckboxTicked('manuallySelectTxns1','chosenTxns' )"  /></td>  
@@ -160,9 +161,10 @@
 		<form:textarea path="sqlSelectRunNotLike" class="textarea" style="width:30%;"  />
 		note: if entered the date formatting is removed for the DB lookup
 	   </td>
-	
+	 </tr>
 	 <tr>
-	   <td> <table width="100%" border="0" cellspacing="0" >
+	   <td>
+	   		<table style="width:100%; text-align:left; border: 0">
 	   		  <tr>
 				<td width="8%"><div  style='vertical-align:centre;'>Manually Select Runs: </div></td>
 	   	    	<td width="1%"><form:checkbox path="manuallySelectRuns"  onclick="setElementReadonlyIfCheckboxTicked('manuallySelectRuns1','chosenRuns' )"  /></td>  

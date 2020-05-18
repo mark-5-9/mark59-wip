@@ -172,13 +172,10 @@ public class ServerMetricsCaptureViaWeb  extends AbstractJavaSamplerClient {
 							(long)Math.round(Double.parseDouble(parsedCommandResponse.getParsedCommandResponse())),
 							JMeterFileDatatypes.valueOf(parsedCommandResponse.getMetricTxnType()));
 				} else {
-					String metricFailsMsg = "Warning : Server Metrics Web has recorded a failed metric response for txn : " + parsedCommandResponse.getCandidateTxnId(); 
-					LOG.warn(metricFailsMsg);
+					String metricFailsMsg = "Warning : Server Metrics Web has recorded a failed metric response for txn : " + parsedCommandResponse.getCandidateTxnId() +
+							" (log ref: " + System.currentTimeMillis() + ")"  ; 
 					System.out.println(metricFailsMsg);
-					if (LOG.isDebugEnabled()){
-						LOG.debug("command response : " + parsedCommandResponse.getCommandResponse());
-						LOG.debug("parsed response : "  + parsedCommandResponse.getParsedCommandResponse());
-					}
+					LOG.warn(metricFailsMsg +  "\n     command response : " + parsedCommandResponse.getCommandResponse() + "\n    parsed response : " + parsedCommandResponse.getParsedCommandResponse());
 				};
 				
 			}

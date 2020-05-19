@@ -66,6 +66,7 @@ table
     <tr><td>Username</td>		  <td>:</td><td>${map.serverProfileEditingForm.serverProfile.username}</td></tr>
     <tr><td>Connection Port</td>  <td>:</td><td>${map.serverProfileEditingForm.serverProfile.connectionPort}</td></tr>
     <tr><td>Connection Timeout</td><td>:</td><td>${map.serverProfileEditingForm.serverProfile.connectionTimeout}</td><tr>
+    <tr><td>Comment			  </td><td>:</td><td>${map.serverProfileEditingForm.serverProfile.comment}</td><tr>
 
      <tr><td><br></td><td></td><td></td></tr>
      <tr> 

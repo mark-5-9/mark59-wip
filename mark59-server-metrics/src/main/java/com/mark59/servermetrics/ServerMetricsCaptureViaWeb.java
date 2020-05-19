@@ -52,9 +52,9 @@ import com.mark59.servermetricsweb.utils.AppConstantsServerMetricsWeb;
 
 /**
  * @author Philip Webb
- * Written: Australian Summer 2020 
+ * Written: Australian Autumn 2020 
  * 
- * This is the initiating class for web-mark59-server-metrics
+ * This is the initiating class for web-mark59-server-metrics (metrics capture via API) 
  */
 public class ServerMetricsCaptureViaWeb  extends AbstractJavaSamplerClient { 
 

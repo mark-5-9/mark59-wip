@@ -109,7 +109,7 @@ public class DataHunterLifecyclePvtScript  extends SeleniumAbstractJavaSamplerCl
 
 		String dataHunterUrl 	= context.getParameter("DATAHUNTER_URL_HOST_PORT");
 		String application 		= context.getParameter("DATAHUNTER_APPLICATION_ID");
-		int forceTxnFailPercent = new Integer(context.getParameter("FORCE_TXN_FAIL_PERCENT").trim());
+		int forceTxnFailPercent = Integer.valueOf(context.getParameter("FORCE_TXN_FAIL_PERCENT").trim());
 		String user 			= context.getParameter("USER");
 
 // 		delete any existing policies for this application/thread combination

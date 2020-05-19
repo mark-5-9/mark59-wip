@@ -77,7 +77,7 @@ public class PerformanceTest {
 			DateFormat formatterMinutePrecision = new SimpleDateFormat("yyyyMMddHHmm");
 			run.setRunTime(formatterMinutePrecision.format(runStartDate));
 			
-			Date runEndDate = new Date(new Long(runEndTime));
+			Date runEndDate = new Date(Long.valueOf(runEndTime));
 			long durationMs  = runEndDate.getTime() - runStartDate.getTime();
 			Long durationInMinutes = TimeUnit.MILLISECONDS.toMinutes(durationMs);
 			run.setDuration(durationInMinutes.toString());
@@ -124,7 +124,7 @@ public class PerformanceTest {
 			
 		Long excludestartMsecs = 0L;
 		if (StringUtils.isNumeric(excludestart)) {  
-			excludestartMsecs = TimeUnit.MINUTES.toMillis(new Long(excludestart)); 
+			excludestartMsecs = TimeUnit.MINUTES.toMillis(Long.valueOf(excludestart)); 
 		}
 
 		if ( excludestartMsecs != 0  || !captureperiod.equalsIgnoreCase(AppConstantsMetrics.ALL) ){
@@ -134,11 +134,11 @@ public class PerformanceTest {
 			System.out.println( " Transaction results will be filtered by time for this run"  );
 			System.out.print( " - only transactions " + excludestart + " mins from the start of the test ");
 			
-			Long filterEpochTimeFromMsecs = new Long(dateRangeBean.getRunStartTime()) + excludestartMsecs; 
-			Long filterEpochTimeToMsecs   = new Long(dateRangeBean.getRunEndTime()); 
+			Long filterEpochTimeFromMsecs = Long.valueOf(dateRangeBean.getRunStartTime()) + excludestartMsecs; 
+			Long filterEpochTimeToMsecs   = Long.valueOf(dateRangeBean.getRunEndTime()); 
 			
 			if (StringUtils.isNumeric(captureperiod)){
-				filterEpochTimeToMsecs = filterEpochTimeFromMsecs + TimeUnit.MINUTES.toMillis(new Long(captureperiod));
+				filterEpochTimeToMsecs = filterEpochTimeFromMsecs + TimeUnit.MINUTES.toMillis(Long.valueOf(captureperiod));
 				System.out.print( ", for the following " + captureperiod	+ " mins "); 
 			} 
 			

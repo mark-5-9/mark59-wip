@@ -214,7 +214,7 @@ public class TestTransactionsDAOjdbcTemplateImpl implements TestTransactionsDAO
 	    if ( ! StringUtils.isNumeric(earliestTimestamp)) {
 	    	throw new RuntimeException(" A valid date range for the test was not found (possible empty datasest?).  Aborting run." + "(found run start time of " + earliestTimestamp + ")" );
 	    }
-	    return new Long(earliestTimestamp);
+	    return Long.valueOf(earliestTimestamp);
 	}
 	
 	@Override
@@ -226,7 +226,7 @@ public class TestTransactionsDAOjdbcTemplateImpl implements TestTransactionsDAO
 	    if ( ! StringUtils.isNumeric(latestTimestamp)) {
 	    	throw new RuntimeException(" A valid date range for the test was not found (possible empty datasest?).  Aborting run." + "(found run end time of " + latestTimestamp + ")" );
 	    }
-	    return new Long (latestTimestamp);
+	    return Long.valueOf (latestTimestamp);
 	}
 
 	/* 
@@ -335,9 +335,9 @@ public class TestTransactionsDAOjdbcTemplateImpl implements TestTransactionsDAO
 				transaction.setTxn90th((BigDecimal)row.get("txn90th"));
 			}
 			
-			transaction.setTxnPass(new Long( ((BigDecimal)row.get("txnPass")).longValue() ));
-			transaction.setTxnFail(new Long( ((BigDecimal)row.get("txnFail")).longValue() ));
-			transaction.setTxnStop(new Long( ((BigDecimal)row.get("txnStop")).longValue() ));		
+			transaction.setTxnPass(Long.valueOf( ((BigDecimal)row.get("txnPass")).longValue() ));
+			transaction.setTxnFail(Long.valueOf( ((BigDecimal)row.get("txnFail")).longValue() ));
+			transaction.setTxnStop(Long.valueOf( ((BigDecimal)row.get("txnStop")).longValue() ));		
       		transaction.setTxnFirst(new BigDecimal(-1.0));
       		transaction.setTxnLast(new BigDecimal(-1.0));
       		transaction.setTxnSum(new BigDecimal(-1.0));
@@ -377,24 +377,24 @@ public class TestTransactionsDAOjdbcTemplateImpl implements TestTransactionsDAO
 		List<Map<String, Object>> rows = jdbcTemplate.queryForList(sql);
 		
 		
-		BigDecimal value = new BigDecimal(0.000000).setScale(6, BigDecimal.ROUND_DOWN);
-		BigDecimal totalOfValues = new BigDecimal(0.000000).setScale(6, BigDecimal.ROUND_HALF_UP);
+		BigDecimal value = new BigDecimal(0.000000).setScale(6, RoundingMode.DOWN);
+		BigDecimal totalOfValues = new BigDecimal(0.000000).setScale(6, RoundingMode.HALF_UP );
 		
-		Long countPointsAtBottleneckThreshold = new Long(0);
-		Long count = new Long(0);	
+		Long countPointsAtBottleneckThreshold = Long.valueOf(0);
+		Long count = Long.valueOf(0);	
 		
-		BigDecimal txnMinimum =  new BigDecimal(-1.0).setScale(3, BigDecimal.ROUND_HALF_UP);
-		BigDecimal txnMaximum =  new BigDecimal(-1.0).setScale(3, BigDecimal.ROUND_HALF_UP);				
+		BigDecimal txnMinimum =  new BigDecimal(-1.0).setScale(3, RoundingMode.HALF_UP);
+		BigDecimal txnMaximum =  new BigDecimal(-1.0).setScale(3, RoundingMode.HALF_UP);				
 
-		BigDecimal txnFirst =  new BigDecimal(-1.0).setScale(3, BigDecimal.ROUND_HALF_UP);		
-		BigDecimal txnLast  =  new BigDecimal(-1.0).setScale(3, BigDecimal.ROUND_HALF_UP);		
+		BigDecimal txnFirst =  new BigDecimal(-1.0).setScale(3, RoundingMode.HALF_UP);		
+		BigDecimal txnLast  =  new BigDecimal(-1.0).setScale(3, RoundingMode.HALF_UP);		
 		boolean firstTimeThru = true;	
 		
 		BigDecimal ninteyPercent = new BigDecimal(90.0);
 		
 		
 		for (Map<String, Object> row : rows) {
-			value =  (BigDecimal)row.get("TXN_RESULT");  //.setScale(3, BigDecimal.ROUND_HALF_UP) ;
+			value =  (BigDecimal)row.get("TXN_RESULT");  //.setScale(3, RoundingMode.HALF_UP) ;
 			
 			if (firstTimeThru) {
 				txnMinimum = value;
@@ -407,10 +407,10 @@ public class TestTransactionsDAOjdbcTemplateImpl implements TestTransactionsDAO
 			txnLast = value;
 
 			if ( value.compareTo(txnMinimum) < 0  ){			
-				txnMinimum = value.setScale(3, BigDecimal.ROUND_HALF_UP);
+				txnMinimum = value.setScale(3, RoundingMode.HALF_UP);
 			}
 			if ( value.compareTo(txnMinimum) > 0  ){				
-				txnMaximum = value.setScale(3, BigDecimal.ROUND_HALF_UP);
+				txnMaximum = value.setScale(3, RoundingMode.HALF_UP);
 			}			
 			
 			// if the metric value is a %idle, we need to invert it to turn it into a %utilisation ..
@@ -463,8 +463,8 @@ public class TestTransactionsDAOjdbcTemplateImpl implements TestTransactionsDAO
 			metricTransaction.setTxn90th(new BigDecimal(percentSpendAtBottleneckThresholdStr));
 		}		
 		metricTransaction.setTxnPass(count);
-		metricTransaction.setTxnFail(new Long(-1).longValue() );
-		metricTransaction.setTxnStop(new Long(-1).longValue() );
+		metricTransaction.setTxnFail(Long.valueOf(-1).longValue() );
+		metricTransaction.setTxnStop(Long.valueOf(-1).longValue() );
 		
 		metricTransaction.setTxnFirst(txnFirst);
 		metricTransaction.setTxnLast(txnLast);

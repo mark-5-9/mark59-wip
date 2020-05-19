@@ -177,7 +177,7 @@ public class LrRunAccessDatabase {
 					
 					//  The txn recored time "End Time" is the relative end time in seconds to 3 decimals of the txn.  Storing as epoch time in msecs  
 					Double txnSecsFromStart =  (Double)row.get("End Time");	
-					Long txnEpochTimeMsecs = new Double( runStartTimeEpochMsecs + txnSecsFromStart * 1000 ).longValue();
+					Long txnEpochTimeMsecs = Double.valueOf(runStartTimeEpochMsecs + txnSecsFromStart * 1000 ).longValue();
 					lrEventMeterBean.setEndTime(txnEpochTimeMsecs.toString()); 
 					
 					BigDecimal rawValue  = new BigDecimal((Double)row.get("Value"     )).setScale(6, RoundingMode.HALF_UP);
@@ -310,22 +310,22 @@ public class LrRunAccessDatabase {
 
 		Integer eventId =  eventAttributes.getEventId();
 		BigDecimal value = new BigDecimal(0.000000).setScale(6, RoundingMode.HALF_UP)   ;
-		Integer eventInstanceID = new Integer(0);
-		Double eventSecsFromStart = new Double(0.0);
+		Integer eventInstanceID = Integer.valueOf(0);
+		Double eventSecsFromStart = Double.valueOf(0.0);
 		boolean filterOutThisEvent = false;
 		
 		BigDecimal totalOfValues = new BigDecimal(0.0).setScale(6, RoundingMode.HALF_UP);
 
-		Long countPointsAtBottleneckThreshold = new Long(0);
-		Long count = new Long(0);	
+		Long countPointsAtBottleneckThreshold = Long.valueOf(0);
+		Long count = Long.valueOf(0);	
 		
-		BigDecimal txnMinimum =  new BigDecimal(-1.0).setScale(3, BigDecimal.ROUND_HALF_UP);
-		BigDecimal txnMaximum =  new BigDecimal(-1.0).setScale(3, BigDecimal.ROUND_HALF_UP);				
+		BigDecimal txnMinimum =  new BigDecimal(-1.0).setScale(3, RoundingMode.HALF_UP);
+		BigDecimal txnMaximum =  new BigDecimal(-1.0).setScale(3, RoundingMode.HALF_UP);				
 
 		Integer minEventInstanceId =  null;		
 		Integer maxEventInstanceId =  null;		
-		BigDecimal txnFirst =  new BigDecimal(-1.0).setScale(3, BigDecimal.ROUND_HALF_UP);		
-		BigDecimal txnLast  =  new BigDecimal(-1.0).setScale(3, BigDecimal.ROUND_HALF_UP);		
+		BigDecimal txnFirst =  new BigDecimal(-1.0).setScale(3, RoundingMode.HALF_UP);		
+		BigDecimal txnLast  =  new BigDecimal(-1.0).setScale(3, RoundingMode.HALF_UP);		
 		boolean firstTimeThru = true;	
 		
 		BigDecimal ninteyPercent = new BigDecimal(90.0);
@@ -349,7 +349,7 @@ public class LrRunAccessDatabase {
 			
 			filterOutThisEvent = false;
 			if  (filteredDateRangeBean.isFilterApplied() ) {
-				Long eventEpochTimeMsecs = new Double( dateRangeBean.getRunStartTime() +  eventSecsFromStart * 1000 ).longValue();
+				Long eventEpochTimeMsecs = Double.valueOf( dateRangeBean.getRunStartTime() +  eventSecsFromStart * 1000 ).longValue();
 				if ( eventEpochTimeMsecs < filteredDateRangeBean.getRunStartTime() || eventEpochTimeMsecs > filteredDateRangeBean.getRunEndTime() ) {
 					filterOutThisEvent = true;
 				}
@@ -427,8 +427,8 @@ public class LrRunAccessDatabase {
 			serverTransaction.setTxn90th(new BigDecimal(percentSpendAtBottleneckThresholdStr));
 		}		
 		serverTransaction.setTxnPass(count);
-		serverTransaction.setTxnFail(new Long(-1).longValue() );
-		serverTransaction.setTxnStop(new Long(-1).longValue() );
+		serverTransaction.setTxnFail(Long.valueOf(-1).longValue() );
+		serverTransaction.setTxnStop(Long.valueOf(-1).longValue() );
 		
 		serverTransaction.setTxnFirst(txnFirst);
 		serverTransaction.setTxnLast(txnLast);

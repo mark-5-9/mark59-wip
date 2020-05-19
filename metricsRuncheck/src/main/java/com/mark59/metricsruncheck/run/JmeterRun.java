@@ -21,6 +21,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -283,7 +284,7 @@ public class JmeterRun extends PerformanceTest  {
 		String txnResultMsStr = StringUtils.substringBetween(jmeterFileLine, " t=\"", "\"");
 		BigDecimal txnResultMsBigD = new BigDecimal(txnResultMsStr);
 		if ( Mark59Constants.DatabaseDatatypes.TRANSACTION.name().equals(testTransaction.getTxnType())) {
-			testTransaction.setTxnResult( txnResultMsBigD.divide(AppConstantsMetrics.THOUSAND, 3, BigDecimal.ROUND_HALF_UP)  );			
+			testTransaction.setTxnResult( txnResultMsBigD.divide(AppConstantsMetrics.THOUSAND, 3, RoundingMode.HALF_UP)  );			
 		} else {
 			try {
 				testTransaction.setTxnResult( validateAndDetermineMetricValue(txnResultMsBigD, testTransaction.getTxnType()));		
@@ -439,10 +440,10 @@ public class JmeterRun extends PerformanceTest  {
 //			.. CI tool database holds transaction values in seconds so we divide by 1000 (response times back to seconds)  		
 		
 		BigDecimal txnResultMsBigD = new BigDecimal(csvDataLineFields[fieldPoselapsed]);
-		testTransaction.setTxnResult( txnResultMsBigD.divide(AppConstantsMetrics.THOUSAND, 3, BigDecimal.ROUND_HALF_UP)  );			
+		testTransaction.setTxnResult( txnResultMsBigD.divide(AppConstantsMetrics.THOUSAND, 3, RoundingMode.HALF_UP)  );			
 	
 		if ( Mark59Constants.DatabaseDatatypes.TRANSACTION.name().equals(testTransaction.getTxnType())) {
-			testTransaction.setTxnResult( txnResultMsBigD.divide(AppConstantsMetrics.THOUSAND, 3, BigDecimal.ROUND_HALF_UP)  );			
+			testTransaction.setTxnResult( txnResultMsBigD.divide(AppConstantsMetrics.THOUSAND, 3, RoundingMode.HALF_UP)  );			
 		} else {
 			try {
 				testTransaction.setTxnResult( validateAndDetermineMetricValue(txnResultMsBigD, testTransaction.getTxnType()));
@@ -546,7 +547,7 @@ public class JmeterRun extends PerformanceTest  {
 					valueMultiplier = new BigDecimal(passedMultipler);
 				}
 
-				return txnResultMsBigD.divide(valueMultiplier, 3, BigDecimal.ROUND_HALF_UP) ;
+				return txnResultMsBigD.divide(valueMultiplier, 3, RoundingMode.HALF_UP) ;
 			}
 		}
 

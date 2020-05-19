@@ -43,7 +43,7 @@ public class CountPoliciesBreakdownActionPage extends _GenericDatatHunterActionP
 		} catch ( NoSuchElementException e) {
 			return 0;
 		}
-		int count = new Integer(countForBreakdownElement.getText());
+		int count = Integer.valueOf(countForBreakdownElement.getText());
 		return count;
 	}
 	

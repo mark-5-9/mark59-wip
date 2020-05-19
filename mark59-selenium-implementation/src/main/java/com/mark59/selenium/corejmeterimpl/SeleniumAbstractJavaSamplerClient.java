@@ -402,7 +402,7 @@ public abstract class SeleniumAbstractJavaSamplerClient  extends AbstractJavaSam
 		public void run() {
 			SeleniumAbstractJavaSamplerClient testInstance = null;
 			try {
-				testInstance = testClass.newInstance();
+				testInstance = testClass.getDeclaredConstructor().newInstance();
 			} catch (Exception e) {	e.printStackTrace(); System.out.println(" Error " + e.getMessage()  ); } 
 			
 			Arguments thisThreadParameterAuguments = Mark59Utils.mergeMapWithAnOverrideMap(getDefaultParameters().getArgumentsAsMap(), thisThreadParametersOverride);

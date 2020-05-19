@@ -155,7 +155,7 @@ public class EventMappingDAOjdbcTemplateImpl implements EventMappingDAO
 		}
 		
 		String sql = "SELECT count(*) col FROM dual where '" + eventType + "'" + " = '" + matchWhenLikeSplit[1] + "' and '" + eventName + "' like  '" +  eventMapping.getMatchWhenLike() + "'"; 		
-		matchCount = new Integer(jdbcTemplate.queryForObject(sql, String.class));
+		matchCount = Integer.valueOf(jdbcTemplate.queryForObject(sql, String.class));
 		
 		if ( matchCount > 0 ){
 //			System.out.println("     Event matched using sql: " + sql  + "     RESULT = " +  matchCount  );	

@@ -77,9 +77,9 @@ public String createDataPoints(String application, GraphMapping graphMapping, St
 		int plotPointx = (Integer)dataRow[0];		
 		int plotPointy = (Integer)dataRow[1];	
 		
-		Object plotPointz =  new Double(dataRow[2].toString()); 
+		Object plotPointz =  Double.valueOf(dataRow[2].toString()); 
 		if ((Double)plotPointz % 1 == 0 ) {  // its an integer!
-			plotPointz = new Integer((int)Math.round(((Double)plotPointz).doubleValue()));
+			plotPointz = Integer.valueOf((int)Math.round(((Double)plotPointz).doubleValue()));
 		} 		
 		graphDataPoints.append(plotPointx + ", " + plotPointy + ", " + plotPointz + "\n");		
 	}

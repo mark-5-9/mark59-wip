@@ -118,7 +118,7 @@ public class DataHunterLifecycleIteratorPvtScript  extends SeleniumIteratorAbstr
 
 		dataHunterUrl 		= context.getParameter("DATAHUNTER_URL_HOST_PORT");
 		application 		= context.getParameter("DATAHUNTER_APPLICATION_ID");
-		forceTxnFailPercent = new Integer(context.getParameter("FORCE_TXN_FAIL_PERCENT").trim());
+		forceTxnFailPercent = Integer.valueOf(context.getParameter("FORCE_TXN_FAIL_PERCENT").trim());
 		user 				= context.getParameter("USER");
 
 // 		delete any existing policies for this application/thread combination

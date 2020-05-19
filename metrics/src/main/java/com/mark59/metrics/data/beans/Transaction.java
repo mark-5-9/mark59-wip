@@ -17,6 +17,7 @@
 package com.mark59.metrics.data.beans;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 /**
  * @author Philip Webb
@@ -69,31 +70,31 @@ public class Transaction {
 		return txnMinimum;
 	}
 	public void setTxnMinimum(BigDecimal txnMinimum) {
-		this.txnMinimum = txnMinimum.setScale(3, BigDecimal.ROUND_HALF_UP);
+		this.txnMinimum = txnMinimum.setScale(3, RoundingMode.HALF_UP);
 	}
 	public BigDecimal getTxnAverage() {
 		return txnAverage;
 	}
 	public void setTxnAverage(BigDecimal txnAverage) {
-		this.txnAverage = txnAverage.setScale(3, BigDecimal.ROUND_HALF_UP);
+		this.txnAverage = txnAverage.setScale(3, RoundingMode.HALF_UP);
 	}
 	public BigDecimal getTxnMaximum() {
 		return txnMaximum;
 	}
 	public void setTxnMaximum(BigDecimal txnMaximum) {
-		this.txnMaximum = txnMaximum.setScale(3, BigDecimal.ROUND_HALF_UP);
+		this.txnMaximum = txnMaximum.setScale(3, RoundingMode.HALF_UP);
 	}
 	public BigDecimal getTxnStdDeviation() {
 		return txnStdDeviation;
 	}
 	public void setTxnStdDeviation(BigDecimal txnStdDeviation) {
-		this.txnStdDeviation = txnStdDeviation.setScale(3, BigDecimal.ROUND_HALF_UP);
+		this.txnStdDeviation = txnStdDeviation.setScale(3, RoundingMode.HALF_UP);
 	}
 	public BigDecimal getTxn90th() {
 		return txn90th;
 	}
 	public void setTxn90th(BigDecimal txn90th) {
-		this.txn90th = txn90th.setScale(3, BigDecimal.ROUND_HALF_UP);
+		this.txn90th = txn90th.setScale(3, RoundingMode.HALF_UP);
 	}
 	public Long getTxnPass() {
 		return txnPass;
@@ -117,19 +118,19 @@ public class Transaction {
 		return txnFirst;
 	}
 	public void setTxnFirst(BigDecimal txnFirst) {
-		this.txnFirst = txnFirst.setScale(3, BigDecimal.ROUND_HALF_UP);
+		this.txnFirst = txnFirst.setScale(3, RoundingMode.HALF_UP);
 	}
 	public BigDecimal getTxnLast() {
 		return txnLast;
 	}
 	public void setTxnLast(BigDecimal txnLast) {
-		this.txnLast = txnLast.setScale(3, BigDecimal.ROUND_HALF_UP);
+		this.txnLast = txnLast.setScale(3, RoundingMode.HALF_UP);
 	}
 	public BigDecimal getTxnSum() {
 		return txnSum;
 	}
 	public void setTxnSum(BigDecimal txnSum) {
-		this.txnSum = txnSum.setScale(3, BigDecimal.ROUND_HALF_UP);
+		this.txnSum = txnSum.setScale(3, RoundingMode.HALF_UP);
 	}
 	
 	@Override

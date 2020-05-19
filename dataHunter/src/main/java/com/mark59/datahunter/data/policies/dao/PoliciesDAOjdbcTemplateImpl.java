@@ -191,7 +191,7 @@ public class PoliciesDAOjdbcTemplateImpl implements PoliciesDAO
 	public int runCountSql(String sql){
 		Integer rowCount  = 0;
 		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
-		rowCount = new Integer(jdbcTemplate.queryForObject(sql, String.class));
+		rowCount = Integer.valueOf(jdbcTemplate.queryForObject(sql, String.class));
 		return rowCount;
 		
 	};	

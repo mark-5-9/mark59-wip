@@ -146,7 +146,7 @@ public class Elemental {
 	protected WebElement runUsingFluentWaitInDebugMode(ExpectedCondition<?> condition) {
 		
 		long debugPollingFrequency = pollingFrequency.toMillis() + 1000L;                                                //will generally get set to a bit over 1 seconds 
-		int numberOfAttempts = new Long( timeout.getSeconds() * 1000L / debugPollingFrequency ).intValue();  
+		int numberOfAttempts = Long.valueOf( timeout.getSeconds() * 1000L / debugPollingFrequency ).intValue();  
 		
 		for (int i = 1; i <= numberOfAttempts; i++ ) {
 			try {

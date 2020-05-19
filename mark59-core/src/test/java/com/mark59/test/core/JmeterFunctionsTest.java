@@ -39,6 +39,7 @@ public class JmeterFunctionsTest {
 		System.setProperty("log4j.configurationFile", "./log4j2.xml");
 	}
 
+	@SuppressWarnings("deprecation")
 	@Rule
 	public ExpectedException thrown = ExpectedException.none();
 

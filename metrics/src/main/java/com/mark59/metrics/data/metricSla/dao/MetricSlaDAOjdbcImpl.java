@@ -38,7 +38,7 @@ public class MetricSlaDAOjdbcImpl implements MetricSlaDAO {
 
 	
 	public void insertData(MetricSla metricSla) {
-		String sql = "INSERT INTO metricsla "
+		String sql = "INSERT INTO METRICSLA "
 				+ "(APPLICATION, METRIC_NAME, METRIC_TXN_TYPE, VALUE_DERIVATION, SLA_MIN, SLA_MAX, COMMENT) VALUES (?,?,?,?,?,?,?)";
 
 		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
@@ -51,7 +51,7 @@ public class MetricSlaDAOjdbcImpl implements MetricSlaDAO {
 
 	@Override
 	public void deleteAllSlasForApplication(String application) {
-		String sql = "delete from metricsla where  APPLICATION='" + application + "'";
+		String sql = "delete from METRICSLA where  APPLICATION='" + application + "'";
 		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
 		jdbcTemplate.update(sql);
 	}
@@ -59,7 +59,7 @@ public class MetricSlaDAOjdbcImpl implements MetricSlaDAO {
 	
 	@Override
 	public void deleteData(String application, String metricName, String metricTxnType, String valueDerivation ) {
-		String sql = "delete from metricsla where APPLICATION='" + application + "' "
+		String sql = "delete from METRICSLA where APPLICATION='" + application + "' "
 										  + " and METRIC_NAME='" + metricName + "'"
 										  + " and METRIC_TXN_TYPE='" + metricTxnType + "'"
 										  + " and VALUE_DERIVATION='" + valueDerivation + "'"   ;
@@ -84,7 +84,7 @@ public class MetricSlaDAOjdbcImpl implements MetricSlaDAO {
 			
 		} else {  // update values for an existing transaction
 				
-			String sql = "UPDATE metricsla SET SLA_MIN = " + metricSla.getSlaMin() + ", "
+			String sql = "UPDATE METRICSLA SET SLA_MIN = " + metricSla.getSlaMin() + ", "
 										+ "SLA_MAX= " + metricSla.getSlaMax() + ", "
 										+ "COMMENT= '" + metricSla.getComment() +  "'"
 										+ " where APPLICATION='" + metricSla.getApplication() + "' "
@@ -101,7 +101,7 @@ public class MetricSlaDAOjdbcImpl implements MetricSlaDAO {
 	@Override
 	public MetricSla getMetricSla(String application,String metricName, String metricTxnType, String valueDerivation) {
 		List<MetricSla> slaList = new ArrayList<MetricSla>();
-		String sql = "select * from metricsla where APPLICATION='" + application + "' "
+		String sql = "select * from METRICSLA where APPLICATION='" + application + "' "
 									  		+ " and METRIC_NAME='" + metricName + "'"
 									  		+ " and METRIC_TXN_TYPE='" + metricTxnType + "'"
 									  		+ " and VALUE_DERIVATION='" + valueDerivation + "'" ;
@@ -118,7 +118,7 @@ public class MetricSlaDAOjdbcImpl implements MetricSlaDAO {
 	
 	public List<MetricSla> getMetricSlaList() {
 		List<MetricSla> metricSlaList = new ArrayList<MetricSla>();
-		String sql = "select * from metricsla order by APPLICATION, METRIC_NAME, METRIC_TXN_TYPE, VALUE_DERIVATION ";
+		String sql = "select * from METRICSLA order by APPLICATION, METRIC_NAME, METRIC_TXN_TYPE, VALUE_DERIVATION ";
 //		System.out.println("getSla sql = " + sql);
 		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
 		metricSlaList = jdbcTemplate.query(sql, new MetricSlaRowMapper());
@@ -128,7 +128,7 @@ public class MetricSlaDAOjdbcImpl implements MetricSlaDAO {
 	@Override
 	public List<MetricSla> getMetricSlaList(String application) {
 		List<MetricSla> metricSlaList = new ArrayList<MetricSla>();
-		String sql = "select * from metricsla where APPLICATION='" + application + "' order by METRIC_NAME, METRIC_TXN_TYPE, VALUE_DERIVATION ";
+		String sql = "select * from METRICSLA where APPLICATION='" + application + "' order by METRIC_NAME, METRIC_TXN_TYPE, VALUE_DERIVATION ";
 //		System.out.println("getSla sql = " + sql);
 		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
 		metricSlaList = jdbcTemplate.query(sql, new MetricSlaRowMapper());
@@ -141,7 +141,7 @@ public class MetricSlaDAOjdbcImpl implements MetricSlaDAO {
 			return getMetricSlaList(application);
 		}
 		List<MetricSla> metricSlaList = new ArrayList<MetricSla>();
-		String sql = "select * from metricsla where APPLICATION='" + application + "' and METRIC_TXN_TYPE ='" + metricTxnType + "' order by METRIC_NAME, VALUE_DERIVATION ";
+		String sql = "select * from METRICSLA where APPLICATION='" + application + "' and METRIC_TXN_TYPE ='" + metricTxnType + "' order by METRIC_NAME, VALUE_DERIVATION ";
 //		System.out.println("getSla sql = " + sql);
 		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
 		metricSlaList = jdbcTemplate.query(sql, new MetricSlaRowMapper());
@@ -156,7 +156,7 @@ public class MetricSlaDAOjdbcImpl implements MetricSlaDAO {
 	@Override
 	@SuppressWarnings("rawtypes")
 	public List<String> findApplications() {
-		String sql = "SELECT distinct APPLICATION FROM metricsla";
+		String sql = "SELECT distinct APPLICATION FROM METRICSLA";
 
 		List<String> applications = new ArrayList<String>();
 		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);

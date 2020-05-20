@@ -43,16 +43,14 @@ public class BaseDAOjdbcTemplateImpl implements BaseDAO
 		List<String> columnNames = new ArrayList<String>();
 		JdbcTemplate jdbcTemplate = new JdbcTemplate  (dataSource);
 
-		String findColumnNameSQL = "SELECT * FROM  information_schema.COLUMNS WHERE	TABLE_NAME = '" + tableName + "' order by ORDINAL_POSITION; ";
+		String findColumnNameSQL = "SELECT * FROM  information_schema.columns WHERE	table_name = '" + tableName + "' order by ordinal_position; ";		
 		
 		System.out.println(" BaseDAOjdbcTemplateImpl sql : " + findColumnNameSQL ); 
-//		List<Map<String, Object>> rows = jdbcTemplate.queryForList("show columns from " + tableName);
 		List<Map<String, Object>> rows = jdbcTemplate.queryForList(findColumnNameSQL);
 		
 		for (Map<String, Object> row : rows) {
-			//columnNames.add((String)row.get("Field"));
-			columnNames.add((String)row.get("COLUMN_NAME"));
-			System.out.println("findColumnNamesForTable " + tableName + " : " + (String)row.get("COLUMN_NAME")  ) ;		
+			columnNames.add((String)row.get("column_name"));
+			System.out.println("findColumnNamesForTable " + tableName + " : " + (String)row.get("column_name")  ) ;		
 		}	
 		return columnNames;
 	}

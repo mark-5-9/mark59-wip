@@ -45,7 +45,7 @@ public class CommandParserLinksDAOjdbcTemplateImpl implements CommandParserLinks
 
 		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
 		
-		String selectServerSQL   = "select COMMAND_NAME, SCRIPT_NAME from commandparserlinks"
+		String selectServerSQL   = "select COMMAND_NAME, SCRIPT_NAME from COMMANDPARSERLINKS"
 				+ " where COMMAND_NAME = '" + commandName + "'"
 				+ "   and SCRIPT_NAME = '"  + scriptName  + "'"
 				+ " order by COMMAND_NAME;";

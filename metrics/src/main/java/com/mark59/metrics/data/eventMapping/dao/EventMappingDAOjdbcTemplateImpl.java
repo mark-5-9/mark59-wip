@@ -42,11 +42,11 @@ public class EventMappingDAOjdbcTemplateImpl implements EventMappingDAO
  	
 	@Override
 	public void insertData(EventMapping eventMapping) {
-		String sql = "INSERT INTO eventmapping "
+		String sql = "INSERT INTO EVENTMAPPING "
 				+ "(TXN_TYPE, PERFORMANCE_TOOL, METRIC_SOURCE, MATCH_WHEN_LIKE, TARGET_NAME_LB, TARGET_NAME_RB, IS_PERCENTAGE, IS_INVERTED_PERCENTAGE, COMMENT )"
 				+ " VALUES (?,?,?,?,?,?,?,?,?)";
 		
-		System.out.println("EventMappingDAOjdbcTemplateImpl insert eventMapping : " +  eventMapping.toString() );
+		System.out.println("EventMappingDAOjdbcTemplateImpl insert EVENTMAPPING : " +  eventMapping.toString() );
 		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
 
 		jdbcTemplate.update(sql,
@@ -57,7 +57,7 @@ public class EventMappingDAOjdbcTemplateImpl implements EventMappingDAO
 	
 	@Override
 	public void deleteData(String txnType, String metricSource, String matchhWenLike) {
-		String sql = " DELETE FROM eventmapping where TXN_TYPE = '"	+ txnType
+		String sql = " DELETE FROM EVENTMAPPING where TXN_TYPE = '"	+ txnType
 											+ "' and  METRIC_SOURCE = '" + metricSource
 											+ "' and  MATCH_WHEN_LIKE = '" + matchhWenLike + "'"; 
 		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
@@ -68,7 +68,7 @@ public class EventMappingDAOjdbcTemplateImpl implements EventMappingDAO
 	@Override
 	public void updateData(EventMapping eventMapping) {
 		
-		String sql = "UPDATE eventmapping SET TARGET_NAME_LB = '" 		+ eventMapping.getTargetNameLB() + "', "
+		String sql = "UPDATE EVENTMAPPING SET TARGET_NAME_LB = '" 		+ eventMapping.getTargetNameLB() + "', "
 										+ "TARGET_NAME_RB = '"    		+ eventMapping.getTargetNameRB() + "', "
 										+ "IS_PERCENTAGE = '"    		+ eventMapping.getIsPercentage() +  "', "
 										+ "IS_INVERTED_PERCENTAGE = '"	+ eventMapping.getIsInvertedPercentage() +  "', "
@@ -85,7 +85,7 @@ public class EventMappingDAOjdbcTemplateImpl implements EventMappingDAO
 	
 	@Override
 	public EventMapping getEventMapping(String metricSource, String matchhWenLike) {
-		String sql = " SELECT * FROM eventmapping where METRIC_SOURCE = '" + metricSource
+		String sql = " SELECT * FROM EVENTMAPPING where METRIC_SOURCE = '" + metricSource
 													  	 + "' and MATCH_WHEN_LIKE = '" + matchhWenLike + "'"; 
 		
 		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
@@ -128,7 +128,7 @@ public class EventMappingDAOjdbcTemplateImpl implements EventMappingDAO
 	}
 	
 	private String getEventsMappingListSelectionSQL(String selectionCol, String selectionValue){	
-		String eventsMappingListSelectionSQL               = "select TXN_TYPE, METRIC_SOURCE, MATCH_WHEN_LIKE, TARGET_NAME_LB, TARGET_NAME_RB, IS_PERCENTAGE, IS_INVERTED_PERCENTAGE, PERFORMANCE_TOOL, COMMENT from eventmapping ";
+		String eventsMappingListSelectionSQL               = "select TXN_TYPE, METRIC_SOURCE, MATCH_WHEN_LIKE, TARGET_NAME_LB, TARGET_NAME_RB, IS_PERCENTAGE, IS_INVERTED_PERCENTAGE, PERFORMANCE_TOOL, COMMENT from EVENTMAPPING ";
 		if (!selectionValue.isEmpty()  ) {			
 			eventsMappingListSelectionSQL += "  where " + selectionCol + " like '" + selectionValue + "' ";
 		} 
@@ -180,7 +180,7 @@ public class EventMappingDAOjdbcTemplateImpl implements EventMappingDAO
 	@Override
 	public EventMapping findAnEventForTxnIdAndSource(String txnId, String metricSource) {
 			
-		String sql = "SELECT  * FROM eventmapping" + 
+		String sql = "SELECT  * FROM EVENTMAPPING" + 
 					"  where '" + txnId + "'" + " like MATCH_WHEN_LIKE " +
 					"    and  METRIC_SOURCE =  '" + metricSource + "' "  + 
 					"  order by " + orderingByMatchingProcess();

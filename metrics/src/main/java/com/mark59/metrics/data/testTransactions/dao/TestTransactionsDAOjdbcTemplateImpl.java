@@ -65,7 +65,7 @@ public class TestTransactionsDAOjdbcTemplateImpl implements TestTransactionsDAO
 //			System.out.println("TestTransactionsDAOjdbcTemplateImpl  : " +  testTransaction.getTxnId() + " has been ignored!" );
 		} else {
 		
-			sql = "INSERT INTO testtransactions "
+			sql = "INSERT INTO TESTTRANSACTIONS "
 					+ "(APPLICATION, RUN_TIME, TXN_ID, TXN_TYPE, "
 					+ "TXN_RESULT, TXN_PASSED, TXN_EPOCH_TIME )"
 					+ " VALUES ("
@@ -98,7 +98,7 @@ public class TestTransactionsDAOjdbcTemplateImpl implements TestTransactionsDAO
 		boolean yetToAddFirstRowToSqlStatement = true;
 		StringBuilder sqlSb = new StringBuilder();
 		
-		sqlSb.append("INSERT INTO testtransactions "
+		sqlSb.append("INSERT INTO TESTTRANSACTIONS "
 				+ "(APPLICATION, RUN_TIME, TXN_ID, TXN_TYPE, "
 				+ "TXN_RESULT, TXN_PASSED, TXN_EPOCH_TIME )"
 				+ " VALUES (?,?,?,?,?,?,?)");
@@ -148,7 +148,7 @@ public class TestTransactionsDAOjdbcTemplateImpl implements TestTransactionsDAO
 	
 	@Override
 	public void deleteAllForRun(Run run) {
-		String sql = "delete from testtransactions where APPLICATION='" + run.getApplication() + "' "
+		String sql = "delete from TESTTRANSACTIONS where APPLICATION='" + run.getApplication() + "' "
 												     + "and RUN_TIME='" + run.getRunTime() + "'";
 //		System.out.println("performing TestTransactionsDAOjdbcTemplateImpl.deleteAllForRun : " + sql );
 		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
@@ -158,7 +158,7 @@ public class TestTransactionsDAOjdbcTemplateImpl implements TestTransactionsDAO
 	
 	@Override
 	public void deleteAllForApplication(String applicationn) {
-		String sql = "delete from testtransactions where APPLICATION='" + applicationn + "'";
+		String sql = "delete from TESTTRANSACTIONS where APPLICATION='" + applicationn + "'";
 //		System.out.println("TestTransactionsDAOjdbcTemplateImpl.deleteAllForApplication: performing " + sql );
 		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
 		jdbcTemplate.update(sql);
@@ -171,7 +171,7 @@ public class TestTransactionsDAOjdbcTemplateImpl implements TestTransactionsDAO
 	public List<TestTransaction> getUniqueListOfSystemMetricNamesByType(String application) {
 		List<TestTransaction> dataSampleTxnkeys  = new ArrayList<TestTransaction>();
 		
-		String sql = "select distinct TXN_ID, TXN_TYPE  from testtransactions "
+		String sql = "select distinct TXN_ID, TXN_TYPE  from TESTTRANSACTIONS "
 					+ "where APPLICATION = '"  + application + "' "
 					+ "and TXN_TYPE <> 'TRANSACTION' ";
 				
@@ -207,7 +207,7 @@ public class TestTransactionsDAOjdbcTemplateImpl implements TestTransactionsDAO
 
 	@Override
 	public Long getEarliestTimestamp(String applicationn) {
-		String sql = "select min(TXN_EPOCH_TIME) from testtransactions where APPLICATION = '" + applicationn + "' ";
+		String sql = "select min(TXN_EPOCH_TIME) from TESTTRANSACTIONS where APPLICATION = '" + applicationn + "' ";
 		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
 	    String earliestTimestamp = (String) jdbcTemplate.queryForObject(sql, String.class);
 	    
@@ -219,7 +219,7 @@ public class TestTransactionsDAOjdbcTemplateImpl implements TestTransactionsDAO
 	
 	@Override
 	public Long getLatestTimestamp(String applicationn) {
-		String sql = "select max(TXN_EPOCH_TIME) from testtransactions where APPLICATION = '" + applicationn + "' ";
+		String sql = "select max(TXN_EPOCH_TIME) from TESTTRANSACTIONS where APPLICATION = '" + applicationn + "' ";
 		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
 	    String latestTimestamp = (String) jdbcTemplate.queryForObject(sql, String.class);
 
@@ -366,7 +366,7 @@ public class TestTransactionsDAOjdbcTemplateImpl implements TestTransactionsDAO
 	 */
 	private Transaction extractEventSummaryStats(Run run, String txnType, String dataSampleLablel, EventMapping eventMapping) {
 		
-		String sql = "select TXN_RESULT from testtransactions "
+		String sql = "select TXN_RESULT from TESTTRANSACTIONS "
 				+ " where APPLICATION = '" + run.getApplication() + "' "
 				+ "   and RUN_TIME = '" + run.getRunTime() + "'"
 				+ "   and TXN_ID = '" + dataSampleLablel + "'"		   		
@@ -478,7 +478,7 @@ public class TestTransactionsDAOjdbcTemplateImpl implements TestTransactionsDAO
 	@Override
 	public int filterByTime(Run run, DateRangeBean filteredDateRangeBean) {
 		
-		String sql = "delete from testtransactions where APPLICATION = '" + run.getApplication() + "' "
+		String sql = "delete from TESTTRANSACTIONS where APPLICATION = '" + run.getApplication() + "' "
 									+ "  and TXN_EPOCH_TIME not between " + filteredDateRangeBean.getRunStartTime() 
 															   + "  and " + filteredDateRangeBean.getRunEndTime();
 

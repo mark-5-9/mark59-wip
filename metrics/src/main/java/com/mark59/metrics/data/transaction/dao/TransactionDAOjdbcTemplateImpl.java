@@ -55,7 +55,7 @@ public class TransactionDAOjdbcTemplateImpl implements TransactionDAO
 	
 	@Override
 	public void insert(Transaction transaction) {
-		String sql = "INSERT INTO transaction "
+		String sql = "INSERT INTO TRANSACTION "
 				+ "(APPLICATION, RUN_TIME, TXN_ID, TXN_TYPE, "
 				+ "TXN_MINIMUM, TXN_AVERAGE, TXN_MAXIMUM, TXN_STD_DEVIATION, TXN_90TH, TXN_PASS, TXN_FAIL, TXN_STOP, TXN_FIRST, TXN_LAST, TXN_SUM  )"
 				+ " VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
@@ -77,7 +77,7 @@ public class TransactionDAOjdbcTemplateImpl implements TransactionDAO
 
 		List<Transaction> transactionList = new ArrayList<Transaction>();
 
-		String sql = "SELECT * FROM transaction WHERE APPLICATION = '" + application + "' AND " +
+		String sql = "SELECT * FROM TRANSACTION WHERE APPLICATION = '" + application + "' AND " +
 				                                        "RUN_TIME = '" + runTime + "' AND " +
 				                                        "TXN_TYPE = '" + txnType + "' AND " +
 				                                          "TXN_ID = '" + txnId + "' ";
@@ -96,7 +96,7 @@ public class TransactionDAOjdbcTemplateImpl implements TransactionDAO
 	public Object getTransactionValue(String application, String txnType, String runTime, String txnId, String transactionField) {
 
 		List<Object> transactionValues =  new ArrayList<Object>();  
-		String sql = "SELECT " + transactionField + " FROM transaction " +
+		String sql = "SELECT " + transactionField + " FROM TRANSACTION " +
 										  	   "WHERE APPLICATION = '" + application + "' AND " +
 				                                        "RUN_TIME = '" + runTime + "' AND " +
 				                                        "TXN_TYPE = '" + txnType + "' AND " +
@@ -127,7 +127,7 @@ public class TransactionDAOjdbcTemplateImpl implements TransactionDAO
 	
 	@Override
 	public void deleteAllForRun(String application,  String runTime) {
-		String sql = "delete from transaction where APPLICATION='" + application + "' "
+		String sql = "delete from TRANSACTION where APPLICATION='" + application + "' "
 												+ "and RUN_TIME='" + runTime + "'";
 //		System.out.println("performing : " + sql );
 		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
@@ -136,7 +136,7 @@ public class TransactionDAOjdbcTemplateImpl implements TransactionDAO
 	
 	@Override
 	public void deleteAllForApplication(String application) {
-		String sql = "delete from transaction where APPLICATION='" + application + "' ";
+		String sql = "delete from TRANSACTION where APPLICATION='" + application + "' ";
 		System.out.println("delete all transactions for application : " + sql );
 		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
 		jdbcTemplate.update(sql);

@@ -47,7 +47,7 @@ public class CommandResponseParsersDAOjdbcTemplateImpl implements CommandRespons
 		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
 		
 		String selectServerSQL   = "select SCRIPT_NAME, METRIC_TXN_TYPE, METRIC_NAME_SUFFIX, SCRIPT, COMMENT, SAMPLE_COMMAND_RESPONSE "
-				+ "from commandresponseparsers where SCRIPT_NAME = '" + scriptName + "'"
+				+ "from COMMANDRESPONSEPARSERS where SCRIPT_NAME = '" + scriptName + "'"
 				+ " order by SCRIPT_NAME asc;";
 		
 		List<Map<String, Object>> rows = jdbcTemplate.queryForList(selectServerSQL);
@@ -103,7 +103,7 @@ public class CommandResponseParsersDAOjdbcTemplateImpl implements CommandRespons
 	}
 	
 	private String getCommandResponseParserListSelectionSQL(String selectionCol, String selectionValue){	
-		String commandResponseParserListSelectionSQL = "select SCRIPT_NAME, METRIC_TXN_TYPE, METRIC_NAME_SUFFIX, SCRIPT, COMMENT, SAMPLE_COMMAND_RESPONSE from commandresponseparsers ";
+		String commandResponseParserListSelectionSQL = "select SCRIPT_NAME, METRIC_TXN_TYPE, METRIC_NAME_SUFFIX, SCRIPT, COMMENT, SAMPLE_COMMAND_RESPONSE from COMMANDRESPONSEPARSERS ";
 		
 		if (!selectionValue.isEmpty()  ) {			
 			commandResponseParserListSelectionSQL += "  where " + selectionCol + " like '" + selectionValue + "' ";
@@ -137,7 +137,7 @@ public class CommandResponseParsersDAOjdbcTemplateImpl implements CommandRespons
 	@Override
 	public void updateCommandResponseParser(CommandResponseParser commandResponseParser){
 
-		String sql = "UPDATE commandresponseparsers set SCRIPT_NAME = ?, METRIC_TXN_TYPE = ?, METRIC_NAME_SUFFIX = ?, SCRIPT = ?, COMMENT = ?, SAMPLE_COMMAND_RESPONSE = ? "
+		String sql = "UPDATE COMMANDRESPONSEPARSERS set SCRIPT_NAME = ?, METRIC_TXN_TYPE = ?, METRIC_NAME_SUFFIX = ?, SCRIPT = ?, COMMENT = ?, SAMPLE_COMMAND_RESPONSE = ? "
 				+ "where SCRIPT_NAME = ? ";
 		
 		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
@@ -157,12 +157,12 @@ public class CommandResponseParsersDAOjdbcTemplateImpl implements CommandRespons
 	
 	@Override
 	public void deleteCommandResponseParser(String scriptName) {
-		String sql = "delete from commandparserlinks where SCRIPT_NAME ='" + scriptName	+ "'";
+		String sql = "delete from COMMANDPARSERLINKS where SCRIPT_NAME ='" + scriptName	+ "'";
 		System.out.println("delete commandResponseParser sql: " + sql);
 		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
 		jdbcTemplate.update(sql);		
 		
-		sql = "delete from commandresponseparsers where SCRIPT_NAME ='" + scriptName	+ "'";
+		sql = "delete from COMMANDRESPONSEPARSERS where SCRIPT_NAME ='" + scriptName	+ "'";
 		System.out.println("delete commandResponseParser sql: " + sql);
 		jdbcTemplate = new JdbcTemplate(dataSource);
 		jdbcTemplate.update(sql);

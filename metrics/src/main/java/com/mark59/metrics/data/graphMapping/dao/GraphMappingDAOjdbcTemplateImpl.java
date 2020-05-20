@@ -50,7 +50,7 @@ public class GraphMappingDAOjdbcTemplateImpl implements GraphMappingDAO
 		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
 		
 		String selectGraphsSQL   = "select LISTORDER, GRAPH, TXN_TYPE, VALUE_DERIVATION, UOM_DESCRIPTION, BAR_RANGE_SQL, BAR_RANGE_LEGEND, COMMENT "
-				+ "from graphmapping where GRAPH = '" + graph + "'"
+				+ "from GRAPHMAPPING where GRAPH = '" + graph + "'"
 				+ " order by GRAPH asc;";
 		
 		List<Map<String, Object>> rows = jdbcTemplate.queryForList(selectGraphsSQL);
@@ -84,7 +84,7 @@ public class GraphMappingDAOjdbcTemplateImpl implements GraphMappingDAO
 		List<GraphMapping> graphMappingList = new ArrayList<GraphMapping>();
 		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
 		
-		String selectGraphsSQL   = "select LISTORDER, GRAPH, TXN_TYPE, VALUE_DERIVATION, UOM_DESCRIPTION, BAR_RANGE_SQL, BAR_RANGE_LEGEND, COMMENT from graphmapping order by LISTORDER asc;";
+		String selectGraphsSQL   = "select LISTORDER, GRAPH, TXN_TYPE, VALUE_DERIVATION, UOM_DESCRIPTION, BAR_RANGE_SQL, BAR_RANGE_LEGEND, COMMENT from GRAPHMAPPING order by LISTORDER asc;";
 		List<Map<String, Object>> rows = jdbcTemplate.queryForList(selectGraphsSQL);
 		
 		for (Map row : rows) {
@@ -108,7 +108,7 @@ public class GraphMappingDAOjdbcTemplateImpl implements GraphMappingDAO
 	
 	@Override
 	public void inserttGraphMapping(GraphMapping graphMapping) {
-		String sql = "INSERT INTO graphmapping "
+		String sql = "INSERT INTO GRAPHMAPPING "
 				+ "(LISTORDER, GRAPH, TXN_TYPE, VALUE_DERIVATION, UOM_DESCRIPTION,  BAR_RANGE_SQL, BAR_RANGE_LEGEND, COMMENT) VALUES (?,?,?,?,?,?,?,?)";
 //		System.out.println("performing : " + sql + " " +  graphMapping.getGraph() );
 		
@@ -124,7 +124,7 @@ public class GraphMappingDAOjdbcTemplateImpl implements GraphMappingDAO
 	@Override
 	public void updateGraphMapping(GraphMapping graphMapping){
 
-		String sql = "UPDATE graphmapping set LISTORDER = ?, TXN_TYPE = ?, VALUE_DERIVATION = ?, UOM_DESCRIPTION = ?, BAR_RANGE_SQL = ?, BAR_RANGE_LEGEND = ?, COMMENT = ?"
+		String sql = "UPDATE GRAPHMAPPING set LISTORDER = ?, TXN_TYPE = ?, VALUE_DERIVATION = ?, UOM_DESCRIPTION = ?, BAR_RANGE_SQL = ?, BAR_RANGE_LEGEND = ?, COMMENT = ?"
 				+ "where GRAPH = ? ";
 		
 		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
@@ -137,7 +137,7 @@ public class GraphMappingDAOjdbcTemplateImpl implements GraphMappingDAO
 	
 	@Override
 	public void deleteGraphMapping(String graph) {
-		String sql = "delete from graphmapping where GRAPH='" + graph	+ "'";
+		String sql = "delete from GRAPHMAPPING where GRAPH='" + graph	+ "'";
 		System.out.println("deleteRun sql: " + sql);
 		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
 		jdbcTemplate.update(sql);
@@ -151,7 +151,7 @@ public class GraphMappingDAOjdbcTemplateImpl implements GraphMappingDAO
 		List<BarRange> trxnIdsSlaRanges = new ArrayList<BarRange>();
 		
 		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
-		String  sqlObtainBarRangeSql = "SELECT BAR_RANGE_SQL FROM graphmapping where graph = '" + graph + "'";
+		String  sqlObtainBarRangeSql = "SELECT BAR_RANGE_SQL FROM GRAPHMAPPING where graph = '" + graph + "'";
 		List<Map<String, Object>> onerows = jdbcTemplate.queryForList(sqlObtainBarRangeSql);
 		
 		if (onerows.size() == 0 ){

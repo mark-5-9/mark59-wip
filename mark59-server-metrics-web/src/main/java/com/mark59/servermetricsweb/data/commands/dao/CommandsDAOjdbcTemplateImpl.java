@@ -47,7 +47,7 @@ public class CommandsDAOjdbcTemplateImpl implements CommandsDAO
 		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
 		
 		String selectServerSQL   = "select COMMAND_NAME, EXECUTOR, COMMAND, IGNORE_STDERR, COMMENT "
-				+ "from commands where COMMAND_NAME = '" + commandName + "'"
+				+ "from COMMANDS where COMMAND_NAME = '" + commandName + "'"
 				+ " order by COMMAND_NAME asc;";
 		
 		List<Map<String, Object>> rows = jdbcTemplate.queryForList(selectServerSQL);
@@ -95,7 +95,7 @@ public class CommandsDAOjdbcTemplateImpl implements CommandsDAO
 	}
 	
 	private String getCommandListSelectionSQL(String selectionCol, String selectionValue){	
-		String commandListSelectionSQL = "select COMMAND_NAME, EXECUTOR, COMMAND, IGNORE_STDERR, COMMENT from commands ";
+		String commandListSelectionSQL = "select COMMAND_NAME, EXECUTOR, COMMAND, IGNORE_STDERR, COMMENT from COMMANDS ";
 		
 		if (!selectionValue.isEmpty()  ) {			
 			commandListSelectionSQL += "  where " + selectionCol + " like '" + selectionValue + "' ";
@@ -109,7 +109,7 @@ public class CommandsDAOjdbcTemplateImpl implements CommandsDAO
 	@Override
 	public void insertCommand(Command command) {
 		
-		String sql = "INSERT INTO commands ( COMMAND_NAME, EXECUTOR, COMMAND, IGNORE_STDERR, COMMENT ) " + 
+		String sql = "INSERT INTO COMMANDS ( COMMAND_NAME, EXECUTOR, COMMAND, IGNORE_STDERR, COMMENT ) " + 
 				      " VALUES (?,?,?,?,?)";
 		
 		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
@@ -128,7 +128,7 @@ public class CommandsDAOjdbcTemplateImpl implements CommandsDAO
 	@Override
 	public void updateCommand(Command command){
 
-		String sql = "UPDATE commands set EXECUTOR = ?, COMMAND = ?, IGNORE_STDERR = ?, COMMENT = ? "
+		String sql = "UPDATE COMMANDS set EXECUTOR = ?, COMMAND = ?, IGNORE_STDERR = ?, COMMENT = ? "
 				+ "where COMMAND_NAME = ? ";
 		
 		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
@@ -148,15 +148,15 @@ public class CommandsDAOjdbcTemplateImpl implements CommandsDAO
 	@Override
 	public void deleteCommand(String commandName) {
 		
-		String sql = "delete from servercommandlinks where COMMAND_NAME ='" + commandName	+ "'";
+		String sql = "delete from SERVERCOMMANDLINKS where COMMAND_NAME ='" + commandName	+ "'";
 		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
 		jdbcTemplate.update(sql);		
 				
-		sql = "delete from commandparserlinks where COMMAND_NAME ='" + commandName	+ "'";
+		sql = "delete from COMMANDPARSERLINKS where COMMAND_NAME ='" + commandName	+ "'";
 		jdbcTemplate = new JdbcTemplate(dataSource);
 		jdbcTemplate.update(sql);		
 		
-		sql = "delete from commands where COMMAND_NAME ='" + commandName	+ "'";
+		sql = "delete from COMMANDS where COMMAND_NAME ='" + commandName	+ "'";
 		System.out.println("delete deleteCommand sql: " + sql);
 		jdbcTemplate = new JdbcTemplate(dataSource);
 		jdbcTemplate.update(sql);

@@ -45,7 +45,7 @@ public class ServerCommandLinksDAOjdbcTemplateImpl implements ServerCommandLinks
 
 		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
 		
-		String selectServerSQL   = "select SERVER_PROFILE_NAME, COMMAND_NAME  from servercommandlinks"
+		String selectServerSQL   = "select SERVER_PROFILE_NAME, COMMAND_NAME  from SERVERCOMMANDLINKS"
 				+ " where SERVER_PROFILE_NAME = '"  + serverProfileName  + "'"
 				+ "   and COMMAND_NAME = '" + commandName + "'"
 				+ " order by SERVER_PROFILE_NAME;";
@@ -95,7 +95,7 @@ public class ServerCommandLinksDAOjdbcTemplateImpl implements ServerCommandLinks
 	
 	
 	private String getServerCommandLinkListSelectionSQL(String selectionCol, String selectionValue){	
-		String commandListSelectionSQL = "select SERVER_PROFILE_NAME, COMMAND_NAME from servercommandlinks ";
+		String commandListSelectionSQL = "select SERVER_PROFILE_NAME, COMMAND_NAME from SERVERCOMMANDLINKS ";
 		
 		if (!selectionValue.isEmpty()  ) {			
 			commandListSelectionSQL += "  where " + selectionCol + " like '" + selectionValue + "' ";
@@ -108,7 +108,7 @@ public class ServerCommandLinksDAOjdbcTemplateImpl implements ServerCommandLinks
 	
 	@Override
 	public void insertServerCommandLink(ServerCommandLink serverCommandLink) {
-		String sql = "INSERT INTO servercommandlinks ( SERVER_PROFILE_NAME, COMMAND_NAME) " + 
+		String sql = "INSERT INTO SERVERCOMMANDLINKS ( SERVER_PROFILE_NAME, COMMAND_NAME) " + 
 				      " VALUES (?,?)";
 		
 		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
@@ -136,7 +136,7 @@ public class ServerCommandLinksDAOjdbcTemplateImpl implements ServerCommandLinks
 	
 	@Override
 	public void deleteServerCommandLinksForCommandName(String commandName) {
-		String sql = "delete from servercommandlinks "
+		String sql = "delete from SERVERCOMMANDLINKS "
 				+ " where COMMAND_NAME = '" + commandName + "'";
 		System.out.println("delete deleteCommand sql: " + sql);
 		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
@@ -146,7 +146,7 @@ public class ServerCommandLinksDAOjdbcTemplateImpl implements ServerCommandLinks
 	
 	@Override
 	public void deleteServerCommandLink(ServerCommandLink serverCommandLink) {
-		String sql = "delete from servercommandlinks "
+		String sql = "delete from SERVERCOMMANDLINKS "
 				+ " where COMMAND_NAME = '" + serverCommandLink.getCommandName() + "'"
 				+ "   and SERVER_PROFILE_NAME = '"  + serverCommandLink.getServerProfileName()  + "'";
 		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
@@ -155,7 +155,7 @@ public class ServerCommandLinksDAOjdbcTemplateImpl implements ServerCommandLinks
 
 	@Override
 	public void deleteServerCommandLinksForServerProfile(String serverProfileName) {
-		String sql = "delete from servercommandlinks "
+		String sql = "delete from SERVERCOMMANDLINKS "
 				+ " where SERVER_PROFILE_NAME = '" + serverProfileName + "'";
 		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
 		jdbcTemplate.update(sql);

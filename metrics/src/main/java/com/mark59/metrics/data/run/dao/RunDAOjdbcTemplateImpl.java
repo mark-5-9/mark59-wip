@@ -53,7 +53,7 @@ public class RunDAOjdbcTemplateImpl implements RunDAO
 	
 	@Override
 	public void insertRun(Run run) {
-		String sql = "INSERT INTO runs "
+		String sql = "INSERT INTO RUNS "
 				+ "(APPLICATION, RUN_TIME, LRS_FILENAME, PERIOD, DURATION, BASELINE_RUN, COMMENT) VALUES (?,?,?,?,?,?,?)";
 //		System.out.println("performing : " + sql + " vars: runTime " + run.getRunTime() + ", period " + run.getPeriod() );
 		
@@ -77,7 +77,7 @@ public class RunDAOjdbcTemplateImpl implements RunDAO
 	@Override
 	public void updateRun(Run run) {
 
-		String sql = "UPDATE runs set LRS_FILENAME = ? , PERIOD = ?, DURATION = ?, BASELINE_RUN = ?, COMMENT = ? "
+		String sql = "UPDATE RUNS set LRS_FILENAME = ? , PERIOD = ?, DURATION = ?, BASELINE_RUN = ?, COMMENT = ? "
 				+ "where  APPLICATION = ? and  RUN_TIME = ? ";
 		
 		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
@@ -96,7 +96,7 @@ public class RunDAOjdbcTemplateImpl implements RunDAO
 		
 		transactionDAO.deleteAllForRun(application, runTime);
 		
-		String sql = "delete from runs where APPLICATION='" + application	+ "' and RUN_TIME='" + runTime + "'";
+		String sql = "delete from RUNS where APPLICATION='" + application	+ "' and RUN_TIME='" + runTime + "'";
 		System.out.println("deleteRun sql: " + sql);
 		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
 		jdbcTemplate.update(sql);
@@ -110,11 +110,11 @@ public class RunDAOjdbcTemplateImpl implements RunDAO
 	public void deleteMultiple(String applicationSelectionCriteria,	String runTimeSelectionCriteria) {
 		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
 
-		String sql = "delete from transaction where APPLICATION " + applicationSelectionCriteria	+ " and RUN_TIME " + runTimeSelectionCriteria;
+		String sql = "delete from TRANSACTION where APPLICATION " + applicationSelectionCriteria	+ " and RUN_TIME " + runTimeSelectionCriteria;
 		System.out.println("deleteMultiple performing : " + sql);
 		jdbcTemplate.update(sql);		
 		
-		sql = "delete from runs where APPLICATION " + applicationSelectionCriteria	+ " and RUN_TIME " + runTimeSelectionCriteria;
+		sql = "delete from RUNS where APPLICATION " + applicationSelectionCriteria	+ " and RUN_TIME " + runTimeSelectionCriteria;
 		System.out.println("deleteMultiple performing : " + sql);
 		jdbcTemplate.update(sql);
 
@@ -127,7 +127,7 @@ public class RunDAOjdbcTemplateImpl implements RunDAO
 		
 		transactionDAO.deleteAllForApplication(application);
 		
-		String sql = "delete from runs where APPLICATION='" + application	+ "' ";
+		String sql = "delete from RUNS where APPLICATION='" + application	+ "' ";
 		System.out.println("delete all runs for : " + application);
 		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
 		jdbcTemplate.update(sql);
@@ -140,7 +140,7 @@ public class RunDAOjdbcTemplateImpl implements RunDAO
 	@SuppressWarnings("rawtypes")
 	public List<String> findApplications(){
 
-		String sql = "SELECT distinct APPLICATION FROM runs order by APPLICATION ";
+		String sql = "SELECT distinct APPLICATION FROM RUNS order by APPLICATION ";
 		
 		List<String> applications = new ArrayList<String>();
 		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
@@ -161,7 +161,7 @@ public class RunDAOjdbcTemplateImpl implements RunDAO
 
 		if (AppConstantsMetrics.ACTIVE.equals(appListSelector)){ 
 			
-			String sql = "SELECT distinct APPLICATION FROM runs where application in (select application from applications where ACTIVE = 'Y')"
+			String sql = "SELECT distinct APPLICATION FROM RUNS where APPLICATION in (select APPLICATION from APPLICATIONS where ACTIVE = 'Y')"
 					+ " order by APPLICATION " ;
 	
 			List<String> applications = new ArrayList<String>();
@@ -215,7 +215,7 @@ public class RunDAOjdbcTemplateImpl implements RunDAO
 
 		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
 		
-		String runSQL = "select APPLICATION, RUN_TIME, LRS_FILENAME, PERIOD, DURATION, BASELINE_RUN, COMMENT from runs " +
+		String runSQL = "select APPLICATION, RUN_TIME, LRS_FILENAME, PERIOD, DURATION, BASELINE_RUN, COMMENT from RUNS " +
 		                "   where APPLICATION = '" + application + "'" +
 		                "     and RUN_TIME    = '" + runTime + "'" ;
 		
@@ -247,10 +247,10 @@ public class RunDAOjdbcTemplateImpl implements RunDAO
 		List<Run> runsList = new ArrayList<Run>();
 		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
 		
-		String runsListSelectionSQL        = "select APPLICATION, RUN_TIME, LRS_FILENAME, PERIOD, DURATION, BASELINE_RUN, COMMENT from runs ";
-		String runsListSelectionSQLwithApp = "   where application = '" + application + "' order by run_time DESC      ";  
+		String runsListSelectionSQL        = "select APPLICATION, RUN_TIME, LRS_FILENAME, PERIOD, DURATION, BASELINE_RUN, COMMENT from RUNS ";
+		String runsListSelectionSQLwithApp = "   where APPLICATION = '" + application + "' order by RUN_TIME DESC      ";  
 		
-		String runsListSelectionSQLnoApp   = "   order by application  ASC, run_time DESC "; 		
+		String runsListSelectionSQLnoApp   = "   order by APPLICATION  ASC, RUN_TIME DESC "; 		
 
 		if ( StringUtils.isEmpty(application)) {
 			runsListSelectionSQL = runsListSelectionSQL + runsListSelectionSQLnoApp;
@@ -388,13 +388,13 @@ public class RunDAOjdbcTemplateImpl implements RunDAO
 	public String getRunTimeSelectionSQL(String application, String sqlSelectRunLike, String reqSqlSelectRunNotLike){	
 	
 		String runTimeSelectionSQL = "select distinct r.RUN_TIME, r.BASELINE_RUN from "
-				 + " runs r, "
-				 + " transaction t "
-				 + "   where r.application = '" + application + "'"  
-				 + "     and r.application = t.application "
-				 + "     and r.run_time    = t.run_time "
+				 + " RUNS r, "
+				 + " TRANSACTION t "
+				 + "   where r.APPLICATION = '" + application + "'"  
+				 + "     and r.APPLICATION = t.APPLICATION "
+				 + "     and r.RUN_TIME    = t.RUN_TIME "
 			  	 + constructSqlRunTimeLikeNotLike("r.", sqlSelectRunLike, reqSqlSelectRunNotLike)
-				 + "   order by r.run_time DESC "; 		
+				 + "   order by r.RUN_TIME DESC "; 		
 
 //		System.out.println("runDAOjdbcTemplateImpl:getRunTimeSelectionSQL: " + runTimeSelectionSQL) ;		
 		return  runTimeSelectionSQL;
@@ -403,7 +403,7 @@ public class RunDAOjdbcTemplateImpl implements RunDAO
 	private String constructSqlRunTimeLikeNotLike(String runTableId, String sqlSelectRunLike, String reqSqlSelectRunNotLike) {
 		String sqlAnd = "";
 		if (sqlSelectRunLike != "%" ){
-			sqlAnd =" AND " + runTableId + "run_time LIKE '%" +  sqlSelectRunLike.replace(".", "").replace("T","").replace(":","").trim() + "%' ";  
+			sqlAnd =" AND " + runTableId + "RUN_TIME LIKE '%" +  sqlSelectRunLike.replace(".", "").replace("T","").replace(":","").trim() + "%' ";  
 		}
 		if (reqSqlSelectRunNotLike != "" ){
 			sqlAnd = sqlAnd + " AND NOT (" + runTableId + "run_time LIKE '%" +  reqSqlSelectRunNotLike.replace(".", "").replace("T","").replace(":","").trim() + "%' ) ";  

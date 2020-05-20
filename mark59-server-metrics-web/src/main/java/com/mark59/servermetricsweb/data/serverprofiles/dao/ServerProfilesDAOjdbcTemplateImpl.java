@@ -47,7 +47,7 @@ public class ServerProfilesDAOjdbcTemplateImpl implements ServerProfilesDAO
 		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
 		
 		String selectServerSQL   = "select SERVER, ALTERNATE_SERVER_ID, USERNAME, PASSWORD, PASSWORD_CIPHER, OPERATING_SYSTEM, CONNECTION_PORT, CONNECTION_TIMEOUT, COMMENT "
-				+ "from serverprofiles where SERVER_PROFILE_NAME = '" + serverProfileName + "'"
+				+ "from SERVERPROFILES where SERVER_PROFILE_NAME = '" + serverProfileName + "'"
 				+ " order by SERVER_PROFILE_NAME ";
 		
 		List<Map<String, Object>> rows = jdbcTemplate.queryForList(selectServerSQL);
@@ -106,7 +106,7 @@ public class ServerProfilesDAOjdbcTemplateImpl implements ServerProfilesDAO
 	}
 	
 	private String getServersListSelectionSQL(String selectionCol, String selectionValue){	
-		String serversListSelectionSQL = "select SERVER_PROFILE_NAME, SERVER, ALTERNATE_SERVER_ID, USERNAME, PASSWORD, PASSWORD_CIPHER, OPERATING_SYSTEM, CONNECTION_PORT, CONNECTION_TIMEOUT, COMMENT from serverprofiles ";
+		String serversListSelectionSQL = "select SERVER_PROFILE_NAME, SERVER, ALTERNATE_SERVER_ID, USERNAME, PASSWORD, PASSWORD_CIPHER, OPERATING_SYSTEM, CONNECTION_PORT, CONNECTION_TIMEOUT, COMMENT from SERVERPROFILES ";
 		
 		if (!selectionValue.isEmpty()  ) {			
 			serversListSelectionSQL += "  where " + selectionCol + " like '" + selectionValue + "' ";
@@ -169,11 +169,11 @@ public class ServerProfilesDAOjdbcTemplateImpl implements ServerProfilesDAO
 	@Override
 	public void deleteServerProfile(String serverProfileName) {
 		
-		String sql = "delete from servercommandlinks where SERVER_PROFILE_NAME ='" + serverProfileName	+ "'";
+		String sql = "delete from SERVERCOMMANDLINKS where SERVER_PROFILE_NAME ='" + serverProfileName	+ "'";
 		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
 		jdbcTemplate.update(sql);		
 		
-		sql = "delete from serverprofiles where SERVER_PROFILE_NAME ='" + serverProfileName	+ "'";
+		sql = "delete from SERVERPROFILES where SERVER_PROFILE_NAME ='" + serverProfileName	+ "'";
 		jdbcTemplate = new JdbcTemplate(dataSource);
 		jdbcTemplate.update(sql);
 	}	

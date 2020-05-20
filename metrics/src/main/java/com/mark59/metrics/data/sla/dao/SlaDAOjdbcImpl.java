@@ -40,7 +40,7 @@ public class SlaDAOjdbcImpl implements SlaDAO {
 	
 	public void insertData(Sla sla) {
 		/* transaction name and id the same thing for now.. */
-		String sql = "INSERT INTO sla "
+		String sql = "INSERT INTO SLA "
 				+ "(TXN_ID, SLA_APPLICATION_KEY, IS_TXN_IGNORED, SLA_90TH_RESPONSE, "
 				+ "SLA_PASS_COUNT, SLA_PASS_COUNT_VARIANCE_PERCENT, SLA_FAIL_COUNT, SLA_FAIL_PERCENT, SLA_REF_URL) VALUES (?,?,?,?,?,?,?,?,?)";
 
@@ -87,7 +87,7 @@ public class SlaDAOjdbcImpl implements SlaDAO {
 				existingSla.setSlaPassCount((Long)row.get("TXN_PASS"));
 				existingSla.setSlaRefUrl( existingSla.getSlaRefUrl().replaceAll(", \\(base:(.*)\\)" , "")  + ", (base:" + (String)row.get("RUN_TIME") + ")"    );
 	
-				sql = "UPDATE sla set SLA_PASS_COUNT = ?, SLA_REF_URL = ? where SLA_APPLICATION_KEY=? and TXN_ID = ?";
+				sql = "UPDATE SLA set SLA_PASS_COUNT = ?, SLA_REF_URL = ? where SLA_APPLICATION_KEY=? and TXN_ID = ?";
 				jdbcTemplate = new JdbcTemplate(dataSource);
 		
 				jdbcTemplate.update(sql, new Object[] { existingSla.getSlaPassCount(), existingSla.getSlaRefUrl(), existingSla.getSlaApplicationKey(), existingSla.getTxnId() });
@@ -100,7 +100,7 @@ public class SlaDAOjdbcImpl implements SlaDAO {
 
 	@Override
 	public void deleteAllSlasForApplication(String slaApplicationKey) {
-		String sql = "delete from sla where  SLA_APPLICATION_KEY='" + slaApplicationKey + "'";
+		String sql = "delete from SLA where  SLA_APPLICATION_KEY='" + slaApplicationKey + "'";
 		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
 		jdbcTemplate.update(sql);
 
@@ -108,7 +108,7 @@ public class SlaDAOjdbcImpl implements SlaDAO {
 	
 	@Override
 	public void deleteData(String slaApplicationKey, String txnId) {
-		String sql = "delete from sla where  SLA_APPLICATION_KEY='" + slaApplicationKey + "' and TXN_ID='" + txnId + "'";
+		String sql = "delete from SLA where  SLA_APPLICATION_KEY='" + slaApplicationKey + "' and TXN_ID='" + txnId + "'";
 		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
 		jdbcTemplate.update(sql);
 
@@ -129,7 +129,7 @@ public class SlaDAOjdbcImpl implements SlaDAO {
 			
 		} else {  // update values for an existing transaction
 				
-			String sql = "UPDATE sla set SLA_APPLICATION_KEY = ?, IS_TXN_IGNORED = ?,SLA_90TH_RESPONSE = ?, "
+			String sql = "UPDATE SLA set SLA_APPLICATION_KEY = ?, IS_TXN_IGNORED = ?,SLA_90TH_RESPONSE = ?, "
 					+ "SLA_PASS_COUNT = ?, SLA_PASS_COUNT_VARIANCE_PERCENT = ?, SLA_FAIL_COUNT = ?, SLA_FAIL_PERCENT = ?, SLA_REF_URL = ? "
 					+ "where SLA_APPLICATION_KEY=? and TXN_ID = ?";
 			JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
@@ -143,7 +143,7 @@ public class SlaDAOjdbcImpl implements SlaDAO {
 	@Override
 	public Sla getSla(String slaApplicationKey, String txnId, String defaultSlaForApplicationKey) {
 		List<Sla> slaList = new ArrayList<Sla>();
-		String sql = "select * from sla where SLA_APPLICATION_KEY='" + slaApplicationKey + "' and TXN_ID='" + txnId + "'";
+		String sql = "select * from SLA where SLA_APPLICATION_KEY='" + slaApplicationKey + "' and TXN_ID='" + txnId + "'";
 //		System.out.println("getSla sql = " + sql);
 		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
 		slaList = jdbcTemplate.query(sql, new SlaRowMapper());
@@ -165,7 +165,7 @@ public class SlaDAOjdbcImpl implements SlaDAO {
 	
 	public Sla getDefaultApplicationSla(String slaApplicationKey,String defaultSlaForApplicationKey) {
 		List<Sla> slaList = new ArrayList<Sla>();
-		String sql = "select * from sla where  SLA_APPLICATION_KEY='" + slaApplicationKey + "' and TXN_ID='" + defaultSlaForApplicationKey + "'";
+		String sql = "select * from SLA where  SLA_APPLICATION_KEY='" + slaApplicationKey + "' and TXN_ID='" + defaultSlaForApplicationKey + "'";
 //		System.out.println("getDefaultApplicationSla sql : " + sql);
 		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
 		slaList = jdbcTemplate.query(sql, new SlaRowMapper());
@@ -184,7 +184,7 @@ public class SlaDAOjdbcImpl implements SlaDAO {
 	@Override
 	public List<Sla> getSlaList(String slaApplicationKey) {
 		List<Sla> slaList = new ArrayList<Sla>();
-		String sql = "select * from sla where SLA_APPLICATION_KEY='" + slaApplicationKey	+ "' order by TXN_ID"   ;
+		String sql = "select * from SLA where SLA_APPLICATION_KEY='" + slaApplicationKey	+ "' order by TXN_ID"   ;
 //		System.out.println("getSla sql = " + sql);
 		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
 		slaList = jdbcTemplate.query(sql, new SlaRowMapper());
@@ -193,7 +193,7 @@ public class SlaDAOjdbcImpl implements SlaDAO {
 	
 	public List<Sla> getSlaList() {
 		List<Sla> slaList = new ArrayList<Sla>();
-		String sql = "select * from sla order by SLA_APPLICATION_KEY, TXN_ID";
+		String sql = "select * from SLA order by SLA_APPLICATION_KEY, TXN_ID";
 		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
 		slaList = jdbcTemplate.query(sql, new SlaRowMapper());
 		return slaList;
@@ -203,7 +203,7 @@ public class SlaDAOjdbcImpl implements SlaDAO {
 	@Override
 	@SuppressWarnings("rawtypes")
 	public List<String> findSlaApplicationKeys() {
-		String sql = "SELECT distinct SLA_APPLICATION_KEY FROM sla order by SLA_APPLICATION_KEY";
+		String sql = "SELECT distinct SLA_APPLICATION_KEY FROM SLA order by SLA_APPLICATION_KEY";
 
 		List<String> applications = new ArrayList<String>();
 		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
@@ -228,7 +228,7 @@ public class SlaDAOjdbcImpl implements SlaDAO {
 	@SuppressWarnings("rawtypes")	
 	public List<String> getSlasWithMissingTxnsInThisRun(String application, String runTime) {
 		
-		String sql = "SELECT TXN_ID FROM sla "
+		String sql = "SELECT TXN_ID FROM SLA "
 					+ " where SLA_APPLICATION_KEY='" + application	+ "' " 
 					+ "  and TXN_ID not in ( "
 					+ "     SELECT TXN_ID FROM transaction"

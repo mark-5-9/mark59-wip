@@ -43,7 +43,7 @@ public class ApplicationDAOjdbcTemplateImpl implements ApplicationDAO
 	@Override
 	public void insertApplication(Application  application) {
 
-		String sql = "INSERT INTO applications (APPLICATION, ACTIVE, COMMENT) VALUES (?,?,?)";
+		String sql = "INSERT INTO APPLICATIONS (APPLICATION, ACTIVE, COMMENT) VALUES (?,?,?)";
 		
 		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
 		jdbcTemplate.update(sql,new Object[] {	application.getApplication(), application.getActive(), application.getComment() });
@@ -52,7 +52,7 @@ public class ApplicationDAOjdbcTemplateImpl implements ApplicationDAO
 	
 	@Override
 	public void enforceRunCascadeDelete() {
-		String sql = "DELETE FROM applications where applications.APPLICATION NOT IN (select distinct APPLICATION from runs) ";
+		String sql = "DELETE FROM APPLICATIONS where applications.APPLICATION NOT IN (select distinct APPLICATION from runs) ";
 		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
 		jdbcTemplate.update(sql);
 	}
@@ -61,7 +61,7 @@ public class ApplicationDAOjdbcTemplateImpl implements ApplicationDAO
 	@Override
 	public void updateApplication(Application application) {
 
-		String sql = "UPDATE applications set ACTIVE = ? , COMMENT = ? where  APPLICATION = ?";
+		String sql = "UPDATE APPLICATIONS set ACTIVE = ? , COMMENT = ? where  APPLICATION = ?";
 		
 		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
 		jdbcTemplate.update(sql,new Object[] {application.getActive(), application.getComment(), application.getApplication()});
@@ -83,9 +83,9 @@ public class ApplicationDAOjdbcTemplateImpl implements ApplicationDAO
 			sqlWhereClause = " where ACTIVE = 'Y' ";
 		}
 		
-		String sql = "SELECT APPLICATION, ACTIVE, COMMENT FROM applications " + sqlWhereClause + "order by APPLICATION ";
+		String sql = "SELECT APPLICATION, ACTIVE, COMMENT FROM APPLICATIONS " + sqlWhereClause + "order by APPLICATION ";
 		
-		List<Application> applications = new ArrayList<Application>();
+		List<Application> applications  = new ArrayList<Application>();
 		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
 
 		List<Map<String, Object>> rows = jdbcTemplate.queryForList(sql);
@@ -106,11 +106,11 @@ public class ApplicationDAOjdbcTemplateImpl implements ApplicationDAO
 		
 		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
 		
-		String sql    = "select APPLICATION, ACTIVE, COMMENT from applications where APPLICATION = '" + applicationId + "'" ;
+		String sql    = "select APPLICATION, ACTIVE, COMMENT from APPLICATIONS where APPLICATION = '" + applicationId + "'" ;
 		List<Map<String, Object>> rows = jdbcTemplate.queryForList(sql);
 		
 		if (rows.isEmpty()){
-			System.out.println("applications " + applicationId + " does not exist on application table " );
+			System.out.println("application " + applicationId + " does not exist on application table " );
 			application.setApplication("");
 		} else {		
 			Map<String, Object> row = rows.get(0);

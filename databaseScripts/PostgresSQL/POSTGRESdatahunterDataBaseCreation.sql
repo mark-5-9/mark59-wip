@@ -9,22 +9,22 @@ CREATE DATABASE datahunterdb WITH ENCODING='UTF8' OWNER=admin TEMPLATE=template0
 --   if you use the pgAdmin tool to load data, remember to hit the 'commit' icon to save the changes! 
 
 
-CREATE TABLE IF NOT EXISTS policies (
-  application varchar(64) NOT NULL,
-  identifier 	varchar(512) NOT NULL,
-  lifecycle 	varchar(64) NOT NULL,
-  useability 	varchar(16) NOT NULL,
-  otherdata  	varchar(512) NOT NULL,
-  created   	timestamp NOT NULL,
-  updated   	timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  epochtime  	bigint  NOT NULL DEFAULT '0',
-  PRIMARY KEY (application,identifier,lifecycle)
+CREATE TABLE IF NOT EXISTS POLICIES (
+  APPLICATION VARCHAR(64) NOT NULL,
+  IDENTIFIER 	VARCHAR(512) NOT NULL,
+  LIFECYCLE 	VARCHAR(64) NOT NULL,
+  USEABILITY 	VARCHAR(16) NOT NULL,
+  OTHERDATA  	VARCHAR(512) NOT NULL,
+  CREATED   	TIMESTAMP NOT NULL,
+  UPDATED   	TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  EPOCHTIME  	BIGINT  NOT NULL DEFAULT '0',
+  PRIMARY KEY (APPLICATION,IDENTIFIER,LIFECYCLE)
 ); 
 
-CREATE TABLE IF NOT EXISTS reference (
-  application varchar(64) NOT NULL,
-  property	  varchar(128) NOT NULL,
-  value 	  varchar(128) NOT NULL,
-  description varchar(512) DEFAULT NULL,
-  PRIMARY KEY (application,property)
+CREATE TABLE IF NOT EXISTS REFERENCE (
+  APPLICATION VARCHAR(64) NOT NULL,
+  PROPERTY	  VARCHAR(128) NOT NULL,
+  VALUE 	  VARCHAR(128) NOT NULL,
+  DESCRIPTION VARCHAR(512) DEFAULT NULL,
+  PRIMARY KEY (APPLICATION,PROPERTY)
 ); 

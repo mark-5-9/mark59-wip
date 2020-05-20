@@ -51,11 +51,11 @@ public class PoliciesDAOjdbcTemplateImpl implements PoliciesDAO
 		
 		StringBuilder builder = new StringBuilder();
 		builder.append("SELECT ").append(policySelect.getSelectClause())
-		.append( " FROM policies WHERE application = '").append( policySelect.getApplication())
-		.append( "' AND identifier = '").append( policySelect.getIdentifier()  ).append("' ");
+		.append( " FROM POLICIES WHERE APPLICATION = '").append( policySelect.getApplication())
+		.append( "' AND IDENTIFIER = '").append( policySelect.getIdentifier()  ).append("' ");
 		
 		if (! DataHunterUtils.isEmpty(policySelect.getLifecycle())) {   								//so only if lifecycle is entered (it is part of the full policy key)
-			builder.append( " AND lifecycle = '").append(policySelect.getLifecycle()).append("' ");
+			builder.append( " AND LIFECYCLE = '").append(policySelect.getLifecycle()).append("' ");
 		}	
 		return builder.toString();
 	}
@@ -66,19 +66,19 @@ public class PoliciesDAOjdbcTemplateImpl implements PoliciesDAO
 		
 		StringBuilder builder = new StringBuilder();
 		builder.append("SELECT ").append(policySelect.getSelectClause())
-				.append( " FROM policies WHERE application = '").append( policySelect.getApplication()).append( "' ")
+				.append( " FROM POLICIES WHERE APPLICATION = '").append( policySelect.getApplication()).append( "' ")
 				.append(lifecycleAndUseabiltySelector(policySelect));
 		
 		if (DataHunterUtils.isEmpty(policySelect.getSelectOrder())) {   						 			//default ordering: most recently created first on the list 
-			builder.append(" ORDER BY created desc");
+			builder.append(" ORDER BY CREATED DESC ");
 		} else if (DataHunterConstants.SELECT_UNORDERED.equals(policySelect.getSelectOrder())){      			//eg when just selecting count(*)      
 			builder.append("");			
 		} else if (DataHunterConstants.SELECT_MOST_RECENTLY_ADDED.equals(policySelect.getSelectOrder())){
-			builder.append(" ORDER BY created desc, epochtime desc, identifier desc limit 1 ");			//with Epoch time and Id as a tie-breakers
+			builder.append(" ORDER BY CREATED DESC, EPOCHTIME DESC, IDENTIFIER DESC LIMIT 1 ");			//with Epoch time and Id as a tie-breakers
 		} else if (DataHunterConstants.SELECT_OLDEST_ENTRY.equals(policySelect.getSelectOrder())){
-			builder.append(" ORDER BY created asc, epochtime asc, identifier asc limit 1 ");			//with Epoch time and Id as a tie-breakers
+			builder.append(" ORDER BY CREATED ASC, EPOCHTIME ASC, IDENTIFIER ASC LIMIT 1 ");			//with Epoch time and Id as a tie-breakers
 		} if (DataHunterConstants.SELECT_RANDOM_ENTRY.equals(policySelect.getSelectOrder())){
-			builder.append(" ORDER BY RAND() limit 1 ");	
+			builder.append(" ORDER BY RAND() LIMIT 1 ");	
 		}
 			
 		return builder.toString();
@@ -89,10 +89,10 @@ public class PoliciesDAOjdbcTemplateImpl implements PoliciesDAO
 	public String constructCountPoliciesBreakdownSql(PolicySelectionCriteria policySelect){
 
 		StringBuilder builder = new StringBuilder();
-		builder.append("select DISTINCT application, lifecycle, useability, COUNT(*) as rowCount from policies where ")
+		builder.append("SELECT DISTINCT APPLICATION, LIFECYCLE, USEABILITY, COUNT(*) AS ROWCOUNT FROM POLICIES WHERE ")
 			.append(applicationSelectorDependingOnOperator(policySelect))
 			.append(lifecycleAndUseabiltySelector(policySelect))				
-			.append( " group by application, lifecycle, useability");
+			.append( " GROUP BY APPLICATION, LIFECYCLE, USEABILITY");
 		
 		return builder.toString();
 	}
@@ -102,16 +102,16 @@ public class PoliciesDAOjdbcTemplateImpl implements PoliciesDAO
 	public String constructAsyncMessageaAnalyzerSql(PolicySelectionCriteria policySelect) {
 
 		StringBuilder builder = new StringBuilder();
-		builder.append("select application, identifier, useability,  min(epochtime) as starttm, max(epochtime) as endtm, max(epochtime) - min(epochtime) as differencetm from policies where ")
+		builder.append("SELECT APPLICATION, IDENTIFIER, USEABILITY,  MIN(EPOCHTIME) AS STARTTM, MAX(EPOCHTIME) AS ENDTM, MAX(EPOCHTIME) - MIN(EPOCHTIME) AS DIFFERENCETM FROM POLICIES WHERE ")
 			.append(applicationSelectorDependingOnOperator(policySelect));
 
 		if ( ! DataHunterUtils.isEmpty(policySelect.getIdentifier())){  
-			builder.append( " AND identifier = '").append(policySelect.getIdentifier()).append("' ");
+			builder.append( " AND IDENTIFIER = '").append(policySelect.getIdentifier()).append("' ");
 		} 
 		if ( ! DataHunterUtils.isEmpty(policySelect.getUseability())){  
-			builder.append( " AND useability = '").append(policySelect.getUseability()).append("' ");
+			builder.append( " AND USEABILITY = '").append(policySelect.getUseability()).append("' ");
 		} 		
-		builder.append( " group by application, identifier, useability having count(*) > 1 order by application desc, identifier desc");
+		builder.append( " GROUP BY APPLICATION, IDENTIFIER, USEABILITY HAVING COUNT(*) > 1 ORDER BY APPLICATION DESC, IDENTIFIER DESC");
 		
 		return builder.toString();
 	}
@@ -123,7 +123,7 @@ public class PoliciesDAOjdbcTemplateImpl implements PoliciesDAO
 	public String constructDeleteMultiplePoliciesSql(PolicySelectionCriteria policySelect){
 		
 		StringBuilder builder = new StringBuilder();
-		builder.append("DELETE FROM policies WHERE application = '").append( policySelect.getApplication())	.append( "' ")
+		builder.append("DELETE FROM POLICIES WHERE APPLICATION = '").append( policySelect.getApplication())	.append( "' ")
 				.append(lifecycleAndUseabiltySelector(policySelect));
 
 		return builder.toString();
@@ -131,9 +131,9 @@ public class PoliciesDAOjdbcTemplateImpl implements PoliciesDAO
 	
 	
 	private String  applicationSelectorDependingOnOperator(PolicySelectionCriteria policySelect) {
-		String applicationSelection = " application =  '" + policySelect.getApplication() + "' ";
+		String applicationSelection = " APPLICATION =  '" + policySelect.getApplication() + "' ";
 		if ( DataHunterConstants.STARTS_WITH.equals(policySelect.getApplicationStartsWithOrEquals()) ){
-			applicationSelection = " application like '"  + policySelect.getApplication() + "%' ";
+			applicationSelection = " APPLICATION LIKE '"  + policySelect.getApplication() + "%' ";
 		}
 		return applicationSelection;
 	}
@@ -145,12 +145,12 @@ public class PoliciesDAOjdbcTemplateImpl implements PoliciesDAO
 		if ( DataHunterUtils.isEmpty(policySelect.getLifecycle()) && DataHunterUtils.isEmpty(policySelect.getUseability()) ){  
 			// do nothing, sql done
 		} else if (DataHunterUtils.isEmpty(policySelect.getUseability())) {   								//so only lifecycle has a value
-			builder.append( " AND lifecycle = '").append(policySelect.getLifecycle()).append("' ");
+			builder.append( " AND LIFECYCLE = '").append(policySelect.getLifecycle()).append("' ");
 		} else if (DataHunterUtils.isEmpty(policySelect.getLifecycle())) {   								//so only usability has a value
-			builder.append(" AND useability = '").append(policySelect.getUseability()).append("' ");
+			builder.append(" AND USEABILITY = '").append(policySelect.getUseability()).append("' ");
 		} else {																						//so both have a value set 
-			builder.append(" AND lifecycle = '").append(policySelect.getLifecycle())
-			.append("' AND useability = '").append(policySelect.getUseability()).append("'  ");	
+			builder.append(" AND LIFECYCLE = '").append(policySelect.getLifecycle())
+			.append("' AND USEABILITY = '").append(policySelect.getUseability()).append("'  ");	
 		}
 		return builder.toString(); 
 	}
@@ -217,7 +217,7 @@ public class PoliciesDAOjdbcTemplateImpl implements PoliciesDAO
 	public String constructInsertDataSql(Policies policies) {
 		
 		StringBuilder builder = new StringBuilder();		
-		builder.append("INSERT INTO policies (application, identifier, lifecycle, useability, otherdata, created, updated, epochtime) VALUES ( '" )
+		builder.append("INSERT INTO POLICIES (APPLICATION, IDENTIFIER, LIFECYCLE, USEABILITY, OTHERDATA, CREATED, UPDATED, EPOCHTIME) VALUES ( '" )
 		       .append(policies.getApplication()).append("', '")
 		       .append(policies.getIdentifier()).append("', '")
 		       .append(policies.getLifecycle()).append("', '")
@@ -236,8 +236,8 @@ public class PoliciesDAOjdbcTemplateImpl implements PoliciesDAO
 	public String constructDeletePoliciesSql(PolicySelectionCriteria policySelectionCriteria) {
 		
 		StringBuilder builder = new StringBuilder();
-		builder.append("DELETE FROM policies WHERE application = '").append(policySelectionCriteria.getApplication())
-				.append("' and identifier = '").append(policySelectionCriteria.getIdentifier() ).append( "' ");
+		builder.append("DELETE FROM POLICIES WHERE APPLICATION = '").append(policySelectionCriteria.getApplication())
+				.append("' AND IDENTIFIER = '").append(policySelectionCriteria.getIdentifier() ).append( "' ");
 
 		return builder.toString();
 	}	
@@ -267,25 +267,25 @@ public class PoliciesDAOjdbcTemplateImpl implements PoliciesDAO
 	public String constructUpdatePoliciesUseStateSql(UpdateUseStateAndEpochTime updateUse) {
 		StringBuilder builder = new StringBuilder();
 
-		builder.append("UPDATE policies set useability = '").append(updateUse.getToUseability()).append("' ") 
-			   .append(", updated = CURRENT_TIMESTAMP "); 
+		builder.append("UPDATE POLICIES SET USEABILITY = '").append(updateUse.getToUseability()).append("' ") 
+			   .append(", UPDATED = CURRENT_TIMESTAMP "); 
 
 		if (updateUse.getToEpochTime() !=  null ){
-			builder.append(", epochtime = ").append(updateUse.getToEpochTime()); 	
+			builder.append(", EPOCHTIME = ").append(updateUse.getToEpochTime()); 	
 		}
 		
-		builder.append(" WHERE application = '").append(updateUse.getApplication()).append("' ");
+		builder.append(" WHERE APPLICATION = '").append(updateUse.getApplication()).append("' ");
 		
 		if (! DataHunterUtils.isEmpty(updateUse.getLifecycle())) {   		 	
-			builder.append(" and lifecycle = '").append(updateUse.getLifecycle()).append( "' ");
+			builder.append(" AND LIFECYCLE = '").append(updateUse.getLifecycle()).append( "' ");
 		}		
 		
 		if (! DataHunterUtils.isEmpty(updateUse.getIdentifier())) {   		 	
-			builder.append(" and identifier = '").append(updateUse.getIdentifier()).append( "' ");
+			builder.append(" AND IDENTIFIER = '").append(updateUse.getIdentifier()).append( "' ");
 		}		
 		
 		if (! DataHunterUtils.isEmpty(updateUse.getUseability())) {   		 	
-			builder.append(" and useability = '").append(updateUse.getUseability()).append( "' ");
+			builder.append(" AND USEABILITY = '").append(updateUse.getUseability()).append( "' ");
 		}
 		return builder.toString(); 
 	}
@@ -306,14 +306,14 @@ public class PoliciesDAOjdbcTemplateImpl implements PoliciesDAO
 
 	private Policies populatePoliciesFromResultSet(Map<String, Object> row) {
 		Policies policies = new Policies();
-		policies.setApplication((String)row.get("application"));
-		policies.setIdentifier((String)row.get("identifier"));
-		policies.setLifecycle((String)row.get("lifecycle"));
-		policies.setUseability((String)row.get("useability"));
-		policies.setOtherdata((String)row.get("otherdata"));
-		policies.setCreated((Timestamp)row.get("created"));		
-		policies.setUpdated((Timestamp)row.get("updated"));			
-		policies.setEpochtime((Long)row.get("epochtime"));		
+		policies.setApplication((String)row.get("APPLICATION"));
+		policies.setIdentifier((String)row.get("IDENTIFIER"));
+		policies.setLifecycle((String)row.get("LIFECYCLE"));
+		policies.setUseability((String)row.get("USEABILITY"));
+		policies.setOtherdata((String)row.get("OTHERDATA"));
+		policies.setCreated((Timestamp)row.get("CREATED"));		
+		policies.setUpdated((Timestamp)row.get("UPDATED"));			
+		policies.setEpochtime((Long)row.get("EPOCHTIME"));		
 		return policies;
 	}
 	
@@ -323,21 +323,21 @@ public class PoliciesDAOjdbcTemplateImpl implements PoliciesDAO
 	 */
 	private CountPoliciesBreakdown populateCountPoliciesBreakdownFromResultSet(Map<String, Object> row) {
 		CountPoliciesBreakdown policiesSelectedCountsBreakdown = new CountPoliciesBreakdown();
-		policiesSelectedCountsBreakdown.setApplication(((String)row.get("application")).replace(" ", "_"));
-		policiesSelectedCountsBreakdown.setLifecycle(((String)row.get("lifecycle")).replace(" ", "_"));
-		policiesSelectedCountsBreakdown.setUseability(((String)row.get("useability")).replace(" ", "_"));
-		policiesSelectedCountsBreakdown.setRowCount((Long)row.get("rowCount"));
+		policiesSelectedCountsBreakdown.setApplication(((String)row.get("APPLICATION")).replace(" ", "_"));
+		policiesSelectedCountsBreakdown.setLifecycle(((String)row.get("LIFECYCLE")).replace(" ", "_"));
+		policiesSelectedCountsBreakdown.setUseability(((String)row.get("USEABILITY")).replace(" ", "_"));
+		policiesSelectedCountsBreakdown.setRowCount((Long)row.get("ROWCOUNT"));
 		return policiesSelectedCountsBreakdown;
 	}
 
 	private AsyncMessageaAnalyzerResult populateAsyncMessageaAnalyzerResultFromSqlResultRow(Map<String, Object> row) {
 		AsyncMessageaAnalyzerResult asyncMessageaAnalyzerResult = new AsyncMessageaAnalyzerResult();
-		asyncMessageaAnalyzerResult.setApplication((String)row.get("application"));
-		asyncMessageaAnalyzerResult.setIdentifier((String)row.get("identifier"));
-		asyncMessageaAnalyzerResult.setUseability((String)row.get("useability"));
-		asyncMessageaAnalyzerResult.setStarttm((Long)row.get("starttm"));
-		asyncMessageaAnalyzerResult.setEndtm((Long)row.get("endtm"));	
-		asyncMessageaAnalyzerResult.setDifferencetm((Long)row.get("differencetm"));			
+		asyncMessageaAnalyzerResult.setApplication((String)row.get("APPLICATION"));
+		asyncMessageaAnalyzerResult.setIdentifier((String)row.get("IDENTIFIER"));
+		asyncMessageaAnalyzerResult.setUseability((String)row.get("USEABILITY"));
+		asyncMessageaAnalyzerResult.setStarttm((Long)row.get("STARTTM"));
+		asyncMessageaAnalyzerResult.setEndtm((Long)row.get("ENDTM"));	
+		asyncMessageaAnalyzerResult.setDifferencetm((Long)row.get("DIFFERENCETM"));			
 		return asyncMessageaAnalyzerResult;
 	}
 

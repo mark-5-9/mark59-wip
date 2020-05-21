@@ -52,7 +52,7 @@ public class ApplicationDAOjdbcTemplateImpl implements ApplicationDAO
 	
 	@Override
 	public void enforceRunCascadeDelete() {
-		String sql = "DELETE FROM APPLICATIONS where applications.APPLICATION NOT IN (select distinct APPLICATION from runs) ";
+		String sql = "DELETE FROM APPLICATIONS where APPLICATIONS.APPLICATION NOT IN (select distinct APPLICATION from RUNS) ";
 		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
 		jdbcTemplate.update(sql);
 	}

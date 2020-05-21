@@ -24,3 +24,12 @@ GRANT ALL PRIVILEGES ON *.* TO 'admin'@'localhost' WITH GRANT OPTION;
 CREATE USER 'admin'@'%' IDENTIFIED BY 'admin';
 GRANT ALL PRIVILEGES ON *.* TO 'admin'@'%' WITH GRANT OPTION;
 FLUSH PRIVILEGES;
+
+
+--  A Note for Linux Users --
+--  You may also need to set a time_zone, depending on your instal (you will find our when you attmept to connect start an applciaton and you see a message like 
+--   " The server time zone value 'xxxx' is unrecognized or represents more than one time zone"  
+--  refer https://stackoverflow.com/questions/930900/how-do-i-set-the-time-zone-of-mysql 
+-- eg (for utc time)
+-- SET GLOBAL default-time-zone='+00:00';
+-- SELECT @@global.time_zone;

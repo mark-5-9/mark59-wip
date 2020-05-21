@@ -231,7 +231,7 @@ public class SlaDAOjdbcImpl implements SlaDAO {
 		String sql = "SELECT TXN_ID FROM SLA "
 					+ " where SLA_APPLICATION_KEY='" + application	+ "' " 
 					+ "  and TXN_ID not in ( "
-					+ "     SELECT TXN_ID FROM transaction"
+					+ "     SELECT TXN_ID FROM TRANSACTION"
 					+ "     where APPLICATION = '" + application + "' "
 					+ "       and RUN_TIME = '" + runTime + "' " 
 					+ "       and TXN_TYPE = 'TRANSACTION' ) " 					

@@ -94,7 +94,7 @@ public class CommandParserLinksDAOjdbcTemplateImpl implements CommandParserLinks
 	}
 	
 	private String getCommandParserLinkListSelectionSQL(String selectionCol, String selectionValue){	
-		String commandListSelectionSQL = "select COMMAND_NAME, SCRIPT_NAME from commandparserlinks ";
+		String commandListSelectionSQL = "SELECT COMMAND_NAME, SCRIPT_NAME FROM COMMANDPARSERLINKS ";
 		
 		if (!selectionValue.isEmpty()  ) {			
 			commandListSelectionSQL += "  where " + selectionCol + " like '" + selectionValue + "' ";
@@ -107,7 +107,7 @@ public class CommandParserLinksDAOjdbcTemplateImpl implements CommandParserLinks
 	
 	@Override
 	public void insertCommandParserLink(CommandParserLink commandParserLink) {
-		String sql = "INSERT INTO commandparserlinks ( COMMAND_NAME, SCRIPT_NAME ) " + 
+		String sql = "INSERT INTO COMMANDPARSERLINKS ( COMMAND_NAME, SCRIPT_NAME ) " + 
 				      " VALUES (?,?)";
 		
 		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
@@ -135,7 +135,7 @@ public class CommandParserLinksDAOjdbcTemplateImpl implements CommandParserLinks
 	
 	@Override
 	public void deleteCommandParserLinksForCommandName(String commandName) {
-		String sql = "delete from commandparserlinks "
+		String sql = "delete from COMMANDPARSERLINKS "
 				+ " where COMMAND_NAME = '" + commandName + "'";
 		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
 		jdbcTemplate.update(sql);
@@ -144,7 +144,7 @@ public class CommandParserLinksDAOjdbcTemplateImpl implements CommandParserLinks
 	
 	@Override
 	public void deleteCommandParserLink(CommandParserLink commandParserLink) {
-		String sql = "delete from commandparserlinks "
+		String sql = "delete from COMMANDPARSERLINKS "
 				+ " where COMMAND_NAME = '" + commandParserLink.getCommandName() + "'"
 				+ "   and SCRIPT_NAME = '"  + commandParserLink.getScriptName()  + "'";
 		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
@@ -153,7 +153,7 @@ public class CommandParserLinksDAOjdbcTemplateImpl implements CommandParserLinks
 
 	@Override
 	public void deleteCommandParserLinksForScriptName(String scriptName) {
-		String sql = "delete from commandparserlinks "
+		String sql = "delete from COMMANDPARSERLINKS "
 				+ " where SCRIPT_NAME = '" + scriptName + "'";
 		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
 		jdbcTemplate.update(sql);

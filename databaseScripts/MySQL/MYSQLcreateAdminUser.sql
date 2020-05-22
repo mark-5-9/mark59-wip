@@ -27,9 +27,16 @@ FLUSH PRIVILEGES;
 
 
 --  A Note for Linux Users --
---  You may also need to set a time_zone, depending on your instal (you will find our when you attmept to connect start an applciaton and you see a message like 
---   " The server time zone value 'xxxx' is unrecognized or represents more than one time zone"  
---  refer https://stackoverflow.com/questions/930900/how-do-i-set-the-time-zone-of-mysql 
--- eg (for utc time)
--- SET GLOBAL default-time-zone='+00:00';
--- SELECT @@global.time_zone;
+--  You may also need to set a time_zone, depending on your install (you will find out when you attempt to connect start an applciaton and you see a message like " The server time zone value 'xxxx' is unrecognized or represents more than one time zone"  
+--  refer https://dev.mysql.com/doc/refman/8.0/en/time-zone-support.html :
+--     run command: mysql_tzinfo_to_sql /usr/share/zoneinfo | mysql -u root -p mysql              <- loads tz data into mysql 
+--     restart server: sudo systemctl restart mysql
+--     run sql (to confirm values are loaded):  SELECT * FROM mysql.time_zone_name;               <- you shoud see list of timezones
+--     stop server:  sudo systemctl stop mysql
+--     logon as su and edit /etc/mysql/my.conf adding line(s):                                    <- (above the !included... lines) 
+--        [mysqld]
+--        default-time-zone='Australia/Melbourne'                                                 <- or whatever your timezone is  
+--     start server:  sudo systemctl start mysql 
+--     run sql (to confirm values are loaded):  SELECT @@GLOBAL.time_zone, @@SESSION.time_zone;   <- should return your new timezone 
+
+

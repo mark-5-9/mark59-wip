@@ -127,14 +127,14 @@ public class ServerProfileController {
 		headerCellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
 		
 		
-		Sheet sheet = workbook.createSheet("serverprofiles");
+		Sheet sheet = workbook.createSheet("SERVERPROFILES");
 
 		DataFormat fmt = workbook.createDataFormat();
 		CellStyle textStyle = workbook.createCellStyle();
 		textStyle.setDataFormat(fmt.getFormat("@"));
 		sheet.setDefaultColumnStyle(0, textStyle);
 		
-		columnCount = createHeaderRow(sheet, headerCellStyle, "serverprofiles");
+		columnCount = createHeaderRow(sheet, headerCellStyle, "SERVERPROFILES");
 		rowIndex = 1;
 		List<ServerProfile> serverProfiles = serverProfilesDAO.findServerProfiles();
 		for (ServerProfile serverProfile : serverProfiles) {
@@ -156,8 +156,8 @@ public class ServerProfileController {
 		autoSizeColumns(sheet, columnCount);
 
 		
-		sheet = workbook.createSheet("servercommandlinks");
-		columnCount = createHeaderRow(sheet, headerCellStyle, "servercommandlinks");
+		sheet = workbook.createSheet("SERVERCOMMANDLINKS");
+		columnCount = createHeaderRow(sheet, headerCellStyle, "SERVERCOMMANDLINKS");
 		rowIndex = 1;
 		List<ServerCommandLink> serverCommandLinks = serverCommandLinksDAO.findServerCommandLinks();
 		for (ServerCommandLink serverCommandLink : serverCommandLinks) {
@@ -169,8 +169,8 @@ public class ServerProfileController {
 		autoSizeColumns(sheet, columnCount);
 
 		
-		sheet = workbook.createSheet("commands");
-		columnCount = createHeaderRow(sheet, headerCellStyle, "commands");
+		sheet = workbook.createSheet("COMMANDS");
+		columnCount = createHeaderRow(sheet, headerCellStyle, "COMMANDS");
 		rowIndex = 1;
 		List<Command> commands = commandsDAO.findCommands() ;
 		for (Command command : commands) {
@@ -185,8 +185,8 @@ public class ServerProfileController {
 		autoSizeColumns(sheet, columnCount);
 	
 		
-		sheet = workbook.createSheet("commandparserlinks");
-		columnCount = createHeaderRow(sheet, headerCellStyle, "commandparserlinks");
+		sheet = workbook.createSheet("COMMANDPARSERLINKS");
+		columnCount = createHeaderRow(sheet, headerCellStyle, "COMMANDPARSERLINKS");
 		rowIndex = 1;
 		List<CommandParserLink> commandparserlinks = commandParserLinksDAO.findCommandParserLinks();
 		for (CommandParserLink commandParserLink : commandparserlinks) {
@@ -198,8 +198,8 @@ public class ServerProfileController {
 		autoSizeColumns(sheet, columnCount);
 	
 		
-		sheet = workbook.createSheet("commandresponseparsers");
-		columnCount = createHeaderRow(sheet, headerCellStyle, "commandresponseparsers");
+		sheet = workbook.createSheet("COMMANDRESPONSEPARSERS");
+		columnCount = createHeaderRow(sheet, headerCellStyle, "COMMANDRESPONSEPARSERS");
 		rowIndex = 1;
 		List<CommandResponseParser> commandResponseParsers = commandResponseParsersDAO.findCommandResponseParsers();
 		for (CommandResponseParser commandResponseParser : commandResponseParsers) {

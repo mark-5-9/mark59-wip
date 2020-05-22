@@ -120,7 +120,7 @@ public class ServerProfilesDAOjdbcTemplateImpl implements ServerProfilesDAO
 	@Override
 	public void insertServerProfile(ServerProfile serverProfile) {
 		
-		String sql = "INSERT INTO serverprofiles (SERVER_PROFILE_NAME, SERVER, ALTERNATE_SERVER_ID, USERNAME, PASSWORD, PASSWORD_CIPHER, OPERATING_SYSTEM, CONNECTION_PORT, CONNECTION_TIMEOUT, COMMENT ) " + 
+		String sql = "INSERT INTO SERVERPROFILES (SERVER_PROFILE_NAME, SERVER, ALTERNATE_SERVER_ID, USERNAME, PASSWORD, PASSWORD_CIPHER, OPERATING_SYSTEM, CONNECTION_PORT, CONNECTION_TIMEOUT, COMMENT ) " + 
 				      " VALUES (?,?,?,?,?,?,?,?,?,? )";
 		
 		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
@@ -144,7 +144,7 @@ public class ServerProfilesDAOjdbcTemplateImpl implements ServerProfilesDAO
 	@Override
 	public void updateServerProfile(ServerProfile serverProfile){
 
-		String sql = "UPDATE serverprofiles set SERVER = ?, ALTERNATE_SERVER_ID = ?, USERNAME = ?, PASSWORD = ?, PASSWORD_CIPHER = ?,"
+		String sql = "UPDATE SERVERPROFILES set SERVER = ?, ALTERNATE_SERVER_ID = ?, USERNAME = ?, PASSWORD = ?, PASSWORD_CIPHER = ?,"
 				+ " OPERATING_SYSTEM = ?, CONNECTION_PORT = ?, CONNECTION_TIMEOUT = ?, COMMENT = ? "
 				+ "where SERVER_PROFILE_NAME = ? ";
 		

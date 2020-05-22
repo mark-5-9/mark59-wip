@@ -82,7 +82,7 @@ public class CommandDriverNixSshImpl implements CommandDriver {
 		String commandLog = cipherUsedLog + IgnoreStdErrLog + " :<br><font face='Courier'>" + command.getCommand().replaceAll("\\R", "<br>") + "</font>"; 
 			
 		if ("localhost".equalsIgnoreCase(serverProfile.getServer())) {
-			CommandDriver.executeRuntimeCommand(command.getCommand().replaceAll("\\R", "\n")  , command.getIngoreStderr());
+			commandDriverResponse = CommandDriver.executeRuntimeCommand(command.getCommand().replaceAll("\\R", "\n")  , command.getIngoreStderr());
 		} else {
 			commandDriverResponse = connect(serverProfile, actualPassword);
 			if (sesConnection != null) {                                                                      

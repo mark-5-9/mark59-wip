@@ -146,11 +146,11 @@ public class ServerMetricsCaptureViaExcel extends AbstractJavaSamplerClient {
 
         	Workbook workbook = new XSSFWorkbook(excelFile.getPath() );
             
-        	Sheet serverprofilesSheet 		  = workbook.getSheet("serverprofiles");
-        	Sheet servercommandlinksSheet	  = workbook.getSheet("servercommandlinks");
-        	Sheet commandsSheet 			  = workbook.getSheet("commands");
-        	Sheet commandparserlinksSheet 	  = workbook.getSheet("commandparserlinks");
-        	Sheet commandresponseparsersSheet = workbook.getSheet("commandresponseparsers");
+        	Sheet serverprofilesSheet 		  = workbook.getSheet("SERVERPROFILES");
+        	Sheet servercommandlinksSheet	  = workbook.getSheet("SERVERCOMMANDLINKS");
+        	Sheet commandsSheet 			  = workbook.getSheet("COMMANDS");
+        	Sheet commandparserlinksSheet 	  = workbook.getSheet("COMMANDPARSERLINKS");
+        	Sheet commandresponseparsersSheet = workbook.getSheet("COMMANDRESPONSEPARSERS");
         	
         	ServerProfilesDAO serverProfilesDAO 				= new ServerProfilesDAOexcelWorkbookImpl(serverprofilesSheet); 
         	ServerCommandLinksDAO serverCommandLinksDAO 		= new ServerCommandLinksDAOexcelWorkbookImpl(servercommandlinksSheet);    	

@@ -117,7 +117,7 @@ public class CommandResponseParsersDAOjdbcTemplateImpl implements CommandRespons
 	@Override
 	public void insertCommandResponseParser(CommandResponseParser commandResponseParser) {
 		
-		String sql = "INSERT INTO commandresponseparsers ( SCRIPT_NAME, METRIC_TXN_TYPE, METRIC_NAME_SUFFIX, SCRIPT, COMMENT, SAMPLE_COMMAND_RESPONSE ) " + 
+		String sql = "INSERT INTO COMMANDRESPONSEPARSERS ( SCRIPT_NAME, METRIC_TXN_TYPE, METRIC_NAME_SUFFIX, SCRIPT, COMMENT, SAMPLE_COMMAND_RESPONSE ) " + 
 				      " VALUES (?,?,?,?,?,?)";
 		
 		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);

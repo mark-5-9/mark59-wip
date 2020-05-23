@@ -50,7 +50,11 @@ public class ApplicationConfig {
         return springProfilesActive;
     }   
 	
-	
+    @Bean
+    public PropertiesConfiguration PropertiesConfiguration() {
+        return new PropertiesConfiguration();
+    }   
+    
     /**
      * This method is equivalent to the following appConfig.xml:
 	 * <pre><code>

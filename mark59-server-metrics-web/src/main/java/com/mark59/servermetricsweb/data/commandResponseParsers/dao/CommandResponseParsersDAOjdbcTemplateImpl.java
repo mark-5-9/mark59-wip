@@ -36,7 +36,6 @@ public class CommandResponseParsersDAOjdbcTemplateImpl implements CommandRespons
 	
 	@Autowired  
 	private DataSource dataSource;
-
 		
 
 	@Override

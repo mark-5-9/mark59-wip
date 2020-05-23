@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.mark59.servermetricsweb;
 
 import org.apache.logging.log4j.LogManager;
@@ -34,6 +33,7 @@ import com.mark59.servermetricsweb.drivers.CommandDriver;
 public class ApplicationEntry extends SpringBootServletInitializer {
 	
 	static final Logger LOG = LogManager.getLogger(ApplicationEntry.class);	
+
 	
 	public static void main(String[] args) {
 		setOperatingSystemVariable("MARK59_SERVER_METRICS",  System.getProperty("user.dir"));
@@ -54,6 +54,5 @@ public class ApplicationEntry extends SpringBootServletInitializer {
 		CommandDriver.executeRuntimeCommand("setx " + osLeverVar + " " + value, "N");
 		LOG.info("Environment variable " + osLeverVar + " : " + System.getenv().get(osLeverVar));	
     }
-    
 	
 }

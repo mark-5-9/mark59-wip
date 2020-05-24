@@ -13,7 +13,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 public class PropertiesConfiguration {
 	
 	private String userid;
-	private String pwd;
+	private String passwrd;
 	
 	public String getUserid() {
 		return userid;
@@ -21,11 +21,13 @@ public class PropertiesConfiguration {
 	public void setUserid(String userid) {
 		this.userid = userid;
 	}
-	public String getPwd() {
-		return pwd;
+	public String getPasswrd() {
+		return passwrd;
 	}
-	public void setPwd(String pwd) {
-		this.pwd = pwd;
+	public void setPasswrd(String passwrd) {
+		this.passwrd = passwrd;
 	}
+	
+	
 	
 }

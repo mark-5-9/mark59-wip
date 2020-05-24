@@ -32,12 +32,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 		PasswordEncoder encoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
 
-		String userid = springBootConfiguration.getUserid();
-		String pwd    = springBootConfiguration.getPwd();		
+		String userid   = springBootConfiguration.getUserid();
+		String passwrd  = springBootConfiguration.getPasswrd();		
+		System.out.println("userid=" + userid + ",passwrd=" + passwrd );
 		
-		System.out.println("userid=" + userid + ",pwd=" + pwd );
-		
-		auth.inMemoryAuthentication().withUser(userid).password(encoder.encode(pwd)).roles("USER");
+		auth.inMemoryAuthentication().withUser(userid).password(encoder.encode(passwrd)).roles("USER");
 	}
     
 

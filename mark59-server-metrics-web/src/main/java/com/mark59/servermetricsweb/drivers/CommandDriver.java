@@ -83,7 +83,7 @@ public interface CommandDriver {
 				
 		Process p;
 		try {
-			p = Runtime.getRuntime().exec(runtimeCommand);
+			p = Runtime.getRuntime().exec(new String[]{"sh", "-c" , runtimeCommand});			
 			p.waitFor();
 			
 			if ( ! Mark59Utils.resovesToTrue(ingoreStderr)){

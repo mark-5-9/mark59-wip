@@ -23,7 +23,7 @@ IF "%DATABASE%" == "H2" (
 
 IF "%DATABASE%" == "MYSQL" (
 	rem Using MySQL + server info with override user/pass
-	java -jar ./target/mark59-server-metrics-web.war --spring.profiles.active=mysql --port=8085  --mysql.server=localhost --mysql.port=3306  --mysql.schema=mark59servermetricswebdb --mysql.xtra.url.parms="?allowPublicKeyRetrieval=true&useSSL=false" --mysql.username=admin --mysql.password=admin --user=admin --pass=mark59
+	java -jar ./target/mark59-server-metrics-web.war --spring.profiles.active=mysql --port=8085  --mysql.server=localhost --mysql.port=3306  --mysql.schema=mark59servermetricswebdb --mysql.xtra.url.parms="?allowPublicKeyRetrieval=true&useSSL=false" --mysql.username=admin --mysql.password=admin --web.logon.userid=admin --web.logon.passwrd=mark59
 )
 
 rem -- another MySQL example --  
@@ -32,7 +32,7 @@ rem java -jar ./target/mark59-server-metrics-web.war --spring.profiles.active=my
 
 IF "%DATABASE%"=="POSTGRES" (
 	rem Using Postgress + server info with override user/pass  
-	java -jar ./target/mark59-server-metrics-web.war --spring.profiles.active=pg ---port=8085  --pg.server=localhost --pg.port=5432  --pg.database=mark59servermetricswebdb --pg.xtra.url.parms=" " --pg.username=admin --pg.password=admin --user=admin --pass=mark59
+	java -jar ./target/mark59-server-metrics-web.war --spring.profiles.active=pg ---port=8085  --pg.server=localhost --pg.port=5432  --pg.database=mark59servermetricswebdb --pg.xtra.url.parms=" " --pg.username=admin --pg.password=admin --web.logon.userid=admin --web.logon.passwrd=mark59
 )
 
 PAUSE

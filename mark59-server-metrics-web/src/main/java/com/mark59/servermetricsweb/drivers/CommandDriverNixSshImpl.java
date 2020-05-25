@@ -109,6 +109,7 @@ public class CommandDriverNixSshImpl implements CommandDriver {
 			sesConnection.setConfig("StrictHostKeyChecking", "no");
 			sesConnection.connect(Integer.parseInt(serverProfile.getConnectionTimeout()));
 		} catch (JSchException jschX) {
+			try {sesConnection.disconnect();} catch (Exception x){};			
 			commandDriverResponse.setRawCommandResponseLines(new ArrayList<String>());
 			commandDriverResponse.setCommandLog("<br>A failure has occured attempting to connect : " + jschX.getMessage() + "<br>");			
 			commandDriverResponse.setCommandFailure(true);
@@ -127,10 +128,11 @@ public class CommandDriverNixSshImpl implements CommandDriver {
 		commandDriverResponse.setCommandFailure(false);
 		List<String> rawCommandResponseLines = new ArrayList<>();
 		String commandLog = "";
-				
+		ChannelExec channelExec = null;
+		
 		try {		
 		
-			ChannelExec channelExec = (ChannelExec) sesConnection.openChannel("exec");
+			channelExec = (ChannelExec) sesConnection.openChannel("exec");
 			channelExec.setCommand(runtimeCommand);
 			InputStream commandResponseStream = channelExec.getInputStream();
 			InputStream commandErrStream      = channelExec.getErrStream();
@@ -146,9 +148,11 @@ public class CommandDriverNixSshImpl implements CommandDriver {
 			
 			rawCommandResponseLines.addAll( readCommandInputStream(commandResponseStream) );
 			
+			channelExec.getSession().disconnect();
 			channelExec.disconnect();
 			
 		} catch (Exception e) {
+			try {channelExec.getSession().disconnect();channelExec.disconnect();} catch (Exception x){};
 			StringWriter stackTrace = new StringWriter();
 			e.printStackTrace(new PrintWriter(stackTrace));
 			commandDriverResponse.setCommandLog("<br>A faiure has occured attempting to execute the command : " + e.getMessage() + "<br>" + stackTrace.toString() + "<br>");			

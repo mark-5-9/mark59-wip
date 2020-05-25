@@ -36,6 +36,7 @@ import com.mark59.core.utils.SimpleAES;
 import com.mark59.servermetricsweb.data.beans.Command;
 import com.mark59.servermetricsweb.data.beans.ServerProfile;
 import com.mark59.servermetricsweb.pojos.CommandDriverResponse;
+import com.mark59.servermetricsweb.utils.AppConstantsServerMetricsWeb.CommandExecutorDatatypes;
 
 
 /**
@@ -82,7 +83,7 @@ public class CommandDriverNixSshImpl implements CommandDriver {
 		String commandLog = cipherUsedLog + IgnoreStdErrLog + " :<br><font face='Courier'>" + command.getCommand().replaceAll("\\R", "<br>") + "</font>"; 
 			
 		if ("localhost".equalsIgnoreCase(serverProfile.getServer())) {
-			commandDriverResponse = CommandDriver.executeRuntimeCommand(command.getCommand().replaceAll("\\R", "\n")  , command.getIngoreStderr());
+			commandDriverResponse = CommandDriver.executeRuntimeCommand(command.getCommand().replaceAll("\\R", "\n")  , command.getIngoreStderr(), CommandExecutorDatatypes.SSH_LINIX_UNIX );
 		} else {
 			commandDriverResponse = connect(serverProfile, actualPassword);
 			if (sesConnection != null) {                                                                      
@@ -134,7 +135,7 @@ public class CommandDriverNixSshImpl implements CommandDriver {
 			InputStream commandResponseStream = channelExec.getInputStream();
 			InputStream commandErrStream      = channelExec.getErrStream();
 	
-			channelExec.connect();
+			channelExec.connect();               // its actually command execution
 							
 			if ( ! Mark59Utils.resovesToTrue(ingoreStderr)){
 				rawCommandResponseLines = readCommandInputStream(commandErrStream);

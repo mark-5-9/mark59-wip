@@ -25,6 +25,7 @@ import com.mark59.core.utils.SimpleAES;
 import com.mark59.servermetricsweb.data.beans.Command;
 import com.mark59.servermetricsweb.data.beans.ServerProfile;
 import com.mark59.servermetricsweb.pojos.CommandDriverResponse;
+import com.mark59.servermetricsweb.utils.AppConstantsServerMetricsWeb.CommandExecutorDatatypes;
 
 
 /**
@@ -90,7 +91,7 @@ public class CommandDriverWinWmicImpl implements CommandDriver {
 
 		String commandLog = cipherUsedLog + IgnoreStdErrLog + runtimeCommandLog; 
 		
-		CommandDriverResponse commandDriverResponse = CommandDriver.executeRuntimeCommand(runtimeCommand, command.getIngoreStderr());
+		CommandDriverResponse commandDriverResponse = CommandDriver.executeRuntimeCommand(runtimeCommand, command.getIngoreStderr(),CommandExecutorDatatypes.WMIC_WINDOWS);
 		
 		commandLog += "<br>Response :<br><font face='Courier'>" 
 					+ commandDriverResponse.getCommandLog()

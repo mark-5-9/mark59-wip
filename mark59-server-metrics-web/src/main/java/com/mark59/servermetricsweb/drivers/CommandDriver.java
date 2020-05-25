@@ -32,6 +32,7 @@ import com.mark59.servermetricsweb.data.beans.Command;
 import com.mark59.servermetricsweb.data.beans.ServerProfile;
 import com.mark59.servermetricsweb.pojos.CommandDriverResponse;
 import com.mark59.servermetricsweb.utils.AppConstantsServerMetricsWeb;
+import com.mark59.servermetricsweb.utils.AppConstantsServerMetricsWeb.CommandExecutorDatatypes;
 
 /**
 * @author Michael Cohen
@@ -72,7 +73,7 @@ public interface CommandDriver {
 	public CommandDriverResponse executeCommand(Command command);
 
 	
-	public static CommandDriverResponse executeRuntimeCommand(String runtimeCommand, String ingoreStderr) {
+	public static CommandDriverResponse executeRuntimeCommand(String runtimeCommand, String ingoreStderr, CommandExecutorDatatypes executorType) {
 		LOG.debug("executeRuntimeCommand : " + runtimeCommand );
 		
 		CommandDriverResponse commandDriverResponse = new CommandDriverResponse();   
@@ -81,9 +82,13 @@ public interface CommandDriver {
 		String commandLog = "";
 		String line = "";
 				
-		Process p;
+		Process p = null;
 		try {
-			p = Runtime.getRuntime().exec(new String[]{"sh", "-c" , runtimeCommand});			
+			if (CommandExecutorDatatypes.WMIC_WINDOWS.equals(executorType)) {
+				p = Runtime.getRuntime().exec(runtimeCommand);			
+			} else { // *nix
+				p = Runtime.getRuntime().exec(new String[]{"sh", "-c" , runtimeCommand});	
+			}
 			p.waitFor();
 			
 			if ( ! Mark59Utils.resovesToTrue(ingoreStderr)){

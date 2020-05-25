@@ -24,6 +24,7 @@ import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 
 import com.mark59.servermetricsweb.drivers.CommandDriver;
+import com.mark59.servermetricsweb.utils.AppConstantsServerMetricsWeb.CommandExecutorDatatypes;
 
 /**
  * @author Philip Webb
@@ -51,7 +52,7 @@ public class ApplicationEntry extends SpringBootServletInitializer {
 
     
     private static void setOperatingSystemVariable(String osLeverVar, String value) {
-		CommandDriver.executeRuntimeCommand("setx " + osLeverVar + " " + value, "N");
+		CommandDriver.executeRuntimeCommand("setx " + osLeverVar + " " + value, "N", CommandExecutorDatatypes.WMIC_WINDOWS);
 		LOG.info("Environment variable " + osLeverVar + " : " + System.getenv().get(osLeverVar));	
     }
 	

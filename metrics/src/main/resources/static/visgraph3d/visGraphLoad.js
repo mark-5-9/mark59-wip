@@ -623,8 +623,8 @@ function resetSelectionFields() {
 	document.getElementById("manuallySelectRuns1").checked = false;			
 	document.getElementById("chosenRuns").value = "";
 	document.getElementById("useRawRunSQL1").checked = false;
-	document.getElementById("maxRun").value = "default(10)";
-	document.getElementById("maxBaselineRun").value = "default(1)";
+	document.getElementById("maxRun").value = "10";            // in line with DEFAULT_10 = "10";
+	document.getElementById("maxBaselineRun").value = "1";     // in line with DEFAULT_01 = "1";
 }
 
 

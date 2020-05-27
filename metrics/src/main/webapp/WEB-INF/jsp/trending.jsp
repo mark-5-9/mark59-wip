@@ -51,17 +51,17 @@
 
 <table  id="graphSelectorTable">
 	<tr>
-	  <td class=maroontitle  style="white-space:nowrap">Trend Analysis  &nbsp; &nbsp; &nbsp; </td>
+	  <td class=maroontitle  style="white-space:nowrap">Trend Analysis &nbsp;</td>
   	  <td style="white-space:nowrap"><form:select path="appListSelector" items="${appListSelectors}"  class="smallborder" dir="rtl"  onChange="asyncPopulationOfApplicationList()" /></td>
 	  <td style="white-space:nowrap; padding-top: 5px">applications:</td>
  	  <td style="white-space:nowrap"><form:select path="application" items="${applications}"  onChange="resetSelectionFields()" /></td>
  	  <td style="white-space:nowrap">graph:  <form:select path="graph" items="${graphs}" />	</td>
  	  <td style="white-space:nowrap; text-align:right">latest<br>runs</td>		 		
  	  <td style="white-space:nowrap">:</td>
- 	  <td ><form:input path="maxRun"  maxlength="12" size="6"  onChange="clearChosenRuns()" /></td>	   	  
+ 	  <td ><form:input path="maxRun"  maxlength="5" size="2"  onChange="clearChosenRuns()" /></td>	   	  
  	  <td style="white-space:nowrap; text-align:right">latest<br>baselines</td>
  	  <td style="white-space:nowrap">:</td>
-  	  <td style="white-space:nowrap"><form:input path="maxBaselineRun"   maxlength="12" size="6"  onChange="clearChosenRuns()" /></td>	
+  	  <td style="white-space:nowrap"><form:input path="maxBaselineRun"   maxlength="5" size="2"  onChange="clearChosenRuns()" /></td>	
  	  <td style="white-space:nowrap; text-align:right">only top<br>txn values</td>
  	  <td style="white-space:nowrap">:</td>
   	  <td style="white-space:nowrap"><form:input path="nthRankedTxn"   	maxlength="3" size="1" /></td>	  	  
@@ -69,11 +69,11 @@
  	  <td style="white-space:nowrap"><form:checkbox path="displayPointText"  onclick="graph3d.redraw();" /></td>
   	  <td style="white-space:nowrap; text-align:right">range<br>bars</td>	  
  	  <td style="white-space:nowrap"><form:checkbox path="displayBarRanges"  onclick="graph3d.redraw();" /></td>
-	  <td width="99%"></td>  
-	  <td> <input type="button" value="Reset Graph" onclick="draw();" id="resetGraph" class="customButton" ></td>  
-	  <td> <input type="button" value="Table" onclick="showHideElement('comparetab');draw();" id="showCompareBtb" class="customButton" ></td> 
+	  <td width="70%"></td>  
       <td> <input type="button" value="Draw"  onclick="trendingBuildPageLink();trendingLinkGetNewPage();" id="submitDrawLink" class="customButton" > </td>  
-      <td width="3%"></td>
+	  <td> <input type="button" value="Table" onclick="showHideElement('comparetab');draw();" id="showCompareBtb" class="customButton" ></td> 
+	  <td> <input type="button" value="Reset" onclick="draw();" id="resetGraph" class="customButton" ></td>  
+	  <td width="2%"></td>  
 	</tr>
 </table> 
 

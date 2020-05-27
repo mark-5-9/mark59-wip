@@ -60,8 +60,8 @@ public class ServerMetricsCaptureViaWeb  extends AbstractJavaSamplerClient {
 
 	private static final Logger LOG = LogManager.getLogger(ServerMetricsCaptureViaWeb.class);
 	
-	public static final String MARK59_SERVER_METRICS_WEB_URL 	= "MARK59_SERVER_METRICS_WEB_URL";
-	public static final String DEFAULT_MARK59_SERVER_METRICS_WEB_URL 	= "http://localhost:8085/mark59-server-metrics-web-default";
+	public static final String MARK59_SERVER_METRICS_WEB_URL 			= "MARK59_SERVER_METRICS_WEB_URL";
+	public static final String DEFAULT_MARK59_SERVER_METRICS_WEB_URL 	= "http://localhost:8085/mark59-server-metrics-web";
 
 	public static final String SERVER_PROFILE_NAME 	= "SERVER_PROFILE_NAME";
 	
@@ -76,17 +76,17 @@ public class ServerMetricsCaptureViaWeb  extends AbstractJavaSamplerClient {
 	static {
 		Map<String,String> staticMap = new LinkedHashMap<String,String>();
 	
-		staticMap.put("______________________ web service setup: ________________", "Notes : please replace the default url with your actual.");	
-		staticMap.put("_"                                                         , "          : server profile of 'localhost' only reports metrics of the mark59-server-metrics-web machine!");	
-		staticMap.put("-"                                                         , "          : - use actual machine name or (better) '..viaExcel' 'localhost_HOSTID' entry instead (see Mark59 User Guide)");	
-		staticMap.put("."                                                         , "");		
 		staticMap.put(MARK59_SERVER_METRICS_WEB_URL, DEFAULT_MARK59_SERVER_METRICS_WEB_URL );
-		staticMap.put(SERVER_PROFILE_NAME, "localhost" );
+		staticMap.put(SERVER_PROFILE_NAME, "" );
 
 		staticMap.put("______________________ miscellaneous: ____________________", "");				
 		staticMap.put(IpUtilities.RESTRICT_TO_ONLY_RUN_ON_IPS_LIST, "");	
 		
-		staticMap.put("______________"       , "");			
+		staticMap.put("______________________ notes: _________________________________", "");	
+		staticMap.put("__","- please replace the default url with your actual.");	
+		staticMap.put("_", "- server profile of 'localhost' only reports metrics of the mark59-server-metrics-web machine!");	
+		staticMap.put("-", "   use actual machine name or (better) '..viaExcel' 'localhost..' entry instead (see Mark59 User Guide)");	
+		staticMap.put(".", "");		
 		staticMap.put("build information: ", "mark59-server-metrics version " + AppConstantsServerMetrics.MARK59_SERVER_METRICS_VERSION);			
 		
 		defaultArgumentsMap = Collections.unmodifiableMap(staticMap);

@@ -713,7 +713,7 @@ function trendingBuildPageLink() {
 function buildSlaDatabaseLink(){
 	//eg: http://MYSERVER:8080/metrics/viewSlaList?reqApp=MYAPP
 	var host =  window.location.host; 	
-	url="http://" + host + "/metrics/viewSlaList?reqApp=" + document.getElementById("application").value
+	url="http://" + host + "/metrics/slaList?reqApp=" + document.getElementById("application").value
 	document.getElementById('slaDatabaseLink').href = url;  	
 }
 

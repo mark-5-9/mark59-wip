@@ -88,6 +88,7 @@ public class DataHunterBasicSampleScript  extends SeleniumAbstractJavaSamplerCli
 //		jm.logPageSourceAtStartOfTransactions(Mark59LogLevels.WRITE);		
 //		jm.logPageSourceAtEndOfTransactions(Mark59LogLevels.WRITE );
 //		jm.logPerformanceLogAtEndOfTransactions(Mark59LogLevels.WRITE);
+		// you need to use jm.writeBufferedArtifacts to output BUFFERed data (see end of this method)  		
 //		jm.logAllLogsAtEndOfTransactions(Mark59LogLevels.BUFFER);		
 
 		String thread = Thread.currentThread().getName();

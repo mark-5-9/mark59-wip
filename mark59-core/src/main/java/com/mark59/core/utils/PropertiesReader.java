@@ -42,19 +42,29 @@ public class PropertiesReader {
     private static final String OS_NAME = System.getProperty("os.name");
     private static final String OS_NAME_LC = OS_NAME.toLowerCase(java.util.Locale.ENGLISH);
 	
+    private static final String WINDOWS = "WINDOWS";
+    private static final String NIX     = "*NIX";
+     
     private static final String MARK59_PROPERTIES = "mark59.properties";
  
-	
+    private String os;
+    
 	private Properties properties = new Properties();
 	
 	private static PropertiesReader instance;
 	
 	private PropertiesReader(String propFileName) throws IOException {
+		
+		os = NIX;  
+		if ( OS_NAME_LC.indexOf("win") >= 0 ) {
+			os = WINDOWS; 
+		}
 
 		LOG.info( "");
 		LOG.info( "Host Server Details : ");
 		LOG.info("    Name : " + InetAddress.getLocalHost().getHostName());		
-		LOG.info("    IP   : " + IpUtilities.getLocalHostIP());		
+		LOG.info("    IP   : " + IpUtilities.getLocalHostIP());	
+		LOG.info("    o/s  : " + OS_NAME_LC);			
 		LOG.info("    ------------------ ");		
 		LOG.info( "");
 		
@@ -82,8 +92,8 @@ public class PropertiesReader {
 		LOG.info( "");
 		LOG.info( "Mark59 property settings : ");
 		setMark59property(PropertiesKeys.MARK59_PROP_SCREENSHOT_DIRECTORY);
-		setMark59property(PropertiesKeys.MARK59_PROP_DRIVER_CHROME);
-		setMark59property(PropertiesKeys.MARK59_PROP_DRIVER_FIREFOX);	
+		setMark59property(PropertiesKeys.MARK59_PROP_DRIVER_CHROME, true);
+		setMark59property(PropertiesKeys.MARK59_PROP_DRIVER_FIREFOX, true);	
 		setMark59property(PropertiesKeys.MARK59_PROP_SERVER_PROFILES_EXCEL_FILE_PATH);	
 		LOG.info("    ----------------------- " );			
 	}
@@ -155,18 +165,54 @@ public class PropertiesReader {
         	return false;
         }	
      }
-    
 
-	private void setMark59property(String mark59PropertyKey) {
+    
+    private void setMark59property(String mark59PropertyKey) {
+    	setMark59property(mark59PropertyKey, false); 
+    }
+	
+    /**
+     * Properties in mark59.properties should already be loaded before this method is invoked.  Here, system properties
+     * can be used to override the mark59.properties, and properties will be updated with substitutions when required.      
+     * 
+     * @param mark59PropertyKey
+     * @param isExecutable
+     */
+    private void setMark59property(String mark59PropertyKey, boolean isExecutable) {
 		if ( StringUtils.isNotEmpty(System.getProperty( mark59PropertyKey))){
 			properties.setProperty(mark59PropertyKey, System.getProperty( mark59PropertyKey));
+			substitutePredfinedStringsIfNecessary(mark59PropertyKey,  properties.getProperty( mark59PropertyKey), isExecutable);
 			LOG.info("    " + mark59PropertyKey + " has been set from System properties  : " + properties.getProperty( mark59PropertyKey));
 		} else if ( StringUtils.isNotEmpty(properties.getProperty( mark59PropertyKey))){
-			LOG.info("    " + mark59PropertyKey + " has been set from " + MARK59_PROPERTIES + " : " + properties.getProperty( mark59PropertyKey));		
+			substitutePredfinedStringsIfNecessary(mark59PropertyKey,  properties.getProperty( mark59PropertyKey), isExecutable);
+			LOG.info("    " + mark59PropertyKey + " has been set from " + MARK59_PROPERTIES + " : " + properties.getProperty( mark59PropertyKey));
 		} else {
 			LOG.info("    " + mark59PropertyKey + " has not been set. ");		
 		}
 	}
+ 
+	private void substitutePredfinedStringsIfNecessary(String mark59PropertyKey, String propertyValue, boolean isExecutable) {
+		if (propertyValue.contains("${mark59.runs}")){
+			if (os.equals(WINDOWS)) {
+				propertyValue = propertyValue.replace("${mark59.runs}", System.getenv("SYSTEMDRIVE") + "/Mark59_Runs");
+			} else {
+				propertyValue = propertyValue.replace("${mark59.runs}", System.getProperty("user.home") + "/Mark59_Runs");
+			};
+			properties.setProperty(mark59PropertyKey, propertyValue);
+		}
+		if (propertyValue.contains("${user.home}")){
+			propertyValue = propertyValue.replace("${user.home}", System.getProperty("user.home"));
+			properties.setProperty(mark59PropertyKey, propertyValue);
+		}
+		
+		if (isExecutable && os.equals(NIX) && propertyValue.trim().endsWith(".exe")    ){
+			properties.setProperty(mark59PropertyKey, propertyValue.replace(".exe", "").trim() );			
+		}
+		if (isExecutable && os.equals(WINDOWS) && !propertyValue.trim().endsWith(".exe")){
+			properties.setProperty(mark59PropertyKey, propertyValue.trim() + ".exe" );			
+		}		
+	}
+
 	
 	public String getProperty(String key) {
 		if(!properties.containsKey(key)) return null;

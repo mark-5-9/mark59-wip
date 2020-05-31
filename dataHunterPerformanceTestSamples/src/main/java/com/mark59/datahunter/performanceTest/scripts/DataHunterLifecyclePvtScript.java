@@ -51,7 +51,7 @@ import com.mark59.selenium.drivers.SeleniumDriverFactory;
 import com.mark59.seleniumDSL.pageElements.HtmlTable;
 import com.mark59.seleniumDSL.pageElements.HtmlTableRow;
 
-//import com.mark59.selenium.drivers.Mark59LogLevels;
+//import com.mark59.selenium.corejmeterimpl.Mark59LogLevels;;
 
 /**
  * This selenium test uses a style of DSL which we suggest would be suitable for most performance tests.<br><br>
@@ -101,6 +101,7 @@ public class DataHunterLifecyclePvtScript  extends SeleniumAbstractJavaSamplerCl
 //		jm.logPageSourceAtStartOfTransactions(Mark59LogLevels.WRITE);		
 //		jm.logPageSourceAtEndOfTransactions(Mark59LogLevels.WRITE );
 //		jm.logPerformanceLogAtEndOfTransactions(Mark59LogLevels.WRITE);
+		// you need to use jm.writeBufferedArtifacts to output BUFFERed data (see end of this method)		
 //		jm.logAllLogsAtEndOfTransactions(Mark59LogLevels.BUFFER);		
 
 		String thread = Thread.currentThread().getName();

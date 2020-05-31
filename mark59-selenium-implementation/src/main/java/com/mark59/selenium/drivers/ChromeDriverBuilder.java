@@ -16,11 +16,13 @@
 
 package com.mark59.selenium.drivers;
 
+import java.io.OutputStream;
 import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.Capabilities;
@@ -34,6 +36,7 @@ import org.openqa.selenium.logging.LogType;
 import org.openqa.selenium.logging.LoggingPreferences;
 import org.openqa.selenium.remote.CapabilityType;
 
+
 /**
  * @author Michael Cohen
  * @author Philip Webb
@@ -44,10 +47,10 @@ public class ChromeDriverBuilder extends SeleniumDriverBuilder<ChromeOptions> {
 	private static final Logger LOG = LogManager.getLogger(ChromeDriverBuilder.class);
 
 	public ChromeDriverBuilder() {
-		// https://stackoverflow.com/questions/18702533/how-to-execute-selenium-chrome-webdriver-in-silent-mode
+		//https://stackoverflow.com/questions/52975287/selenium-chromedriver-disable-logging-or-redirect-it-java
 		serviceBuilder = new ChromeDriverService.Builder().withSilent(true);
 		options = new ChromeOptions();
-		
+
 		// renderer issues around Chrome 73, adding options which can assist 
 		// https://stackoverflow.com/questions/48450594/selenium-timed-out-receiving-message-from-renderer
 		options.addArguments("--no-sandbox");
@@ -58,7 +61,6 @@ public class ChromeDriverBuilder extends SeleniumDriverBuilder<ChromeOptions> {
 		// https://stackoverflow.com/questions/56558361/driver-manage-logs-getloglogtype-browser-no-longer-working-in-chromedriver-v/56596616#56596616
 		// https://stackoverflow.com/questions/56507652/selenium-chrome-cant-see-browser-logs-invalidargumentexception
 		options.setExperimentalOption("w3c", false);
-//		options.setExperimentalOption("w3c", true);
 	}
 
 	
@@ -145,9 +147,12 @@ public class ChromeDriverBuilder extends SeleniumDriverBuilder<ChromeOptions> {
 		ChromeDriver driver = null;
 		
 		if (LOG.isDebugEnabled()) LOG.debug("chrome options : " + Arrays.toString(options.asMap().entrySet().toArray()));			
-
+		
 		try {
-			driver = new ChromeDriver((ChromeDriverService) serviceBuilder.build(), options);
+			ChromeDriverService chromeDriverService = (ChromeDriverService)serviceBuilder.build(); 
+			chromeDriverService.sendOutputTo(new OutputStream(){@Override public void write(int b){}});  // send to null			
+			driver = new ChromeDriver(chromeDriverService, options);
+			
 			driver.manage().window().setSize(new Dimension(DEFAULT_WIDTH, DEFAULT_HEIGHT));
 			
 			if (LOG.isDebugEnabled()) {
@@ -167,7 +172,5 @@ public class ChromeDriverBuilder extends SeleniumDriverBuilder<ChromeOptions> {
 		}
 		return new ChromeDriverWrapper(driver);
 	}
-
-
 
 }

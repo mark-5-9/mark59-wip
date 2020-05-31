@@ -60,7 +60,7 @@ public class ScreenshotLoggingHelper {
 		
 		if (directory != null ) {
 		
-			directory += "\\" + LocalDate.now();
+			directory += File.separator + LocalDate.now();
 			screenshotDirectory = new File(directory).toPath();
 			LOG.info( "Clearing any existing data from Screenshots Directory " + screenshotDirectory);
 			FileUtils.deleteDirectory(screenshotDirectory.toFile());
@@ -89,7 +89,7 @@ public class ScreenshotLoggingHelper {
 	/**
 	 * Returns a fully qualified name for the image, including assigning an arbitrary file extension.
 	 * 
-	 * <p>Returned names take the pattern {ThreadName}_{Image Number}_{imageName}.{extension}</p>
+	 * <p>Returned names take the pattern {Directory}/{ThreadName}_{Image Number}_{imageName}.{extension}</p>
 	 * 
 	 * @param fileNameEnding filename to use for the screenshot
 	 * @param extension file extension
@@ -97,8 +97,9 @@ public class ScreenshotLoggingHelper {
 	 */
 	public static String buildFullyQualifiedImageName(String fileNameEnding, String extension) {
 		
-		String fullyQualifiedImageName = MessageFormat.format("{0}\\{1}_{2}_{3}.{4}", 
+		String fullyQualifiedImageName = MessageFormat.format("{0}{1}{2}_{3}_{4}.{5}", 
 											getScreenshotDirectory(),
+											File.separator, 
 											Thread.currentThread().getName(), 
 											String.format("%03d", StaticCounter.readCount(SCREENSHOT_COUNTER)),
 											fileNameEnding, 
@@ -123,6 +124,9 @@ public class ScreenshotLoggingHelper {
 	 * @param screenshotLogFileData the screenshot data 
 	 */
 	public static void writeScreenshotLog(File screenshotLogFilename, byte[] screenshotLogFileData) {
+		
+		System.out.println("** writeScreenshotLog creating dir " + screenshotLogFilename.getParent());
+		
 		new File(screenshotLogFilename.getParent()).mkdirs();
 
 		LOG.info(MessageFormat.format("Writing image to disk: {0}", screenshotLogFilename));

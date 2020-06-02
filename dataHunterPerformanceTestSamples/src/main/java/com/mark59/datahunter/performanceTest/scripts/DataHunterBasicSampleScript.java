@@ -37,7 +37,7 @@ import com.mark59.selenium.corejmeterimpl.KeepBrowserOpen;
 import com.mark59.selenium.corejmeterimpl.SeleniumAbstractJavaSamplerClient;
 import com.mark59.selenium.drivers.SeleniumDriverFactory;
 
-//import com.mark59.selenium.drivers.Mark59LogLevels;
+//import com.mark59.selenium.corejmeterimpl.Mark59LogLevels;
 
 /**
  * This selenium test provides a basic example of the Mark59 framework usage. It contains no 'DSL' classes etc, so that you can see the basics within the script.

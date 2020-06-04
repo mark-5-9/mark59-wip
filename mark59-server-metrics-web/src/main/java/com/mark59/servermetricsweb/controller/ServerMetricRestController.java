@@ -37,12 +37,15 @@ import com.mark59.servermetricsweb.data.servercommandlinks.dao.ServerCommandLink
 import com.mark59.servermetricsweb.data.serverprofiles.dao.ServerProfilesDAO;
 import com.mark59.servermetricsweb.pojos.TestCommandParserResponsePojo;
 import com.mark59.servermetricsweb.utils.ServerMetricsWebUtils;
-import com.mark59.servermetricsweb.utils.TargetServerFunctions;
+import com.mark59.servermetricsweb.utils.TargetServerCommandProcessor;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 /**
+ * Controls API calls from the server metrics web application, and from any JMeter Java Sampler implementation using a direct API call
+ * to obtain metrics from a server (see ServerMetricsCaptureViaWeb).
+ *   
  * @author Philip Webb
  * Written: Australian Summer 2020  
  */
@@ -72,17 +75,21 @@ public class ServerMetricRestController {
 	
 	/**
 	 *  Service call to profile.
-	 *  <p> For a localhost example using defaults<br>
-	 *  http://localhost:8085/mark59-server-metrics-web/api/metric?reqServerProfileName=localhost
+	 *  <p>Calls a functions which controls and executed commands on the target servers, and returns the formatted response.
+	 *  <p>With the mark59 framework, will be called by implementation(s) of JMeter Java Samplers designed to cater for 
+	 *  metrics capture directly via this API call (refer to See Also).
+	 *  <p> For example using profile localhost_HOSTID, and from default setting localhost, the url used would be <br>
+	 *  http://localhost:8085/mark59-server-metrics-web/api/metric?reqServerProfileName=localhost_HOSTID
 	 *  
 	 * @param reqServerProfileName
 	 * @param reqTestMode
 	 * @return org.springframework.http.ResponseEntity (Json format)
+	 * @see ServerMetricsCaptureViaWeb
 	 */
 	@GetMapping(path =  "/metric")
 	public ResponseEntity<Object> apiMetric(@RequestParam String reqServerProfileName, @RequestParam(required=false) String reqTestMode){
 	
-		return ResponseEntity.ok(TargetServerFunctions.serverResponse(reqServerProfileName, reqTestMode, 
+		return ResponseEntity.ok(TargetServerCommandProcessor.serverResponse(reqServerProfileName, reqTestMode, 
 				serverProfilesDAO, serverCommandLinksDAO, commandsDAO, commandParserLinksDAO, commandResponseParsersDAO));	
 	}
 

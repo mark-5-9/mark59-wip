@@ -1,3 +1,18 @@
+/*
+ *  Copyright 2019 Insurance Australia Group Limited
+ *  
+ *  Licensed under the Apache License, Version 2.0 (the "License"); 
+ *  you may not use this file except in compliance with the License. 
+ *  You may obtain a copy of the License at
+ *  
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *      
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.mark59.servermetricsweb.utils;
 
 import java.io.PrintWriter;
@@ -25,7 +40,13 @@ import com.mark59.servermetricsweb.pojos.CommandDriverResponse;
 import com.mark59.servermetricsweb.pojos.ParsedCommandResponse;
 import com.mark59.servermetricsweb.pojos.WebServerMetricsResponsePojo;
 
-public class TargetServerFunctions {
+/**
+ * Controls commands to be processed on the server profile target server.  
+ * 
+ * @author Philip Webb
+ * Written: Australian Autumn 2020 
+ */
+public class TargetServerCommandProcessor {
 
 	private static final Logger LOG = LogManager.getLogger(ServerMetricRestController.class);	
 
@@ -34,6 +55,9 @@ public class TargetServerFunctions {
 	private static int parsingFailureCount;
 		
 	/**
+	 * Controls the driving and parsing of commands executed on the target server, and formats the 
+	 * responses   
+	 * 
 	 * @param reqServerProfileName
 	 * @param reqTestMode
 	 * @return
@@ -42,7 +66,7 @@ public class TargetServerFunctions {
 			ServerProfilesDAO serverProfilesDAO, ServerCommandLinksDAO serverCommandLinksDAO, CommandsDAO commandsDAO,
 			CommandParserLinksDAO commandParserLinksDAO, CommandResponseParsersDAO commandResponseParsersDAO) {
 		
-		LOG.debug("TargetServerFunctions apiMetric profile =" + reqServerProfileName);
+		LOG.debug("TargetServerCommandProcessor apiMetric profile =" + reqServerProfileName);
 
 		WebServerMetricsResponsePojo response = new WebServerMetricsResponsePojo();
 		response.setServerProfileName(reqServerProfileName);
@@ -59,7 +83,6 @@ public class TargetServerFunctions {
 			if (serverProfile == null ) {
 				response.setServerProfileName(reqServerProfileName); 
 				response.setFailMsg(AppConstantsServerMetricsWeb.SERVER_PROFILE_NOT_FOUND + " (" + reqServerProfileName + ")" ); 
-				//return ResponseEntity.ok(response);
 				return response;
 			}
 			// if possible determine the 'localhost' operating system and override the provided value 
@@ -77,15 +100,15 @@ public class TargetServerFunctions {
 			response.setFailMsg("");
 			
 			
-			CommandDriver driver =  CommandDriver.init(serverProfile);	
 			List<ParsedCommandResponse> parsedCommandResponses = new ArrayList<ParsedCommandResponse>();
 			List<ServerCommandLink> serverCommandLinks = serverCommandLinksDAO.findServerCommandLinksForServerProfile(serverProfile.getServerProfileName());  
 			
-			for (ServerCommandLink serverCommandLink : serverCommandLinks) {      		// execute each command linked to the server profile
+			for (ServerCommandLink serverCommandLink : serverCommandLinks) {      		// loop thru each command linked to the server profile
 			
 				Command command = commandsDAO.findCommand(serverCommandLink.getCommandName());
-				
-				CommandDriverResponse commandDriverResponse = driver.executeCommand(command);
+			
+				CommandDriver driver =  CommandDriver.init(command.getExecutor(), serverProfile);	
+				CommandDriverResponse commandDriverResponse = driver.executeCommand(command);         //executes the command on the target server
 	
 				logLines.add("<b><a href=./editCommand?&reqCommandName=" + command.getCommandName() + ">" + command.getCommandName() + "</a></b> command invoked");
 				if (commandDriverResponse.isCommandFailure()){

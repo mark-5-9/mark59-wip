@@ -24,14 +24,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import com.mark59.core.utils.Mark59Utils;
 import com.mark59.servermetricsweb.data.beans.Command;
 import com.mark59.servermetricsweb.data.beans.ServerProfile;
 import com.mark59.servermetricsweb.pojos.CommandDriverResponse;
-import com.mark59.servermetricsweb.utils.AppConstantsServerMetricsWeb;
 import com.mark59.servermetricsweb.utils.AppConstantsServerMetricsWeb.CommandExecutorDatatypes;
 
 /**
@@ -60,11 +59,11 @@ public interface CommandDriver {
 		return reportedServerId; 
 	}
 	
-	public static CommandDriver init(ServerProfile serverProfile) {
+	public static CommandDriver init(String commandExecutor, ServerProfile serverProfile) {
 		CommandDriver driver = null; 
-		if (AppConstantsServerMetricsWeb.WINDOWS.equals(serverProfile.getOperatingSystem())) {
+		if (CommandExecutorDatatypes.WMIC_WINDOWS.getExecutorText().equals(commandExecutor)) {
 			driver = new CommandDriverWinWmicImpl(serverProfile);
-		} else {
+		} else {  
 			driver = new CommandDriverNixSshImpl(serverProfile);
 		}
 		return driver;
@@ -84,9 +83,9 @@ public interface CommandDriver {
 				
 		Process p = null;
 		try {
-			if (CommandExecutorDatatypes.WMIC_WINDOWS.equals(executorType)) {
-				p = Runtime.getRuntime().exec(runtimeCommand);			
-			} else { // *nix
+			if (CommandExecutorDatatypes.WMIC_WINDOWS.equals(executorType)){            
+				p = Runtime.getRuntime().exec(runtimeCommand);
+			} else {// *nix
 				p = Runtime.getRuntime().exec(new String[]{"sh", "-c" , runtimeCommand});	
 			}
 			p.waitFor();

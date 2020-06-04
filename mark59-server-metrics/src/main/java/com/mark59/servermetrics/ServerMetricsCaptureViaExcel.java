@@ -1,4 +1,3 @@
-
 /*
  *  Copyright 2019 Insurance Australia Group Limited
  *  
@@ -60,14 +59,24 @@ import com.mark59.servermetricsweb.data.serverprofiles.dao.ServerProfilesDAOexce
 import com.mark59.servermetricsweb.pojos.ParsedCommandResponse;
 import com.mark59.servermetricsweb.pojos.WebServerMetricsResponsePojo;
 import com.mark59.servermetricsweb.utils.AppConstantsServerMetricsWeb;
-import com.mark59.servermetricsweb.utils.TargetServerFunctions;
+import com.mark59.servermetricsweb.utils.TargetServerCommandProcessor;
 
 
 /**
+ * This is the initiating class for server metrics capture using a (already downloaded) server metrics excel spreadsheet.
+ * The location of the spreadsheet containing the server profile details is generally expected to set set via
+ * the property 'mark59.server.profiles.excel.file.path' (in Mark59.properties).  An path override is also available
+ * on the Java Request parameter list.    
+ * 
+ * <p>Using details provided on the spreadsheet, calls a functions which controls and executed commands on the target servers, 
+ * and returns the formatted response.
+ * 
+ * @see TargetServerCommandProcessor
+ * 
  * @author Philip Webb
  * Written: Australian Autumn 2020 
  * 
- * This is the initiating class for web-mark59-server-metrics
+ * 
  */
 public class ServerMetricsCaptureViaExcel extends AbstractJavaSamplerClient { 
 
@@ -158,7 +167,7 @@ public class ServerMetricsCaptureViaExcel extends AbstractJavaSamplerClient {
         	CommandParserLinksDAO commandParserLinksDAO 		= new CommandParserLinksDAOexcelWorkbookImpl(commandparserlinksSheet);
         	CommandResponseParsersDAO commandResponseParsersDAO = new CommandResponseParsersDAOexcelWorkbookImpl(commandresponseparsersSheet);
 	        	
-			response = TargetServerFunctions.serverResponse(parmServerProfileName, testModeNo, serverProfilesDAO,
+			response = TargetServerCommandProcessor.serverResponse(parmServerProfileName, testModeNo, serverProfilesDAO,
 													serverCommandLinksDAO, commandsDAO, commandParserLinksDAO, commandResponseParsersDAO);
 	 		workbook.close();
 
@@ -214,7 +223,6 @@ public class ServerMetricsCaptureViaExcel extends AbstractJavaSamplerClient {
 		Log4jConfigurationHelper.init(Level.INFO);
 		ServerMetricsCaptureViaExcel thistest = new ServerMetricsCaptureViaExcel();
 		additionalTestParametersMap.put(SERVER_PROFILE_NAME, "localhost_HOSTID");	
-		//additionalTestParametersMap.put(SERVER_PROFILE_NAME, "localhost");	
 		JavaSamplerContext context = new JavaSamplerContext( thistest.getDefaultParameters()  );
 		thistest.setupTest(context);
 		thistest.runTest(context);

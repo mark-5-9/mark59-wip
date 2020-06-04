@@ -46,6 +46,7 @@ import com.mark59.core.utils.Log4jConfigurationHelper;
 import com.mark59.core.utils.Mark59Constants.JMeterFileDatatypes;
 import com.mark59.servermetrics.utils.AppConstantsServerMetrics;
 import com.mark59.core.utils.Mark59Utils;
+import com.mark59.servermetricsweb.controller.ServerMetricRestController;
 import com.mark59.servermetricsweb.pojos.ParsedCommandResponse;
 import com.mark59.servermetricsweb.pojos.WebServerMetricsResponsePojo;
 import com.mark59.servermetricsweb.utils.AppConstantsServerMetricsWeb;
@@ -55,6 +56,9 @@ import com.mark59.servermetricsweb.utils.AppConstantsServerMetricsWeb;
  * Written: Australian Autumn 2020 
  * 
  * This is the initiating class for web-mark59-server-metrics (metrics capture via API) 
+ * 
+ * @see ServerMetricRestController
+ * 
  */
 public class ServerMetricsCaptureViaWeb  extends AbstractJavaSamplerClient { 
 

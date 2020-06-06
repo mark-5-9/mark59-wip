@@ -2,6 +2,8 @@ package com.mark59.servermetricsweb.utils;
 
 import java.util.List;
 
+import org.apache.poi.ss.usermodel.Cell;
+
 import groovy.lang.Binding;
 import groovy.lang.GroovyShell;
 
@@ -49,5 +51,10 @@ public class ServerMetricsWebUtils {
 		return sb.toString();
 	}
 
-
+	public static String cellValue(Cell cell) {
+		if (cell == null) return ""; 
+		return cell.getStringCellValue();
+	}
+	
+	
 }

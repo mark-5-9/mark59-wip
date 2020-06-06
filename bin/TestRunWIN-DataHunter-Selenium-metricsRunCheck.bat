@@ -10,7 +10,7 @@ REM   |		 - run the DemoWIN-DataHunter-Selenium-metricsRunCheck profile.
 REM   |
 REM   |  JMeter input results file expected at C:\Mark59_Runs\Jmeter_Results\DataHunter 
 REM   |
-REM	  |  Loaded run can be seen at http://localhost:8080/metrics/trending?reqApp=DataHunter    (assuming default setup)
+REM   |  Loaded run can be seen at http://localhost:8080/metrics/trending?reqApp=DataHunter    (assuming default setup)
 REM   |
 REM   |  *** YOU NEED TO SELECT WHICH DATABASE TO LOAD RESULTS TO BEFORE EXECUTION ***
 REM   |

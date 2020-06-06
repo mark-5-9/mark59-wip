@@ -22,6 +22,7 @@ import java.util.List;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import com.mark59.servermetricsweb.data.beans.ServerCommandLink;
+import com.mark59.servermetricsweb.utils.ServerMetricsWebUtils;
 
 /**
  * @author Philip Webb
@@ -52,8 +53,8 @@ public class ServerCommandLinksDAOexcelWorkbookImpl implements ServerCommandLink
 
 			if (serverCommandLinkRow.getCell(0).getStringCellValue().equalsIgnoreCase(serverProfileName)) {
 				ServerCommandLink serverCommandLink = new ServerCommandLink();
-				serverCommandLink.setServerProfileName(serverCommandLinkRow.getCell(0).getStringCellValue());
-				serverCommandLink.setCommandName(serverCommandLinkRow.getCell(1).getStringCellValue());
+				serverCommandLink.setServerProfileName(ServerMetricsWebUtils.cellValue(serverCommandLinkRow.getCell(0)));
+				serverCommandLink.setCommandName      (ServerMetricsWebUtils.cellValue(serverCommandLinkRow.getCell(1)));
 				serverCommandLinkList.add(serverCommandLink);
 			}
 		}

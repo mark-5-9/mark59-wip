@@ -50,6 +50,7 @@ import com.mark59.servermetricsweb.controller.ServerMetricRestController;
 import com.mark59.servermetricsweb.pojos.ParsedCommandResponse;
 import com.mark59.servermetricsweb.pojos.WebServerMetricsResponsePojo;
 import com.mark59.servermetricsweb.utils.AppConstantsServerMetricsWeb;
+import com.mark59.servermetricsweb.utils.ServerMetricsWebUtils;
 
 /**
  * @author Philip Webb
@@ -208,11 +209,11 @@ public class ServerMetricsCaptureViaWeb  extends AbstractJavaSamplerClient {
 	
 	
 	public static void main(String[] args) {
+		// expects server metrics web to be running on url and have profile(s) localhost_WINDOWS / localhost_LINUX
 		Log4jConfigurationHelper.init(Level.INFO);
 		ServerMetricsCaptureViaWeb thistest = new ServerMetricsCaptureViaWeb();
 		additionalTestParametersMap.put(MARK59_SERVER_METRICS_WEB_URL, "http://localhost:8085/mark59-server-metrics-web");	
-		additionalTestParametersMap.put(SERVER_PROFILE_NAME, "localhost_HOSTID");	
-		//additionalTestParametersMap.put(SERVER_PROFILE_NAME, "localhost");	
+		additionalTestParametersMap.put(SERVER_PROFILE_NAME, "localhost_" + ServerMetricsWebUtils.obtainOperatingSystemForLocalhost());			
 		JavaSamplerContext context = new JavaSamplerContext( thistest.getDefaultParameters()  );
 		thistest.setupTest(context);
 		thistest.runTest(context);

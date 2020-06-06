@@ -55,8 +55,8 @@ public class TargetServerCommandProcessor {
 	private static int parsingFailureCount;
 		
 	/**
-	 * Controls the driving and parsing of commands executed on the target server, and formats the 
-	 * responses   
+	 * Controls the driving and parsing of commands for a server profile executed on the target server, 
+	 * and formats the responses.   
 	 * 
 	 * @param reqServerProfileName
 	 * @param reqTestMode
@@ -85,14 +85,7 @@ public class TargetServerCommandProcessor {
 				response.setFailMsg(AppConstantsServerMetricsWeb.SERVER_PROFILE_NOT_FOUND + " (" + reqServerProfileName + ")" ); 
 				return response;
 			}
-			// if possible determine the 'localhost' operating system and override the provided value 
-			if ( "localhost".equalsIgnoreCase(serverProfile.getServer())) {
-				String localhostOS = ServerMetricsWebUtils.obtainOperatingSystemForLocalhost();
-				if (! AppConstantsServerMetricsWeb.UNKNOWN.equalsIgnoreCase(localhostOS)) {
-					serverProfile.setOperatingSystem(localhostOS);
-				}
-			}
-			
+
 			response.setServerProfileName(reqServerProfileName);
 			response.setServer(serverProfile.getServer());
 			response.setAlternativeServerId(serverProfile.getAlternativeServerId());
@@ -144,12 +137,12 @@ public class TargetServerCommandProcessor {
 		} catch (Exception e) {
 			StringWriter stackTrace = new StringWriter();
 			e.printStackTrace(new PrintWriter(stackTrace));
-			String failureMsg = "Error: Unexpected Failure calling the Server Metrics Service. \n" +
+			String failureMsg = "Error: Unexpected Failure executing server profile command on the target server. \n" +
 								"reqServerProfileName : " + reqServerProfileName + "\n" +
 								e.getMessage() + "\n" + stackTrace.toString();
 			response.setFailMsg(failureMsg);
 			response.setLogLines(response.getLogLines() + failureMsg.replaceAll("\\R", "<br>"));
-			response.setTestModeResult("<font color='red'>Error: Unexpected Failure calling the Server Metrics Service.</font>");
+			response.setTestModeResult("<font color='red'>Error: Unexpected Failure executing server profile command on the target server.</font>");
 			LOG.warn(failureMsg);
 			LOG.debug("    loglines : " + response.getLogLines());
 		};

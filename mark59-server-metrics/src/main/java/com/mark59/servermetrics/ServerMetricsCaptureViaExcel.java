@@ -59,6 +59,7 @@ import com.mark59.servermetricsweb.data.serverprofiles.dao.ServerProfilesDAOexce
 import com.mark59.servermetricsweb.pojos.ParsedCommandResponse;
 import com.mark59.servermetricsweb.pojos.WebServerMetricsResponsePojo;
 import com.mark59.servermetricsweb.utils.AppConstantsServerMetricsWeb;
+import com.mark59.servermetricsweb.utils.ServerMetricsWebUtils;
 import com.mark59.servermetricsweb.utils.TargetServerCommandProcessor;
 
 
@@ -150,8 +151,14 @@ public class ServerMetricsCaptureViaExcel extends AbstractJavaSamplerClient {
 				excelFilePath =  PropertiesReader.getInstance().getProperty(PropertiesKeys.MARK59_PROP_SERVER_PROFILES_EXCEL_FILE_PATH);
 			}
  	
-        	File excelFile = new File(excelFilePath);
-        	LOG.debug("File excelFile path, full path  = " + excelFile.getPath() + ", "  + excelFile.getCanonicalPath() );
+			File excelFile = null;
+        	try {
+				excelFile = new File(excelFilePath);
+			} catch (Exception e) {
+				LOG.error("excel speadsheet " + excelFilePath + " file error. Msg : "  + e.getMessage());
+				e.printStackTrace();
+			}
+        	LOG.debug("File excelFile path : full path  = " + excelFile.getPath() + " :"  + excelFile.getCanonicalPath() );
 
         	Workbook workbook = new XSSFWorkbook(excelFile.getPath() );
             
@@ -187,7 +194,8 @@ public class ServerMetricsCaptureViaExcel extends AbstractJavaSamplerClient {
 							(long)Math.round(Double.parseDouble(parsedCommandResponse.getParsedCommandResponse())),
 							JMeterFileDatatypes.valueOf(parsedCommandResponse.getMetricTxnType()));
 				} else {
-					String metricFailsMsg = "Warning : Server Metrics (via Excel)  has recorded a failed metric response for txn : " + parsedCommandResponse.getCandidateTxnId(); 
+					String metricFailsMsg = "Warning : Server Metrics (via Excel)  has recorded a failed metric response for txn : "
+								+ parsedCommandResponse.getCandidateTxnId(); 
 					LOG.warn(metricFailsMsg);
 					System.out.println(metricFailsMsg);
 					if (LOG.isDebugEnabled()){
@@ -219,10 +227,13 @@ public class ServerMetricsCaptureViaExcel extends AbstractJavaSamplerClient {
 	
 	
 	
-	public static void main(String[] args) {
+	public static void main(String[] args) { 
 		Log4jConfigurationHelper.init(Level.INFO);
+		//copy of test case..		 
 		ServerMetricsCaptureViaExcel thistest = new ServerMetricsCaptureViaExcel();
-		additionalTestParametersMap.put(SERVER_PROFILE_NAME, "localhost_HOSTID");	
+		additionalTestParametersMap.put(OVERRIDE_PROPERTY_MARK59_SERVER_PROFILES_EXCEL_FILE_PATH,
+				"./src/test/resources/simpleSheetWithLocalhostProfileForEachOs/mark59serverprofiles.xlsx");	
+		additionalTestParametersMap.put(SERVER_PROFILE_NAME, "localhost_" + ServerMetricsWebUtils.obtainOperatingSystemForLocalhost());	
 		JavaSamplerContext context = new JavaSamplerContext( thistest.getDefaultParameters()  );
 		thistest.setupTest(context);
 		thistest.runTest(context);

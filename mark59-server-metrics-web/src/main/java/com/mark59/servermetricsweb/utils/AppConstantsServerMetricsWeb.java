@@ -38,6 +38,9 @@ public class AppConstantsServerMetricsWeb {
 	public static final String UNIX			= "UNIX";  
 	public static final List<String>  OPERATING_SYSTEM_LIST =	Arrays.asList(WINDOWS, LINUX, UNIX);  
 	
+	public static final String SERVER_METRICS_WEB_BASE_DIR 	= "SERVER_METRICS_WEB_BASE_DIR"; 
+	
+	
 	public static enum CommandExecutorDatatypes {
 
 		WMIC_WINDOWS("WMIC_WINDOWS"), SSH_LINIX_UNIX("SSH_LINIX_UNIX");

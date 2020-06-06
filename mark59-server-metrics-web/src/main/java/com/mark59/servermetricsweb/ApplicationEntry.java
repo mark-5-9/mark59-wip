@@ -23,8 +23,7 @@ import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfi
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 
-import com.mark59.servermetricsweb.drivers.CommandDriver;
-import com.mark59.servermetricsweb.utils.AppConstantsServerMetricsWeb.CommandExecutorDatatypes;
+import com.mark59.servermetricsweb.utils.AppConstantsServerMetricsWeb;
 
 /**
  * @author Philip Webb
@@ -37,7 +36,7 @@ public class ApplicationEntry extends SpringBootServletInitializer {
 
 	
 	public static void main(String[] args) {
-		setOperatingSystemVariable("MARK59_SERVER_METRICS",  System.getProperty("user.dir"));
+		setUserAccessibleDefinedVariables();
 		SpringApplication.run(ApplicationEntry.class, args);
 	}
 
@@ -51,9 +50,10 @@ public class ApplicationEntry extends SpringBootServletInitializer {
     }
 
     
-    private static void setOperatingSystemVariable(String osLeverVar, String value) {
-		CommandDriver.executeRuntimeCommand("setx " + osLeverVar + " " + value, "N", CommandExecutorDatatypes.WMIC_WINDOWS);
-		LOG.info("Environment variable " + osLeverVar + " : " + System.getenv().get(osLeverVar));	
+    private static void setUserAccessibleDefinedVariables() {
+		System.setProperty(AppConstantsServerMetricsWeb.SERVER_METRICS_WEB_BASE_DIR, System.getProperty("user.dir"));
+		LOG.debug("User variable %" + AppConstantsServerMetricsWeb.SERVER_METRICS_WEB_BASE_DIR + "% : "
+				+ System.getProperty(AppConstantsServerMetricsWeb.SERVER_METRICS_WEB_BASE_DIR));
     }
 	
 }

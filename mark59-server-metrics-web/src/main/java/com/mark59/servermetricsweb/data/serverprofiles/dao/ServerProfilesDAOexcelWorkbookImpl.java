@@ -18,9 +18,12 @@ package com.mark59.servermetricsweb.data.serverprofiles.dao;
 
 import java.util.Iterator;
 import java.util.List;
+
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
+
 import com.mark59.servermetricsweb.data.beans.ServerProfile;
+import com.mark59.servermetricsweb.utils.ServerMetricsWebUtils;
 
 /**
  * @author Philip Webb
@@ -49,22 +52,21 @@ public class ServerProfilesDAOexcelWorkbookImpl implements ServerProfilesDAO {
             if (serverProfileRow.getCell(0).getStringCellValue().equalsIgnoreCase(serverProfileName)){
             	notFound=false;
             	serverProfile =new ServerProfile();
-            	serverProfile.setServerProfileName	(serverProfileRow.getCell(0).getStringCellValue());
-            	serverProfile.setServer				(serverProfileRow.getCell(1).getStringCellValue());
-            	serverProfile.setAlternativeServerId(serverProfileRow.getCell(2).getStringCellValue());
-            	serverProfile.setUsername			(serverProfileRow.getCell(3).getStringCellValue());
-            	serverProfile.setPassword			(serverProfileRow.getCell(4).getStringCellValue());
-            	serverProfile.setPasswordCipher		(serverProfileRow.getCell(5).getStringCellValue());
-            	serverProfile.setOperatingSystem	(serverProfileRow.getCell(6).getStringCellValue());
-            	serverProfile.setConnectionPort		(serverProfileRow.getCell(7).getStringCellValue());
-            	serverProfile.setConnectionTimeout	(serverProfileRow.getCell(8).getStringCellValue());
-            	serverProfile.setComment			(serverProfileRow.getCell(9).getStringCellValue());
+            	serverProfile.setServerProfileName	(ServerMetricsWebUtils.cellValue(serverProfileRow.getCell(0)));
+            	serverProfile.setServer				(ServerMetricsWebUtils.cellValue(serverProfileRow.getCell(1)));
+            	serverProfile.setAlternativeServerId(ServerMetricsWebUtils.cellValue(serverProfileRow.getCell(2)));
+            	serverProfile.setUsername			(ServerMetricsWebUtils.cellValue(serverProfileRow.getCell(3)));
+            	serverProfile.setPassword			(ServerMetricsWebUtils.cellValue(serverProfileRow.getCell(4)));
+            	serverProfile.setPasswordCipher		(ServerMetricsWebUtils.cellValue(serverProfileRow.getCell(5)));
+            	serverProfile.setOperatingSystem	(ServerMetricsWebUtils.cellValue(serverProfileRow.getCell(6)));
+            	serverProfile.setConnectionPort		(ServerMetricsWebUtils.cellValue(serverProfileRow.getCell(7)));
+            	serverProfile.setConnectionTimeout	(ServerMetricsWebUtils.cellValue(serverProfileRow.getCell(8)));
+            	serverProfile.setComment			(ServerMetricsWebUtils.cellValue(serverProfileRow.getCell(9)));
             }
         }   
 		return  serverProfile;
 	}
 
-	
 	
 	@Override
 	public List<ServerProfile> findServerProfiles() {

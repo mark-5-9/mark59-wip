@@ -14,12 +14,10 @@
  * limitations under the License.
  */
 
-package com.pnv.metrics.application;
+package com.mark59.metrics.application;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import com.mark59.metrics.application.UtilsMetrics;
 
 import junit.framework.TestCase;
 

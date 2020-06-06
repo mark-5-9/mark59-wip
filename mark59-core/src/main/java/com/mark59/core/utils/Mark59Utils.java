@@ -111,25 +111,6 @@ public class Mark59Utils {
 	    return prettyOut+= "\n    ------------------------------- \n";	
 	}
 	
-	
-	
-//	public static List<String> listMappedDataTypes() {
-//		List<String> listOfMappedDataTypes = new ArrayList<String>();
-//		for (Mark59Constants.DatabaseDatatypes txnTypeEnum : (Mark59Constants.DatabaseDatatypes.values())) {
-//			listOfMappedDataTypes.add(txnTypeEnum.name());
-//		}
-//		return listOfMappedDataTypes;
-//	}
-
-//	public static List<String> listMappedMetricDataTypes() {
-//		List<String> listOfMappedMetricDataTypes = new ArrayList<String>();
-//		for (Mark59Constants.DatabaseDatatypes txnTypeEnum : (Mark59Constants.DatabaseDatatypes.values())) {
-//			if (txnTypeEnum.isMetricDataType()) {
-//				listOfMappedMetricDataTypes.add(txnTypeEnum.name());
-//			}
-//		}
-//		return listOfMappedMetricDataTypes;
-//	}
 
 
 	/**

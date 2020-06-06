@@ -21,6 +21,7 @@ import java.util.List;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import com.mark59.servermetricsweb.data.beans.Command;
+import com.mark59.servermetricsweb.utils.ServerMetricsWebUtils;
 
 /**
  * @author Philip Webb
@@ -50,11 +51,11 @@ public class CommandsDAOexcelWorkbookImpl implements CommandsDAO
             if (commandRow.getCell(0).getStringCellValue().equalsIgnoreCase(commandName)){
             	notFound=false;
             	command =new Command();
-            	command.setCommandName 	(commandRow.getCell(0).getStringCellValue());
-            	command.setExecutor		(commandRow.getCell(1).getStringCellValue());
-            	command.setCommand		(commandRow.getCell(2).getStringCellValue());
-            	command.setIngoreStderr	(commandRow.getCell(3).getStringCellValue());
-            	command.setComment		(commandRow.getCell(4).getStringCellValue());
+            	command.setCommandName 	(ServerMetricsWebUtils.cellValue(commandRow.getCell(0)));
+            	command.setExecutor		(ServerMetricsWebUtils.cellValue(commandRow.getCell(1)));
+            	command.setCommand		(ServerMetricsWebUtils.cellValue(commandRow.getCell(2)));
+            	command.setIngoreStderr	(ServerMetricsWebUtils.cellValue(commandRow.getCell(3)));
+            	command.setComment		(ServerMetricsWebUtils.cellValue(commandRow.getCell(4)));
             }
         }   
 		return  command;

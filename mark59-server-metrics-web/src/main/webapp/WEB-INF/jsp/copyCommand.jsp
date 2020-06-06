@@ -30,7 +30,7 @@
 <script type="text/javascript" src="javascript/sharedFunctions.js"></script>
 </head>
 
-<body> 
+<body onload="displayWinOnlyPredefinedVars()"> 
 
 <%-- Include navigation element --%>
 <jsp:include page="include/navigation.jsp" />
@@ -56,7 +56,12 @@
    
      <tr>
       <td>Command&nbsp;Executor&nbsp;:</td>
-      <td><form:select path="command.executor"  items="${map.commandExecutors}" value="${map.commandEditingForm.command.executor}" /></td>      
+      <td><form:select path="command.executor"  items="${map.commandExecutors}" value="${map.commandEditingForm.command.executor}"   onChange="displayWinOnlyPredefinedVars()"  /></td>      
+     </tr>
+
+     <tr>
+      <td></td>
+      <td id="winOnlyPredefinedVars" colspan=2 style="font-size: 9px" ><b>predefined (win only):&nbsp;&nbsp;</b>%SERVER_METRICS_WEB_BASE_DIR%</td>          
      </tr>
 
      <tr>

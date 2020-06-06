@@ -24,6 +24,7 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 
 import com.mark59.servermetricsweb.data.beans.CommandParserLink;
+import com.mark59.servermetricsweb.utils.ServerMetricsWebUtils;
 
 /**
  * @author Philip Webb
@@ -52,8 +53,8 @@ public class CommandParserLinksDAOexcelWorkbookImpl implements CommandParserLink
 
 			if (commandparserlinksRow.getCell(0).getStringCellValue().equalsIgnoreCase(commandName)) {
 				CommandParserLink commandParserLink = new CommandParserLink();
-				commandParserLink.setCommandName(commandparserlinksRow.getCell(0).getStringCellValue());
-				commandParserLink.setScriptName	(commandparserlinksRow.getCell(1).getStringCellValue());
+				commandParserLink.setCommandName(ServerMetricsWebUtils.cellValue(commandparserlinksRow.getCell(0)));
+				commandParserLink.setScriptName	(ServerMetricsWebUtils.cellValue(commandparserlinksRow.getCell(1)));
 				commandParserLinkList.add(commandParserLink);
 			}
 

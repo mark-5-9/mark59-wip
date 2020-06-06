@@ -165,5 +165,16 @@
 			};
 			i ++;
 		};
+	}
+	
+	
+	function displayWinOnlyPredefinedVars(){
+		var selectedExecutorValue = document.getElementById("command.executor").value;
+		var winOnlyPredefinedVars = document.getElementById("winOnlyPredefinedVars");
+		if (selectedExecutorValue == "WMIC_WINDOWS" ) {
+			winOnlyPredefinedVars.style.display = 'block';
+		} else {
+			winOnlyPredefinedVars.style.display = 'none';
+		}
 	}		
 		

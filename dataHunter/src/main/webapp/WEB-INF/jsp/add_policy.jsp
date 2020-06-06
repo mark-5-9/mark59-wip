@@ -1,4 +1,4 @@
-<!-- Copyright 2019 Insurance Australia Group Limited
+<%-- Copyright 2019 Insurance Australia Group Limited
  
   Licensed under the Apache License, Version 2.0 (the "License");
   you may not use this file except in compliance with the License.
@@ -14,7 +14,7 @@
   
   Author:  Philip Webb
   Date:    Australian Winter 2019
-  -->
+  --%>
  <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -52,7 +52,7 @@
      <tr>
       <td width="71">Application</td>
       <td width="6">:</td>      
-      <td width="301"><form:input path="application" /></td>  <!-- can be set via @RequestParam -->
+      <td width="301"><form:input path="application" /></td>  <%-- can be set via @RequestParam --%>
      </tr>
      <tr>
       <td width="71">Identifier</td>

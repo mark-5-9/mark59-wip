@@ -35,7 +35,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.apache.poi.ss.usermodel.WorkbookFactory;
 
 import com.mark59.core.JmeterFunctionsImpl;
 import com.mark59.core.interfaces.JmeterFunctions;
@@ -159,8 +159,8 @@ public class ServerMetricsCaptureViaExcel extends AbstractJavaSamplerClient {
 				e.printStackTrace();
 			}
         	LOG.debug("File excelFile path : full path  = " + excelFile.getPath() + " :"  + excelFile.getCanonicalPath() );
-
-        	Workbook workbook = new XSSFWorkbook(excelFile.getPath() );
+        	 
+        	Workbook workbook = WorkbookFactory.create(excelFile, null, true);    // Factory class necessary to avoid excel file being 'touched' 
             
         	Sheet serverprofilesSheet 		  = workbook.getSheet("SERVERPROFILES");
         	Sheet servercommandlinksSheet	  = workbook.getSheet("SERVERCOMMANDLINKS");

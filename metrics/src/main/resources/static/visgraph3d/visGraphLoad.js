@@ -710,6 +710,14 @@ function trendingBuildPageLink() {
 }
 
 
+
+function buildHomePageink(){
+	var host =  window.location.host; 	
+	url="http://" + host + "/metrics?reqApp=" + document.getElementById("application").value
+	document.getElementById('homePageLink').href = url;  	
+}
+
+
 function buildSlaDatabaseLink(){
 	//eg: http://MYSERVER:8080/metrics/viewSlaList?reqApp=MYAPP
 	var host =  window.location.host; 	

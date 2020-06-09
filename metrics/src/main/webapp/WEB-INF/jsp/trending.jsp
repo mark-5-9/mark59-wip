@@ -40,6 +40,7 @@
  	showHideElementIfCheckboxTicked('useRawSQL1','transactionIdsSQL');
  	setElementReadonlyIfCheckboxTicked('manuallySelectRuns1','chosenRuns');
  	setElementReadonlyIfCheckboxTicked('manuallySelectTxns1','chosenTxns' );
+ 	buildHomePageink();
  	buildSlaDatabaseLink();
  	buildMetricSlaDatabaseLink();
  	buildRunsListLink(); 	 
@@ -95,14 +96,15 @@
   </tr>
 
  <tr>
-	<td><h3>Quick Links</h3></td> 
+	<td><h3>Quick Links &nbsp; &nbsp; &nbsp; (links open in a new tab)</h3></td> 
  </tr>	
  <tr>
     <td>	
+    <a id="homePageLink" 			href="see_buildHomePageink_JS"        target="_blank">Home</a> &nbsp; &nbsp; &nbsp;    
     <a id="dashboardLink" 			href="dashboard?reqAppListSelector=Active" target="_blank">Application Dashboard </a> &nbsp; &nbsp; &nbsp;
-    <a id="slaDatabaseLink" 		href="see_buildSlaDatabaseLink_JS"    target="_blank">SLA Transaction Database Link</a> &nbsp; &nbsp; &nbsp;
-    <a id="slaMetricDatabaseLink" 	href="see_buildMetricSlaDatabaseLink" target="_blank">SLA Metric Database Link</a> &nbsp; &nbsp; &nbsp;
-    <a id="runsListLink" 			href="see_buildRunsLIst_JS" 		  target="_blank">Runs List Link</a> &nbsp; &nbsp; &nbsp;
+    <a id="slaDatabaseLink" 		href="see_buildSlaDatabaseLink_JS"    target="_blank">SLA Transactions Table</a> &nbsp; &nbsp; &nbsp;
+    <a id="slaMetricDatabaseLink" 	href="see_buildMetricSlaDatabaseLink" target="_blank">SLA Metrics Table</a> &nbsp; &nbsp; &nbsp;
+    <a id="runsListLink" 			href="see_buildRunsLIst_JS" 		  target="_blank">Runs List</a> &nbsp; &nbsp; &nbsp;
     <a id="eventMappingLink"  		href="see_buildEventMappingLink_JS"   target="_blank">Event Mapping Admin</a> &nbsp; &nbsp; &nbsp;
     <a id="graphMappingLink" 		href="see_buildGraphMappingLink_JS"   target="_blank">Graph Mapping Admin</a> &nbsp; &nbsp; &nbsp;
     <input type="button" value="+ Advanced Filters" onclick="showHideElement('AdvFilters');" id="showAdvFilters" class="customButton" style="float: right; margin-left: 5px;" > &nbsp; &nbsp; &nbsp;

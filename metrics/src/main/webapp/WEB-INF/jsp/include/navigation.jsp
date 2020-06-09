@@ -16,7 +16,8 @@ if (reqApp != null && !reqApp.isEmpty()) {
 <div class="canterbury">Mark59</div>  
   <a <% if (path.contains("welcome")){ %> class="active" <% } %> href="/metrics">Overview</a> 
   <a <% if (path.contains("dashboard")){ %> class="active" <% } %> href="dashboard?reqAppListSelector=Active">Application Dashboard</a> 
-  <a href="trending<%= reqAppUrlParm %>" target="_blank">Trend Analysis</a>
+<%--   <a href="trending<%= reqAppUrlParm %>" target="_blank">Trend Analysis</a> --%>
+  <a href="trending<%= reqAppUrlParm %>">Trend Analysis</a>  
   <a <% if (path.contains("run")){ %> class="active" <% } %> href="runsList<%= reqAppUrlParm %>" >Run List</a> 
   <a <% if (path.contains("/slalist") || path.contains("copysla") || path.contains("registersla") || path.contains("editsla") || path.contains("deletesla") || path.contains("bulkapplication") || path.contains("applicationsla") )
                                        { %> class="active" <% } %> href="slaList<%= reqAppUrlParm %>">SLA Transactions</a> 

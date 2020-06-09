@@ -58,13 +58,13 @@ public class ServerMetricsCaptureViaExcelTest  {
 			System.out.println(listOfTxnNames + " : " + listOfResponses );
 			
 			if (AppConstantsServerMetricsWeb.WINDOWS.equals(ServerMetricsWebUtils.obtainOperatingSystemForLocalhost())){
-				assertEquals("wrond txn count", 3, subResArray.length);
+				assertEquals("wrong txn count", 3, subResArray.length);
 				assertTrue(listOfTxnNames + " isnt right, no listng for Memory_localhost_FreePhysicalG" , listOfTxnNames.contains( "_Memory_localhost_FreePhysicalG_") );
 				assertTrue(listOfTxnNames + " isnt right, no listng for Memory_localhost_FreeVirtualG"  , listOfTxnNames.contains( "_Memory_localhost_FreeVirtualG_") );
 				assertTrue(listOfTxnNames + " isnt right, no listng for CPU_localhost"  				, listOfTxnNames.contains( "_CPU_localhost_") );
 				assertTrue(listOfResponses + " isnt right"  , "PASSPASSPASS".equals(listOfResponses));
 			} else  {   // LINUX
-				assertEquals("wrond txn count", 4, subResArray.length);			
+				assertEquals("wrong txn count", 4, subResArray.length);			
 				assertTrue(listOfTxnNames + " isnt right, no listng for Memory_localhost_freeG"  		, listOfTxnNames.contains( "_Memory_localhost_freeG_") );
 				assertTrue(listOfTxnNames + " isnt right, no listng for Memory_localhost_totalG"   		, listOfTxnNames.contains( "_Memory_localhost_totalG_") );
 				assertTrue(listOfTxnNames + " isnt right, no listng for Memory_localhost_usedG"   		, listOfTxnNames.contains( "_Memory_localhost_usedG_") );

@@ -46,9 +46,9 @@ public class CommandsDAOexcelWorkbookImpl implements CommandsDAO
 
         while (iterator.hasNext() && notFound ) {
             Row commandRow = iterator.next();
-            //System.out.println("command key=" + commandRow.getCell(0).getStringCellValue());
+            // System.out.println("command key=" + ServerMetricsWebUtils.cellValue(commandRow.getCell(0)));
             
-            if (commandRow.getCell(0).getStringCellValue().equalsIgnoreCase(commandName)){
+			if (commandName != null && commandName.equalsIgnoreCase(ServerMetricsWebUtils.cellValue(commandRow.getCell(0)))){	            
             	notFound=false;
             	command =new Command();
             	command.setCommandName 	(ServerMetricsWebUtils.cellValue(commandRow.getCell(0)));

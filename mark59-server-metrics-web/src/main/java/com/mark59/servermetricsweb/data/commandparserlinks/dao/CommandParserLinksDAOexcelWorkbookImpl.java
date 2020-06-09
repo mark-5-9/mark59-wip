@@ -49,9 +49,9 @@ public class CommandParserLinksDAOexcelWorkbookImpl implements CommandParserLink
 
 		while (iterator.hasNext()) {
 			Row commandparserlinksRow = iterator.next();
-			// System.out.println("commandparserlinks key =" + commandparserlinksRow.getCell(0).getStringCellValue());
-
-			if (commandparserlinksRow.getCell(0).getStringCellValue().equalsIgnoreCase(commandName)) {
+			// System.out.println("commandparserlinks key =" + ServerMetricsWebUtils.cellValue(commandparserlinksRow.getCell(0)));
+			
+			if (commandName != null && commandName.equalsIgnoreCase(ServerMetricsWebUtils.cellValue(commandparserlinksRow.getCell(0)))) {				
 				CommandParserLink commandParserLink = new CommandParserLink();
 				commandParserLink.setCommandName(ServerMetricsWebUtils.cellValue(commandparserlinksRow.getCell(0)));
 				commandParserLink.setScriptName	(ServerMetricsWebUtils.cellValue(commandparserlinksRow.getCell(1)));

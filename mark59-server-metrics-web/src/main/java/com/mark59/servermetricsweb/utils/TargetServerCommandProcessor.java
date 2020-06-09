@@ -138,8 +138,7 @@ public class TargetServerCommandProcessor {
 			StringWriter stackTrace = new StringWriter();
 			e.printStackTrace(new PrintWriter(stackTrace));
 			String failureMsg = "Error: Unexpected Failure executing server profile command on the target server. \n" +
-								"reqServerProfileName : " + reqServerProfileName + "\n" +
-								e.getMessage() + "\n" + stackTrace.toString();
+								"reqServerProfileName : " + reqServerProfileName + "\n" + e.getMessage() + "\n" + stackTrace.toString();
 			response.setFailMsg(failureMsg);
 			response.setLogLines(response.getLogLines() + failureMsg.replaceAll("\\R", "<br>"));
 			response.setTestModeResult("<font color='red'>Error: Unexpected Failure executing server profile command on the target server.</font>");
@@ -192,12 +191,12 @@ public class TargetServerCommandProcessor {
 					parsingFailureCount++;
 					parsedCommandResponse.setTxnPassed("N");
 					parsedCommandResponse.setParsedCommandResponse(	
-							"Error : Script parsing failure.  A valid numeric was not returned : [" + groovyScriptResult + "].\n" +  
-							"Serverprofile : " + serverProfileName +
-							"Command  : " + commandName +
-							"Parser : " + commandResponseParser.getScriptName() + "\n" +
-							"Command Response : " + "\n" + commandResponseAsString +  "\n" +
-							"Error Msg : " + pe.getMessage());
+							"Error : Script parsing failure.  A valid numeric was not returned : [" + groovyScriptResult + "]." +  
+							"\nServerprofile : " + serverProfileName +
+							"\nCommand  : " + commandName +
+							"\nParser : " + commandResponseParser.getScriptName() +
+							"\nCommand Response : " + "\n" + commandResponseAsString +  "\n" +
+							"\nError Msg : " + pe.getMessage());
 					response.setFailMsg(response.getFailMsg() +
 							"Error : " + commandResponseParser.getScriptName() + " Script parsing failure\n" );
 					LOG.warn(parsedCommandResponse.getParsedCommandResponse());
@@ -210,12 +209,11 @@ public class TargetServerCommandProcessor {
 				
 				parsedCommandResponse.setTxnPassed("N");
 				parsedCommandResponse.setParsedCommandResponse(
-						"Error: Script parser failure.  Scrpt has failed to processes a command response.\n" +
-						"Serverprofile : " + serverProfileName +
-						"Command  : " + commandName +
-						"Parser : " + commandResponseParser.getScriptName() + "\n" +
-						"Command Response : " + "\n" + commandResponseAsString + "\n" +
-						e.getMessage() + "\n" + stackTrace.toString());
+						"Error: Script parser failure.  Script has failed to processes a command response." +
+						"\nServerprofile : " + serverProfileName +
+						"\nCommand  : " + commandName +
+						"\nParser : " + commandResponseParser.getScriptName() + 
+						"\nCommand Response : " + "\n" + commandResponseAsString + "\n" + e.getMessage() + "\n" + stackTrace.toString());
 				response.setFailMsg(response.getFailMsg() +
 						"Error: " + commandResponseParser.getScriptName() + " parser failed to processes command response.\n");
 				LOG.warn(parsedCommandResponse.getParsedCommandResponse());

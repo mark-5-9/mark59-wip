@@ -21,6 +21,7 @@ import java.util.List;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import com.mark59.servermetricsweb.data.beans.CommandResponseParser;
+import com.mark59.servermetricsweb.utils.ServerMetricsWebUtils;
 
 /**
  * @author Philip Webb
@@ -47,17 +48,17 @@ public class CommandResponseParsersDAOexcelWorkbookImpl implements CommandRespon
 		
         while (iterator.hasNext() && notFound ) {
             Row commandResponseParserRow = iterator.next();
-            // System.out.println("findServerProfile key=" + commandResponseParserRow.getCell(0).getStringCellValue());
+            // System.out.println("commandResponseParser scriptName=" + ServerMetricsWebUtils.cellValue(commandResponseParserRow.getCell(0)));
             
-            if (commandResponseParserRow.getCell(0).getStringCellValue().equalsIgnoreCase(scriptName)){
+			if (scriptName != null && scriptName.equalsIgnoreCase(ServerMetricsWebUtils.cellValue(commandResponseParserRow.getCell(0)))){	
             	notFound=false;
             	commandResponseParser = new CommandResponseParser();
-            	commandResponseParser.setScriptName				(commandResponseParserRow.getCell(0).getStringCellValue());
-            	commandResponseParser.setMetricTxnType			(commandResponseParserRow.getCell(1).getStringCellValue());
-            	commandResponseParser.setMetricNameSuffix    	(commandResponseParserRow.getCell(2).getStringCellValue());
-            	commandResponseParser.setScript  				(commandResponseParserRow.getCell(3).getStringCellValue());
-            	commandResponseParser.setComment   				(commandResponseParserRow.getCell(4).getStringCellValue());
-            	commandResponseParser.setSampleCommandResponse  (commandResponseParserRow.getCell(5).getStringCellValue());
+            	commandResponseParser.setScriptName				(ServerMetricsWebUtils.cellValue(commandResponseParserRow.getCell(0)));
+            	commandResponseParser.setMetricTxnType			(ServerMetricsWebUtils.cellValue(commandResponseParserRow.getCell(1)));
+            	commandResponseParser.setMetricNameSuffix    	(ServerMetricsWebUtils.cellValue(commandResponseParserRow.getCell(2)));
+            	commandResponseParser.setScript  				(ServerMetricsWebUtils.cellValue(commandResponseParserRow.getCell(3)));
+            	commandResponseParser.setComment   				(ServerMetricsWebUtils.cellValue(commandResponseParserRow.getCell(4)));
+            	commandResponseParser.setSampleCommandResponse  (ServerMetricsWebUtils.cellValue(commandResponseParserRow.getCell(5)));
             }
         }   	
 		return  commandResponseParser;

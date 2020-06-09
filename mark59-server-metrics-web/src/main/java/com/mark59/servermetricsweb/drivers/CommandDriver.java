@@ -20,6 +20,8 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,7 +33,9 @@ import com.mark59.core.utils.Mark59Utils;
 import com.mark59.servermetricsweb.data.beans.Command;
 import com.mark59.servermetricsweb.data.beans.ServerProfile;
 import com.mark59.servermetricsweb.pojos.CommandDriverResponse;
+import com.mark59.servermetricsweb.utils.AppConstantsServerMetricsWeb;
 import com.mark59.servermetricsweb.utils.AppConstantsServerMetricsWeb.CommandExecutorDatatypes;
+import com.mark59.servermetricsweb.utils.ServerMetricsWebUtils;
 
 /**
 * @author Michael Cohen
@@ -47,17 +51,26 @@ public interface CommandDriver {
 	public static String obtainReportedServerId(String server, String alternateServerId) {
 		String reportedServerId = server;
 		if ( "localhost".equalsIgnoreCase(server) && HOSTID.equals(alternateServerId) ) {
-			if ( System.getProperty("os.name", "unknown").toLowerCase().contains("win")){
+
+			if (AppConstantsServerMetricsWeb.WINDOWS.equals(ServerMetricsWebUtils.obtainOperatingSystemForLocalhost())){				
 				reportedServerId = System.getenv("COMPUTERNAME");
 			} else { 
 				reportedServerId = System.getenv("HOSTNAME");
 			}
-
+			if (StringUtils.isAllBlank(reportedServerId)){	  // use IP Host Name as a alternative .
+				try {
+					reportedServerId = InetAddress.getLocalHost().getHostName();
+				} catch (UnknownHostException e) {
+					reportedServerId = "unknown";
+				}
+			}
+			
 		} else if (StringUtils.isNotEmpty(alternateServerId)) {
 			reportedServerId = alternateServerId;
 		}
 		return reportedServerId; 
 	}
+	
 	
 	public static CommandDriver init(String commandExecutor, ServerProfile serverProfile) {
 		CommandDriver driver = null; 
@@ -68,6 +81,7 @@ public interface CommandDriver {
 		}
 		return driver;
 	}
+	
 	
 	public CommandDriverResponse executeCommand(Command command);
 

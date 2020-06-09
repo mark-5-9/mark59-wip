@@ -30,6 +30,7 @@ import org.junit.Test;
 
 import com.mark59.core.utils.Log4jConfigurationHelper;
 import com.mark59.core.utils.Mark59Utils;
+import com.mark59.servermetricsweb.drivers.CommandDriver;
 import com.mark59.servermetricsweb.utils.AppConstantsServerMetricsWeb;
 import com.mark59.servermetricsweb.utils.ServerMetricsWebUtils;
 
@@ -57,19 +58,21 @@ public class ServerMetricsCaptureViaExcelTest  {
 			} 
 			System.out.println(listOfTxnNames + " : " + listOfResponses );
 			
+			String server = CommandDriver.obtainReportedServerId("localhost", "HOSTID");
+						
 			if (AppConstantsServerMetricsWeb.WINDOWS.equals(ServerMetricsWebUtils.obtainOperatingSystemForLocalhost())){
 				assertEquals("wrong txn count", 3, subResArray.length);
-				assertTrue(listOfTxnNames + " isnt right, no listng for Memory_localhost_FreePhysicalG" , listOfTxnNames.contains( "_Memory_localhost_FreePhysicalG_") );
-				assertTrue(listOfTxnNames + " isnt right, no listng for Memory_localhost_FreeVirtualG"  , listOfTxnNames.contains( "_Memory_localhost_FreeVirtualG_") );
-				assertTrue(listOfTxnNames + " isnt right, no listng for CPU_localhost"  				, listOfTxnNames.contains( "_CPU_localhost_") );
+				assertTrue(listOfTxnNames + " isnt right, no listng for Memory_localhost_FreePhysicalG" , listOfTxnNames.contains( "_Memory_"+server+"_FreePhysicalG_") );
+				assertTrue(listOfTxnNames + " isnt right, no listng for Memory_localhost_FreeVirtualG"  , listOfTxnNames.contains( "_Memory_"+server+"_FreeVirtualG_") );
+				assertTrue(listOfTxnNames + " isnt right, no listng for CPU_localhost"  				, listOfTxnNames.contains( "_CPU_"+server+"_") );
 				assertTrue(listOfResponses + " isnt right"  , "PASSPASSPASS".equals(listOfResponses));
 			} else  {   // LINUX
 				assertEquals("wrong txn count", 4, subResArray.length);			
-				assertTrue(listOfTxnNames + " isnt right, no listng for Memory_localhost_freeG"  		, listOfTxnNames.contains( "_Memory_localhost_freeG_") );
-				assertTrue(listOfTxnNames + " isnt right, no listng for Memory_localhost_totalG"   		, listOfTxnNames.contains( "_Memory_localhost_totalG_") );
-				assertTrue(listOfTxnNames + " isnt right, no listng for Memory_localhost_usedG"   		, listOfTxnNames.contains( "_Memory_localhost_usedG_") );
-				assertTrue(listOfTxnNames + " isnt right, no listng for CPU_localhost_IDLE"  			, listOfTxnNames.contains( "_CPU_localhost_IDLE_") );
-				assertTrue(listOfResponses + " isnt right"  , "PASSPASSPASS".equals(listOfResponses));
+				assertTrue(listOfTxnNames + " isnt right, no listng for Memory_localhost_freeG"  		, listOfTxnNames.contains( "_Memory_"+server+"_freeG_") );
+				assertTrue(listOfTxnNames + " isnt right, no listng for Memory_localhost_totalG"   		, listOfTxnNames.contains( "_Memory_"+server+"_totalG_") );
+				assertTrue(listOfTxnNames + " isnt right, no listng for Memory_localhost_usedG"   		, listOfTxnNames.contains( "_Memory_"+server+"_usedG_") );
+				assertTrue(listOfTxnNames + " isnt right, no listng for CPU_localhost_IDLE"  			, listOfTxnNames.contains( "_CPU_"+server+"_IDLE_") );
+				assertTrue(listOfResponses + " isnt right"  , "PASSPASSPASSPASS".equals(listOfResponses));
 			} 
 		}else {
 			System.out.println("This test is not set up for the "  +  ServerMetricsWebUtils.obtainOperatingSystemForLocalhost() + " o/s ... bypassing test case."  );

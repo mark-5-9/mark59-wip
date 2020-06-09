@@ -47,9 +47,9 @@ public class ServerProfilesDAOexcelWorkbookImpl implements ServerProfilesDAO {
 
         while (iterator.hasNext() && notFound ) {
             Row serverProfileRow = iterator.next();
-            //System.out.println("findServerProfile key=" + serverProfileRow.getCell(0).getStringCellValue());
+            // System.out.println("findServerProfile key=" + ServerMetricsWebUtils.cellValue(serverProfileRow.getCell(0)));
             
-            if (serverProfileRow.getCell(0).getStringCellValue().equalsIgnoreCase(serverProfileName)){
+			if (serverProfileName != null && serverProfileName.equalsIgnoreCase(ServerMetricsWebUtils.cellValue(serverProfileRow.getCell(0)))){	
             	notFound=false;
             	serverProfile =new ServerProfile();
             	serverProfile.setServerProfileName	(ServerMetricsWebUtils.cellValue(serverProfileRow.getCell(0)));

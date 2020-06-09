@@ -49,9 +49,9 @@ public class ServerCommandLinksDAOexcelWorkbookImpl implements ServerCommandLink
 
 		while (iterator.hasNext()) {
 			Row serverCommandLinkRow = iterator.next();
-			//System.out.println("ServerCommandLinks key =" + serverCommandLinkRow.getCell(0).getStringCellValue());
+			// System.out.println("ServerCommandLinks key =" + ServerMetricsWebUtils.cellValue(serverCommandLinkRow.getCell(0)));
 
-			if (serverCommandLinkRow.getCell(0).getStringCellValue().equalsIgnoreCase(serverProfileName)) {
+			if (serverProfileName != null && serverProfileName.equalsIgnoreCase(ServerMetricsWebUtils.cellValue(serverCommandLinkRow.getCell(0)))) {				
 				ServerCommandLink serverCommandLink = new ServerCommandLink();
 				serverCommandLink.setServerProfileName(ServerMetricsWebUtils.cellValue(serverCommandLinkRow.getCell(0)));
 				serverCommandLink.setCommandName      (ServerMetricsWebUtils.cellValue(serverCommandLinkRow.getCell(1)));

@@ -2,16 +2,11 @@
 #   |  This shell script assumes - the metrics.war file exists in the ./target directory (relative to this file) 
 #   |                   - when using a mySQL database, the metricsdb database exists locally (using defaults)
 #   |
-#   |  Alternative to running this .bat (H2 database ONLY)
-#   |		 - login  to the server-metrics-web application  "ehttp://localhost:8085/mark59-server-metrics-web" 
-#   |		 - run the DemoWIN-DataHunter-Selenium-metricsRunCheck profile. 
-#   |
-#   |  Note the use of double quotes n a few places, required to cater for the & (ampersand) char, or to enter a space (equates to a blank blank here). 
+#   |  Note the use of double quotes in a few places, required to cater for the & (ampersand) char, or to enter a space (equates to a blank blank here). 
 #   -------------------------------------------------------------------------------------------------------------------------------------------------
-# SET "DATABASE=MYSQL"
+# DATABASE=H2|MYSQL|POSTGRES  
 
-
-#echo The database has been set to $DATABASE
+echo The database has been set to "$DATABASE"
 
 if [ "$DATABASE" = "" ]; then
 	echo 'DATABASE' variable not set, assuming H2 

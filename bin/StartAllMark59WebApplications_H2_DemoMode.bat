@@ -3,7 +3,7 @@ REM   |  This bat starts the three Mark59 Web Applications:   DataHunter
 REM   |                                                       Metrics (Trend Analysis)
 REM   |                                                       Mark59 Server Metrics Web 
 REM   |
-REM   |  using a 'H2' database.  This database is built/started automatically, so no a database build is not needed  
+REM   |  using a 'H2' database.  This database is built/started automatically, so a database build is not needed  
 REM   |   
 REM   |  Assuming you are using (default) server.port values for the applications, home page URLs  will be:    
 REM   |  

@@ -10,7 +10,7 @@
 #   |
 #   |  JMeter input results file expected at /home/<username>/Mark59_Runs/Jmeter_Results/DataHunter/ 
 #   |
-#	  |  Loaded run can be seen at http://localhost:8080/metrics/trending?reqApp=DataHunter    (assuming default setup)
+#   |  Loaded run can be seen at http://localhost:8080/metrics/trending?reqApp=DataHunter    (assuming default setup)
 #   |
 #   |  *** YOU NEED TO SELECT WHICH DATABASE TO LOAD RESULTS TO BEFORE EXECUTION ***
 #   |

@@ -1,10 +1,10 @@
 #!/bin/sh
 #   --------------------------------------------------------------------------------------------------------------
-#   |  This Shell script starts the three Mark59 Web Applications:   DataHunter
-#   |                                                                Metrics (Trend Analysis)
-#   |                                                                Mark59 Server Metrics Web 
+#   |  This bat starts the three Mark59 Web Applications:   DataHunter
+#   |                                                       Metrics (Trend Analysis)
+#   |                                                       Mark59 Server Metrics Web 
 #   |
-#   |  using a 'H2' database.  This database is built/started automatically, so a database build is not needed  
+#   |  using a 'POSTGRES' database.  The POSTGRES database build scripts must be run first.  
 #   |   
 #   |  Assuming you are using (default) server.port values for the applications, home page URLs  will be:    
 #   |  
@@ -17,7 +17,7 @@
 # cd ~/gitrepo/mark59/mark59-wip/bin
 echo starting from $PWD
 
-DATABASE=H2
+DATABASE=POSTGRES
 export DATABASE
 echo Database is set to "$DATABASE"
 
@@ -32,4 +32,3 @@ echo Starting the mark59-server-metrics-web Application
 gnome-terminal --working-directory=$PWD/mark59-server-metrics-web -- ./StartMark59ServerMetricsWebFromTarget.sh 
 
 # $SHELL
-

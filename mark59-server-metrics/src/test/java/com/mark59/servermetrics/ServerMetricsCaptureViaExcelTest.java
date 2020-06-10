@@ -62,16 +62,16 @@ public class ServerMetricsCaptureViaExcelTest  {
 						
 			if (AppConstantsServerMetricsWeb.WINDOWS.equals(ServerMetricsWebUtils.obtainOperatingSystemForLocalhost())){
 				assertEquals("wrong txn count", 3, subResArray.length);
-				assertTrue(listOfTxnNames + " isnt right, no listng for Memory_localhost_FreePhysicalG" , listOfTxnNames.contains( "_Memory_"+server+"_FreePhysicalG_") );
-				assertTrue(listOfTxnNames + " isnt right, no listng for Memory_localhost_FreeVirtualG"  , listOfTxnNames.contains( "_Memory_"+server+"_FreeVirtualG_") );
-				assertTrue(listOfTxnNames + " isnt right, no listng for CPU_localhost"  				, listOfTxnNames.contains( "_CPU_"+server+"_") );
+				assertTrue(listOfTxnNames + " isnt right, no listng for Memory_server_FreePhysicalG" , listOfTxnNames.contains( "_Memory_"+server+"_FreePhysicalG_") );
+				assertTrue(listOfTxnNames + " isnt right, no listng for Memory_server_FreeVirtualG"  , listOfTxnNames.contains( "_Memory_"+server+"_FreeVirtualG_") );
+				assertTrue(listOfTxnNames + " isnt right, no listng for CPU_server"  				, listOfTxnNames.contains( "_CPU_"+server+"_") );
 				assertTrue(listOfResponses + " isnt right"  , "PASSPASSPASS".equals(listOfResponses));
 			} else  {   // LINUX
 				assertEquals("wrong txn count", 4, subResArray.length);			
-				assertTrue(listOfTxnNames + " isnt right, no listng for Memory_localhost_freeG"  		, listOfTxnNames.contains( "_Memory_"+server+"_freeG_") );
-				assertTrue(listOfTxnNames + " isnt right, no listng for Memory_localhost_totalG"   		, listOfTxnNames.contains( "_Memory_"+server+"_totalG_") );
-				assertTrue(listOfTxnNames + " isnt right, no listng for Memory_localhost_usedG"   		, listOfTxnNames.contains( "_Memory_"+server+"_usedG_") );
-				assertTrue(listOfTxnNames + " isnt right, no listng for CPU_localhost_IDLE"  			, listOfTxnNames.contains( "_CPU_"+server+"_IDLE_") );
+				assertTrue(listOfTxnNames + " isnt right, no listng for Memory_server_freeG"  		, listOfTxnNames.contains( "_Memory_"+server+"_freeG_") );
+				assertTrue(listOfTxnNames + " isnt right, no listng for Memory_server_totalG"   		, listOfTxnNames.contains( "_Memory_"+server+"_totalG_") );
+				assertTrue(listOfTxnNames + " isnt right, no listng for Memory_server_usedG"   		, listOfTxnNames.contains( "_Memory_"+server+"_usedG_") );
+				assertTrue(listOfTxnNames + " isnt right, no listng for CPU_server_IDLE"  			, listOfTxnNames.contains( "_CPU_"+server+"_IDLE_") );
 				assertTrue(listOfResponses + " isnt right"  , "PASSPASSPASSPASS".equals(listOfResponses));
 			} 
 		}else {

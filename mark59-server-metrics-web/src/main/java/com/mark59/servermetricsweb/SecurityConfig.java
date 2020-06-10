@@ -32,10 +32,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 		PasswordEncoder encoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
 
-		String userid   = springBootConfiguration.getUserid();
-		String passwrd  = springBootConfiguration.getPasswrd();		
-		System.out.println("userid=" + userid + ",passwrd=" + passwrd );
+		String userid   = springBootConfiguration.getMark59servermetricswebuserid();
+		String passwrd  = springBootConfiguration.getMark59servermetricswebpasswrd();
+		String hide     = springBootConfiguration.getMark59servermetricswebhide();
 		
+		if ( hide!= null && (hide.toLowerCase().startsWith("y") || hide.toLowerCase().startsWith("t"))){
+			System.out.println("hide activated");
+		} else {
+			System.out.println("userid=" + userid + ",passwrd=" + passwrd );
+		}
 		auth.inMemoryAuthentication().withUser(userid).password(encoder.encode(passwrd)).roles("USER");
 	}
     

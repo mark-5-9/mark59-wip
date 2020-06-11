@@ -21,7 +21,7 @@ CREATE TABLE IF NOT EXISTS SERVERPROFILES  (
 
 CREATE TABLE IF NOT EXISTS COMMANDS  (
    COMMAND_NAME  varchar(64) NOT NULL,
-   EXECUTOR  varchar(16) NOT NULL,
+   EXECUTOR  varchar(32) NOT NULL,
    COMMAND  varchar(4096) NOT NULL,
    IGNORE_STDERR  varchar(1) DEFAULT NULL,
    COMMENT  varchar(128) DEFAULT NULL,
@@ -55,13 +55,24 @@ CREATE TABLE IF NOT EXISTS COMMANDPARSERLINKS  (
 
 
 
+INSERT IGNORE INTO SERVERPROFILES VALUES ('DemoLINUX-DataHunterSeleniumDeployAndExecute','localhost','','','','','LINUX','22','60000','');
+INSERT IGNORE INTO SERVERPROFILES VALUES ('DemoLINUX-DataHunterSeleniumGenJmeterReport','localhost','','','','','LINUX','22','60000','Reports generated at   ~/Mark59_Runs/Jmeter_Reports/DataHunter/   <br>(open each index.html)   ');
+INSERT IGNORE INTO SERVERPROFILES VALUES ('DemoLINUX-DataHunterSeleniumRunCheck','localhost','','','','','LINUX','22','60000','Loads Trend Analysis (H2 database).  See:<br>http://localhost:8080/metrics/trending?reqApp=DataHunter');
+INSERT IGNORE INTO SERVERPROFILES VALUES ('DemoWIN-DataHunterSeleniumDeployAndExecute','localhost','','','','','WINDOWS','','','');
+INSERT IGNORE INTO SERVERPROFILES VALUES ('DemoWIN-DataHunterSeleniumGenJmeterReport','localhost','','','','','WINDOWS','','','Hint - in browser open this URL and go to each index.html:  file:///C:/Mark59_Runs/Jmeter_Reports/DataHunter/');
+INSERT IGNORE INTO SERVERPROFILES VALUES ('DemoWIN-DataHunterSeleniumRunCheck','localhost','','','','','WINDOWS','','','Loads Trend Analysis (H2 database).  See:<br>http://localhost:8080/metrics/trending?reqApp=DataHunter');
+INSERT IGNORE INTO SERVERPROFILES VALUES ('localhost_LINUX','localhost','','','','','LINUX','22','60000','');
+INSERT IGNORE INTO SERVERPROFILES VALUES ('localhost_WINDOWS','localhost','','','','','WINDOWS','','','');
+INSERT IGNORE INTO SERVERPROFILES VALUES ('localhost_WINDOWS_HOSTID','localhost','HOSTID','','','','WINDOWS','','','HOSTID will be subed <br> with computername  ');
+INSERT IGNORE INTO SERVERPROFILES VALUES ('remoteLinuxServer','LinuxServerName','','userid','encryptMe','','LINUX','22','60000','');
+INSERT IGNORE INTO SERVERPROFILES VALUES ('remoteUnixVM','UnixVMName','','userid','encryptMe','','UNIX','22','60000','');
+INSERT IGNORE INTO SERVERPROFILES VALUES ('remoteWinServer','WinServerName','','userid','encryptMe','','WINDOWS','','','');
 
-INSERT IGNORE INTO COMMANDPARSERLINKS VALUES ('DataHunterSeleniumDeployAndExecute','Return1'),('DataHunterSeleniumGenJmeterReport','Return1'),('DataHunterSeleniumRunCheckTrendAnalysis','Return1'),('FreePhysicalMemory','Memory_FreePhysicalG'),('FreeVirtualMemory','Memory_FreeVirtualG'),('LINUX_free_m_1_1','LINUX_Memory_freeG'),('LINUX_free_m_1_1','LINUX_Memory_totalG'),('LINUX_free_m_1_1','LINUX_Memory_usedG'),('LINUX_mpstat_1_1','Nix_CPU_Idle'),('UNIX_lparstat_5_1','Nix_CPU_Idle'),('UNIX_Memory_Script','UNIX_Memory_numperm_percent'),('UNIX_Memory_Script','UNIX_Memory_pgsp_aggregate_util'),('UNIX_Memory_Script','UNIX_Memory_pinned_percent'),('UNIX_VM_Memory','UNIX_Memory_numperm_percent'),('UNIX_VM_Memory','UNIX_Memory_pgsp_aggregate_util'),('UNIX_VM_Memory','UNIX_Memory_pinned_percent'),('WinCpuCmd','WicnCpu');
 
 INSERT IGNORE INTO COMMANDS VALUES ('DataHunterSeleniumDeployAndExecute','WMIC_WINDOWS','process call create ''cmd.exe /c 
  echo Running Directly From Server Metrics Web (cmd DataHunterSeleniumDeployAndExecute) & 
- echo MARK59_SERVER_METRICS = %MARK59_SERVER_METRICS% & 
- cd /D %MARK59_SERVER_METRICS% &  
+ echo  SERVER_METRICS_WEB_BASE_DIR: %SERVER_METRICS_WEB_BASE_DIR% & 
+ cd /D %SERVER_METRICS_WEB_BASE_DIR% &  
  cd ..\dataHunterPerformanceTestSamples & 
  DEL C:\apache-jmeter\bin\mark59.properties & COPY .\mark59.properties C:\apache-jmeter\bin &
  DEL C:\apache-jmeter\bin\chromedriver.exe  & COPY .\chromedriver.exe  C:\apache-jmeter\bin &
@@ -80,27 +91,79 @@ INSERT IGNORE INTO COMMANDS VALUES ('DataHunterSeleniumDeployAndExecute','WMIC_W
  echo Starting JMeter DataHunter test ... &  
 
  jmeter -n -X -f 
-     -t %MARK59_SERVER_METRICS%\..\dataHunterPerformanceTestSamples\test-plans\DataHunterSeleniumTestPlan.jmx 
+     -t %SERVER_METRICS_WEB_BASE_DIR%\..\dataHunterPerformanceTestSamples\test-plans\DataHunterSeleniumTestPlan.jmx 
      -l C:\Mark59_Runs\Jmeter_Results\DataHunter\DataHunterTestResults.csv 
-     -j %MARK59_SERVER_METRICS%\..\bin\jmeter.log 
+     -j %SERVER_METRICS_WEB_BASE_DIR%\..\bin\jmeter.log 
      -JForceTxnFailPercent=0 
      -JDataHunterUrlHostPort=http://localhost:8081 &  
 
  PAUSE
 ''
-','N','refer DeployDataHunterTestArtifactsToJmeter.bat and DataHunterExecuteJmeterTest.bat in dataHunterPerformanceTestSamples '),('DataHunterSeleniumGenJmeterReport','WMIC_WINDOWS','process call create ''cmd.exe /c 
- cd /D %MARK59_SERVER_METRICS% & 
+','N','refer DeployDataHunterTestArtifactsToJmeter.bat and DataHunterExecuteJmeterTest.bat in dataHunterPerformanceTestSamples ');
+INSERT IGNORE INTO COMMANDS VALUES ('DataHunterSeleniumDeployAndExecute_LINUX','SSH_LINIX_UNIX','echo This script runs the JMeter deploy in the background, then opens a terminal for JMeter execution.
+echo starting from $PWD;
+
+{   # try  
+
+    cd ../dataHunterPerformanceTestSamples && 
+    DH_TEST_SAMPLES_DIR=$(pwd) && 
+    echo dataHunterPerformanceTestSamples base dir is $DH_TEST_SAMPLES_DIR &&
+
+    cp ./mark59.properties ~/apache-jmeter/bin/mark59.properties &&
+    cp ./chromedriver ~/apache-jmeter/bin/chromedriver && 
+    cp ../mark59-server-metrics/target/mark59-server-metrics.jar  ~/apache-jmeter/lib/ext/mark59-server-metrics.jar && 
+    cp ./target/dataHunterPerformanceTestSamples.jar  ~/apache-jmeter/lib/ext/dataHunterPerformanceTestSamples.jar && 
+    mkdir -p ~/Mark59_Runs/Jmeter_Results/DataHunter && 
+ 
+    gnome-terminal -- sh -c "~/apache-jmeter/bin/jmeter -n -X -f  -t $DH_TEST_SAMPLES_DIR/test-plans/DataHunterSeleniumTestPlan.jmx -l ~/Mark59_Runs/Jmeter_Results/DataHunter/DataHunterTestResults.csv -JForceTxnFailPercent=0; exec bash"
+
+} || { # catch 
+    echo Deploy was unsuccessful! 
+}','N','refer bin/TestRunLINUX-DataHunter-Selenium-DeployAndExecute.sh');
+INSERT IGNORE INTO COMMANDS VALUES ('DataHunterSeleniumGenJmeterReport','WMIC_WINDOWS','process call create ''cmd.exe /c 
+ cd /D %SERVER_METRICS_WEB_BASE_DIR% & 
  cd../resultFilesConverter & 
  CreateDataHunterJmeterReports.bat''
-','N',''),('DataHunterSeleniumRunCheckTrendAnalysis','WMIC_WINDOWS','process call create ''cmd.exe /c 
+','N','');
+INSERT IGNORE INTO COMMANDS VALUES ('DataHunterSeleniumGenJmeterReport_LINUX','SSH_LINIX_UNIX','echo This script creates a set of JMeter reports from a DataHunter test run.
+echo starting from $PWD;
+
+{   # try  
+
+    cd ../resultFilesConverter
+    gnome-terminal -- sh -c "./CreateDataHunterJmeterReports.sh; exec bash"
+
+} || { # catch 
+    echo attempt to generate JMeter Reports has failed! 
+}
+','N','refer bin/TestRunLINUX-DataHunter-Selenium-GenJmeterReport.sh');
+INSERT IGNORE INTO COMMANDS VALUES ('DataHunterSeleniumRunCheck','WMIC_WINDOWS','process call create ''cmd.exe /c 
  echo Load DataHunter Test Results into  Mark59 Metrics (Trend Analysis) h2 database. & 
- cd /D %MARK59_SERVER_METRICS% & 
+ cd /D  %SERVER_METRICS_WEB_BASE_DIR% & 
  cd ../metricsRuncheck &  
  
  java -jar ./target/metricsRuncheck.jar -a DataHunter -i C:\Mark59_Runs\Jmeter_Results\DataHunter -d h2 &
  PAUSE
 ''
-','N',''),('FreePhysicalMemory','WMIC_WINDOWS','OS get FreePhysicalMemory','N',''),('FreeVirtualMemory','WMIC_WINDOWS','OS get FreeVirtualMemory','N',''),('LINUX_free_m_1_1','SSH_LINIX_UNIX','free -m 1 1','N','linux memory'),('LINUX_mpstat_1_1','SSH_LINIX_UNIX','mpstat 1 1','N',''),('UNIX_lparstat_5_1','SSH_LINIX_UNIX','lparstat 5 1','N',''),('UNIX_Memory_Script','SSH_LINIX_UNIX','vmstat=$(vmstat -v); 
+','N','');
+INSERT IGNORE INTO COMMANDS VALUES ('DataHunterSeleniumRunCheck_LINUX','SSH_LINIX_UNIX','echo This script runs metricsRuncheck,to load results from a DataHunter test run into the Metrics Trend Analysis Graph.
+echo starting from $PWD;
+
+{   # try  
+
+    cd ../metricsRuncheck/target &&
+    gnome-terminal -- sh -c "java -jar metricsRuncheck.jar -a DataHunter -i ~/Mark59_Runs/Jmeter_Results/DataHunter -d h2; exec bash"
+
+} || { # catch 
+    echo attempt to execute metricsRuncheck has failed! 
+}
+','N','refer bin/TestRunLINUX-DataHunter-Selenium-metricsRunCheck.sh');
+INSERT IGNORE INTO COMMANDS VALUES ('FreePhysicalMemory','WMIC_WINDOWS','OS get FreePhysicalMemory','N','');
+INSERT IGNORE INTO COMMANDS VALUES ('FreeVirtualMemory','WMIC_WINDOWS','OS get FreeVirtualMemory','N','');
+INSERT IGNORE INTO COMMANDS VALUES ('LINUX_free_m_1_1','SSH_LINIX_UNIX','free -m 1 1','N','linux memory');
+INSERT IGNORE INTO COMMANDS VALUES ('LINUX_mpstat_1_1','SSH_LINIX_UNIX','mpstat 1 1','N','');
+INSERT IGNORE INTO COMMANDS VALUES ('UNIX_lparstat_5_1','SSH_LINIX_UNIX','lparstat 5 1','N','');
+INSERT IGNORE INTO COMMANDS VALUES ('UNIX_Memory_Script','SSH_LINIX_UNIX','vmstat=$(vmstat -v); 
 let total_pages=$(print "$vmstat" | grep ''memory pages'' | awk ''{print $1}''); 
 let pinned_pages=$(print "$vmstat" | grep ''pinned pages'' | awk ''{print $1}''); 
 let pinned_percent=$(( $(print "scale=4; $pinned_pages / $total_pages " | bc) * 100 )); 
@@ -111,7 +174,8 @@ let pgsp_num=$(print "$pgsp_utils" | wc -l | tr -d '' '');
 let pgsp_util_sum=0; 
 for pgsp_util in $pgsp_utils; do let pgsp_util_sum=$(( $pgsp_util_sum + $pgsp_util )); done; 
 pgsp_aggregate_util=$(( $pgsp_util_sum / $pgsp_num )); 
-print "${pinned_percent},${numperm_percent},${pgsp_aggregate_util}"','N',''),('UNIX_VM_Memory','SSH_LINIX_UNIX','vmstat=$(vmstat -v); 
+print "${pinned_percent},${numperm_percent},${pgsp_aggregate_util}"','N','');
+INSERT IGNORE INTO COMMANDS VALUES ('UNIX_VM_Memory','SSH_LINIX_UNIX','vmstat=$(vmstat -v); 
 let total_pages=$(print "$vmstat" | grep ''memory pages'' | awk ''{print $1}''); 
 let pinned_pages=$(print "$vmstat" | grep ''pinned pages'' | awk ''{print $1}''); 
 let pinned_percent=$(( $(print "scale=4; $pinned_pages / $total_pages " | bc) * 100 )); 
@@ -122,18 +186,8 @@ let pgsp_num=$(print "$pgsp_utils" | wc -l | tr -d '' '');
 let pgsp_util_sum=0; 
 for pgsp_util in $pgsp_utils; do let pgsp_util_sum=$(( $pgsp_util_sum + $pgsp_util )); done; 
 pgsp_aggregate_util=$(( $pgsp_util_sum / $pgsp_num )); 
-print "${pinned_percent},${numperm_percent},${pgsp_aggregate_util}"','N',''),('WinCpuCmd','WMIC_WINDOWS','cpu get loadpercentage','N','');
-
-
-
-INSERT IGNORE INTO SERVERCOMMANDLINKS VALUES ('DemoWIN-DataHunter-Selenium-DeployAndExecute','DataHunterSeleniumDeployAndExecute'),('DemoWIN-DataHunter-Selenium-GenJmeterReport','DataHunterSeleniumGenJmeterReport'),('DemoWIN-DataHunter-Selenium-metricsRunCheck','DataHunterSeleniumRunCheckTrendAnalysis'),('localhost','FreePhysicalMemory'),('localhost','FreeVirtualMemory'),('localhost','WinCpuCmd'),('localhost,localhost','WinCpuCmd'),('localhost_HOSTID','FreePhysicalMemory'),('localhost_HOSTID','FreeVirtualMemory'),('localhost_HOSTID','WinCpuCmd'),('remoteLinuxServer','LINUX_free_m_1_1'),('remoteLinuxServer','LINUX_mpstat_1_1'),('remoteUnixVM','UNIX_lparstat_5_1'),('remoteUnixVM','UNIX_Memory_Script'),('remoteWinServer','FreePhysicalMemory'),('remoteWinServer','FreeVirtualMemory'),('remoteWinServer','WinCpuCmd'),('rubbishnew,rubbishnew','WinCpuCmd');
-
-
-
-
-INSERT IGNORE INTO SERVERPROFILES VALUES ('DemoWIN-DataHunter-Selenium-DeployAndExecute','localhost','','','','','WINDOWS','','',''),('DemoWIN-DataHunter-Selenium-GenJmeterReport','localhost','','','','','WINDOWS','','',''),('DemoWIN-DataHunter-Selenium-metricsRunCheck','localhost','','','','','WINDOWS','','',''),('localhost','localhost','','','','','WINDOWS','','',''),('localhost_HOSTID','localhost','HOSTID','','','','WINDOWS','','','using HOSTID for local  '),('remoteLinuxServer','LinuxServerName','','userid','encryptMe','','LINUX','22','60000',''),('remoteUnixVM','UnixVMName','','userid','encryptMe','','UNIX','22','60000',''),('remoteWinServer','WinServerName','','userid','encryptMe','','WINDOWS','','','');
-
-
+print "${pinned_percent},${numperm_percent},${pgsp_aggregate_util}"','N','');
+INSERT IGNORE INTO COMMANDS VALUES ('WinCpuCmd','WMIC_WINDOWS','cpu get loadpercentage','N','');
 
 
 INSERT IGNORE INTO COMMANDRESPONSEPARSERS VALUES ('LINUX_Memory_freeG','MEMORY','freeG','import org.apache.commons.lang3.StringUtils;
@@ -144,7 +198,7 @@ String targetRowName= "Mem:";
 String extractedMetric = "-3";
 
 if (StringUtils.isNotBlank(commandResponse)) {
-    String wordsOnThisResultLine = commandResponse.replace("\n", " ").replace("\r", " ");
+    String wordsOnThisResultLine = commandResponse.replace("\\n", " ").replace("\\r", " ");
     ArrayList<String> cmdResultLine = new ArrayList<>(
          Arrays.asList(wordsOnThisResultLine.trim().split("\\s+")));
 
@@ -158,7 +212,6 @@ return Math.round(Double.parseDouble(extractedMetric) / 1000 );
 Mem:          28798       14043         561        1412       14392       12953
 Swap:             0           0           0
 ');
-
 INSERT IGNORE INTO COMMANDRESPONSEPARSERS VALUES ('LINUX_Memory_totalG','MEMORY','totalG','import org.apache.commons.lang3.StringUtils;
 // ---
 String targetColumnName= "total";              
@@ -167,7 +220,7 @@ String targetRowName= "Mem:";
 String extractedMetric = "-3";
 
 if (StringUtils.isNotBlank(commandResponse)) {
-    String wordsOnThisResultLine = commandResponse.replace("\n", " ").replace("\r", " ");
+    String wordsOnThisResultLine = commandResponse.replace("\\n", " ").replace("\\r", " ");
     ArrayList<String> cmdResultLine = new ArrayList<>(
          Arrays.asList(wordsOnThisResultLine.trim().split("\\s+")));
 
@@ -181,7 +234,6 @@ return Math.round(Double.parseDouble(extractedMetric) / 1000 );
 Mem:          28798       14043         361        1412       14392       12953
 Swap:             0           0           0
 ');
-
 INSERT IGNORE INTO COMMANDRESPONSEPARSERS VALUES ('LINUX_Memory_usedG','MEMORY','usedG','import org.apache.commons.lang3.StringUtils;
 // ---
 String targetColumnName= "used";              
@@ -190,7 +242,7 @@ String targetRowName= "Mem:";
 String extractedMetric = "-3";
 
 if (StringUtils.isNotBlank(commandResponse)) {
-    String wordsOnThisResultLine = commandResponse.replace("\n", " ").replace("\r", " ");
+    String wordsOnThisResultLine = commandResponse.replace("\\n", " ").replace("\\r", " ");
     ArrayList<String> cmdResultLine = new ArrayList<>(
          Arrays.asList(wordsOnThisResultLine.trim().split("\\s+")));
 
@@ -204,13 +256,11 @@ return Math.round(Double.parseDouble(extractedMetric) / 1000 );
 Mem:          28798       14043         361        1412       14392       12953
 Swap:             0           0           0
 ');
-
-
 INSERT IGNORE INTO COMMANDRESPONSEPARSERS VALUES ('Memory_FreePhysicalG','MEMORY','FreePhysicalG','Math.round(Double.parseDouble(commandResponse.replaceAll("[^\\d.]", "")) / 1000000 )','','FreePhysicalG
 22510400');
 INSERT IGNORE INTO COMMANDRESPONSEPARSERS VALUES ('Memory_FreeVirtualG','MEMORY','FreeVirtualG','Math.round(Double.parseDouble(commandResponse.replaceAll("[^\\d.]", "")) / 1000000 )','','FreeVirtualMemory
 22510400');
-INSERT IGNORE INTO COMMANDRESPONSEPARSERS VALUES ('Nix_CPU_Idle','CPU_UTIL','','import org.apache.commons.lang3.ArrayUtils;
+INSERT IGNORE INTO COMMANDRESPONSEPARSERS VALUES ('Nix_CPU_Idle','CPU_UTIL','IDLE','import org.apache.commons.lang3.ArrayUtils;
 // ---
 String targetColumnName = "%idle"              
 String targetmetricFormat = "\\d*\\.?\\d+"   // a decimal format  
@@ -237,12 +287,42 @@ return extractedMetric;
 %user  %sys  %wait  %idle physc %entc  lbusy   app  vcsw phint  %nsp  %utcyc
 ----- ----- ------ ------ ----- ----- ------   --- ----- ----- -----  ------
  11.3  15.0    0.0   73.7  0.22  44.5    6.1 45.26   919     0   101   1.39 ');
- 
+INSERT IGNORE INTO COMMANDRESPONSEPARSERS VALUES ('Nix_CPU_UTIL','CPU_UTIL','','import org.apache.commons.lang3.ArrayUtils;
+import java.math.RoundingMode;
+// 
+String targetColumnName = "%idle";
+String targetmetricFormat = "\\d*\\.?\\d+"; // a decimal format
+// 
+String notFound = "-1";
+String extractedMetric = notFound;
+int colNumberOfTargetColumnName = -1;
+String[] commandResultLine = commandResponse.trim().split("\\r\\n|\\n|\\r");
+
+for (int i = 0; i < commandResultLine.length && notFound.equals(extractedMetric); i++) {
+
+	String[] wordsOnThiscommandResultsLine = commandResultLine[i].trim().split("\\s+");
+
+	if (colNumberOfTargetColumnName > -1
+			&& wordsOnThiscommandResultsLine[colNumberOfTargetColumnName].matches(targetmetricFormat)) {
+		extractedMetric = wordsOnThiscommandResultsLine[colNumberOfTargetColumnName];
+	}
+	if (colNumberOfTargetColumnName == -1) { // column name not yet found, so see if it is on this line ...
+		colNumberOfTargetColumnName = ArrayUtils.indexOf(wordsOnThiscommandResultsLine, targetColumnName);
+	}
+}
+
+if (notFound.equals(extractedMetric))return notFound;
+String cpuUtil = notFound;
+try {  cpuUtil = new BigDecimal(100).subtract(new BigDecimal(extractedMetric)).setScale(1, RoundingMode.HALF_UP).toPlainString();} catch (Exception e) {}
+return cpuUtil;','This works on data in a simple column format (eg unix lparstat and linux mpstat cpu). It will return the first matching value it finds in the column requested.','System configuration: type=Shared mode=Uncapped smt=4 lcpu=4 mem=47104MB psize=60 ent=0.50 
+
+%user  %sys  %wait  %idle physc %entc  lbusy   app  vcsw phint  %nsp  %utcyc
+----- ----- ------ ------ ----- ----- ------   --- ----- ----- -----  ------
+ 11.3  15.0    0.0   73.7  0.22  44.5    6.1 45.26   919     0   101   1.39 ');
 INSERT IGNORE INTO COMMANDRESPONSEPARSERS VALUES ('Return1','DATAPOINT','','return 1','','any rand junk');
 INSERT IGNORE INTO COMMANDRESPONSEPARSERS VALUES ('UNIX_Memory_numperm_percent','MEMORY','numperm_percent','commandResponse.split(",")[1].trim()','','1,35,4');
 INSERT IGNORE INTO COMMANDRESPONSEPARSERS VALUES ('UNIX_Memory_pgsp_aggregate_util','MEMORY','pgsp_aggregate_util','commandResponse.split(",")[2].trim()','','1,35,4');
 INSERT IGNORE INTO COMMANDRESPONSEPARSERS VALUES ('UNIX_Memory_pinned_percent','MEMORY','pinned_percent','commandResponse.split(",")[0].trim()','','1,35,4');
-
 INSERT IGNORE INTO COMMANDRESPONSEPARSERS VALUES ('WicnCpu','CPU_UTIL','','java.util.regex.Matcher m = java.util.regex.Pattern.compile("-?[0-9]+").matcher(commandResponse);
 Integer sum = 0; 
 int count = 0; 
@@ -256,3 +336,47 @@ else
     return sum/count;','comment','LoadPercentage
 21');
 
+
+INSERT IGNORE INTO SERVERCOMMANDLINKS VALUES ('DemoLINUX-DataHunterSeleniumDeployAndExecute','DataHunterSeleniumDeployAndExecute_LINUX');
+INSERT IGNORE INTO SERVERCOMMANDLINKS VALUES ('DemoLINUX-DataHunterSeleniumGenJmeterReport','DataHunterSeleniumGenJmeterReport_LINUX');
+INSERT IGNORE INTO SERVERCOMMANDLINKS VALUES ('DemoLINUX-DataHunterSeleniumRunCheck','DataHunterSeleniumRunCheck_LINUX');
+INSERT IGNORE INTO SERVERCOMMANDLINKS VALUES ('DemoWIN-DataHunterSeleniumDeployAndExecute','DataHunterSeleniumDeployAndExecute');
+INSERT IGNORE INTO SERVERCOMMANDLINKS VALUES ('DemoWIN-DataHunterSeleniumGenJmeterReport','DataHunterSeleniumGenJmeterReport');
+INSERT IGNORE INTO SERVERCOMMANDLINKS VALUES ('DemoWIN-DataHunterSeleniumRunCheck','DataHunterSeleniumRunCheck');
+INSERT IGNORE INTO SERVERCOMMANDLINKS VALUES ('localhost_LINUX','LINUX_free_m_1_1');
+INSERT IGNORE INTO SERVERCOMMANDLINKS VALUES ('localhost_LINUX','LINUX_mpstat_1_1');
+INSERT IGNORE INTO SERVERCOMMANDLINKS VALUES ('localhost_WINDOWS','FreePhysicalMemory');
+INSERT IGNORE INTO SERVERCOMMANDLINKS VALUES ('localhost_WINDOWS','FreeVirtualMemory');
+INSERT IGNORE INTO SERVERCOMMANDLINKS VALUES ('localhost_WINDOWS','WinCpuCmd');
+INSERT IGNORE INTO SERVERCOMMANDLINKS VALUES ('localhost_WINDOWS_HOSTID','FreePhysicalMemory');
+INSERT IGNORE INTO SERVERCOMMANDLINKS VALUES ('localhost_WINDOWS_HOSTID','FreeVirtualMemory');
+INSERT IGNORE INTO SERVERCOMMANDLINKS VALUES ('localhost_WINDOWS_HOSTID','WinCpuCmd');
+INSERT IGNORE INTO SERVERCOMMANDLINKS VALUES ('remoteLinuxServer','LINUX_free_m_1_1');
+INSERT IGNORE INTO SERVERCOMMANDLINKS VALUES ('remoteLinuxServer','LINUX_mpstat_1_1');
+INSERT IGNORE INTO SERVERCOMMANDLINKS VALUES ('remoteUnixVM','UNIX_lparstat_5_1');
+INSERT IGNORE INTO SERVERCOMMANDLINKS VALUES ('remoteUnixVM','UNIX_Memory_Script');
+INSERT IGNORE INTO SERVERCOMMANDLINKS VALUES ('remoteWinServer','FreePhysicalMemory');
+INSERT IGNORE INTO SERVERCOMMANDLINKS VALUES ('remoteWinServer','FreeVirtualMemory');
+INSERT IGNORE INTO SERVERCOMMANDLINKS VALUES ('remoteWinServer','WinCpuCmd');
+
+
+INSERT IGNORE INTO COMMANDPARSERLINKS VALUES ('DataHunterSeleniumDeployAndExecute','Return1');
+INSERT IGNORE INTO COMMANDPARSERLINKS VALUES ('DataHunterSeleniumDeployAndExecute_LINUX','Return1');
+INSERT IGNORE INTO COMMANDPARSERLINKS VALUES ('DataHunterSeleniumGenJmeterReport','Return1');
+INSERT IGNORE INTO COMMANDPARSERLINKS VALUES ('DataHunterSeleniumGenJmeterReport_LINUX','Return1');
+INSERT IGNORE INTO COMMANDPARSERLINKS VALUES ('DataHunterSeleniumRunCheck','Return1');
+INSERT IGNORE INTO COMMANDPARSERLINKS VALUES ('DataHunterSeleniumRunCheck_LINUX','Return1');
+INSERT IGNORE INTO COMMANDPARSERLINKS VALUES ('FreePhysicalMemory','Memory_FreePhysicalG');
+INSERT IGNORE INTO COMMANDPARSERLINKS VALUES ('FreeVirtualMemory','Memory_FreeVirtualG');
+INSERT IGNORE INTO COMMANDPARSERLINKS VALUES ('LINUX_free_m_1_1','LINUX_Memory_freeG');
+INSERT IGNORE INTO COMMANDPARSERLINKS VALUES ('LINUX_free_m_1_1','LINUX_Memory_totalG');
+INSERT IGNORE INTO COMMANDPARSERLINKS VALUES ('LINUX_free_m_1_1','LINUX_Memory_usedG');
+INSERT IGNORE INTO COMMANDPARSERLINKS VALUES ('LINUX_mpstat_1_1','Nix_CPU_UTIL');
+INSERT IGNORE INTO COMMANDPARSERLINKS VALUES ('UNIX_lparstat_5_1','Nix_CPU_UTIL');
+INSERT IGNORE INTO COMMANDPARSERLINKS VALUES ('UNIX_Memory_Script','UNIX_Memory_numperm_percent');
+INSERT IGNORE INTO COMMANDPARSERLINKS VALUES ('UNIX_Memory_Script','UNIX_Memory_pgsp_aggregate_util');
+INSERT IGNORE INTO COMMANDPARSERLINKS VALUES ('UNIX_Memory_Script','UNIX_Memory_pinned_percent');
+INSERT IGNORE INTO COMMANDPARSERLINKS VALUES ('UNIX_VM_Memory','UNIX_Memory_numperm_percent');
+INSERT IGNORE INTO COMMANDPARSERLINKS VALUES ('UNIX_VM_Memory','UNIX_Memory_pgsp_aggregate_util');
+INSERT IGNORE INTO COMMANDPARSERLINKS VALUES ('UNIX_VM_Memory','UNIX_Memory_pinned_percent');
+INSERT IGNORE INTO COMMANDPARSERLINKS VALUES ('WinCpuCmd','WicnCpu');

@@ -39,7 +39,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		if ( hide!= null && (hide.toLowerCase().startsWith("y") || hide.toLowerCase().startsWith("t"))){
 			System.out.println("hide activated");
 		} else {
-			System.out.println("userid=" + userid + ",passwrd=" + passwrd );
+			System.out.println("userid=" + userid + ",passwrd=" + passwrd 
+					+ "       Please set 'mark59servermetricswebhide' as 'true' to hide credentials"
+					+ " (either as a command line argument or OS environment variable)");
 		}
 		auth.inMemoryAuthentication().withUser(userid).password(encoder.encode(passwrd)).roles("USER");
 	}

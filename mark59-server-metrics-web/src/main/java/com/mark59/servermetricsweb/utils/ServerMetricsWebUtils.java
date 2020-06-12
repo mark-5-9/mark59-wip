@@ -56,19 +56,21 @@ public class ServerMetricsWebUtils {
 	
 	
 	/**
-	 * Get the directory for the Window WMIC executable
+	 * If possible get the directory for the Window WMIC executable.  If it is 
+	 * not found, then it's still possible to get the WMIC command to work by adding the 
+	 * location of WMIC to the 'path' windows env variable.
 	 * 
-	 * @return File object pointing to the execution directory
-	 * @throws IOException Execution directory doesn't exist
+	 * @return String containing absolute path of WMIC execution directory, with 
+	 * a file separator appended (for directly prefixing to 'wmic') 
 	 */
-	public static File wmicExecutableDirectory() {
+	public static String wmicExecutableDirectory() {
 		String root = System.getenv("SystemRoot");
 		File wmicDir = new File(root, "System32" + File.separatorChar + "wbem");
-		System.out.println("wmicExecutableDirectory : " + wmicDir);
 		if (!wmicDir.exists() || !wmicDir.isDirectory()) { // not expected to occur
-			return null;
+			System.out.println("WMIC Executable Directory : " + wmicDir + " either is a dir or does not exist!");
+			return "";
 		}
-		return wmicDir;
+		return wmicDir.getAbsolutePath() + File.separatorChar;
 	}	
 	
 	

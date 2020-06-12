@@ -26,6 +26,7 @@ import com.mark59.servermetricsweb.data.beans.Command;
 import com.mark59.servermetricsweb.data.beans.ServerProfile;
 import com.mark59.servermetricsweb.pojos.CommandDriverResponse;
 import com.mark59.servermetricsweb.utils.AppConstantsServerMetricsWeb;
+import com.mark59.servermetricsweb.utils.ServerMetricsWebUtils;
 import com.mark59.servermetricsweb.utils.AppConstantsServerMetricsWeb.CommandExecutorDatatypes;
 
 
@@ -37,12 +38,15 @@ import com.mark59.servermetricsweb.utils.AppConstantsServerMetricsWeb.CommandExe
 public class CommandDriverWinWmicImpl implements CommandDriver {
 
 	
-	private static final String WMIC_COMMAND_REMOTE_FORMAT = "wmic /user:{0} /password:{1} /node:{2} {3}";
-	private static final String WMIC_COMMAND_LOCAL_FORMAT  = "wmic /node:localhost {0}";
+	private static final String WMIC_COMMAND_REMOTE_FORMAT = "WMIC /user:{0} /password:{1} /node:{2} {3}";
+	private static final String WMIC_COMMAND_LOCAL_FORMAT  = "WMIC /node:localhost {0}";
 	
 	
 	private static final String CHALLENGE_REPLACE_REGEX = "(^.*password:).*?(\\s.*$)";
 	private static final String CHALLENGE_REPLACE_VALUE = "$1********$2";
+
+	public static final String WMIC_DIR = ServerMetricsWebUtils.wmicExecutableDirectory();
+	
 	
 	private ServerProfile serverProfile;
 	
@@ -72,7 +76,7 @@ public class CommandDriverWinWmicImpl implements CommandDriver {
 		} 			
 		
 		if ("localhost".equalsIgnoreCase(serverProfile.getServer())) {
-			runtimeCommand = MessageFormat.format(WMIC_COMMAND_LOCAL_FORMAT, command.getCommand().replaceAll("\\R", " "));
+			runtimeCommand = WMIC_DIR + MessageFormat.format(WMIC_COMMAND_LOCAL_FORMAT, command.getCommand().replaceAll("\\R", " "));
 			if (System.getProperty(AppConstantsServerMetricsWeb.SERVER_METRICS_WEB_BASE_DIR) != null ) {
 				runtimeCommand = runtimeCommand
 						.replace("%"+AppConstantsServerMetricsWeb.SERVER_METRICS_WEB_BASE_DIR+"%", System.getProperty(AppConstantsServerMetricsWeb.SERVER_METRICS_WEB_BASE_DIR));
@@ -81,7 +85,7 @@ public class CommandDriverWinWmicImpl implements CommandDriver {
 			runtimeCommandLog = " :<br><font face='Courier'>" + runtimeCommand.replaceAll("\\R", " ")  + "</font>";
 			cipherUsedLog = " (local execution)";
 		} else {
-			runtimeCommand = MessageFormat.format(WMIC_COMMAND_REMOTE_FORMAT, serverProfile.getUsername(), actualPassword, serverProfile.getServer(), command.getCommand().replaceAll("\\R", " ") );
+			runtimeCommand = WMIC_DIR + MessageFormat.format(WMIC_COMMAND_REMOTE_FORMAT, serverProfile.getUsername(), actualPassword, serverProfile.getServer(), command.getCommand().replaceAll("\\R", " ") );
 			runtimeCommandLog = ": <br><font face='Courier'>" + runtimeCommand.replaceAll(CHALLENGE_REPLACE_REGEX, CHALLENGE_REPLACE_VALUE).replaceAll("\\R", "") + "</font>";
 		}
 

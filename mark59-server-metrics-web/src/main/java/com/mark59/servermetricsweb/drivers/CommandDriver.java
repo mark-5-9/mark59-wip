@@ -47,7 +47,8 @@ public interface CommandDriver {
 	static final Logger LOG = LogManager.getLogger(CommandDriver.class);	
 	
 	public static final String HOSTID = "HOSTID";
-
+	
+	
 	public static String obtainReportedServerId(String server, String alternateServerId) {
 		String reportedServerId = server;
 		if ( "localhost".equalsIgnoreCase(server) && HOSTID.equals(alternateServerId) ) {
@@ -98,7 +99,7 @@ public interface CommandDriver {
 		Process p = null;
 		try {
 			if (CommandExecutorDatatypes.WMIC_WINDOWS.equals(executorType)){
-				p = Runtime.getRuntime().exec(runtimeCommand, null, ServerMetricsWebUtils.wmicExecutableDirectory());
+				p = Runtime.getRuntime().exec(runtimeCommand);
 			} else {// *nix
 				p = Runtime.getRuntime().exec(new String[]{"sh", "-c" , runtimeCommand});	
 			}

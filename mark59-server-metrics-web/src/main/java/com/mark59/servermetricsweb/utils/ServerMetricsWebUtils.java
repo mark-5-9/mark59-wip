@@ -1,5 +1,7 @@
 package com.mark59.servermetricsweb.utils;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 import org.apache.poi.ss.usermodel.Cell;
@@ -51,6 +53,26 @@ public class ServerMetricsWebUtils {
 		return sb.toString();
 	}
 
+	
+	
+	/**
+	 * Get the directory for the Window WMIC executable
+	 * 
+	 * @return File object pointing to the execution directory
+	 * @throws IOException Execution directory doesn't exist
+	 */
+	public static File wmicExecutableDirectory() {
+		String root = System.getenv("SystemRoot");
+		File wmicDir = new File(root, "System32" + File.separatorChar + "wbem");
+		System.out.println("wmicExecutableDirectory : " + wmicDir);
+		if (!wmicDir.exists() || !wmicDir.isDirectory()) { // not expected to occur
+			return null;
+		}
+		return wmicDir;
+	}	
+	
+	
+	
 	public static String cellValue(Cell cell) {
 		if (cell == null) return ""; 
 		return cell.getStringCellValue();

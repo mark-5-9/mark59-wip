@@ -188,22 +188,6 @@ public class TestTransactionsDAOjdbcTemplateImpl implements TestTransactionsDAO
 		return dataSampleTxnkeys;
 	}	
 	
-/*	@Override
-	public List<String> getTransactionIds(Run run, String txnType) {
-		List<String> transactionIds = new ArrayList<String>();
-		
-		String sql = "select distinct TXN_ID from testtransactions where   APPLICATION = '" + run.getApplication() + "' "
-															    		+ "and TXN_TYPE = '" + txnType + "' "
-																		+ "and RUN_TIME = '" + run.getRunTime() + "'";
-		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
-		List<Map<String, Object>> rows = jdbcTemplate.queryForList(sql);
-		for (Map row : rows) {
-			transactionIds.add( (String)row.get("TXN_ID") );
-//			System.out.println("populating TXN_ID for TestTransactionsDAOjdbcTemplateImpl.getTransactionIds : " + row.get("TXN_ID")  ) ;
-		}	
-		return transactionIds;
-	}
-*/
 
 	@Override
 	public Long getEarliestTimestamp(String applicationn) {
@@ -231,14 +215,14 @@ public class TestTransactionsDAOjdbcTemplateImpl implements TestTransactionsDAO
 
 	/* 
 	 * Extracts all data for an application data type (transaction or data sample)
-	 * IMPORTANT NOTE: It is assumed this assumes there is only ONE result set per application stored on testtransactions. 
-	 *                 Would need to be refactored to allow for multiple test results per application to be stored
+	 * IMPORTANT NOTE: It is assumed this assumes there is only ONE result set per application stored on TESTTRANSACTIONS. 
+	 *                 Would need to be changed to allow for multiple test results per application to be stored
 	 */
 	@Override
 	public List<Transaction> extractTransactionResponsesSummary(String application, String txnType) {
 		// for MySQL : http://rpbouman.blogspot.com/2008/07/calculating-nth-percentile-in-mysql.html
 		//   - BUT "90/100 * COUNT(*) + 0.5" INSTEAD OF "90/100 * COUNT(*) + 1" to match Loadrunner results (which seems to be correct)
-		//     may have something to do with the way integer rounding is implemented in mqsql   
+		//     may have something to do with the way integer rounding is implemented in MySql   
 		// https://stackoverflow.com/questions/2567000/mysql-and-group-concat-maximum-length
 		// https://dev.mysql.com/doc/refman/8.0/en/server-system-variables.html#sysvar_group_concat_max_len
 		// Note that transaction statistics are only calculated for Passed transactions
@@ -277,7 +261,7 @@ public class TestTransactionsDAOjdbcTemplateImpl implements TestTransactionsDAO
 					 " sum(case when TXN_PASSED = 'Y'  then 1 else 0 end) txnPass, " +
 					 " 0 txnFail, " +
 					 " 0 txnStop " +				
-					 " from testtransactions " +
+					 " from TESTTRANSACTIONS " +					 
 					 " where APPLICATION = '" + application + "' " +
 			   		 "   and TXN_TYPE = '" + txnType + "' " +
 			   		 "   and TXN_PASSED = 'Y' " + 		   		
@@ -294,7 +278,7 @@ public class TestTransactionsDAOjdbcTemplateImpl implements TestTransactionsDAO
 			   		 " 0 txnPass, " + 
 					 " sum(case when TXN_PASSED = 'N'  then 1 else 0 end) txnFail, " +
 					 " sum(case when TXN_PASSED = '" + AppConstantsMetrics.TXN_STOPPPED_STATUS +  "' then 1 else 0 end) txnStop " +	
-			   		 " from testtransactions " + 
+			   		 " from TESTTRANSACTIONS " + 
 					 " where APPLICATION = '" + application + "' " +
 			   		 "   and TXN_TYPE = '" + txnType + "' " +
 			   		 "   and TXN_PASSED != 'Y' " + 		   		

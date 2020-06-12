@@ -17,13 +17,14 @@
 #   -------------------------------------------------------------------------------------------------------------------------------------------------
 
 
-# #   |  *** YOU NEED TO SELECT WHICH DATABASE TO LOAD RESULTS TO BEFORE EXECUTION *** :
+echo  "YOU NEED TO SELECT WHICH DATABASE TO LOAD RESULTS TO BEFORE EXECUTION (DEFAULT IS H2) "; 
 
-#DATABASE=H2
-#DATABASE=MYSQL
-#DATABASE=POSTGRES
+DATABASE=H2
+# DATABASE=MYSQL
+# DATABASE=POSTGRES
 
-cd ../metricsRuncheck
+cd ../metricsRuncheck;
+./LoadDataHunterResultsIntoMetricsTrendAnalysis.sh "${DATABASE}";
 
-gnome-terminal -- sh -c "java -jar ./target/metricsRuncheck.jar -a DataHunter -i ~/Mark59_Runs/Jmeter_Results/DataHunter -d h2; exec bash"
-
+cd ../bin
+$SHELL

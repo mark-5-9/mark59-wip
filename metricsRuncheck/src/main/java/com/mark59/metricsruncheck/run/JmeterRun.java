@@ -74,12 +74,11 @@ public class JmeterRun extends PerformanceTest  {
 		run = new Run( calculateAndSetRunTimesUsingEpochStartAndEnd(run, dateRangeBean));
 		runDAO.deleteRun(run.getApplication(), run.getRunTime());
 		runDAO.insertRun(run);
-				
+
 		applyTimingRangeFilters(excludestart, captureperiod, dateRangeBean);
-
-		transactionDAO.deleteAllForRun(run.getApplication(), run.getRunTime());				
+		transactionDAO.deleteAllForRun(run.getApplication(), run.getRunTime());	
+		
 		storeTransactionSummaries(run);
-
 		
 		storeSystemMetricSummaries(run);
 		
@@ -142,11 +141,13 @@ public class JmeterRun extends PerformanceTest  {
 		} else if (firstLineOfFile.trim().startsWith("timeStamp") &&  firstLineOfFile.matches("timeStamp.elapsed.*")){	
 			return loadCSVFile(jmeterResultsFile, true, application);
 
-		} else if ( firstLineOfFile.length() > 28 && StringUtils.countMatches(firstLineOfFile, ",") > 14  && firstLineOfFile.indexOf(",") == 13   ){  //assuming a headerless CSV file in default layout	
+		} else if ( firstLineOfFile.length() > 28 && StringUtils.countMatches(firstLineOfFile, ",") > 14  && firstLineOfFile.indexOf(",") == 13   ){  
+			//assuming a headerless CSV file in default layout	
 			return loadCSVFile(jmeterResultsFile, false, application);
 			
 		} else {
-			System.out.println("   Warning : " + jmeterResultsFile.getName() + " bypassed - not in expected Jmeter results format. (Does not start with regex 'timeStamp.elapsed' (csv) or '<' (xml))" );
+			System.out.println("   Warning : " + jmeterResultsFile.getName()
+					+ " bypassed - not in expected Jmeter results format. (Does not start with regex 'timeStamp.elapsed' (csv) or '<' (xml))");
 			return 0;
 		}
 	}	
@@ -278,8 +279,11 @@ public class JmeterRun extends PerformanceTest  {
 		
 		testTransaction.setTxnType( eventMappingTxnTypeTransform(testTransaction.getTxnId(), AppConstantsMetrics.JMETER, sampleLineRawDbDataType));
 			
-		// The response time ("t=") holds the value to be reported for all sample types, for transactions (ie, not data samples) it assumed to be milliseconds.
-		//  TODO: perfmon stats?		
+		//		The response time ("t=") holds the value to be reported for all sample types. Note: 
+		//		- the taken to be milliseconds for all timed TRANSACTION samples in the Jmeter results file. The metrics (trend analysis) database 
+		//	      holds transaction values in seconds, so we divide by 1000 (response times back to seconds)  		
+		//		- TODO: is assumed to be multiplied by 1000 for raw Perfmon captured metrics will not be marked by the DATAPOINT indicator in the
+		//	      return code, but to be handed by Event Mapping lookup?		
 		
 		String txnResultMsStr = StringUtils.substringBetween(jmeterFileLine, " t=\"", "\"");
 		BigDecimal txnResultMsBigD = new BigDecimal(txnResultMsStr);
@@ -432,12 +436,12 @@ public class JmeterRun extends PerformanceTest  {
 		String sampleLineRawDbDataType = Mark59Utils.convertJMeterFileToDbDatatype( csvDataLineFields[fieldPosdataType]  );
 		
 		testTransaction.setTxnType( eventMappingTxnTypeTransform(testTransaction.getTxnId(), AppConstantsMetrics.JMETER, sampleLineRawDbDataType));
-		
-		
-//		The response time ("elapsed" column) holds the value to be reported for all sample types, but  : 
-//			is assumed to be milliseconds for all timed transaction samples 
-//			is assumed to be multiplied by 1000 for raw Perfmon captured metrics (will not be marked by the DATAPOINT indicator in the return code, but assumed to be handed by Event Mapping lookup(TODO: !)
-//			.. CI tool database holds transaction values in seconds so we divide by 1000 (response times back to seconds)  		
+				
+//		The response time ("elapsed" column) holds the value to be reported for all sample types. Note: 
+//			- the taken to be milliseconds for all timed TRANSACTION samples in the Jmeter results file. The metrics (trend analysis) database 
+//		      holds transaction values in seconds, so we divide by 1000 (response times back to seconds)  		
+//			- TODO: is assumed to be multiplied by 1000 for raw Perfmon captured metrics will not be marked by the DATAPOINT indicator in the
+//		      return code, but to be handed by Event Mapping lookup?
 		
 		BigDecimal txnResultMsBigD = new BigDecimal(csvDataLineFields[fieldPoselapsed]);
 		testTransaction.setTxnResult( txnResultMsBigD.divide(AppConstantsMetrics.THOUSAND, 3, RoundingMode.HALF_UP)  );			
@@ -473,18 +477,17 @@ public class JmeterRun extends PerformanceTest  {
 	
 	
 
-	//TODO: PERFMON
 	
 	/**
-	 * 
-	 * 'sourceDataType' will be one of the string values enum Mark59Constants.DatabaseDatatypes (DATAPOINT, CPU_UTIL, MEMORY, TRANSACTION).
-	 * 
-	 * If a event mapping for the sample line is not found, the tnx type is assumed to be transaction ('TRANSACTION')
-	 * 
+	 * If an event mapping is found for the given transaction / tool / Database Data type (relating to a a sample line), 
+	 * then the Database Data type for that mapping is returned<br>
+	 * If a event mapping for the sample line is not found, then it is taken to be a TRANSACTION<br>
+	 * TODO: PERFMON<br>
+	 * TODO: also allow for transforms to TRANSACTION in event mapping<br>
 	 * @param txnId
 	 * @param performanceTool
-	 * @param sampleLineDbDataType
-	 * @return txnType -  will be one of the string values enum Mark59Constants.DatabaseDatatypes (DATAPOINT, CPU_UTIL, MEMORY, TRANSACTION)
+	 * @param sampleLineDbDataType -will be a string value of enum Mark59Constants.DatabaseDatatypes (DATAPOINT, CPU_UTIL, MEMORY, TRANSACTION)
+	 * @return txnType -  will be a string value of enum Mark59Constants.DatabaseDatatypes (DATAPOINT, CPU_UTIL, MEMORY, TRANSACTION)
 	 */
 	private String eventMappingTxnTypeTransform(String txnId, String performanceTool, String sampleLineRawDbDataType) {
 		
@@ -495,8 +498,8 @@ public class JmeterRun extends PerformanceTest  {
 			
 		if (optimizedTxnTypeLookup.get(txnId_MetricSource_Key) != null ){
 			
-			//As we could be processing large files, this is just using a Map of type by transaction ids (labels), for ids that have already have a lookup on the eventMapping table.  
-			// Done to minimise sql calls.  Each different label id / data type in the jmeter file just gets one lookup to see if it has a match on Event Mapping table .....
+			//As we could be processing large files, a Map of type by transaction ids (labels) is held for ids that have already had a lookup on the eventMapping table.  
+			// Done to minimise sql calls - each different label / data type in the jmeter file just gets one lookup to see if it has a match on Event Mapping table.
 			
 			eventMappingTxnType = optimizedTxnTypeLookup.get(txnId_MetricSource_Key);
 			
@@ -507,7 +510,7 @@ public class JmeterRun extends PerformanceTest  {
 			EventMapping eventMapping = eventMappingDAO.findAnEventForTxnIdAndSource(txnId, metricSource);
 			
 			if ( eventMapping != null ) {
-				// so this not a standard transaction - store eventMapping for later use 
+				// this not a standard TRANSACTION (it's one of the metric types) - store eventMapping for later use 
 				eventMappingTxnType = eventMapping.getTxnType();
 				txnIdToEventMappingLookup.put(txnId, eventMapping);
 			}
@@ -516,32 +519,22 @@ public class JmeterRun extends PerformanceTest  {
 		return eventMappingTxnType;
 	}
 
-	
-//	private String extractMetricSourceType(String sampleLineDataType) throws Exception{
-//	    for (String keySourceByTool : AppConstantsMetrics.getToolDataTypeToSourceValueMap().keySet()) {
-//	    	if ( keySourceByTool.startsWith(AppConstantsMetrics.JMETER ) ) {
-//	    		if ( sampleLineDataType.startsWith( AppConstantsMetrics.getToolDataTypeToSourceValueMap().get(keySourceByTool))){
-//	    			return AppConstantsMetrics.getToolDataTypeToSourceValueMap().get(keySourceByTool);
-//	    		}
-//	    	}
-//	    }
-//	    throw new Exception("ERORR unexpected datatype present :  " +  sampleLineDataType    ) ;
-//	}	
 
 	/**
 	 * Calculate the datapoint value, using the multiplier passed in the jmeter datatype ("dt") field.
 	 * 
-	 *  eg dt=DATAPOINT_1000  - the loaded value is the passed numeric / 1000 
+	 *  eg dt=DATAPOINT_1000  - the value loaded to the database will become the passed numeric value / 1000 
 	 *  DATAPOINT, DATAPOINT_1 will use the value as passed.   
 	 */
 	private BigDecimal validateAndDetermineMetricValue(BigDecimal txnResultMsBigD, String sampleLineDataType) throws Exception {
-//		System.out.println("  at validateAndDetermineMetricValue :  " +  txnResultMsBigD + " : " + sampleLineDataType );
 		
 		for ( String metricDataType : Mark59Constants.DatabaseDatatypes.listOfMetricDatabaseDatatypes()) {
 			
 			if (sampleLineDataType.startsWith(metricDataType)) {
 				BigDecimal valueMultiplier = new BigDecimal(1L);
-				String passedMultipler =   sampleLineDataType.replace(metricDataType, "" ).replace("_", "") ;    // eg 'CPU_UTIL_1000' should return 1000,  'CPU_UTIL' returns empty string
+				
+				String passedMultipler =   sampleLineDataType.replace(metricDataType, "" ).replace("_", "") ;  
+				// eg 'CPU_UTIL_1000' should return 1000,  'CPU_UTIL' empty string
 				
 				if (StringUtils.isNotBlank(passedMultipler)) {
 					valueMultiplier = new BigDecimal(passedMultipler);
@@ -570,6 +563,7 @@ public class JmeterRun extends PerformanceTest  {
 	
 	private void storeSystemMetricSummaries(Run run) {
 
+		// TODO: really should be a List of a type called something like "metricTransactionKeys" 
 		List<TestTransaction> dataSampleTxnkeys = testTransactionsDAO.getUniqueListOfSystemMetricNamesByType(run.getApplication()); 
 		
 		for (TestTransaction dataSampleKey : dataSampleTxnkeys) {

@@ -1,7 +1,6 @@
 package com.mark59.servermetricsweb.utils;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.List;
 
 import org.apache.poi.ss.usermodel.Cell;

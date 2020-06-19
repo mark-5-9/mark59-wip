@@ -12,7 +12,7 @@
       <stringProp name="TestPlan.user_define_classpath"></stringProp>
     </TestPlan>
     <hashTree>
-      <SetupThreadGroup guiclass="SetupThreadGroupGui" testclass="SetupThreadGroup" testname="setUp Thread Group " enabled="false">
+      <SetupThreadGroup guiclass="SetupThreadGroupGui" testclass="SetupThreadGroup" testname="setUp Thread Group " enabled="true">
         <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
         <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller" enabled="true">
           <boolProp name="LoopController.continue_forever">false</boolProp>
@@ -42,6 +42,26 @@ OUT.println (&quot;mark59.server.profiles.excel.file.path : &quot; + systemPrope
 OUT.println (&quot;------------------------------------------------------------&quot;);</stringProp>
           <stringProp name="scriptLanguage">groovy</stringProp>
           <stringProp name="TestPlan.comments">windows example of using system properties to override mark59.properties setting  (by default this script should be disabled)</stringProp>
+        </JSR223Sampler>
+        <hashTree/>
+        <JSR223Sampler guiclass="TestBeanGUI" testclass="JSR223Sampler" testname="set_local_operating_system_property" enabled="true">
+          <stringProp name="scriptLanguage">groovy</stringProp>
+          <stringProp name="parameters"></stringProp>
+          <stringProp name="filename"></stringProp>
+          <stringProp name="cacheKey">true</stringProp>
+          <stringProp name="script">import org.apache.jmeter.util.JMeterUtils;
+
+String OS_NAME_LC = System.getProperty(&quot;os.name&quot;).toLowerCase(java.util.Locale.ENGLISH);;
+
+os = &quot;LINUX&quot;;  
+if ( OS_NAME_LC.indexOf(&quot;win&quot;) &gt;= 0 ) {
+	os = &quot;WINDOWS&quot;; 
+}
+
+JMeterUtils.setProperty(&quot;LOCALHOST_OS&quot;, &quot;localhost_&quot; + os);
+ 
+OUT.println(&quot;OS property has been set to : &quot; + os);
+log.info(&quot;OS property has been set to : &quot; +os )</stringProp>
         </JSR223Sampler>
         <hashTree/>
       </hashTree>
@@ -460,25 +480,6 @@ return 0;</stringProp>
         <boolProp name="ThreadGroup.same_user_on_next_iteration">true</boolProp>
       </ThreadGroup>
       <hashTree>
-        <JSR223PreProcessor guiclass="TestBeanGUI" testclass="JSR223PreProcessor" testname="set_localhost_OS" enabled="true">
-          <stringProp name="cacheKey">true</stringProp>
-          <stringProp name="filename"></stringProp>
-          <stringProp name="parameters"></stringProp>
-          <stringProp name="script">
-String OS_NAME_LC = System.getProperty(&quot;os.name&quot;).toLowerCase(java.util.Locale.ENGLISH);;
-
-os = &quot;LINUX&quot;;  
-if ( OS_NAME_LC.indexOf(&quot;win&quot;) &gt;= 0 ) {
-	os = &quot;WINDOWS&quot;; 
-}
-
-vars.put(&quot;localhost_OS&quot;, &quot;localhost_&quot; + os)
- 
-OUT.println(&quot;localhost_OS has been set to : &quot; + vars.get(&quot;localhost_OS&quot;));
-log.info(&quot;localhost_OS has been set to : &quot; + vars.get(&quot;localhost_OS&quot;))</stringProp>
-          <stringProp name="scriptLanguage">groovy</stringProp>
-        </JSR223PreProcessor>
-        <hashTree/>
         <ConstantThroughputTimer guiclass="TestBeanGUI" testclass="ConstantThroughputTimer" testname="Constant Throughput Timer" enabled="true">
           <doubleProp>
             <name>throughput</name>
@@ -498,7 +499,7 @@ log.info(&quot;localhost_OS has been set to : &quot; + vars.get(&quot;localhost_
               </elementProp>
               <elementProp name="SERVER_PROFILE_NAME" elementType="Argument">
                 <stringProp name="Argument.name">SERVER_PROFILE_NAME</stringProp>
-                <stringProp name="Argument.value">${localhost_OS}</stringProp>
+                <stringProp name="Argument.value">${__property(LOCALHOST_OS)}</stringProp>
                 <stringProp name="Argument.metadata">=</stringProp>
               </elementProp>
               <elementProp name="______________________ miscellaneous: ____________________" elementType="Argument">

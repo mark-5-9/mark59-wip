@@ -4,7 +4,7 @@ REM   |
 REM   |  Sample Usage.
 REM   |  ------------
 REM   |  Assumes you have placed your target Jmeter instance is at C:\apache-jmeter,
-REM   |                          you have deployed artifacts to the Jmeter instance (see DataHunterDeployFromMavenTargetToJmeterInstance.bat) 
+REM   |                          you have deployed artifacts to the Jmeter instance (see DeployDataHunterTestArtifactsToJmeter.bat) 
 REM   |                          Java 8+ is installed 
 REM   |                          A local instance of DataHunter is running on (default) port 8081 
 REM   | 

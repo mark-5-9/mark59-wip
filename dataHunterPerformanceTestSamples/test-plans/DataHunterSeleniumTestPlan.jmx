@@ -39,12 +39,15 @@ OUT.println (&quot;DataHunter Selenium Test Plan:  Mark59 properties directly se
 OUT.println (&quot;mark59.selenium.driver.path.chrome     : &quot; + systemProperties.getProperty(&quot;mark59.selenium.driver.path.chrome&quot;));
 OUT.println (&quot;mark59.screenshot.directory            : &quot; + systemProperties.getProperty(&quot;mark59.screenshot.directory&quot;));
 OUT.println (&quot;mark59.server.profiles.excel.file.path : &quot; + systemProperties.getProperty(&quot;mark59.server.profiles.excel.file.path&quot;));
+
+SampleResult.setIgnore();
+
 OUT.println (&quot;------------------------------------------------------------&quot;);</stringProp>
           <stringProp name="scriptLanguage">groovy</stringProp>
-          <stringProp name="TestPlan.comments">windows example of using system properties to override mark59.properties setting  (by default this script should be disabled)</stringProp>
+          <stringProp name="TestPlan.comments">Windows example of using system properties to override mark59.properties setting  (by default this script should be disabled)</stringProp>
         </JSR223Sampler>
         <hashTree/>
-        <JSR223Sampler guiclass="TestBeanGUI" testclass="JSR223Sampler" testname="set_local_operating_system_property" enabled="true">
+        <JSR223Sampler guiclass="TestBeanGUI" testclass="JSR223Sampler" testname="setOperatingSystemProperty" enabled="true">
           <stringProp name="scriptLanguage">groovy</stringProp>
           <stringProp name="parameters"></stringProp>
           <stringProp name="filename"></stringProp>
@@ -53,15 +56,17 @@ OUT.println (&quot;------------------------------------------------------------&
 
 String OS_NAME_LC = System.getProperty(&quot;os.name&quot;).toLowerCase(java.util.Locale.ENGLISH);;
 
-os = &quot;LINUX&quot;;  
+os = &quot;LINUX&quot;;
 if ( OS_NAME_LC.indexOf(&quot;win&quot;) &gt;= 0 ) {
 	os = &quot;WINDOWS&quot;; 
-}
+} 
 
 JMeterUtils.setProperty(&quot;LOCALHOST_OS&quot;, &quot;localhost_&quot; + os);
+
+SampleResult.setIgnore();
  
-OUT.println(&quot;OS property has been set to : &quot; + os);
-log.info(&quot;OS property has been set to : &quot; +os )</stringProp>
+OUT.println(&quot;OS property has been set to : &quot; + os );
+log.info   (&quot;OS property has been set to : &quot; + os );</stringProp>
         </JSR223Sampler>
         <hashTree/>
       </hashTree>
@@ -583,8 +588,8 @@ return 0;</stringProp>
             <connectTime>true</connectTime>
           </value>
         </objProp>
-        <stringProp name="TestPlan.comments">Recommended Standard csv report (default + hostname) </stringProp>
-        <stringProp name="filename">C:\Mark59_Runs\Jmeter_Results\DataHunter\DataHunterTestResults.csv</stringProp>
+        <stringProp name="TestPlan.comments">Recommended Standard Config (default+hostname)  ** For LINUX Gui run, remove &quot;C:/&quot; in the Filename (you get a strange C: named directory otherwise!)  </stringProp>
+        <stringProp name="filename">C:/Mark59_Runs/Jmeter_Results/DataHunter/DataHunterTestResults.csv</stringProp>
       </ResultCollector>
       <hashTree/>
       <ResultCollector guiclass="ViewResultsFullVisualizer" testclass="ResultCollector" testname="View Results Tree" enabled="true">

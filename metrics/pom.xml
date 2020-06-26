@@ -99,7 +99,7 @@
 
 	<build>
 
-		<!-- phase/goals: clean package install -->
+		<!-- phase/goals: clean package    (** install not needed as the maven-install-plugin is set to run in the package phase) -->
 
 		<plugins>
 
@@ -143,7 +143,7 @@
 				<executions>
 					<execution>
 						<id>Add-to-local-repository</id>
-						<phase>install</phase>
+						<phase>package</phase>
 						<configuration>
 							<packaging>jar</packaging>
 							<file>${project.build.directory}\${project.artifactId}.jar</file>

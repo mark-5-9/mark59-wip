@@ -19,8 +19,8 @@ CD /D "%~dp0"
 
 rem REM   |  *** YOU NEED TO SELECT WHICH DATABASE TO LOAD RESULTS TO BEFORE EXECUTION *** :
 
-rem SET "DATABASE=H2"
-SET "DATABASE=MYSQL"
+SET "DATABASE=H2"
+rem SET "DATABASE=MYSQL"
 rem SET "DATABASE=POSTGRES"
 
 ECHO Starting the Metrics (Trend Analysis) runCheck Load Results program  

@@ -106,7 +106,6 @@ INSERT INTO COMMANDS VALUES ('DataHunterSeleniumDeployAndExecute','WMIC_WINDOWS'
  jmeter -n -X -f 
      -t %SERVER_METRICS_WEB_BASE_DIR%\..\dataHunterPerformanceTestSamples\test-plans\DataHunterSeleniumTestPlan.jmx 
      -l C:\Mark59_Runs\Jmeter_Results\DataHunter\DataHunterTestResults.csv 
-     -j %SERVER_METRICS_WEB_BASE_DIR%\..\bin\jmeter.log 
      -JForceTxnFailPercent=0 
      -JDataHunterUrlHostPort=http://localhost:8081 &  
 

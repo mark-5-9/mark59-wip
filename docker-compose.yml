@@ -1,0 +1,40 @@
+version: "3"
+services:
+  jenkins:
+    image: mark59/jenkins
+    expose:
+      - "8080"
+    ports:
+      - "8080:8080"
+    volumes:
+      - "/home/phil/gitrepo/mark59-xtras/docker/jenkins_home:/var/jenkins_home"
+      - "/home/phil/gitrepo/mark59-wip:/var/mark59"
+      - "/home/phil/apache-jmeter:/var/apache-jmeter"
+      - "/home/phil/Mark59_Runs:/var/Mark59_Runs"
+    networks:
+      - mark59net 
+  datahunter:
+    image: mark59/datahunter
+    expose:
+      - "8081"
+    ports:
+      - "8081:8081"
+    volumes:
+      - "/home/phil/gitrepo/mark59-wip:/var/mark59"
+    networks:
+      - mark59net
+  mark59servermetricsweb:
+    image: mark59/mark59-server-metrics-web
+    expose:
+      - "8085"
+    ports:
+      - "8085:8085"
+    volumes:
+      - "/home/phil/gitrepo/mark59-wip:/var/mark59"
+    networks:
+      - mark59net
+
+networks:
+  mark59net:
+
+

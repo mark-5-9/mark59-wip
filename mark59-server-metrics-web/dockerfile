@@ -1,0 +1,9 @@
+FROM openjdk:8
+WORKDIR .
+EXPOSE 8085
+CMD java -jar /var/mark59/mark59-server-metrics-web/target/mark59-server-metrics-web.war --spring.profiles.active=h2 --port=8085
+
+
+
+
+

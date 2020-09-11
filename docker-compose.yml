@@ -7,10 +7,10 @@ services:
     ports:
       - "8080:8080"
     volumes:
-      - "/home/phil/gitrepo/mark59-xtras/docker/jenkins_home:/var/jenkins_home"
-      - "/home/phil/gitrepo/mark59-wip:/var/mark59"
-      - "/home/phil/apache-jmeter:/var/apache-jmeter"
-      - "/home/phil/Mark59_Runs:/var/Mark59_Runs"
+      - "${PWD}/../mark59-xtras/docker/jenkins_home:/var/jenkins_home"
+      - "${PWD}:/var/mark59"
+      - "~/apache-jmeter:/var/apache-jmeter"
+      - "~/Mark59_Runs:/var/Mark59_Runs"
     networks:
       - mark59net 
   datahunter:
@@ -20,7 +20,7 @@ services:
     ports:
       - "8081:8081"
     volumes:
-      - "/home/phil/gitrepo/mark59-wip:/var/mark59"
+      - "${PWD}:/var/mark59"
     networks:
       - mark59net
   mark59servermetricsweb:
@@ -30,7 +30,7 @@ services:
     ports:
       - "8085:8085"
     volumes:
-      - "/home/phil/gitrepo/mark59-wip:/var/mark59"
+      - "${PWD}:/var/mark59"
     networks:
       - mark59net
 

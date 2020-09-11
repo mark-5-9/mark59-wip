@@ -1,5 +1,8 @@
 FROM jenkins/jenkins:lts
-LABEL name="trial headless chrome on jenkins"
+LABEL name="trial headless chrome on mark59/jenkins"
+
+COPY jenkins-plugins.txt /usr/share/jenkins/ref/plugins.txt
+RUN /usr/local/bin/install-plugins.sh < /usr/share/jenkins/ref/plugins.txt
 
 RUN whoami
 USER root

@@ -1,21 +1,25 @@
-FROM jenkins/jenkins:lts
+FROM jenkins/jenkins
 LABEL name="trial headless chrome on mark59/jenkins"
 
-RUN whoami
+# ENV http_proxy http://my.proxy.corp:8888
+# ENV https_proxy http://my.proxy.corp:8888
+
 USER root
+RUN echo "Australia/Melbourne" > /etc/timezone && dpkg-reconfigure -f noninteractive tzdata
+
+RUN /usr/local/bin/install-plugins.sh build-timeout 
+RUN /usr/local/bin/install-plugins.sh email-ext 
+RUN /usr/local/bin/install-plugins.sh git 
+RUN /usr/local/bin/install-plugins.sh greenballs 
+RUN /usr/local/bin/install-plugins.sh htmlpublisher
+RUN /usr/local/bin/install-plugins.sh jobConfigHistory 
+RUN /usr/local/bin/install-plugins.sh log-parser 
+RUN /usr/local/bin/install-plugins.sh mask-passwords
+RUN /usr/local/bin/install-plugins.sh nodelabelparameter
+RUN /usr/local/bin/install-plugins.sh timestamper
+RUN /usr/local/bin/install-plugins.sh parameterized-trigger 
 
 RUN apt-get update && apt-get clean
-
-# RUN /usr/local/bin/install-plugins.sh docker-slaves github-branch-source:1.8
-
-# COPY plugins.txt /usr/share/jenkins/ref/plugins.txt
-# RUN /usr/local/bin/install-plugins.sh < /usr/share/jenkins/ref/plugins.txt
-
-# install all plugins
-# COPY plugins.txt /var/jenkins_home/plugins.txt
-# RUN chmod +x /usr/local/bin/install-plugins.sh
-# RUN xargs /usr/local/bin/install-plugins.sh  < /var/jenkins_home/plugins.txt
-
 
 # Set the Chrome repo.
 RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - \
@@ -23,7 +27,6 @@ RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key
 
 # Install Chrome.
 RUN apt-get update && apt-get -y install google-chrome-stable
-
 
 USER jenkins
 

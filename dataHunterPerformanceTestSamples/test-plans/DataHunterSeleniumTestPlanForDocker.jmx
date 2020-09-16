@@ -26,25 +26,27 @@
         <boolProp name="ThreadGroup.same_user_on_next_iteration">true</boolProp>
       </SetupThreadGroup>
       <hashTree>
-        <JSR223Sampler guiclass="TestBeanGUI" testclass="JSR223Sampler" testname="mark59propsAlternativeOrOverrideValues" enabled="false">
+        <JSR223Sampler guiclass="TestBeanGUI" testclass="JSR223Sampler" testname="mark59propsAlternativeOrOverrideValues" enabled="true">
           <stringProp name="cacheKey">true</stringProp>
           <stringProp name="filename"></stringProp>
           <stringProp name="parameters"></stringProp>
           <stringProp name="script">Properties systemProperties = System.getProperties();
-systemProperties.setProperty(&quot;mark59.selenium.driver.path.chrome&quot; , &quot;./chromedriver.exe&quot;);
-systemProperties.setProperty(&quot;mark59.screenshot.directory&quot;        , &quot;C:/temp/jmeter_test_logs_testplan_override/&quot;);
-systemProperties.setProperty(&quot;mark59.server.profiles.excel.file.path&quot; , &quot;./mark59serverprofiles.xlsx&quot;);
- 
-OUT.println (&quot;DataHunter Selenium Test Plan:  Mark59 properties directly set here : &quot;);
-OUT.println (&quot;mark59.selenium.driver.path.chrome     : &quot; + systemProperties.getProperty(&quot;mark59.selenium.driver.path.chrome&quot;));
+systemProperties.setProperty(&quot;mark59.screenshot.directory&quot;, &quot;/var/Mark59_Runs/Jmeter_ScreenshotLogs/DataHunter&quot;);
+
+// systemProperties.setProperty(&quot;mark59.selenium.driver.path.chrome&quot; , &quot;./chromedriver.exe&quot;);
+// systemProperties.setProperty(&quot;mark59.server.profiles.excel.file.path&quot; , &quot;./mark59serverprofiles.xlsx&quot;); 
+
+OUT.println (&quot;DataHunter Selenium Test Plan:  Mark59 properties directly set within the test plan : &quot;);
 OUT.println (&quot;mark59.screenshot.directory            : &quot; + systemProperties.getProperty(&quot;mark59.screenshot.directory&quot;));
-OUT.println (&quot;mark59.server.profiles.excel.file.path : &quot; + systemProperties.getProperty(&quot;mark59.server.profiles.excel.file.path&quot;));
+
+// OUT.println (&quot;mark59.selenium.driver.path.chrome     : &quot; + systemProperties.getProperty(&quot;mark59.selenium.driver.path.chrome&quot;));
+//OUT.println (&quot;mark59.server.profiles.excel.file.path : &quot; + systemProperties.getProperty(&quot;mark59.server.profiles.excel.file.path&quot;));
 
 SampleResult.setIgnore();
 
 OUT.println (&quot;------------------------------------------------------------&quot;);</stringProp>
           <stringProp name="scriptLanguage">groovy</stringProp>
-          <stringProp name="TestPlan.comments">Windows example of using system properties to override mark59.properties setting  (by default this script should be disabled)</stringProp>
+          <stringProp name="TestPlan.comments">Linux example of using system properties to override mark59.properties setting  - in this case we need to override the screenshot directory location</stringProp>
         </JSR223Sampler>
         <hashTree/>
         <JSR223Sampler guiclass="TestBeanGUI" testclass="JSR223Sampler" testname="setOperatingSystemProperty" enabled="true">

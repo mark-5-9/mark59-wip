@@ -7,12 +7,10 @@ services:
     ports:
       - "8080:8080"
     volumes:
-      - "${PWD}/../mark59-xtras/docker/jenkins_home:/var/jenkins_home"
-      - "${PWD}:/var/mark59"
+      - "./../mark59-xtras/docker/jenkins_home:/var/jenkins_home"
+      - ".:/var/mark59"
       - "~/apache-jmeter:/var/apache-jmeter"
       - "~/Mark59_Runs:/var/Mark59_Runs"
-    networks:
-      - mark59net 
   datahunter:
     image: mark59/datahunter
     expose:
@@ -20,9 +18,7 @@ services:
     ports:
       - "8081:8081"
     volumes:
-      - "${PWD}:/var/mark59"
-    networks:
-      - mark59net
+      - ".:/var/mark59"
   mark59servermetricsweb:
     image: mark59/mark59-server-metrics-web
     expose:
@@ -30,11 +26,5 @@ services:
     ports:
       - "8085:8085"
     volumes:
-      - "${PWD}:/var/mark59"
-    networks:
-      - mark59net
-
-networks:
-  mark59net:
-
+      - ".:/var/mark59"
 

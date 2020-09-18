@@ -1,0 +1,26 @@
+FROM jenkins/jenkins
+LABEL name="trial headless chrome on mark59/jenkins"
+
+# ENV http_proxy http://my.proxy.corp:8888
+# ENV https_proxy http://my.proxy.corp:8888
+
+USER root
+
+
+RUN echo "Australia/Melbourne" > /etc/timezone && dpkg-reconfigure -f noninteractive tzdata
+
+
+RUN apt-get update && apt-get clean
+
+# Set the Chrome repo.
+RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - \
+    && echo "deb http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list
+
+# Install Chrome.
+RUN apt-get update && apt-get -y install google-chrome-stable
+
+# Install mpstat command  
+RUN apt-get update && apt-get -y install sysstat
+
+USER jenkins
+

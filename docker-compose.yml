@@ -1,13 +1,12 @@
 version: "3"
 services:
   jenkins:
-    image: mark59/jenkins
+    image: mark59/jenkins-ci
     expose:
       - "8080"
     ports:
       - "8080:8080"
     volumes:
-      - "./../mark59-xtras/docker/jenkins_home:/var/jenkins_home"
       - ".:/var/mark59"
       - "~/apache-jmeter:/var/apache-jmeter"
       - "~/Mark59_Runs:/var/Mark59_Runs"

@@ -1,7 +1,7 @@
 version: "3"
 services:
   jenkins:
-    image: mark59/jenkins-ci
+    image: mark59/jenkins
     expose:
       - "8080"
     ports:

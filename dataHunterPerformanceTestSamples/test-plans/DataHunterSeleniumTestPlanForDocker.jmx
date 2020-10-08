@@ -30,7 +30,9 @@
           <stringProp name="cacheKey">true</stringProp>
           <stringProp name="filename"></stringProp>
           <stringProp name="parameters"></stringProp>
-          <stringProp name="script">Properties systemProperties = System.getProperties();
+          <stringProp name="script">import org.apache.jmeter.util.JMeterUtils;
+
+Properties systemProperties = System.getProperties();
 systemProperties.setProperty(&quot;mark59.screenshot.directory&quot;, &quot;/var/Mark59_Runs/Jmeter_ScreenshotLogs/DataHunter&quot;);
 
 // systemProperties.setProperty(&quot;mark59.selenium.driver.path.chrome&quot; , &quot;./chromedriver.exe&quot;);
@@ -42,11 +44,18 @@ OUT.println (&quot;mark59.screenshot.directory            : &quot; + systemPrope
 // OUT.println (&quot;mark59.selenium.driver.path.chrome     : &quot; + systemProperties.getProperty(&quot;mark59.selenium.driver.path.chrome&quot;));
 //OUT.println (&quot;mark59.server.profiles.excel.file.path : &quot; + systemProperties.getProperty(&quot;mark59.server.profiles.excel.file.path&quot;));
 
+String localHostIP = InetAddress.getLocalHost().getHostAddress();
+String additionalOptions = &quot;--proxy-server=direct://,--remote-debugging-address=0.0.0.0,--remote-debugging-port=923&quot; + localHostIP.substring(localHostIP.length() - 1);
+JMeterUtils.setProperty(&quot;ADDITIONAL_OPTIONS&quot;, additionalOptions);
+
+OUT.println (&quot;localHostIP (docker) : &quot; + localHostIP);
+OUT.println (&quot;ADDITIONAL_OPTIONS   : (not in use) &quot; + additionalOptions);
+
 SampleResult.setIgnore();
 
 OUT.println (&quot;------------------------------------------------------------&quot;);</stringProp>
           <stringProp name="scriptLanguage">groovy</stringProp>
-          <stringProp name="TestPlan.comments">Linux example of using system properties to override mark59.properties setting  - in this case we need to override the screenshot directory location</stringProp>
+          <stringProp name="TestPlan.comments">Docker / Linux example of using system properties to override mark59.properties setting  - in this case we need to override the screenshot directory location</stringProp>
         </JSR223Sampler>
         <hashTree/>
         <JSR223Sampler guiclass="TestBeanGUI" testclass="JSR223Sampler" testname="setOperatingSystemProperty" enabled="true">
@@ -81,7 +90,7 @@ log.info   (&quot;OS property has been set to : &quot; + os );</stringProp>
           </elementProp>
           <elementProp name="pacing" elementType="Argument">
             <stringProp name="Argument.name">pacing</stringProp>
-            <stringProp name="Argument.value">25 5</stringProp>
+            <stringProp name="Argument.value">45 5</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
           <elementProp name="mark59ServerMetricsWebUrl" elementType="Argument">
@@ -98,7 +107,7 @@ log.info   (&quot;OS property has been set to : &quot; + os );</stringProp>
           <boolProp name="LoopController.continue_forever">false</boolProp>
           <intProp name="LoopController.loops">-1</intProp>
         </elementProp>
-        <stringProp name="ThreadGroup.num_threads">2</stringProp>
+        <stringProp name="ThreadGroup.num_threads">1</stringProp>
         <stringProp name="ThreadGroup.ramp_time">25</stringProp>
         <boolProp name="ThreadGroup.scheduler">true</boolProp>
         <stringProp name="ThreadGroup.duration">${__P(Duration,70)}</stringProp>
@@ -241,7 +250,7 @@ return 0;</stringProp>
               </elementProp>
               <elementProp name="ADDITIONAL_OPTIONS" elementType="Argument">
                 <stringProp name="Argument.name">ADDITIONAL_OPTIONS</stringProp>
-                <stringProp name="Argument.value"></stringProp>
+                <stringProp name="Argument.value">--proxy-server=direct://,--remote-debugging-address=0.0.0.0,--remote-debugging-port=9222</stringProp>
                 <stringProp name="Argument.metadata">=</stringProp>
               </elementProp>
               <elementProp name="WRITE_FFOX_BROWSER_LOGFILE" elementType="Argument">
@@ -305,13 +314,13 @@ return 0;</stringProp>
         </JavaSampler>
         <hashTree/>
       </hashTree>
-      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="DataHunterLifecycleIterator" enabled="true">
+      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="DataHunterLifecycleIterator" enabled="false">
         <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
         <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller" enabled="true">
           <boolProp name="LoopController.continue_forever">false</boolProp>
           <intProp name="LoopController.loops">-1</intProp>
         </elementProp>
-        <stringProp name="ThreadGroup.num_threads">2</stringProp>
+        <stringProp name="ThreadGroup.num_threads">1</stringProp>
         <stringProp name="ThreadGroup.ramp_time">20</stringProp>
         <boolProp name="ThreadGroup.scheduler">true</boolProp>
         <stringProp name="ThreadGroup.duration">${__P(Duration,70)}</stringProp>
@@ -414,12 +423,12 @@ return 0;</stringProp>
               </elementProp>
               <elementProp name="PROXY" elementType="Argument">
                 <stringProp name="Argument.name">PROXY</stringProp>
-                <stringProp name="Argument.value"> </stringProp>
+                <stringProp name="Argument.value"></stringProp>
                 <stringProp name="Argument.metadata">=</stringProp>
               </elementProp>
               <elementProp name="ADDITIONAL_OPTIONS" elementType="Argument">
                 <stringProp name="Argument.name">ADDITIONAL_OPTIONS</stringProp>
-                <stringProp name="Argument.value"></stringProp>
+                <stringProp name="Argument.value">--proxy-server=direct://,--no-sandbox,--disable-dev-shm-usage</stringProp>
                 <stringProp name="Argument.metadata">=</stringProp>
               </elementProp>
               <elementProp name="WRITE_FFOX_BROWSER_LOGFILE" elementType="Argument">
@@ -500,7 +509,7 @@ return 0;</stringProp>
         <ConstantThroughputTimer guiclass="TestBeanGUI" testclass="ConstantThroughputTimer" testname="Constant Throughput Timer" enabled="true">
           <doubleProp>
             <name>throughput</name>
-            <value>3.0</value>
+            <value>2.0</value>
             <savedValue>0.0</savedValue>
           </doubleProp>
           <intProp name="calcMode">0</intProp>

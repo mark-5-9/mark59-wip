@@ -16,6 +16,9 @@
 
 package com.mark59.metrics;
 
+import java.sql.SQLException;
+import org.h2.tools.Server;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -107,5 +110,15 @@ public class ApplicationConfig {
         return new VisGraphicDataProduction();
     }    
   
+    @Bean(initMethod = "start", destroyMethod = "stop")
+    public Server h2DatabaseServer() throws SQLException {
+    	
+    	System.out.println(" h2DatabaseServer: using profile " + currentDatabaseProfile());
+    	
+        return Server.createTcpServer("-tcp", "-tcpAllowOthers", "-tcpPort", "9091");
+    }    
+    
+    
+    
     
 }

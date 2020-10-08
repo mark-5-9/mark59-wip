@@ -150,6 +150,8 @@ public class Runcheck  implements CommandLineRunner
 		if (!Mark59Constants.H2.equalsIgnoreCase(argDatabasetype)
 				&& !Mark59Constants.MYSQL.equalsIgnoreCase(argDatabasetype)
 				&& !Mark59Constants.PG.equalsIgnoreCase(argDatabasetype)
+				&& !Mark59Constants.H2TCP.equalsIgnoreCase(argDatabasetype)       // local tcp connection 
+				&& !Mark59Constants.H2TCPDOCKER.equalsIgnoreCase(argDatabasetype) // docker containers tcp connection
 				&& !Mark59Constants.H2MEM.equalsIgnoreCase(argDatabasetype)) {    // h2mem used for internal testing
 			formatter.printHelp("Runcheck", options);
 			printSampleUsage();
@@ -213,19 +215,29 @@ public class Runcheck  implements CommandLineRunner
 		System.setProperty("pg.username", 	   	dbUsername);
 		System.setProperty("pg.xtra.url.parms",	dbxtraurlparms);
 		
-		// for H2 and H2MEM database settings  are hard coded in their property files and cannot be changed
+		// for H2 database settings are hard coded in their property files and cannot be changed
+		// (this is just for display purposes)
 		if (Mark59Constants.H2.equalsIgnoreCase(argDatabasetype)){
 			dbserver   = "localhost (all db settings hard-coded for h2";
 			dbPort     = "";
 			dbSchema   = "metrics";
 			dbUsername = "sa";
 		} else if (Mark59Constants.H2MEM.equalsIgnoreCase(argDatabasetype)){
-			dbserver   = "localhost (all db settings hard-coded for h2mem)";
+			dbserver   = "localhost (all db settings hard-coded for h2)";
 			dbPort     = "";
 			dbSchema   = "metricsmem";
 			dbUsername = "sa";			
+		}  else if (Mark59Constants.H2TCP.equalsIgnoreCase(argDatabasetype)){
+			dbserver   = "localhost (all db settings hard-coded for h2)";
+			dbPort     = "9091(tcp connection)";
+			dbSchema   = "metrics";
+			dbUsername = "sa";			
+		} else if (Mark59Constants.H2TCPDOCKER.equalsIgnoreCase(argDatabasetype)){
+			dbserver   = "metrics (all db settings hard-coded for h2)";
+			dbPort     = "9091(tcp connection)";
+			dbSchema   = "metrics";
+			dbUsername = "sa";			
 		}
-		
 		
 		String dbpassWord 	   = commandLine.getOptionValue("w", "admin");
 		String dbpassencrYpted = commandLine.getOptionValue("y");

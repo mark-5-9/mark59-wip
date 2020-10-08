@@ -17,10 +17,14 @@ CD /D "%~dp0"
 
 echo  "YOU NEED TO SELECT WHICH DATABASE TO LOAD RESULTS TO BEFORE EXECUTION (DEFAULT IS H2) "; 
 
-SET "DATABASE=H2"
-rem SET "DATABASE=H2MEM"
+rem SET "DATABASE=H2"
 rem SET "DATABASE=MYSQL"
 rem SET "DATABASE=POSTGRES"
+
+rem -- special values
+SET "DATABASE=H2TCP"
+rem SET "DATABASE=H2TCPDOCKER"
+rem SET "DATABASE=H2MEM"
 
 ECHO Starting the Metrics (Trend Analysis) runCheck Load Results program  
 CD ../metricsRuncheck

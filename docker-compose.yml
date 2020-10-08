@@ -8,14 +8,22 @@ services:
       - "8080:8080"
     volumes:
       - ".:/var/mark59"
-      - "~/apache-jmeter:/var/apache-jmeter"
-      - "~/Mark59_Runs:/var/Mark59_Runs"
+      - "//c/apache-jmeter:/var/apache-jmeter"
+      - "//c/Mark59_Runs:/var/Mark59_Runs"
   datahunter:
     image: mark59/datahunter
     expose:
       - "8081"
     ports:
       - "8081:8081"
+    volumes:
+      - ".:/var/mark59"
+  metrics:
+    image: mark59/metrics
+    expose:
+      - "8083"
+    ports:
+      - "8083:8083"
     volumes:
       - ".:/var/mark59"
   mark59servermetricsweb:
@@ -25,5 +33,4 @@ services:
     ports:
       - "8085:8085"
     volumes:
-      - ".:/var/mark59"
-
+      - ".:/var/mark59"      

@@ -20,10 +20,12 @@ ECHO Starting the DataHunter Spring Boot Application
 CD ../dataHunter
 START StartDataHunterFromTarget.bat
 
-ECHO Starting the Metrics (Trend Analysis) Web Application  
-CD ../metrics
-START StartMetricsTrendAnalysisFromTarget.bat
-
 ECHO Starting the mark59-server-metrics-web Application  
 CD ../mark59-server-metrics-web
 START StartMark59ServerMetricsWebFromTarget.bat
+
+SET "DATABASE=H2TCP"
+
+ECHO Starting the Metrics (Trend Analysis) Web Application  
+CD ../metrics
+START StartMetricsTrendAnalysisFromTarget.bat

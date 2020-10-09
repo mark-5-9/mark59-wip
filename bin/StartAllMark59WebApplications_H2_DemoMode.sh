@@ -28,6 +28,8 @@ gnome-terminal --working-directory=$PWD/dataHunter -- ./StartDataHunterFromTarge
 echo Starting the Metrics Trend Analysis Web Application  
 gnome-terminal --working-directory=$PWD/metrics -- ./StartMetricsTrendAnalysisFromTarget.sh
 
+# DATABASE=H2TCPSERVER
+# export DATABASE
 echo Starting the mark59-server-metrics-web Application 
 gnome-terminal --working-directory=$PWD/mark59-server-metrics-web -- ./StartMark59ServerMetricsWebFromTarget.sh 
 

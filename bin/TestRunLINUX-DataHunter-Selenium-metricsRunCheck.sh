@@ -18,9 +18,12 @@
 echo  "YOU NEED TO SELECT WHICH DATABASE TO LOAD RESULTS TO BEFORE EXECUTION (DEFAULT IS H2) "; 
 
 DATABASE=H2
-# DATABASE=H2MEM
 # DATABASE=MYSQL
 # DATABASE=POSTGRES
+
+# -- special purpose values
+# DATABASE=H2TCPCLIENT
+# DATABASE=H2MEM
 
 cd ../metricsRuncheck;
 ./LoadDataHunterResultsIntoMetricsTrendAnalysis.sh "${DATABASE}";

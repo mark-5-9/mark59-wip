@@ -115,7 +115,7 @@ public class Runcheck  implements CommandLineRunner
 																+ "*******************************************\n"
 																+ "** NOTE: all db options applicable to MySQL or Postgres ONLY\n"  
 																+ "*******************************************");
-		options.addOption("p", "dbPort",    			true, "Port number for the database where results will be held (defaults to 3306 for MySQL, 5432 for Postgres)" );		
+		options.addOption("p", "dbPort",    			true, "Port number for the database where results will be held (defaults to 3306 for MySQL, 5432 for Postgres, 9902 for H2 tcp)" );		
 		options.addOption("s", "dbSchema",				true, "database schema (MySQL terminology) / database name (Postgres terminology) defaults to metricsdb" );
 		options.addOption("u", "dbUsername",   			true, "Username for the database (defaults to admin)" );				
 		options.addOption("w", "dbpassWord",   			true, "Password for the database" );				
@@ -150,13 +150,12 @@ public class Runcheck  implements CommandLineRunner
 		if (!Mark59Constants.H2.equalsIgnoreCase(argDatabasetype)
 				&& !Mark59Constants.MYSQL.equalsIgnoreCase(argDatabasetype)
 				&& !Mark59Constants.PG.equalsIgnoreCase(argDatabasetype)
-				&& !Mark59Constants.H2TCP.equalsIgnoreCase(argDatabasetype)       // local tcp connection 
-				&& !Mark59Constants.H2TCPDOCKER.equalsIgnoreCase(argDatabasetype) // docker containers tcp connection
+				&& !Mark59Constants.H2TCPCLIENT.equalsIgnoreCase(argDatabasetype)
 				&& !Mark59Constants.H2MEM.equalsIgnoreCase(argDatabasetype)) {    // h2mem used for internal testing
 			formatter.printHelp("Runcheck", options);
 			printSampleUsage();
 			throw new RuntimeException(
-					"The database type (d) argument must be set to 'h2', 'pg' or 'mysql' ! (or not used, in which case 'mysql' is assumed)");
+					"The database type (d) argument must be set to 'pg', 'mysql', 'h2', 'h2mem' or 'h2tcpclient'! (or not used, in which case 'mysql' is assumed)");
 		}
 		if ( !AppConstantsMetrics.JMETER.equalsIgnoreCase(argTool)  &&  !AppConstantsMetrics.LOADRUNNER.equalsIgnoreCase(argTool)) {
 			formatter.printHelp( "Runcheck", options );
@@ -191,6 +190,8 @@ public class Runcheck  implements CommandLineRunner
 			dbDefaultPort = "3306";
 		} else if (Mark59Constants.PG.equalsIgnoreCase(argDatabasetype)){
 			dbDefaultPort = "5432";
+		} else if (Mark59Constants.H2TCPCLIENT.equalsIgnoreCase(argDatabasetype)){
+			dbDefaultPort = "9092";
 		}
 		
 		String dbserver	 	 	= commandLine.getOptionValue("h", "localhost");
@@ -202,42 +203,34 @@ public class Runcheck  implements CommandLineRunner
 		// argDatabasetype used to set via application.properties: spring.profiles.active={spring.profile}
 		System.setProperty("spring.profile", argDatabasetype);
 		
-		System.setProperty("mysql.server",  	  dbserver);
-		System.setProperty("mysql.port",    	  dbPort);		
-		System.setProperty("mysql.schema",  	  dbSchema);		
-		System.setProperty("mysql.username",	  dbUsername);
-		System.setProperty("mysql.xtra.url.parms",dbxtraurlparms);
-
+		System.setProperty("mysql.server",  	  	dbserver);
+		System.setProperty("mysql.port",    	  	dbPort);		
+		System.setProperty("mysql.schema",  	  	dbSchema);		
+		System.setProperty("mysql.username",	  	dbUsername);
+		System.setProperty("mysql.xtra.url.parms",	dbxtraurlparms);
 		
-		System.setProperty("pg.server",   		dbserver);
-		System.setProperty("pg.port",     		dbPort);		
-		System.setProperty("pg.database",      	dbSchema);		
-		System.setProperty("pg.username", 	   	dbUsername);
-		System.setProperty("pg.xtra.url.parms",	dbxtraurlparms);
+		System.setProperty("pg.server",   			dbserver);
+		System.setProperty("pg.port",     			dbPort);		
+		System.setProperty("pg.database",      		dbSchema);		
+		System.setProperty("pg.username", 	   		dbUsername);
+		System.setProperty("pg.xtra.url.parms",		dbxtraurlparms);
 		
-		// for H2 database settings are hard coded in their property files and cannot be changed
-		// (this is just for display purposes)
+		System.setProperty("h2.server",   			dbserver);
+		System.setProperty("h2.port",     			dbPort);
+		
+		// for H2/H2MEM database settings are hard coded in their property files and cannot be changed,
+		// so this is just for display purposes
 		if (Mark59Constants.H2.equalsIgnoreCase(argDatabasetype)){
 			dbserver   = "localhost (all db settings hard-coded for h2";
 			dbPort     = "";
 			dbSchema   = "metrics";
 			dbUsername = "sa";
 		} else if (Mark59Constants.H2MEM.equalsIgnoreCase(argDatabasetype)){
-			dbserver   = "localhost (all db settings hard-coded for h2)";
+			dbserver   = "localhost (all db settings hard-coded for h2mem)";
 			dbPort     = "";
 			dbSchema   = "metricsmem";
 			dbUsername = "sa";			
-		}  else if (Mark59Constants.H2TCP.equalsIgnoreCase(argDatabasetype)){
-			dbserver   = "localhost (all db settings hard-coded for h2)";
-			dbPort     = "9091(tcp connection)";
-			dbSchema   = "metrics";
-			dbUsername = "sa";			
-		} else if (Mark59Constants.H2TCPDOCKER.equalsIgnoreCase(argDatabasetype)){
-			dbserver   = "metrics (all db settings hard-coded for h2)";
-			dbPort     = "9091(tcp connection)";
-			dbSchema   = "metrics";
-			dbUsername = "sa";			
-		}
+		} 
 		
 		String dbpassWord 	   = commandLine.getOptionValue("w", "admin");
 		String dbpassencrYpted = commandLine.getOptionValue("y");
@@ -296,7 +289,7 @@ public class Runcheck  implements CommandLineRunner
 	public void run(String... args) throws Exception {
 		System.out.println("Spring configuration complete, " + currentDatabaseProfile + " database in use."  );
 		
-		if (Mark59Constants.H2.equalsIgnoreCase(currentDatabaseProfile)) {
+		if (Mark59Constants.H2.equalsIgnoreCase(currentDatabaseProfile) || Mark59Constants.H2TCPCLIENT.equalsIgnoreCase(currentDatabaseProfile)){
 			System.out.println();			
 			System.out.println("***************************************************************************************" );
 			System.out.println("*   The use of a H2 database is intended to assist in tutorials and 'quick start'.    *" );

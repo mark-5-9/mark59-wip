@@ -5,4 +5,4 @@ RUN apt-get update && apt-get -y install sysstat
 
 WORKDIR .
 EXPOSE 8083
-CMD java -jar /var/mark59/metrics/target/metrics.war --spring.profiles.active=h2tcp --port=8083
+CMD java -jar /var/mark59/metrics/target/metrics.war --spring.profiles.active=h2tcpserver --port=8083 --h2.port=9092

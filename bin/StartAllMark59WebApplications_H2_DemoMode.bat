@@ -24,8 +24,7 @@ ECHO Starting the mark59-server-metrics-web Application
 CD ../mark59-server-metrics-web
 START StartMark59ServerMetricsWebFromTarget.bat
 
-SET "DATABASE=H2TCP"
-
+rem SET "DATABASE=H2TCPSERVER"
 ECHO Starting the Metrics (Trend Analysis) Web Application  
 CD ../metrics
 START StartMetricsTrendAnalysisFromTarget.bat

@@ -44,8 +44,7 @@ public class Mark59Constants {
     public static final String MYSQL  		= "mysql";
     public static final String PG     		= "pg";
     public static final String H2MEM  		= "h2mem";
-    public static final String H2TCP  		= "h2tcp";
-    public static final String H2TCPDOCKER  = "h2tcpdocker";
+    public static final String H2TCPCLIENT	= "h2tcpclient";
     
     /**
      * Defines an enumeration of the data-type values use in the Mark59 framework that may appear in 

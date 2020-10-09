@@ -26,9 +26,9 @@ IF "%DATABASE%" == "H2" (
 	java -jar ./target/metrics.war --spring.profiles.active=h2 --port=8083 
 )
 
-IF "%DATABASE%" == "H2TCP" (
-	rem Using H2  Starting mark59-server-metrics-web  (default application server port, db TCP server will be started) 
-	java -jar ./target/metrics.war --spring.profiles.active=h2tcp --port=8083 
+IF "%DATABASE%" == "H2TCPSERVER" (
+	rem Using H2  Starting mark59-server-metrics-web  (default application server port, db TCP server started on default port) 
+	java -jar ./target/metrics.war --spring.profiles.active=h2tcpserver --port=8083 --h2.port=9092 
 )
 
 IF "%DATABASE%" == "H2MEM" (

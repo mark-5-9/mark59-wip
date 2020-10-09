@@ -14,9 +14,13 @@
 #   |
 #   -------------------------------------------------------------------------------------------------------------------------------------------------
 # DATABASE=H2
-# DATABASE=H2MEM
 # DATABASE=MYSQL
 # DATABASE=POSTGRES
+
+# -- special purpose values
+# DATABASE=H2MEM
+# DATABASE=H2TCPCLIENT
+
 DATABASE=$1
 
 CURRENTDATE=`date +"%Y-%m-%d:%T"`
@@ -32,6 +36,11 @@ fi
 if [ "$DATABASE" = "H2" ]; then
 	# Using H2  Starting metricsRuncheck batch for a dataHunter load (defaults taken on parameters) 
 	java -jar ./target/metricsRuncheck.jar  -a DataHunter -i ~/Mark59_Runs/Jmeter_Results/DataHunter/ -d h2   	
+fi
+
+if [ "$DATABASE" = "H2TCPCLIENT" ]; then
+	# Using H2 using a tcp connection to start  metricsRuncheck batch for a dataHunter load (defaults taken on parameters. (Note for docker use -h metrics) 
+	java -jar ./target/metricsRuncheck.jar  -a DataHunter -i ~/Mark59_Runs/Jmeter_Results/DataHunter/ -d h2tcpclient -h localhost  -p 9092
 fi
 
 if [ "$DATABASE" = "H2MEM" ]; then

@@ -19,10 +19,9 @@ rem SET "DATABASE=H2"
 rem SET "DATABASE=MYSQL"
 rem SET "DATABASE=POSTGRES"
 
-rem -- special values
-rem SET "DATABASE=H2TCP"
-rem SET "DATABASE=H2TCPDOCKER"
+rem -- special purpose values
 rem SET "DATABASE=H2MEM"
+rem SET "DATABASE=H2TCPCLIENT"
 
 ECHO The database has been set to %DATABASE%
 
@@ -37,14 +36,9 @@ IF "%DATABASE%" == "H2" (
 	java -jar ./target/metricsRuncheck.jar  -a DataHunter -i C:\Mark59_Runs\Jmeter_Results\DataHunter -d h2   	
 )
 
-IF "%DATABASE%" == "H2TCP" (
-	rem Using H2  Starting metricsRuncheck batch for a dataHunter load (defaults taken on parameters) 
-	java -jar ./target/metricsRuncheck.jar  -a DataHunter -i C:\Mark59_Runs\Jmeter_Results\DataHunter -d h2tcp   	
-)
-
-IF "%DATABASE%" == "H2TCPDOCKER" (
-	rem Using H2  Starting metricsRuncheck batch for a dataHunter load (defaults taken on parameters) 
-	java -jar ./target/metricsRuncheck.jar  -a DataHunter -i C:\Mark59_Runs\Jmeter_Results\DataHunter -d h2tcpdocker -h metrics  	
+IF "%DATABASE%" == "H2TCPCLIENT" (
+	rem Using H2 using a tcp connection to start  metricsRuncheck batch for a dataHunter load (defaults taken on parameters. (Note for docker use -h metrics) 
+	java -jar ./target/metricsRuncheck.jar  -a DataHunter -i C:\Mark59_Runs\Jmeter_Results\DataHunter -d h2tcpclient -h localhost  -p 9092   	
 )
 
 IF "%DATABASE%" == "H2MEM" (

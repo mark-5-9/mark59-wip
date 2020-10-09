@@ -8,8 +8,8 @@ services:
       - "8080:8080"
     volumes:
       - ".:/var/mark59"
-      - "~/apache-jmeter:/var/apache-jmeter"
-      - "~/Mark59_Runs:/var/Mark59_Runs"
+      - "//c/apache-jmeter:/var/apache-jmeter"
+      - "//c/Mark59_Runs:/var/Mark59_Runs"
   datahunter:
     image: mark59/datahunter
     expose:

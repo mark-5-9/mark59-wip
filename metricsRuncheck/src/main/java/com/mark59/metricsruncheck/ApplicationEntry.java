@@ -51,7 +51,7 @@ public class ApplicationEntry  implements CommandLineRunner  {
 			
 //			args = new String[] { "-a", "DataHunter", "-i", "C:/Mark59_Runs/Jmeter_Results/DataHunter", "-d","mysql", "-h","localhost", "-p", "3306", "-q", "?allowPublicKeyRetrieval=true&useSSL=false", "-t", "JMETER", "-r", "sample_run_01"  };
 //			args = new String[] { "-a", "DataHunter", "-i", "C:/Mark59_Runs/Jmeter_Results/DataHunter", "-d","pg",    "-h","localhost", "-t", "JMETER", "-q", "?sslmode=disable", "-r", "sample_run_pg01"  };
-//          args = new String[] { "-a", "DataHunter", "-i", "C:/Mark59_Runs/Jmeter_Results/DataHunter", "-d","h2" }; //	h2mem h2tcp h2tcpdocker		
+//          args = new String[] { "-a", "DataHunter", "-i", "C:/Mark59_Runs/Jmeter_Results/DataHunter", "-d","h2" }; //	h2mem h2tcpclient		
 //          args = new String[] { "-a", "UsingLRapp", "-i", "C:/Mark59_Runs/LR/UsingLRapp/An_Session1/An_Session1.mdb", "-d","h2", "-t","LOADRUNNER"};			
 			
 			// arguments are parsed before Spring Configuration, as the config uses values passed in the args.

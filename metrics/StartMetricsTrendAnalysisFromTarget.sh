@@ -19,6 +19,11 @@ if [ "$DATABASE" = "H2" ]; then
 	java -jar ./target/metrics.war --spring.profiles.active=h2 --port=8083 
 fi
 
+if [ "$DATABASE" = "H2TCPSERVER" ]; then
+	# Using H2  Starting mark59-server-metrics-web  (default application server port, db TCP server started on default port) 
+	java -jar ./target/metrics.war --spring.profiles.active=h2tcpserver --port=8083 --h2.port=9092
+fi
+
 if [ "$DATABASE" = "MYSQL" ]; then
 	# Using MySQL. Starting the (Metrics Trend). Providing DB connection and server information (using default values)  
 	java -jar ./target/metrics.war --spring.profiles.active=mysql --port=8083  --mysql.server=localhost --mysql.port=3306  --mysql.schema=metricsdb  --mysql.xtra.url.parms="?allowPublicKeyRetrieval=true&useSSL=false" --mysql.username=admin --mysql.password=admin

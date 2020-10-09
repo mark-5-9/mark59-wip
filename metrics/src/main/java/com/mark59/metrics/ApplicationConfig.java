@@ -17,6 +17,8 @@
 package com.mark59.metrics;
 
 import java.sql.SQLException;
+
+import org.apache.commons.lang3.StringUtils;
 import org.h2.tools.Server;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -59,11 +61,20 @@ public class ApplicationConfig {
 
     @Value("${spring.profiles.active}")
     private String springProfilesActive;	
-	
+    	
     @Bean
     public String currentDatabaseProfile() {
         return springProfilesActive;
     }   
+
+    @Value("${h2.port:UNUSED}")
+    private String h2port;
+    
+    @Bean
+    public String h2Port() {
+        return h2port;
+    }   
+   
     
     @Bean
     public ApplicationDAO applicationDAO() {
@@ -112,13 +123,17 @@ public class ApplicationConfig {
   
     @Bean(initMethod = "start", destroyMethod = "stop")
     public Server h2DatabaseServer() throws SQLException {
-    	
-    	System.out.println(" h2DatabaseServer: using profile " + currentDatabaseProfile());
-    	
-        return Server.createTcpServer("-tcp", "-tcpAllowOthers", "-tcpPort", "9091");
+
+    	if ( "h2tcpserver".equalsIgnoreCase(currentDatabaseProfile())){
+    		if (StringUtils.isNumeric(h2Port())){
+    			System.out.println("Starting H2 database using tcp port " + h2Port()  );
+    	        return Server.createTcpServer("-tcp", "-tcpAllowOthers", "-tcpPort", h2Port());
+    		} else {
+    			System.out.println("Starting H2 database using tcp default port 9092");
+    	        return Server.createTcpServer("-tcp", "-tcpAllowOthers", "-tcpPort", "9092"); 
+    		}    
+    	}
+    	return null;	
     }    
-    
-    
-    
     
 }

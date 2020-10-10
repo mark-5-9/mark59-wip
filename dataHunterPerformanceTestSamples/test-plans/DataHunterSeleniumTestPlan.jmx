@@ -12,6 +12,36 @@
       <stringProp name="TestPlan.user_define_classpath"></stringProp>
     </TestPlan>
     <hashTree>
+      <Arguments guiclass="ArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
+        <collectionProp name="Arguments.arguments">
+          <elementProp name="dataHunterUrlHostPort" elementType="Argument">
+            <stringProp name="Argument.name">dataHunterUrlHostPort</stringProp>
+            <stringProp name="Argument.value">${__P(DataHunterUrlHostPort,http://localhost:8081)}</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="pacing" elementType="Argument">
+            <stringProp name="Argument.name">pacing</stringProp>
+            <stringProp name="Argument.value">25 5</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="mark59ServerMetricsWebUrl" elementType="Argument">
+            <stringProp name="Argument.name">mark59ServerMetricsWebUrl</stringProp>
+            <stringProp name="Argument.value">${__P(Mark59ServerMetricsWebUrl,http://localhost:8085/mark59-server-metrics-web)}</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="runningInDocker" elementType="Argument">
+            <stringProp name="Argument.name">runningInDocker</stringProp>
+            <stringProp name="Argument.value">${__P(RunningInDocker,false)}</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="additionalOptions" elementType="Argument">
+            <stringProp name="Argument.name">additionalOptions</stringProp>
+            <stringProp name="Argument.value">${__P(AdditionalOptions, )}</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+        </collectionProp>
+      </Arguments>
+      <hashTree/>
       <SetupThreadGroup guiclass="SetupThreadGroupGui" testclass="SetupThreadGroup" testname="setUp Thread Group " enabled="true">
         <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
         <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller" enabled="true">
@@ -47,6 +77,29 @@ OUT.println (&quot;------------------------------------------------------------&
           <stringProp name="TestPlan.comments">Windows example of using system properties to override mark59.properties setting  (by default this script should be disabled)</stringProp>
         </JSR223Sampler>
         <hashTree/>
+        <JSR223Sampler guiclass="TestBeanGUI" testclass="JSR223Sampler" testname="dokcerSetup" enabled="true">
+          <stringProp name="scriptLanguage">groovy</stringProp>
+          <stringProp name="parameters">${runningInDocker}</stringProp>
+          <stringProp name="filename"></stringProp>
+          <stringProp name="cacheKey">true</stringProp>
+          <stringProp name="script">import org.apache.jmeter.util.JMeterUtils;
+
+String runningInDocker = args[0];
+
+OUT.println(&quot;******************&quot;);
+OUT.println(&quot;****************** Parameter runningInDocker : &quot; + runningInDocker);
+OUT.println(&quot;******************&quot;);
+
+if (&quot;true&quot;.equalsIgnoreCase(runningInDocker)){
+	OUT.println(&quot;Parameter runningInDocker set to true&quot;);
+	Properties systemProperties = System.getProperties();
+	systemProperties.setProperty(&quot;mark59.screenshot.directory&quot;, &quot;/var/Mark59_Runs/Jmeter_ScreenshotLogs/DataHunter&quot;);
+	OUT.println (&quot;DataHunter Selenium Test Plan:  Mark59 properties directly set within the test plan : &quot;);
+	OUT.println (&quot;mark59.screenshot.directory            : &quot; + systemProperties.getProperty(&quot;mark59.screenshot.directory&quot;));
+}
+</stringProp>
+        </JSR223Sampler>
+        <hashTree/>
         <JSR223Sampler guiclass="TestBeanGUI" testclass="JSR223Sampler" testname="setOperatingSystemProperty" enabled="true">
           <stringProp name="scriptLanguage">groovy</stringProp>
           <stringProp name="parameters"></stringProp>
@@ -70,33 +123,13 @@ log.info   (&quot;OS property has been set to : &quot; + os );</stringProp>
         </JSR223Sampler>
         <hashTree/>
       </hashTree>
-      <Arguments guiclass="ArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
-        <collectionProp name="Arguments.arguments">
-          <elementProp name="dataHunterUrlHostPort" elementType="Argument">
-            <stringProp name="Argument.name">dataHunterUrlHostPort</stringProp>
-            <stringProp name="Argument.value">${__P(DataHunterUrlHostPort,http://localhost:8081)}</stringProp>
-            <stringProp name="Argument.metadata">=</stringProp>
-          </elementProp>
-          <elementProp name="pacing" elementType="Argument">
-            <stringProp name="Argument.name">pacing</stringProp>
-            <stringProp name="Argument.value">25 5</stringProp>
-            <stringProp name="Argument.metadata">=</stringProp>
-          </elementProp>
-          <elementProp name="mark59ServerMetricsWebUrl" elementType="Argument">
-            <stringProp name="Argument.name">mark59ServerMetricsWebUrl</stringProp>
-            <stringProp name="Argument.value">${__P(Mark59ServerMetricsWebUrl,http://localhost:8085/mark59-server-metrics-web)}</stringProp>
-            <stringProp name="Argument.metadata">=</stringProp>
-          </elementProp>
-        </collectionProp>
-      </Arguments>
-      <hashTree/>
       <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="DataHunterLifecycle" enabled="true">
         <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
         <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller" enabled="true">
           <boolProp name="LoopController.continue_forever">false</boolProp>
           <intProp name="LoopController.loops">-1</intProp>
         </elementProp>
-        <stringProp name="ThreadGroup.num_threads">2</stringProp>
+        <stringProp name="ThreadGroup.num_threads">${__P(Users,2)}</stringProp>
         <stringProp name="ThreadGroup.ramp_time">25</stringProp>
         <boolProp name="ThreadGroup.scheduler">true</boolProp>
         <stringProp name="ThreadGroup.duration">${__P(Duration,70)}</stringProp>
@@ -185,6 +218,7 @@ return 0;</stringProp>
         </UserParameters>
         <hashTree/>
         <JavaSampler guiclass="JavaTestSamplerGui" testclass="JavaSampler" testname="DataHunterLifecycle" enabled="true">
+          <stringProp name="TestPlan.comments">${dataHunterUrlHostPort}</stringProp>
           <elementProp name="arguments" elementType="Arguments" guiclass="ArgumentsPanel" testclass="Arguments" enabled="true">
             <collectionProp name="Arguments.arguments">
               <elementProp name="DATAHUNTER_URL_HOST_PORT" elementType="Argument">
@@ -239,7 +273,7 @@ return 0;</stringProp>
               </elementProp>
               <elementProp name="ADDITIONAL_OPTIONS" elementType="Argument">
                 <stringProp name="Argument.name">ADDITIONAL_OPTIONS</stringProp>
-                <stringProp name="Argument.value"></stringProp>
+                <stringProp name="Argument.value">${additionalOptions}</stringProp>
                 <stringProp name="Argument.metadata">=</stringProp>
               </elementProp>
               <elementProp name="WRITE_FFOX_BROWSER_LOGFILE" elementType="Argument">
@@ -309,7 +343,7 @@ return 0;</stringProp>
           <boolProp name="LoopController.continue_forever">false</boolProp>
           <intProp name="LoopController.loops">-1</intProp>
         </elementProp>
-        <stringProp name="ThreadGroup.num_threads">2</stringProp>
+        <stringProp name="ThreadGroup.num_threads">${__P(Users,2)}</stringProp>
         <stringProp name="ThreadGroup.ramp_time">20</stringProp>
         <boolProp name="ThreadGroup.scheduler">true</boolProp>
         <stringProp name="ThreadGroup.duration">${__P(Duration,70)}</stringProp>
@@ -333,6 +367,7 @@ return 0;</stringProp>
         </UserParameters>
         <hashTree/>
         <JavaSampler guiclass="JavaTestSamplerGui" testclass="JavaSampler" testname="DataHunterLifecycleIterator" enabled="true">
+          <stringProp name="TestPlan.comments">HEADLESS_MODE to parmaterize </stringProp>
           <elementProp name="arguments" elementType="Arguments" guiclass="ArgumentsPanel" testclass="Arguments" enabled="true">
             <collectionProp name="Arguments.arguments">
               <elementProp name="DATAHUNTER_URL_HOST_PORT" elementType="Argument">
@@ -397,7 +432,7 @@ return 0;</stringProp>
               </elementProp>
               <elementProp name="HEADLESS_MODE" elementType="Argument">
                 <stringProp name="Argument.name">HEADLESS_MODE</stringProp>
-                <stringProp name="Argument.value">false</stringProp>
+                <stringProp name="Argument.value">tfalse</stringProp>
                 <stringProp name="Argument.metadata">=</stringProp>
               </elementProp>
               <elementProp name="PAGE_LOAD_STRATEGY" elementType="Argument">
@@ -417,7 +452,7 @@ return 0;</stringProp>
               </elementProp>
               <elementProp name="ADDITIONAL_OPTIONS" elementType="Argument">
                 <stringProp name="Argument.name">ADDITIONAL_OPTIONS</stringProp>
-                <stringProp name="Argument.value"></stringProp>
+                <stringProp name="Argument.value">${additionalOptions}</stringProp>
                 <stringProp name="Argument.metadata">=</stringProp>
               </elementProp>
               <elementProp name="WRITE_FFOX_BROWSER_LOGFILE" elementType="Argument">
@@ -487,7 +522,7 @@ return 0;</stringProp>
           <boolProp name="LoopController.continue_forever">false</boolProp>
           <intProp name="LoopController.loops">-1</intProp>
         </elementProp>
-        <stringProp name="ThreadGroup.num_threads">1</stringProp>
+        <stringProp name="ThreadGroup.num_threads">${__P(MonitoringUsers,1)}</stringProp>
         <stringProp name="ThreadGroup.ramp_time">0</stringProp>
         <boolProp name="ThreadGroup.scheduler">true</boolProp>
         <stringProp name="ThreadGroup.duration">${__P(Duration,80)}</stringProp>

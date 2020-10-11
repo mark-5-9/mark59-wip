@@ -39,6 +39,11 @@
             <stringProp name="Argument.value">${__P(AdditionalOptions, )}</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
+          <elementProp name="headlessModeIteratorTG" elementType="Argument">
+            <stringProp name="Argument.name">headlessModeIteratorTG</stringProp>
+            <stringProp name="Argument.value">${__P(HeadlessModeIteratorTG,false)}</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
         </collectionProp>
       </Arguments>
       <hashTree/>
@@ -85,13 +90,10 @@ OUT.println (&quot;------------------------------------------------------------&
           <stringProp name="script">import org.apache.jmeter.util.JMeterUtils;
 
 String runningInDocker = args[0];
-
-OUT.println(&quot;******************&quot;);
-OUT.println(&quot;****************** Parameter runningInDocker : &quot; + runningInDocker);
-OUT.println(&quot;******************&quot;);
+//OUT.println(&quot;Parameter runningInDocker : &quot; + runningInDocker);
 
 if (&quot;true&quot;.equalsIgnoreCase(runningInDocker)){
-	OUT.println(&quot;Parameter runningInDocker set to true&quot;);
+	OUT.println(&quot;Parameter runningInDocker : true&quot;);
 	Properties systemProperties = System.getProperties();
 	systemProperties.setProperty(&quot;mark59.screenshot.directory&quot;, &quot;/var/Mark59_Runs/Jmeter_ScreenshotLogs/DataHunter&quot;);
 	OUT.println (&quot;DataHunter Selenium Test Plan:  Mark59 properties directly set within the test plan : &quot;);
@@ -253,7 +255,7 @@ return 0;</stringProp>
               </elementProp>
               <elementProp name="HEADLESS_MODE" elementType="Argument">
                 <stringProp name="Argument.name">HEADLESS_MODE</stringProp>
-                <stringProp name="Argument.value">${headlessMode}</stringProp>
+                <stringProp name="Argument.value">true</stringProp>
                 <stringProp name="Argument.metadata">=</stringProp>
               </elementProp>
               <elementProp name="PAGE_LOAD_STRATEGY" elementType="Argument">
@@ -432,7 +434,7 @@ return 0;</stringProp>
               </elementProp>
               <elementProp name="HEADLESS_MODE" elementType="Argument">
                 <stringProp name="Argument.name">HEADLESS_MODE</stringProp>
-                <stringProp name="Argument.value">tfalse</stringProp>
+                <stringProp name="Argument.value">${headlessModeIteratorTG}</stringProp>
                 <stringProp name="Argument.metadata">=</stringProp>
               </elementProp>
               <elementProp name="PAGE_LOAD_STRATEGY" elementType="Argument">

@@ -82,7 +82,7 @@ OUT.println (&quot;------------------------------------------------------------&
           <stringProp name="TestPlan.comments">Windows example of using system properties to override mark59.properties setting  (by default this script should be disabled)</stringProp>
         </JSR223Sampler>
         <hashTree/>
-        <JSR223Sampler guiclass="TestBeanGUI" testclass="JSR223Sampler" testname="dokcerSetup" enabled="true">
+        <JSR223Sampler guiclass="TestBeanGUI" testclass="JSR223Sampler" testname="dockerSettings" enabled="true">
           <stringProp name="scriptLanguage">groovy</stringProp>
           <stringProp name="parameters">${runningInDocker}</stringProp>
           <stringProp name="filename"></stringProp>
@@ -91,15 +91,21 @@ OUT.println (&quot;------------------------------------------------------------&
 
 String runningInDocker = args[0];
 //OUT.println(&quot;Parameter runningInDocker : &quot; + runningInDocker);
+// when running docker on windows, the linux chromedriver may not of been copied over already..
 
 if (&quot;true&quot;.equalsIgnoreCase(runningInDocker)){
 	OUT.println(&quot;Parameter runningInDocker : true&quot;);
+
 	Properties systemProperties = System.getProperties();
-	systemProperties.setProperty(&quot;mark59.screenshot.directory&quot;, &quot;/var/Mark59_Runs/Jmeter_ScreenshotLogs/DataHunter&quot;);
+	systemProperties.setProperty(&quot;mark59.screenshot.directory&quot;       , &quot;/var/Mark59_Runs/Jmeter_ScreenshotLogs/DataHunter&quot;);
+	systemProperties.setProperty(&quot;mark59.selenium.driver.path.chrome&quot;, &quot;/var/mark59/dataHunterPerformanceTestSamples/chromedriver&quot;);
+	
 	OUT.println (&quot;DataHunter Selenium Test Plan:  Mark59 properties directly set within the test plan : &quot;);
-	OUT.println (&quot;mark59.screenshot.directory            : &quot; + systemProperties.getProperty(&quot;mark59.screenshot.directory&quot;));
+	OUT.println (&quot;mark59.screenshot.directory        : &quot; + systemProperties.getProperty(&quot;mark59.screenshot.directory&quot;));
+	OUT.println (&quot;mark59.selenium.driver.path.chrome : &quot; + systemProperties.getProperty(&quot;mark59.selenium.driver.path.chrome&quot;));	
 }
-</stringProp>
+
+SampleResult.setIgnore();</stringProp>
         </JSR223Sampler>
         <hashTree/>
         <JSR223Sampler guiclass="TestBeanGUI" testclass="JSR223Sampler" testname="setOperatingSystemProperty" enabled="true">

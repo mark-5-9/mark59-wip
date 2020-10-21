@@ -46,6 +46,7 @@ import com.mark59.selenium.corejmeterimpl.JmeterFunctionsForSeleniumScripts;
 import com.mark59.selenium.corejmeterimpl.KeepBrowserOpen;
 import com.mark59.selenium.corejmeterimpl.SeleniumIteratorAbstractJavaSamplerClient;
 import com.mark59.selenium.drivers.SeleniumDriverFactory;
+import com.mark59.seleniumDSL.core.SafeSleep;
 
 //import com.mark59.selenium.corejmeterimpl.Mark59LogLevels;
 
@@ -263,9 +264,10 @@ public class DataHunterLifecycleIteratorPvtScript  extends SeleniumIteratorAbstr
 	protected void userActionsOnScriptFailure(JavaSamplerContext context, JmeterFunctionsForSeleniumScripts jm,	WebDriver driver) {
 		// just as a demo, create some transaction and go to some random page (that is different to the page the simulated crash occurred
 		jm.startTransaction("DH-lifecycle-9998-userActionsOnScriptFailure");
-		driver.get(dataHunterUrl + "/dataHunter");	
-		System.out.println("   -- page at userActionsOnScriptFailure has been changed to " + driver.getTitle() + " --");
+		System.out.println("  -- page title at userActionsOnScriptFailure is " + driver.getTitle() + " --");
 		jm.endTransaction("DH-lifecycle-9998-userActionsOnScriptFailure");
+		SafeSleep.sleep(30000); // stop failures quickly repeating 
+		driver.get(dataHunterUrl + "/dataHunter");	
 	}
 	
 

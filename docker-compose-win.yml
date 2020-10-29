@@ -1,7 +1,7 @@
 #
-#   cd to mark59 root folder (the folder containing this file), then run command: 
+#   In Powershell, cd to mark59 root folder (the folder containing this file), then run command: 
 #
-#   docker-compose -f docker-compose-win up 
+#   docker-compose -f docker-compose-win.yml up 
 #
 version: "3"
 services:

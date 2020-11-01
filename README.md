@@ -5,9 +5,17 @@ This is the <b>WORK-IN-PROGRESS</b> repository for Mark59 - be aware it may NOT 
 
 <p>Available at the https://www.mark59.com website
 
-## Version 
+## Releases 
 
-<p>WIP changes -  versioning to 3.0.(.0) <br>
+<p>Release to 3.0.(1) <br>
+  <ul>
+    <li>Default for for metrics (Trend Analysis changed from 8080 to 8083</li>
+    <li>Sample projects updated, docker-compose files added to allow for the Jenkins Docker Sample </li>
+  </ul>  
+
+
+
+<p>Release 3.0.(.0) <br>
   This was a major release 
   <ul>
     <li>New project: mark59-server-metrics-web.   Significant upgrade of server metric capture in mark59.</li>
@@ -21,7 +29,7 @@ This is the <b>WORK-IN-PROGRESS</b> repository for Mark59 - be aware it may NOT 
     <li>Multiple small changes and code clean-up</li>	
   </ul>  
 
-<p>Version 2.3 - Was just a 'dry run' for 3.0 Release 3.0  
+<p>Release 2.3 - Was just a 'dry run' for 3.0 Release 3.0  
   
 <p>Significant changes release 2.2(.0)
   <ul>

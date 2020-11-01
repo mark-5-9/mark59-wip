@@ -31,7 +31,7 @@ import com.mark59.core.utils.Mark59Constants;
  */
 public class AppConstantsMetrics {
 	
-	public static final String MARK59_TRENDING_VERSION = "3.0.0";		
+	public static final String MARK59_TRENDING_VERSION = "3.0.1";		
 	
 	public static final String TXN_90TH_GRAPH  		= "TXN_90TH";
 	

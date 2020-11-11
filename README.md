@@ -7,6 +7,12 @@ This is the <b>WORK-IN-PROGRESS</b> repository for Mark59 - be aware it may NOT 
 
 ## Releases 
 
+<p>prepping for next Release (3.1?) <br>
+  <ul>
+    <li>TOTO: Statiscal deviation from the mean between baseline and last run</li>
+  </ul>  
+
+
 <p>Release to 3.0.(1) <br>
   <ul>
     <li>Default port for metrics (Trend Analysis) changed from 8080 to 8083</li>

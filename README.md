@@ -9,7 +9,7 @@ This is the <b>WORK-IN-PROGRESS</b> repository for Mark59 - be aware it may NOT 
 
 <p>Release to 3.0.(1) <br>
   <ul>
-    <li>Default for for metrics (Trend Analysis changed from 8080 to 8083</li>
+    <li>Default port for metrics (Trend Analysis) changed from 8080 to 8083</li>
     <li>Sample projects updated, docker-compose files added to allow for the Jenkins Docker Sample </li>
   </ul>  
 

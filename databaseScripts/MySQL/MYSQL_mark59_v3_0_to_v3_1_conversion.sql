@@ -1,0 +1,19 @@
+ALTER TABLE `mark59servermetricswebdb`.`commands` 
+CHANGE COLUMN `COMMAND` `COMMAND` VARCHAR(8192) NOT NULL ;
+
+ALTER TABLE `mark59servermetricswebdb`.`commands` 
+ADD COLUMN `PARAM_NAMES` VARCHAR(1000) NULL DEFAULT NULL AFTER `COMMENT`;
+
+ALTER TABLE `mark59servermetricswebdb`.`serverprofiles` 
+ADD COLUMN `PARAMETERS` VARCHAR(2000) NULL DEFAULT NULL AFTER `COMMENT`;
+
+ALTER TABLE `mark59servermetricswebdb`.`serverprofiles` 
+ADD COLUMN `EXECUTOR` VARCHAR(32) NOT NULL AFTER `SERVER_PROFILE_NAME`;
+
+SET SQL_SAFE_UPDATES = 0;
+UPDATE mark59servermetricswebdb.serverprofiles SET EXECUTOR = 'WMIC_WINDOWS' WHERE OPERATING_SYSTEM = 'WINDOWS'; 
+UPDATE mark59servermetricswebdb.serverprofiles SET EXECUTOR = 'SSH_LINIX_UNIX' WHERE OPERATING_SYSTEM LIKE '%N_X'; 
+
+ALTER TABLE `mark59servermetricswebdb`.`serverprofiles` DROP COLUMN `OPERATING_SYSTEM`;
+
+ALTER TABLE `mark59servermetricswebdb`.`serverprofiles` CHANGE COLUMN `SERVER` `SERVER` VARCHAR(64) NULL DEFAULT '' ;

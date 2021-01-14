@@ -16,6 +16,7 @@
 
 package com.mark59.servermetricsweb.pojos;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -23,19 +24,17 @@ import java.util.List;
  * Written: Australian Summer 2020
  * 
  */
-public class CommandDriverResponse {
+public class ScriptResponse {
 
-	private List<String> rawCommandResponseLines;
-	private List<ParsedMetric> parsedMetrics;	
+	private List<ParsedMetric> parsedMetrics;
 	private String commandLog;	
-	private boolean commandFailure;
+	private Boolean commandFailure;
 	
-	public List<String> getRawCommandResponseLines() {
-		return rawCommandResponseLines;
-	}
-
-	public void setRawCommandResponseLines(List<String> rawCommandResponseLines) {
-		this.rawCommandResponseLines = rawCommandResponseLines;
+	
+	public ScriptResponse() {
+		this.parsedMetrics = new ArrayList<ParsedMetric>();
+		this.commandLog = "";
+		this.commandFailure = false;
 	}
 
 	public List<ParsedMetric> getParsedMetrics() {
@@ -54,18 +53,17 @@ public class CommandDriverResponse {
 		this.commandLog = commandLog;
 	}
 
-	public boolean isCommandFailure() {
+	public Boolean getCommandFailure() {
 		return commandFailure;
 	}
 
-	public void setCommandFailure(boolean commandFailure) {
+	public void setCommandFailure(Boolean commandFailure) {
 		this.commandFailure = commandFailure;
 	}
 
 	@Override
     public String toString() {
-        return   "[rawCommandResponseLines= "  + rawCommandResponseLines
-        		+ ", parsedMetrics="+ parsedMetrics   
+        return   "[parsedMetrics= "  + parsedMetrics
         		+ ", commandLog="+ commandLog   
         		+ ", commandFailure="+ commandFailure   
         		+ "]";

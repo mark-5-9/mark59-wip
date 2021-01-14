@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.mark59.servermetrics;
+package com.mark59.servermetrics.v3legacy;
 
 import java.util.Collections;
 import java.util.HashMap;

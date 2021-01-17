@@ -4,7 +4,7 @@
 	
 	<groupId>com.mark59</groupId>
 	<artifactId>dataHunterPerformanceTestSamples</artifactId>
-	<version>3.0.1</version>
+	<version>3.1</version>
 	<packaging>jar</packaging>
 	
 	<name>dataHunterPerformanceTestSamples</name>
@@ -20,7 +20,7 @@
 		<dependency>
 			<groupId>com.mark59</groupId>
 			<artifactId>mark59-selenium-sample-dsl</artifactId>
-			<version>3.0.1</version>
+			<version>3.1</version>
 		</dependency>
 
 <!-- 	Not actually required for this project as it is already included as a dependency of mark59-selenium-sample-dsl (above). 
@@ -28,14 +28,14 @@
 		<dependency>
 			<groupId>com.mark59</groupId>
 			<artifactId>mark59-selenium-implementation</artifactId>
-			<version>3.0</version>
+			<version>3.1</version>
 		</dependency>
 		
 		<!-- https://mvnrepository.com/artifact/org.apache.jmeter/ApacheJMeter_core -->
 		<dependency>
 			<groupId>org.apache.jmeter</groupId>
 			<artifactId>ApacheJMeter_java</artifactId>
-			<version>5.3</version>
+			<version>5.4</version>
 			<scope>provided</scope>
 		</dependency>
 

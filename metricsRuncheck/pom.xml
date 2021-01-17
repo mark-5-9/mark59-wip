@@ -11,7 +11,7 @@
 
 	<groupId>com.mark59</groupId>
 	<artifactId>metricsRuncheck</artifactId>
-	<version>3.0.1</version>
+	<version>3.1</version>
 	<packaging>jar</packaging>
 
 	<name>metricsRuncheck</name>
@@ -30,7 +30,7 @@
 		<dependency>
 			<groupId>com.mark59</groupId>
 			<artifactId>metrics</artifactId>
-			<version>3.0.1</version>
+			<version>3.1</version>
 		</dependency>
 
 

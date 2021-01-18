@@ -12,7 +12,7 @@
 	<groupId>com.mark59</groupId>
 	<artifactId>mark59-server-metrics-web</artifactId>
 	<packaging>war</packaging>
-	<version>3.1</version>
+	<version>3.1.0</version>
 	<name>mark59-server-metrics-web</name>
 
 	<properties>

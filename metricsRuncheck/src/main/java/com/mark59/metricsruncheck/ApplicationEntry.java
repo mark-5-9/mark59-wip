@@ -43,7 +43,7 @@ public class ApplicationEntry  implements CommandLineRunner  {
 
 	
 	
-	//For a quick and dirty test set the args at the start of the main  (commented out lines below):
+	//For a quick and dirty test set the args at the start of the main  (examples in the commented out lines below):
 
 	public static void main(String[] args) throws IOException {
 

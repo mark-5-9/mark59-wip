@@ -108,7 +108,7 @@ public class PerformanceTest {
 	
 
 	protected List<Transaction> storeTransactionSummaries(Run run) {
-		transactionSummariesThisRun = testTransactionsDAO.extractTransactionResponsesSummary(run.getApplication(), Mark59Constants.DatabaseDatatypes.TRANSACTION.name() );  
+		transactionSummariesThisRun = testTransactionsDAO.extractTransactionResponsesSummary(run.getApplication(), Mark59Constants.DatabaseTxnTypes.TRANSACTION.name() );  
       	for (Transaction transaction : transactionSummariesThisRun) {  // insert a row for each transaction captured 
       		transaction.setRunTime(run.getRunTime());
       		transactionDAO.insert(transaction);

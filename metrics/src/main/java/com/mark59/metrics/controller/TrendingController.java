@@ -233,7 +233,7 @@ public class TrendingController {
 
 			trendingForm.setChosenTxns(txnsToGraphId);			
 			
-			if ( Mark59Constants.DatabaseDatatypes.TRANSACTION.name().equals( graphMapping.getTxnType() )){
+			if ( Mark59Constants.DatabaseTxnTypes.TRANSACTION.name().equals( graphMapping.getTxnType() )){
 				populateFailedTransactionalSlaLists(trendingForm.getApplication(), latestRunTime, txnsToGraphId, model);
 				populateIgnoredTransactionsList(trendingForm.getApplication(), model);	
 			} else {
@@ -372,7 +372,7 @@ public class TrendingController {
 		
 		List<Transaction> transactions = new ArrayList<Transaction>();
 		for (String txnId : trxnIds) {
-			transaction = transactionDAO.getTransaction(application, Mark59Constants.DatabaseDatatypes.TRANSACTION.name(), latestRunTime, txnId);
+			transaction = transactionDAO.getTransaction(application, Mark59Constants.DatabaseTxnTypes.TRANSACTION.name(), latestRunTime, txnId);
 			if (transaction != null) {
 				transactions.add(transaction);
 			}

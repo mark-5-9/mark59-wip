@@ -189,7 +189,7 @@ public class LrRunAccessDatabase {
 			
 					TestTransaction testTransaction = new TestTransaction();
 					testTransaction.setTxnId(lrEventMapTable.get(currentEventMeterEventId).eventName);
-					testTransaction.setTxnType(Mark59Constants.DatabaseDatatypes.TRANSACTION.name() );
+					testTransaction.setTxnType(Mark59Constants.DatabaseTxnTypes.TRANSACTION.name() );
 					testTransaction.setTxnResult(lrEventMeterBean.getValue());		
 					
 					if (STATUS1_FAIL.equals(lrEventMeterBean.getStatus1())){

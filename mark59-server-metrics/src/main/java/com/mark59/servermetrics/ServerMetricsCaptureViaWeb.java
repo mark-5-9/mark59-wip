@@ -221,12 +221,9 @@ public class ServerMetricsCaptureViaWeb  extends AbstractJavaSamplerClient {
 //		additionalTestParametersMap.put(SERVER_PROFILE_NAME, "NewRelicTestProfile");			
 		additionalTestParametersMap.put(SERVER_PROFILE_NAME, "SimpleScriptSampleRunner");			
 		JavaSamplerContext groovyscriptcontext = new JavaSamplerContext( groovyscripttest.getDefaultParameters()  );
-		ostest.setupTest(groovyscriptcontext);
-		ostest.runTest(groovyscriptcontext);	
-	
+		groovyscripttest.setupTest(groovyscriptcontext);
+		groovyscripttest.runTest(groovyscriptcontext);	
 	}
-	
-	
-	
+		
 
 }

@@ -302,7 +302,7 @@ public class TestTransactionsDAOjdbcTemplateImpl implements TestTransactionsDAO
 			transaction.setApplication(application);
 			transaction.setRunTime((String)row.get("RUN_TIME"));
 			transaction.setTxnId((String)row.get("TXN_ID"));
-			transaction.setTxnType(Mark59Constants.DatabaseDatatypes.TRANSACTION.name());			
+			transaction.setTxnType(Mark59Constants.DatabaseTxnTypes.TRANSACTION.name());			
 			transaction.setTxnMinimum((BigDecimal)row.get("txnMinimum"));
 			transaction.setTxnAverage((BigDecimal)row.get("txnAverage"));
 			transaction.setTxnMaximum((BigDecimal)row.get("txnMaximum"));

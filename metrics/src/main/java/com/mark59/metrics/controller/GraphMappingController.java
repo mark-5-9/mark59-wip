@@ -55,7 +55,7 @@ public class GraphMappingController {
 	
 	@RequestMapping("/registerGraphMapping")
 	public ModelAndView registerSla(@RequestParam(required=false) String reqErr, @ModelAttribute GraphMapping graphMapping) { 
-		List<String>transactionTypes = Mark59Constants.DatabaseDatatypes.listOfDatabaseDatatypes();  
+		List<String>transactionTypes = Mark59Constants.DatabaseTxnTypes.listOfDatabaseTxnTypes();  
 		Map<String, Object> map = new HashMap<String, Object>(); 
 		map.put("transactionTypes",transactionTypes);			
 		return new ModelAndView("registerGraphMapping",  "map", map);  	
@@ -83,7 +83,7 @@ public class GraphMappingController {
 		System.out.println("GraphMappingController:ediGraphMapping : graph=" + graph  );		
 		graphMapping = graphMappingDAO.findGraphMapping(graph);
 		Map<String, Object> map = new HashMap<String, Object>(); 
-		List<String>transactionTypes = Mark59Constants.DatabaseDatatypes.listOfDatabaseDatatypes();  
+		List<String>transactionTypes = Mark59Constants.DatabaseTxnTypes.listOfDatabaseTxnTypes();  
 		map.put("graphMapping",graphMapping);
 		map.put("transactionTypes",transactionTypes);
 		return new ModelAndView("editGraphMapping", "map", map);

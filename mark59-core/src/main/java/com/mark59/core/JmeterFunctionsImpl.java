@@ -354,8 +354,14 @@ public class JmeterFunctionsImpl implements JmeterFunctions {
 
 		for (int i = 0; i < sampleResut.length; i++) {
 			SampleResult subSR = sampleResut[i];
-			LOG.info(String.format("%-40s%-10s%-60s%-20s%-20s%n", threadName, i, subSR.getSampleLabel(),
-					subSR.getResponseMessage(), subSR.getTime()));
+			
+			if (StringUtils.isBlank(subSR.getDataType())) {
+				LOG.info(String.format("%-40s%-10s%-60s%-20s%-20s%n", threadName, i, subSR.getSampleLabel(),
+						subSR.getResponseMessage(), subSR.getTime()));				
+			} else {
+				LOG.info(String.format("%-40s%-10s%-60s%-20s%-20s%n", threadName, i, subSR.getSampleLabel(),
+						subSR.getResponseMessage() + " (" + subSR.getDataType() + ")" , subSR.getTime()));
+			}
 		}
 	}
 

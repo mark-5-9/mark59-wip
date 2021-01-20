@@ -336,7 +336,7 @@ return 0;</stringProp>
               </elementProp>
               <elementProp name="script build information: " elementType="Argument">
                 <stringProp name="Argument.name">script build information: </stringProp>
-                <stringProp name="Argument.value">using mark59-selenium-implementation version 3.0</stringProp>
+                <stringProp name="Argument.value">using mark59-selenium-implementation version 3.1</stringProp>
                 <stringProp name="Argument.metadata">=</stringProp>
               </elementProp>
             </collectionProp>
@@ -515,7 +515,7 @@ return 0;</stringProp>
               </elementProp>
               <elementProp name="script build information: " elementType="Argument">
                 <stringProp name="Argument.name">script build information: </stringProp>
-                <stringProp name="Argument.value">using mark59-selenium-implementation version 3.0</stringProp>
+                <stringProp name="Argument.value">using mark59-selenium-implementation version 3.1</stringProp>
                 <stringProp name="Argument.metadata">=</stringProp>
               </elementProp>
             </collectionProp>
@@ -582,12 +582,12 @@ return 0;</stringProp>
               </elementProp>
               <elementProp name="_" elementType="Argument">
                 <stringProp name="Argument.name">_</stringProp>
-                <stringProp name="Argument.value">          : server profile of &apos;localhost&apos; only reports metrics of the mark59-server-metrics-web machine!</stringProp>
+                <stringProp name="Argument.value">- server profile of &apos;localhost&apos; only reports metrics of the mark59-server-metrics-web machine!</stringProp>
                 <stringProp name="Argument.metadata">=</stringProp>
               </elementProp>
               <elementProp name="-" elementType="Argument">
                 <stringProp name="Argument.name">-</stringProp>
-                <stringProp name="Argument.value">          : - use actual machine name or (better) &apos;..viaExcel&apos; &apos;localhost_HOSTID&apos; entry instead (see Mark59 User Guide)</stringProp>
+                <stringProp name="Argument.value">   use actual machine name or (better) &apos;..viaExcel&apos; &apos;localhost..&apos; entry instead (see Mark59 User Guide)</stringProp>
                 <stringProp name="Argument.metadata">=</stringProp>
               </elementProp>
               <elementProp name="." elementType="Argument">
@@ -597,7 +597,7 @@ return 0;</stringProp>
               </elementProp>
               <elementProp name="build information: " elementType="Argument">
                 <stringProp name="Argument.name">build information: </stringProp>
-                <stringProp name="Argument.value">mark59-server-metrics version 3.0.1</stringProp>
+                <stringProp name="Argument.value">mark59-server-metrics version 3.1.0</stringProp>
                 <stringProp name="Argument.metadata">=</stringProp>
               </elementProp>
             </collectionProp>

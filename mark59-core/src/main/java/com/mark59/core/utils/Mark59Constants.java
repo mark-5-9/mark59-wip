@@ -26,7 +26,7 @@ import java.util.List;
  */
 public class Mark59Constants {
 	
-	public static final String MARK59_VERSION  = "3.0";	
+	public static final String MARK59_VERSION  = "3.1";	
 		
 	public static final String TRUE = "TRUE";
 	public static final String FALSE = "FALSE";
@@ -89,32 +89,32 @@ public class Mark59Constants {
      * Defines an enumeration for transaction data-type values used in the Mark59 framework that are stored 
      * in the database (TXN_TYPE on the transaction table ) 
      */
-    public static enum DatabaseDatatypes {  //should really be called DatabaseTxnTypes to align do metric db names
+    public static enum DatabaseTxnTypes { 
 
     	DATAPOINT(true), CPU_UTIL(true), MEMORY(true), TRANSACTION(false);
 		
-    	private final boolean metricDataType;   
-		private DatabaseDatatypes(boolean metricDataType) {
-			this.metricDataType = metricDataType;  
+    	private final boolean metricTxnType;   
+		private DatabaseTxnTypes(boolean metricTxnType) {
+			this.metricTxnType = metricTxnType;  
 		}
-		public boolean isMetricDataType() {
-			return this.metricDataType;
+		public boolean isMetricTxnType() {
+			return this.metricTxnType;
 		}
-		public static List<String> listOfDatabaseDatatypes(){
-			List<String> listOfDatabaseDatatypes = new ArrayList<String>();
-			for (DatabaseDatatypes databaseDatatypes : DatabaseDatatypes.values()) {
-				listOfDatabaseDatatypes.add(databaseDatatypes.name());
+		public static List<String> listOfDatabaseTxnTypes(){
+			List<String> listOfDatabaseTxnTypes = new ArrayList<String>();
+			for (DatabaseTxnTypes databaseTxnType : DatabaseTxnTypes.values()) {
+				listOfDatabaseTxnTypes.add(databaseTxnType.name());
 			}
-			return listOfDatabaseDatatypes;
+			return listOfDatabaseTxnTypes;
 		}
-		public static List<String> listOfMetricDatabaseDatatypes() {
-			List<String> listOfMetricDatabaseDatatypes = new ArrayList<String>();
-			for (DatabaseDatatypes databaseDatatypes : DatabaseDatatypes.values()) {
-				if (databaseDatatypes.isMetricDataType()) {
-					listOfMetricDatabaseDatatypes.add(databaseDatatypes.name());
+		public static List<String> listOfMetricDatabaseTxnTypes() {
+			List<String> listOfMetricDatabaseTxnTypes = new ArrayList<String>();
+			for (DatabaseTxnTypes databaseTxntypes : DatabaseTxnTypes.values()) {
+				if (databaseTxntypes.isMetricTxnType()) {
+					listOfMetricDatabaseTxnTypes.add(databaseTxntypes.name());
 				}
 			}
-			return listOfMetricDatabaseDatatypes;
+			return listOfMetricDatabaseTxnTypes;
 		}
 	}
 

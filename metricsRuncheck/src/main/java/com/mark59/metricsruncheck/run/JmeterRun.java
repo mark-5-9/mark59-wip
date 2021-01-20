@@ -275,9 +275,9 @@ public class JmeterRun extends PerformanceTest  {
 		TestTransaction testTransaction = new TestTransaction();
 		testTransaction.setTxnId(StringUtils.substringBetween(jmeterFileLine, " lb=\"", "\""));
 		
-		String sampleLineRawDbDataType = Mark59Utils.convertJMeterFileToDbDatatype(StringUtils.substringBetween(jmeterFileLine, " dt=\"", "\""));
+		String sampleLineRawDbTxnType = Mark59Utils.convertJMeterFileDatatypeToDbTxntype(StringUtils.substringBetween(jmeterFileLine, " dt=\"", "\""));
 		
-		testTransaction.setTxnType( eventMappingTxnTypeTransform(testTransaction.getTxnId(), AppConstantsMetrics.JMETER, sampleLineRawDbDataType));
+		testTransaction.setTxnType( eventMappingTxnTypeTransform(testTransaction.getTxnId(), AppConstantsMetrics.JMETER, sampleLineRawDbTxnType));
 			
 		//		The response time ("t=") holds the value to be reported for all sample types. Note: 
 		//		- the taken to be milliseconds for all timed TRANSACTION samples in the Jmeter results file. The metrics (trend analysis) database 
@@ -287,7 +287,7 @@ public class JmeterRun extends PerformanceTest  {
 		
 		String txnResultMsStr = StringUtils.substringBetween(jmeterFileLine, " t=\"", "\"");
 		BigDecimal txnResultMsBigD = new BigDecimal(txnResultMsStr);
-		if ( Mark59Constants.DatabaseDatatypes.TRANSACTION.name().equals(testTransaction.getTxnType())) {
+		if ( Mark59Constants.DatabaseTxnTypes.TRANSACTION.name().equals(testTransaction.getTxnType())) {
 			testTransaction.setTxnResult( txnResultMsBigD.divide(AppConstantsMetrics.THOUSAND, 3, RoundingMode.HALF_UP)  );			
 		} else {
 			try {
@@ -433,9 +433,9 @@ public class JmeterRun extends PerformanceTest  {
 
 		testTransaction.setTxnId(csvDataLineFields[fieldPoslabel]);
 		
-		String sampleLineRawDbDataType = Mark59Utils.convertJMeterFileToDbDatatype( csvDataLineFields[fieldPosdataType]  );
+		String sampleLineRawDbTxnType = Mark59Utils.convertJMeterFileDatatypeToDbTxntype( csvDataLineFields[fieldPosdataType]  );
 		
-		testTransaction.setTxnType( eventMappingTxnTypeTransform(testTransaction.getTxnId(), AppConstantsMetrics.JMETER, sampleLineRawDbDataType));
+		testTransaction.setTxnType( eventMappingTxnTypeTransform(testTransaction.getTxnId(), AppConstantsMetrics.JMETER, sampleLineRawDbTxnType));
 				
 //		The response time ("elapsed" column) holds the value to be reported for all sample types. Note: 
 //			- the taken to be milliseconds for all timed TRANSACTION samples in the Jmeter results file. The metrics (trend analysis) database 
@@ -446,7 +446,7 @@ public class JmeterRun extends PerformanceTest  {
 		BigDecimal txnResultMsBigD = new BigDecimal(csvDataLineFields[fieldPoselapsed]);
 		testTransaction.setTxnResult( txnResultMsBigD.divide(AppConstantsMetrics.THOUSAND, 3, RoundingMode.HALF_UP)  );			
 	
-		if ( Mark59Constants.DatabaseDatatypes.TRANSACTION.name().equals(testTransaction.getTxnType())) {
+		if ( Mark59Constants.DatabaseTxnTypes.TRANSACTION.name().equals(testTransaction.getTxnType())) {
 			testTransaction.setTxnResult( txnResultMsBigD.divide(AppConstantsMetrics.THOUSAND, 3, RoundingMode.HALF_UP)  );			
 		} else {
 			try {
@@ -505,7 +505,7 @@ public class JmeterRun extends PerformanceTest  {
 			
 		} else {
 			
-			eventMappingTxnType = Mark59Constants.DatabaseDatatypes.TRANSACTION.name();   
+			eventMappingTxnType = Mark59Constants.DatabaseTxnTypes.TRANSACTION.name();   
 			
 			EventMapping eventMapping = eventMappingDAO.findAnEventForTxnIdAndSource(txnId, metricSource);
 			
@@ -528,7 +528,7 @@ public class JmeterRun extends PerformanceTest  {
 	 */
 	private BigDecimal validateAndDetermineMetricValue(BigDecimal txnResultMsBigD, String sampleLineDataType) throws Exception {
 		
-		for ( String metricDataType : Mark59Constants.DatabaseDatatypes.listOfMetricDatabaseDatatypes()) {
+		for ( String metricDataType : Mark59Constants.DatabaseTxnTypes.listOfMetricDatabaseTxnTypes()) {
 			
 			if (sampleLineDataType.startsWith(metricDataType)) {
 				BigDecimal valueMultiplier = new BigDecimal(1L);

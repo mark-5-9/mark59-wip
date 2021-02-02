@@ -40,6 +40,10 @@ public class IpUtilities {
 	
 	private static final Logger LOG = LogManager.getLogger(IpUtilities.class);
 	
+	/**
+	 * A comma delimited list of IP addresses where this script may run.
+	 * @see {@link #localIPisNotOnListOfIPaddresses(String)}
+	 */
 	public static final String RESTRICT_TO_ONLY_RUN_ON_IPS_LIST = "Restrict_To_Only_Run_On_IPs_List";	
 
 	/**

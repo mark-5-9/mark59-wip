@@ -242,7 +242,7 @@ public class DataHunterLifecycleIteratorPvtScript  extends SeleniumIteratorAbstr
 
 	
 	/**
-	 *  Finalize here just does another data clean-up (typically could be an application logoff)
+	 *  Finalize here just does another data clean-up (typically this method could be used for application logoff)
 	 */
 	@Override
 	protected void finalizeSeleniumTest(JavaSamplerContext context, JmeterFunctionsForSeleniumScripts jm,	WebDriver driver) {

@@ -68,8 +68,16 @@
      </tr>
      <tr>
       <td>90th percentile :</td>
-      <td><form:input path="sla90thResponse" /></td>     
+      <td><form:input path="sla90thResponse" value="-1.0" /></td>     
      </tr>
+     <tr>
+      <td>95th percentile :</td>
+      <td><form:input path="sla95thResponse" value="-1.0" /></td>     
+     </tr>     
+     <tr>
+      <td>99th percentile :</td>
+      <td><form:input path="sla99thResponse" value="-1.0" /></td>     
+     </tr>     
      <tr>
       <td>Pass count :</td>
       <td><form:input path="slaPassCount"  value="-1" /></td>     
@@ -85,8 +93,12 @@
      <tr>
       <td>Fail percent :</td>
       <td><form:input path="slaFailPercent"  value="2.0" /></td>     
-     </tr>     
-      <tr>
+     </tr>
+     <tr>
+      <td>Xtra num :</td>
+      <td><form:input path="xtraNum"  value="0.0" /></td>     
+     </tr>          
+     <tr>
       <td><br>Reference :</td>
       <td><br><form:textarea path="slaRefUrl" value="" maxlength="1000" style="width:100%;height:70px" /></td>     
      </tr>

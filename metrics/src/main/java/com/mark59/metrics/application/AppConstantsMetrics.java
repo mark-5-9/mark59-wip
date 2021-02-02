@@ -34,6 +34,8 @@ public class AppConstantsMetrics {
 	public static final String MARK59_TRENDING_VERSION = "3.1.0";		
 	
 	public static final String TXN_90TH_GRAPH  		= "TXN_90TH";
+	public static final String TXN_95TH_GRAPH  		= "TXN_95TH";
+	public static final String TXN_99TH_GRAPH  		= "TXN_99TH";
 	
 	public static final int MAX_NUM_RUNS_DISPLAYABLE_ON_HTML_TABLE  = 10;
 	public static final int DEFAULT_NUM_RUNS_DISPLAYED       		= 10;  
@@ -90,6 +92,8 @@ public class AppConstantsMetrics {
         result.put("Average",        "TXN_AVERAGE");
         result.put("StdDeviation",   "TXN_STD_DEVIATION");
         result.put("90th",           "TXN_90TH");
+        result.put("95th",           "TXN_95TH");
+        result.put("99th",           "TXN_99TH");
         result.put("Pass",           "TXN_PASS");
         result.put("Fail",           "TXN_FAIL");
         result.put("Stop",           "TXN_STOP");
@@ -104,6 +108,6 @@ public class AppConstantsMetrics {
 	}
 	
 	public static final List<String>  DIRECT_VALUE_DERIVATONS =  
-			Arrays.asList("Minimum","Maximum","Average","StdDeviation","90th","Pass","Fail","Stop","First","Last","Sum","PercentOver90");  
+			Arrays.asList("Minimum","Maximum","Average","StdDeviation","90th","95th","99th","Pass","Fail","Stop","First","Last","Sum","PercentOver90");  
 	
 }

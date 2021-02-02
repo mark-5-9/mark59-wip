@@ -70,6 +70,14 @@
       <td><form:input path="sla90thResponse" /></td>
      </tr>  
      <tr>
+      <td>95thResponse:</td>
+      <td><form:input path="sla95thResponse" /></td>
+     </tr>
+     <tr>
+      <td>99thResponse:</td>
+      <td><form:input path="sla99thResponse" /></td>
+     </tr> 
+     <tr>
       <td>Pass Count:</td>
       <td><form:input path="slaPassCount"/></td>
      </tr>
@@ -84,7 +92,11 @@
      <tr>
       <td>Fail Percent:</td>
       <td><form:input path="slaFailPercent" /></td>
-     </tr>       
+     </tr> 
+     <tr>
+      <td>Xtra num :</td>
+      <td><form:input path="xtraNum" /></td>     
+     </tr>      
      <tr>
       <td><br>Reference:</td>
       <td><br><form:textarea path="slaRefUrl" value="" maxlength="1000" style="width:100%;height:70px" /></td>

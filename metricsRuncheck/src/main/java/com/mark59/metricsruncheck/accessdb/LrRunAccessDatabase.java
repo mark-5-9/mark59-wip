@@ -425,7 +425,9 @@ public class LrRunAccessDatabase {
 		serverTransaction.setTxn90th(new BigDecimal(-1.0));
 		if (eventAttributes.getEventMapping().getIsPercentage().equals("Y")){
 			serverTransaction.setTxn90th(new BigDecimal(percentSpendAtBottleneckThresholdStr));
-		}		
+		}	
+		serverTransaction.setTxn95th(new BigDecimal(-1.0));
+		serverTransaction.setTxn99th(new BigDecimal(-1.0));
 		serverTransaction.setTxnPass(count);
 		serverTransaction.setTxnFail(Long.valueOf(-1).longValue() );
 		serverTransaction.setTxnStop(Long.valueOf(-1).longValue() );

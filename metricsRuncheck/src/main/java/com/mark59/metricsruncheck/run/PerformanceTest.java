@@ -65,7 +65,6 @@ public class PerformanceTest {
 	}
 
 
-
 	protected Run calculateAndSetRunTimesUsingEpochStartAndEnd(Run run, DateRangeBean dateRangeBean) {
 		
 		Long runStartTime = dateRangeBean.getRunStartTime();
@@ -117,7 +116,6 @@ public class PerformanceTest {
 	}
 	
 	
-	
 	protected DateRangeBean applyTimingRangeFilters(String excludestart, String captureperiod, DateRangeBean dateRangeBean) {
 		
 		DateRangeBean filteredDateRangeBean = new DateRangeBean(dateRangeBean.getRunStartTime(), dateRangeBean.getRunEndTime(), false );
@@ -128,8 +126,6 @@ public class PerformanceTest {
 		}
 
 		if ( excludestartMsecs != 0  || !captureperiod.equalsIgnoreCase(AppConstantsMetrics.ALL) ){
-			
-			
 			System.out.println();
 			System.out.println( " Transaction results will be filtered by time for this run"  );
 			System.out.print( " - only transactions " + excludestart + " mins from the start of the test ");
@@ -155,7 +151,6 @@ public class PerformanceTest {
 
 			run.setPeriod(run.getPeriod() + " filter x:c ["  + excludestart + ":" + captureperiod + "]" );
 			runDAO.updateRun(run);
-			
 		}
 		return filteredDateRangeBean;
 	}
@@ -168,7 +163,5 @@ public class PerformanceTest {
 	public List<Transaction> getTransactionSummariesThisRun() {
 		return transactionSummariesThisRun;
 	}
-
-
 	
 }

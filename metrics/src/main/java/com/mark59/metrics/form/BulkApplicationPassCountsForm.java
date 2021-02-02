@@ -28,10 +28,13 @@ public class BulkApplicationPassCountsForm {
 		String		txnId;
 		String		isTxnIgnored;
 		BigDecimal	sla90thResponse;
+		BigDecimal	sla95thResponse;
+		BigDecimal	sla99thResponse;
 		long		slaPassCount;
 		BigDecimal	slaPassCountVariancePercent;
 		long		slaFailCount;
 		BigDecimal	slaFailPercent;
+		BigDecimal	xtraNum;			
 		String		slaRefUrl;
 		String		slaOriginalTxnId;
 		String      applyRefUrlOption;
@@ -60,6 +63,18 @@ public class BulkApplicationPassCountsForm {
 		public void setSla90thResponse(BigDecimal sla90thResponse) {
 			this.sla90thResponse = sla90thResponse;
 		}
+		public BigDecimal getSla95thResponse() {
+			return sla95thResponse;
+		}
+		public void setSla95thResponse(BigDecimal sla95thResponse) {
+			this.sla95thResponse = sla95thResponse;
+		}
+		public BigDecimal getSla99thResponse() {
+			return sla99thResponse;
+		}
+		public void setSla99thResponse(BigDecimal sla99thResponse) {
+			this.sla99thResponse = sla99thResponse;
+		}
 		public long getSlaPassCount() {
 			return slaPassCount;
 		}
@@ -84,6 +99,12 @@ public class BulkApplicationPassCountsForm {
 		}
 		public void setSlaFailPercent(BigDecimal slaFailPercent) {
 			this.slaFailPercent = slaFailPercent;
+		}
+		public BigDecimal getXtraNum() {
+			return xtraNum;
+		}
+		public void setXtraNum(BigDecimal xtraNum) {
+			this.xtraNum = xtraNum;
 		}
 		public String getSlaRefUrl() {
 			return slaRefUrl;

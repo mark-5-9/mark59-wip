@@ -243,58 +243,72 @@
            <td width="85%"> 
            	<textarea id='trxnIdsWithFailedSla90thResponseId' style="width:100%;height:50px" >${trxnIdsWithFailedSla90thResponseId}</textarea> 
            </td> 	
-        </tr> 	
+         </tr> 	
+
+	     <tr> 
+           <td width="15%">Failed Sla for 95th Percentile Transaction Ids</td> 
+           <td width="85%"> 
+           	<textarea id='trxnIdsWithFailedSla95thResponseId' style="width:100%;height:50px" >${trxnIdsWithFailedSla95thResponseId}</textarea> 
+           </td> 	
+         </tr> 	
+
+	     <tr> 
+           <td width="15%">Failed Sla for 99th Percentile Transaction Ids</td> 
+           <td width="85%"> 
+           	<textarea id='trxnIdsWithFailedSla99thResponseId' style="width:100%;height:50px" >${trxnIdsWithFailedSla99thResponseId}</textarea> 
+           </td> 	
+         </tr> 	
 
 	     <tr> 
            <td width="15%">Failed Sla for Txn Failure Rate Transaction Ids</td> 
            <td width="85%"> 
            	<textarea id='trxnIdsWithFailedSlaFailPercentId' style="width:100%;height:50px" >${trxnIdsWithFailedSlaFailPercentId}</textarea> 
            </td> 	
-        </tr> 	
+         </tr> 	
 
 	     <tr> 
            <td width="15%">Failed Sla PASS Count Transaction Ids</td> 
            <td width="85%"> 
            	<textarea id='trxnIdsWithFailedSlaPassCount' style="width:100%;height:50px" >${trxnIdsWithFailedSlaPassCount}</textarea> 
            </td> 	
-        </tr> 	
+         </tr> 	
 
 	     <tr> 
            <td width="15%">Transactions which have an SLA set but do not exist in the results</td> 
            <td width="85%"> 
            	<textarea id='missingTransactionsId' style="width:100%;height:50px" >${missingTransactionsId}</textarea> 
            </td> 	
-        </tr> 	
+         </tr> 	
 
 	     <tr> 
            <td width="15%">Transactions which have had the 'Ignore in Graph' flag set in the SLA Transaction table</td> 
            <td width="85%"> 
            	<textarea id='ignoredTransactionsId' style="width:100%;height:50px" >${ignoredTransactionsId}</textarea> 
            </td> 	
-        </tr> 	
+         </tr> 	
 
 	     <tr> 
            <td width="15%">Fails SLA Metrics for the Graphed Metric Measure (Metric Type + Field Derivation)</td> 
            <td width="85%"> 
            	<textarea id='trxnIdsWithFailedSlaForThisMetricMeasure' style="width:100%;height:50px" >${trxnIdsWithFailedSlaForThisMetricMeasure}</textarea> 
            </td> 	
-        </tr> 	
+         </tr> 	
 
 	     <tr> 
            <td width="15%">Transaction Bar Range Array</td> 
            <td width="85%"> 
            	<textarea id='trxnIdsRangeBarId' style="width:100%;height:50px" >${trxnIdsRangeBarId}</textarea> 
            </td> 	
-        </tr> 
+         </tr> 
         	
-        <tr> 
+         <tr> 
            <td width="15%">csvTextarea (data used by vis graphics)</td> 
            <td width="85%"> 
             <div id="csv">
                 <textarea id='csvTextarea' style="width:100%;height:50px" >${csvTextarea}</textarea> 
             </div>
            </td> 	
-        </tr>
+         </tr>
 
       </table> 
      

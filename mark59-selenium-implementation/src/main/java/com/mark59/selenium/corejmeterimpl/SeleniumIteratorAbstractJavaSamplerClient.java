@@ -103,8 +103,6 @@ public abstract class SeleniumIteratorAbstractJavaSamplerClient  extends  Seleni
 	public static final String ITERATION_PACING_IN_SECS 			= "ITERATION_PACING_IN_SECS";	
 	public static final String STOP_THREAD_AFTER_TEST_START_IN_SECS	= "STOP_THREAD_AFTER_TEST_START_IN_SECS";	
 	public static final String STOP_THREAD_ON_FAILURE 				= "STOP_THREAD_ON_FAILURE";
-	
-	private KeepBrowserOpen keepBrowserOpen = KeepBrowserOpen.NEVER;
 
 	
 	private static final Map<String,String> defaultIterArgumentsMap;	
@@ -243,7 +241,7 @@ public abstract class SeleniumIteratorAbstractJavaSamplerClient  extends  Seleni
 			}
 			
 		} finally {
-			if (! keepBrowserOpen.equals(KeepBrowserOpen.ALWAYS )     ) { 
+			if (! this.getKeepBrowserOpen().equals(KeepBrowserOpen.ALWAYS )     ) { 
 				seleniumDriverWrapper.driverDispose();
 			}
 		}

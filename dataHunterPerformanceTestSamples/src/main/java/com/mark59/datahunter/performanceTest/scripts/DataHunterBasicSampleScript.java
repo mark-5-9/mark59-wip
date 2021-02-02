@@ -41,7 +41,7 @@ import com.mark59.selenium.drivers.SeleniumDriverFactory;
 
 /**
  * This selenium test provides a basic example of the Mark59 framework usage. It contains no 'DSL' classes etc, so that you can see the basics within the script.
- * <p>Also, this type of scripting would be appropriate when our are knocking out a 'quick and dirty' script for a simple application. It will quickly become too 
+ * <p>This type of scripting would be appropriate when our are knocking out a 'quick and dirty' script for a simple application. It will quickly become too 
  * limited, cumbersome and difficult to maintain for more complex application tests, where DSL style scripts should be used.   
  * 
  * <p>This script performs a sub-set of the actions in performed by DataHunterLifecyclePvtScript:

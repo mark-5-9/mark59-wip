@@ -17,7 +17,7 @@
   
   Attribution(s)
   --------------  
-  The contents contained in this file use elements from the the vis.js product 
+  The contents contained in this file are based on the vis.js product 
   (https://visjs.org/)
 
   Original Commentary and License agreements:

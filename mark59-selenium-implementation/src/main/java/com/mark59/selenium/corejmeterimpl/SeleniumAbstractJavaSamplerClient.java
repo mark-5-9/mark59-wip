@@ -47,8 +47,8 @@ import com.mark59.selenium.drivers.SeleniumDriverWrapper;
 
 
 /**
- * Selenium flavored extension of the JMeter Java Sampler AbstractJavaSamplerClient.  
- * This a core class of the Mark59 Selenium implementation, and should be extended when creating 
+ * A Selenium Webdriver enabled extension of the JMeter Java Sampler class {@link org.apache.jmeter.protocol.java.sampler.AbstractJavaSamplerClient}.  
+ * This is core class of the Mark59 Selenium implementation, and should be extended when creating 
  * a JMeter-ready Selenium script. 
  * 
  * <p>Implementation of abstract method {@link #runSeleniumTest(JavaSamplerContext, JmeterFunctionsForSeleniumScripts, WebDriver)} 
@@ -72,20 +72,20 @@ import com.mark59.selenium.drivers.SeleniumDriverWrapper;
  * @author Philip Webb
  * Written: Australian Winter 2019  
  */
-public abstract class SeleniumAbstractJavaSamplerClient  extends AbstractJavaSamplerClient {
+public abstract class SeleniumAbstractJavaSamplerClient extends AbstractJavaSamplerClient {
 
 	public static Logger LOG = LogManager.getLogger(SeleniumAbstractJavaSamplerClient.class);	
-	
+
 	protected Arguments jmeterArguments = new Arguments();
 	protected JmeterFunctionsForSeleniumScripts jm;	
 	protected SeleniumDriverWrapper seleniumDriverWrapper; 
 	protected WebDriver driver;
-	private KeepBrowserOpen keepBrowserOpen = KeepBrowserOpen.NEVER;
-
 	protected String thread = Thread.currentThread().getName();
 	protected String tgName = null; 
 	protected AbstractThreadGroup tg = null;
 	
+	private KeepBrowserOpen keepBrowserOpen = KeepBrowserOpen.NEVER;
+
 	protected static final Map<String,String> defaultArgumentsMap; 	
 	static {
 		Map<String,String> staticMap = new LinkedHashMap<String,String>();
@@ -108,6 +108,7 @@ public abstract class SeleniumAbstractJavaSamplerClient  extends AbstractJavaSam
 		
 		staticMap.put("______________________ miscellaneous: __________________________", "");				
 		staticMap.put(IpUtilities.RESTRICT_TO_ONLY_RUN_ON_IPS_LIST, "");
+		staticMap.put(IpUtilities.RESTRICT_TO_ONLY_RUN_ON_IPS_LIST, "");		
 		
 		staticMap.put("___________________"       , "");			
 		staticMap.put("script build information: ", "using mark59-selenium-implementation version " + Mark59Constants.MARK59_VERSION);	
@@ -300,9 +301,26 @@ public abstract class SeleniumAbstractJavaSamplerClient  extends AbstractJavaSam
 	}
 
 	
+	public KeepBrowserOpen getKeepBrowserOpen() {
+		return keepBrowserOpen;
+	}
+
 	/**
-	 * Convenience method to a single-threaded script execution (rather than needing to use Jmeter).  See method runMultiThreadedSeleniumTest to executed a multi-thread test<p>
-	 * It is assumed you are executing for debug purposes, so the default is to keep the browser open at test end the test fails(unless running in headless mode). 
+	 * By default a browser will close at the end of a JMeter iteration.  This can be changed via this setter:<br>
+	 * <b>KeepBrowserOpen.ALWAYS</b>, <b>KeepBrowserOpen.ONFAILURE</b>, default is <b>KeepBrowserOpen.NEVER</b><br>
+	 * Not expected to be used in the normal course of events (and pretty pointless if the browser is headless).   
+	 * @param keepBrowserOpen
+	 */
+	public void setKeepBrowserOpen(KeepBrowserOpen keepBrowserOpen) {
+		this.keepBrowserOpen = keepBrowserOpen;
+	}
+
+	
+	/**
+	 * Convenience method to a single-threaded script execution (rather than needing to use Jmeter).  
+	 * See method runMultiThreadedSeleniumTest to executed a multi-thread test<p>
+	 * You can control if the browser closes at the end of the test. 
+	 * EG: <b>KeepBrowserOpen.ONFAILURE</b> will keep the browser open at test end if the test fails (unless running in headless mode). 
 	 * 
 	 * @see com.mark59.selenium.corejmeterimpl.KeepBrowserOpen
 	 * @see Log4jConfigurationHelper

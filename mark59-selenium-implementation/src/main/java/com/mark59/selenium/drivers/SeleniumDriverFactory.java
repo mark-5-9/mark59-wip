@@ -41,17 +41,60 @@ import com.mark59.core.utils.ScreenshotLoggingHelper;
  * @author Philip Webb
  * Written: Australian Winter 2019  
  */
+/**
+ * @author s62991
+ *
+ */
+/**
+ * @author s62991
+ *
+ */
 public class SeleniumDriverFactory implements DriverWrapperFactory {
 
 	private static final Logger LOG = LogManager.getLogger(SeleniumDriverFactory.class);
 
+	/**
+	 *  "DRIVER"- required, must be 'CHROME' or 'FIREFOX'  
+	 *  @see SeleniumDriverFactory#getDriverBuilderOfType  
+	 */
 	public static final String DRIVER = "DRIVER";
+	/**
+	 * "HEADLESS_MODE" - 'true' or 'false', default 'true' 
+	 * @see com.mark59.selenium.drivers.SeleniumDriverBuilder#setHeadless(boolean)   
+	 */
 	public static final String HEADLESS_MODE = "HEADLESS_MODE";
+	/**
+	 * "BROWSER_EXECUTABLE" - Set an alternate browser executable (eg to a Chrome Beta or Chromium instance)
+	 * @see com.mark59.selenium.drivers.SeleniumDriverBuilder#setAlternateBrowser(java.nio.file.Path)
+	 */
 	public static final String BROWSER_EXECUTABLE = "BROWSER_EXECUTABLE";
+	/**
+	 * "PAGE_LOAD_STRATEGY" - PageLoadStrategy.NONE ('NONE') / PageLoadStrategy.NORMAL ('NORMAL').
+	 * Default is 'NORMAL'.
+	 * @see com.mark59.selenium.drivers.SeleniumDriverBuilder#setPageLoadStrategy(PageLoadStrategy)
+	 */
 	public static final String PAGE_LOAD_STRATEGY = "PAGE_LOAD_STRATEGY";
+	/**
+	 * "WRITE_FFOX_BROWSER_LOGFILE" - Only implemented for Firefox.  Primary purpose is to redirect 
+	 * gekodriver's copious error logging off the console.  Set to 'true' or 'false', default is 'false'.
+	 * @see com.mark59.selenium.drivers.SeleniumDriverBuilder#setWriteBrowserLogfile(boolean)
+	 */
 	public static final String WRITE_FFOX_BROWSER_LOGFILE = "WRITE_FFOX_BROWSER_LOGFILE";
+	/**
+	 * "PROXY"- set the proxy 
+	 * @see com.mark59.selenium.drivers.SeleniumDriverBuilder#setProxy(org.openqa.selenium.Proxy) 
+	 */
 	public static final String PROXY = "PROXY";
+	/**
+	 * "BROWSER_DIMENSIONS") - sets the browser size (eg "800,600") default is 1920 (w) x 1080 (h)
+	 * @see com.mark59.selenium.drivers.SeleniumDriverBuilder#setSize(int width, int height) 
+	 */
 	public static final String BROWSER_DIMENSIONS = "BROWSER_DIMENSIONS";
+	/**
+	 * "ADDITIONAL_OPTIONS" - a comma delimited list used to set of any of the many
+	 *  additional driver options.
+	 *  @see com.mark59.selenium.drivers.SeleniumDriverBuilder#setAdditionalOptions(java.util.List)
+	 */
 	public static final String ADDITIONAL_OPTIONS = "ADDITIONAL_OPTIONS";
 	
 	private static final String CHROME = "CHROME";

@@ -62,12 +62,13 @@ public class JmeterRun extends PerformanceTest  {
 	private int fieldPossuccess;	
 
 	
-	public JmeterRun(ApplicationContext context, String application, String inputdirectory, String runReference, String excludestart, String captureperiod) {
+	public JmeterRun(ApplicationContext context, String application, String inputdirectory, String runReference, String excludestart, String captureperiod, String keeprawresults) {
 		
 		super(context,application, runReference);
 		
 		//clean up before  
-		testTransactionsDAO.deleteAllForApplication(run.getApplication());
+		testTransactionsDAO.deleteAllForRun(run);  // RUN_TIME_YET_TO_BE_CALCULATED
+		
 		loadTestTransactionAllDataFromJmeterFiles(run.getApplication(), inputdirectory);
 		
 		DateRangeBean dateRangeBean = getRunDateRangeUsingTestTransactionalData(run.getApplication());
@@ -82,11 +83,11 @@ public class JmeterRun extends PerformanceTest  {
 		
 		storeSystemMetricSummaries(run);
 		
-		//clean up after (leave commented out to keep the last load of an application on the testTransactions table)
-		//testTransactionsDAO.deleteAllForApplication(run.getApplication());				
-		
+		if (String.valueOf(true).equalsIgnoreCase(keeprawresults)) {
+			testTransactionsDAO.deleteAllForRun(run); // clean up in case of re-run (the same run data)
+			testTransactionsDAO.updateRunTime(run.getApplication(), AppConstantsMetrics.RUN_TIME_YET_TO_BE_CALCULATED, run.getRunTime());
+		}
 	}
-
 
 
 	private void loadTestTransactionAllDataFromJmeterFiles(String application, String inputdirectory) {
@@ -549,10 +550,15 @@ public class JmeterRun extends PerformanceTest  {
 
 		
 	/**
-	 * Once all transaction and metrics data has been stored for the run, work out the start and end time for the run. 
-	 * Start/end times are taken lowest and highest transaction epoch time for the application (assumes data for only 1 run in table!) 
-	 * Note this is actually an approximation, as any time difference between the timestamp and the time to take the sample is not considered, 
-	 * nor is any running time before/after the first/last sample.      
+	 * Once all transaction and metrics data has been stored for the run, work out the start and end 
+	 * time for the run.  Start/end times are taken lowest and highest transaction epoch time for the
+	 * application run. 
+	 *  
+	 * The times are actually an approximation, as any time difference between the timestamp and the time
+	 * to take the sample is not considered, nor is any running time before/after the first/last sample.
+	 * 
+	 * NOTE: When this method is called currently assumed the run being processed will have a  
+	 * run-time of AppConstantsMetrics.RUN_TIME_YET_TO_BE_CALCULATED (zeros) on TESTTRANSACTIONS 	  
 	 */
 	private DateRangeBean getRunDateRangeUsingTestTransactionalData(String application){
 		Long runStartTime = testTransactionsDAO.getEarliestTimestamp(application);

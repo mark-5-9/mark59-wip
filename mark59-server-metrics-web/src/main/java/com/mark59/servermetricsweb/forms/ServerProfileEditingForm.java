@@ -16,7 +16,6 @@
 
 package com.mark59.servermetricsweb.forms;
 
-import java.util.Arrays;
 import java.util.List;
 
 import com.mark59.servermetricsweb.data.beans.ServerProfile;

@@ -269,6 +269,12 @@ function drawSummaryTable(data, sortby){
 	if ( selectedGraph == "TXN_90TH"  ){
 		trxnIdsForFailedSlaRelatingToThisGraphArray = document.getElementById("trxnIdsWithFailedSla90thResponseId").value.split(',');
 	}
+	if ( selectedGraph == "TXN_95TH"  ){
+		trxnIdsForFailedSlaRelatingToThisGraphArray = document.getElementById("trxnIdsWithFailedSla95thResponseId").value.split(',');
+	}
+	if ( selectedGraph == "TXN_99TH"  ){
+		trxnIdsForFailedSlaRelatingToThisGraphArray = document.getElementById("trxnIdsWithFailedSla99thResponseId").value.split(',');
+	}	
 	if ( selectedGraph == "TXN_FAIL" ||
 		 selectedGraph == "TXN_FAIL_PERCENT"	){
 		trxnIdsForFailedSlaRelatingToThisGraphArray = document.getElementById("trxnIdsWithFailedSlaFailPercentId").value.split(',');
@@ -497,8 +503,6 @@ function drawMissingTransactionsTable(data,sortby,runDatesToGraphArray){
 		comparetabContent += "<br>" + runDatesToGraphArray[0].substring(0,4)  + "." + runDatesToGraphArray[0].substring(4,6)+ "." + runDatesToGraphArray[0].substring(6,8);
 		comparetabContent +=  "  "  + runDatesToGraphArray[0].substring(8,10) + ":" + runDatesToGraphArray[0].substring(10,12);
 		comparetabContent += "</th><tr>";		
-	
-		
 
 		for (var i = 0; i < trxnIdsWithAnyFailedSlaArray.length; i ++) {
 	 		comparetabContent += "<tr><td  class=textred>" + trxnIdsWithAnyFailedSlaArray[i] + "</td></tr>";
@@ -509,7 +513,6 @@ function drawMissingTransactionsTable(data,sortby,runDatesToGraphArray){
 	}
 	return comparetabContent;
 }
-
 
 
 
@@ -538,8 +541,6 @@ function drawIgnoredTransactionsTable(data,sortby){
 	}
 	return comparetabContent;
 }
-
-
 
 
 

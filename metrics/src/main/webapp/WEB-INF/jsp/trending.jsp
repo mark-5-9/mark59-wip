@@ -46,7 +46,8 @@
  	buildRunsListLink(); 	 
  	trendingBuildPageLink();  
  	buildEventMappingLink(); 
- 	buildGraphMappingLink()	">  
+ 	buildGraphMappingLink();
+	showHideElement('comparetab');draw();">  
 
 <form:form modelAttribute="trendingForm">
 

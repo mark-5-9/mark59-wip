@@ -487,7 +487,7 @@ function drawMissingTransactionsTable(data,sortby,runDatesToGraphArray){
 			slaUrl="http://" + host + "/metrics/metricSlaList?reqApp=" + document.getElementById("application").value 		
 			slaUrlLink = "<a id=slaUrlLink href=" + slaUrl + " target='_blank'>Metric Sla Transaction Database Link</a>";
 		} else {
-			slaUrl="http://" + host + "/metrics/viewSlaList?reqApp=" + document.getElementById("application").value 		
+			slaUrl="http://" + host + "/metrics/slaList?reqApp=" + document.getElementById("application").value 		
 			slaUrlLink = "<a id=slaUrlLink href=" + slaUrl + " target='_blank'>SLA Transaction Database Link</a>";
 		}
 			
@@ -497,7 +497,7 @@ function drawMissingTransactionsTable(data,sortby,runDatesToGraphArray){
 		if ( txnType != "TRANSACTION" ){  // assume we are displaying a metrics graph
 			comparetabContent += "<th> Missing Metrics List <br>( txn has an SLA and should appear on this graph) <br>see: " + slaUrlLink ;		
 		} else {
-			comparetabContent += "<th> Missing Transactions List <br>(txn has a some SLA but it does not appear in results) <br>see: " + slaUrlLink;
+			comparetabContent += "<th> Missing Transactions List <br>(txns with a SLA but do not appear in results) <br>see: " + slaUrlLink;
 		}
 		
 		comparetabContent += "<br>" + runDatesToGraphArray[0].substring(0,4)  + "." + runDatesToGraphArray[0].substring(4,6)+ "." + runDatesToGraphArray[0].substring(6,8);

@@ -269,7 +269,9 @@ public class SeleniumDriverFactory implements DriverWrapperFactory {
 		}
 		
 		if (seleniumDriverPath == null) {
-			throw new RuntimeException("No selenium driver path property set for " + driverType ); 
+			throw new RuntimeException("No selenium driver path property set for " + driverType +
+				".\n (Please set " + PropertiesKeys.MARK59_PROP_DRIVER_CHROME + " or " + PropertiesKeys.MARK59_PROP_DRIVER_FIREFOX +
+				" as appropriate, to the location of the Selenium driver (usually done in mark59.properties)." ); 
 		}
 		
 		
@@ -278,7 +280,7 @@ public class SeleniumDriverFactory implements DriverWrapperFactory {
 		} else if (FIREFOX.equalsIgnoreCase(driverType)) {
 			builder = new FireFoxDriverBuilder();
 		} else {
-			throw new IllegalArgumentException("No known driver for " + driverType);
+			throw new IllegalArgumentException("No known driver for " + driverType +  ".  (only CHROME or FIREFOX permitted)");
 		}
 
 		builder.setDriverExecutable(new File(seleniumDriverPath).toPath());

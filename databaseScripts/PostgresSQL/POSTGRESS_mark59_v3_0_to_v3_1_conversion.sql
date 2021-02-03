@@ -28,8 +28,10 @@
 *************************************************
 
 
-ALTER TABLE public.commands alter COLUMN command SET DATA TYPE character varying(8192)
-ALTER TABLE public.commands ADD COLUMN param_names character varying(1000) COLLATE pg_catalog."default" DEFAULT NULL;
+ALTER TABLE public.COMMANDS alter COLUMN COMMAND SET DATA TYPE character varying(8192)
+ALTER TABLE public.COMMANDS ADD COLUMN PARAM_ANMES character varying(1000) COLLATE pg_catalog."default" DEFAULT NULL;
+
+ALTER TABLE public.GRAPHMAPPING alter COLUMN VALUE_DERIVATION set data type character varying(2048);
 
 DELETE FROM GRAPHMAPPING;
 INSERT INTO GRAPHMAPPING VALUES (10,'TXN_90TH','TRANSACTION','90th','secs','SELECT TXN_ID, TXN_90TH - TXN_STD_DEVIATION AS BAR_MIN, TXN_90TH+TXN_STD_DEVIATION AS BAR_MAX FROM TRANSACTION WHERE TXN_TYPE = ''TRANSACTION'' AND RUN_TIME = @runTime AND APPLICATION = @application','+/- One Standard Deviation from 90th (secs)','');

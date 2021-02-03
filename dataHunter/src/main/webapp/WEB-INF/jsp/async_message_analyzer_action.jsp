@@ -24,7 +24,7 @@
 
 <html>
 <head>
-<title>Async Message Analyzer</title>
+<title>Async Message Analyzer Action</title>
 <link rel="shortcut icon"  href="favicon.png" />
 <style>
   body { font-size: 20px; color: purple; font-family: Calibri; }

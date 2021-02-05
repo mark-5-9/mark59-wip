@@ -36,8 +36,6 @@ import com.mark59.core.utils.Log4jConfigurationHelper;
 import com.mark59.core.utils.Mark59Constants;
 import com.mark59.core.utils.Mark59Constants.JMeterFileDatatypes;
 import com.mark59.core.utils.Mark59Utils;
-import com.mark59.servermetrics.newrelic.NewRelicServerMetricsDriver;
-import com.mark59.servermetrics.newrelic.NewRelicServerMetricsDriverConfig;
 
 /**
  * @author Philip Webb

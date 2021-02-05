@@ -91,7 +91,7 @@ public class ServerMetricsCaptureViaWeb  extends AbstractJavaSamplerClient {
 		staticMap.put("______________________ notes: _________________________________", "");	
 		staticMap.put("__","- please replace the default url with your actual.");	
 		staticMap.put("_", "- server profile of 'localhost' only reports metrics of the mark59-server-metrics-web machine!");	
-		staticMap.put("-", "   use actual machine name or (better) '..viaExcel' 'localhost..' entry instead (see Mark59 User Guide)");	
+		staticMap.put("-", "   use actual machine name or (better) via Excel 'localhost..' entry instead (see Mark59 User Guide)");	
 		staticMap.put(".", "");		
 		staticMap.put("build information: ", "mark59-server-metrics version " + AppConstantsServerMetrics.MARK59_SERVER_METRICS_VERSION);			
 		

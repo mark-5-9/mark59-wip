@@ -57,13 +57,11 @@ public class CommandDriverGroovyScriptImpl implements CommandDriver {
 		LOG.debug("executeCommand (script) : " + command);
 		CommandDriverResponse commandDriverResponse = new CommandDriverResponse();
 		commandDriverResponse.setRawCommandResponseLines(new ArrayList<String>()); ;
-		
 		String commandLog = " :<br><font face='Courier'> executing groovy script : " + command.getCommandName() + "</font><br>"; 
 		
 		ScriptResponse groovyScriptResult = new ScriptResponse();
 		
 		try {
-			
 			Map<String,Object> scriptParms = new HashMap<String,Object>(); 
 			scriptParms.put("serverProfile", serverProfile);
 			Map<String,String> serverProfileParms = serverProfile.getParameters()  == null ? new HashMap<String,String>() : serverProfile.getParameters();
@@ -75,7 +73,6 @@ public class CommandDriverGroovyScriptImpl implements CommandDriver {
 			commandDriverResponse.setCommandFailure(groovyScriptResult.getCommandFailure());
 			commandLog += "<br>Response :<br><font face='Courier'>" 
 					+ String.join("<br>", groovyScriptResult.getCommandLog()).replace(" ", "&nbsp;") + "</font><br>";
-			
 		} catch (Exception e) {
 			commandDriverResponse.setCommandFailure(true);			
 			StringWriter stackTrace = new StringWriter();
@@ -85,11 +82,9 @@ public class CommandDriverGroovyScriptImpl implements CommandDriver {
 
 			LOG.warn("Command failure on script : " + command.getCommandName() + ":\n" + e.getMessage() + stackTrace.toString());
 		}
-		
 		commandDriverResponse.setCommandLog(commandLog);
 		
 		LOG.debug("ScriptResponse : " + groovyScriptResult);
-		System.out.println("ScriptResponse : " + groovyScriptResult);
 		return commandDriverResponse;
 	}
 }

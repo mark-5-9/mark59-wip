@@ -198,10 +198,12 @@ public abstract class SeleniumIteratorAbstractJavaSamplerClient  extends  Seleni
 			long scriptIterationStartTimeMs;
 			long delay = 0;
 			
-			if (LOG.isDebugEnabled()) LOG.debug(thread + ": tgName = " + tgName + ", scriptStartTimeMs = " + scriptStartTimeMs + ", iteratePeriodMs = " + iterateForPeriodMs + ", iterateNumberOfTimes = " + iterateNumberOfTimes );
+			if (LOG.isDebugEnabled()) LOG.debug(thread + ": tgName = " + tgName + ", scriptStartTimeMs = " + scriptStartTimeMs 
+					+ ", iteratePeriodMs = " + iterateForPeriodMs + ", iterateNumberOfTimes = " + iterateNumberOfTimes );
 		
 			if (iterateForPeriodMs==0 && iterateNumberOfTimes==0 && stopThreadAfterTestStartMs==0 ) {
-				LOG.info("Thread Group " + tgName + " is stopping (none of ITERATE_FOR_PERIOD_IN_SECS or ITERATE_FOR_NUMBER_OF_TIMES or STOP_THREAD_AFTER_TEST_START_IN_SECS have been set to a valid non-zero value)" );
+				LOG.info("Thread Group " + tgName + " is stopping (none of ITERATE_FOR_PERIOD_IN_SECS or ITERATE_FOR_NUMBER_OF_TIMES or "
+						+ "STOP_THREAD_AFTER_TEST_START_IN_SECS have been set to a valid non-zero value)" );
 				if (tg!=null) tg.stop();
 				return null;
 			}

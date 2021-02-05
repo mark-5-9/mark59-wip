@@ -17,6 +17,8 @@
 package com.mark59.selenium.corejmeterimpl;
 
 import java.io.File;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
@@ -231,21 +233,26 @@ public abstract class SeleniumAbstractJavaSamplerClient extends AbstractJavaSamp
 	 * @param e can be an exception or Assertion error
 	 */
 	protected void scriptExceptionHandling(JavaSamplerContext context, Throwable e) {
-		System.err.println("ERROR : " + this.getClass() + ".  Exception " +  e.getClass().getName() +  " thrown.  See log and screenshot directory for details.  Stack trace:");
-		e.printStackTrace();
-		LOG.error("ERROR : " + this.getClass() + ".  Exception " +  e.getClass().getName() +  " thrown",  e);
+		String thread = Thread.currentThread().getName();
+		StringWriter sw = new StringWriter();
+		e.printStackTrace(new PrintWriter(sw));
+		
+		System.err.println("["+ thread + "]  ERROR : " + this.getClass() + ". See screenshot directory for details. Stack trace: \n  " + sw.toString());
+		LOG.error("["+ thread + "]  ERROR : " + this.getClass() + ". See screenshot directory for details. Stack trace: \n  " + sw.toString());
 
 		try {
 			seleniumDriverWrapper.documentExceptionState(new Exception(e));
 		} catch (Exception ex) {
-			LOG.error("ERROR : " + this.getClass() + ".  An exception occured during scriptExceptionHandling (documentExceptionState) " +  ex.getClass().getName() +  " thrown",  e);
+			LOG.error("["+ thread + "]  ERROR : " + this.getClass() + ".  An exception occured during scriptExceptionHandling (documentExceptionState) " 
+					+  ex.getClass().getName() +  " thrown",  e);
 			ex.printStackTrace();
 		}	
 		
 		try {
 			userActionsOnScriptFailure(context, jm, driver); 
 		} catch (Exception errorHandlingException) {
-			LOG.error("ERROR : " + this.getClass() + ".  An exception occured during scriptExceptionHandling (userActionsOnScriptFailure) " +  errorHandlingException.getClass().getName() +  " thrown",  errorHandlingException);
+			LOG.error("["+ thread + "]  ERROR : " + this.getClass() + ".  An exception occured during scriptExceptionHandling (userActionsOnScriptFailure) "
+					+  errorHandlingException.getClass().getName() +  " thrown",  errorHandlingException);
 			errorHandlingException.printStackTrace();
 		}
 		

@@ -180,7 +180,7 @@ public class JmeterRun extends PerformanceTest  {
 	    			potentialSampleResultWithNoSubResults = null;
 	    			lineCount = readLinesToSubResultEndTag(xmlReader, lineCount);
 	    			
-	    		} else { 
+	    		} else { // at a main (parent) result. Bypassed as parent results are not reported in Trend Analysis
 	    			isWithinASampleResult = true;
 	    			potentialSampleResultWithNoSubResults = jmeterFileLine;
 	    		}
@@ -309,8 +309,11 @@ public class JmeterRun extends PerformanceTest  {
 	
 
 	/**
-	 * 	CSV files are treated in a similarly manner to XML.  The main difference is that results with sub-results are non easily detectable, so
-	 *  the dataType setting of "PARENT" is used to detect result lines produced by the mark59 framework which are (normally) expected to have sub-results. 
+	 * CSV files are treated in a similarly manner to XML.  The main difference is that due to the flat structure of CSV files, it is not  
+	 * obvious which line relate to a stand-alone result, a parent result, or sub-results in within a parent.
+	 * <p>In the Mark59 framework the data type field has been used and is set to "PARENT" for result lines which are (normally) expected 
+	 * to have sub-results. 
+	 * <p>PARENT transaction are not reported within Trend Analysis, so are bypassed here. 
 	 * 
 	 * @param inputCsvFileName
 	 * @param application
@@ -569,7 +572,7 @@ public class JmeterRun extends PerformanceTest  {
 	
 	private void storeSystemMetricSummaries(Run run) {
 
-		// TODO: really should be a List of a type called something like "metricTransactionKeys" 
+		// Creates a list of the names of metric transactions for the run, with their types (bit of an abuse of the 'TestTransaction' bean)  
 		List<TestTransaction> dataSampleTxnkeys = testTransactionsDAO.getUniqueListOfSystemMetricNamesByType(run.getApplication()); 
 		
 		for (TestTransaction dataSampleKey : dataSampleTxnkeys) {

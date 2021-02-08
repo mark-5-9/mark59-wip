@@ -142,7 +142,7 @@ public class ResultFilesConverter {
 		options.addOption("o", "outputdirectoy", 		true, "Directory in which to write the output CSV file. Must already exist.  Default is a folder named 'MERGED' under the input directory");
 		options.addRequiredOption("f", "outputFilename",true, "Base output CSV file name.  File extension will be .csv (will be suffixed .csv even if not included in the argument).  If metrics are split out, an additional file ending will be added for metric datafile(s) - see 'Metricsreportsplit' options for details." );
 		options.addOption("e", "errortransactionnaming",true, "How to handle txns marked as failed. 'Rename' suffixes the failed txn names with '_ERRORED'. 'Duplicate' keeps the original txn plus adds a '_ERRORED' txn. Default is 'No' - just keep the original txn name." );
-		options.addOption("x", "eXcludeResultsWithSub",	true, "TRUE (the default) will exclude the XML file main httpsample transaction for entries which has sub-results ('FALSE' to include)") ;		
+		options.addOption("x", "eXcludeResultsWithSub",	true, "TRUE (the default) will exclude the XML file main sample transaction for entries which has sub-results, or for CSV files lines marked as 'PARENT' ('FALSE' to include)") ;		
 		options.addOption("m", "Metricsreportsplit", 	true, "Option to create separate file(s) for metric data.  'CreateMetricsReport' - create separate file with all non-txn data, suffixed _METRICS , 'SplitByDataType' create a file per datatype, suffixed with _{datatype}.  Default is 'No' - just put everything in the one output file" );		
 	
 		

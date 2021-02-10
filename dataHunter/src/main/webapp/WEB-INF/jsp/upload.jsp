@@ -34,12 +34,10 @@
 
 <body>
  <center>
- <br><br><br>
+ <br>
  <b>Upload File</b> 
- <br><br><br> 
+ <br>
   <div>
-
-
    <form:form method="post" action="upload_action" modelAttribute="uploadFile"  enctype="multipart/form-data">	
      
 	<p style="color:red"><b>${validationerror}</b></p> 
@@ -51,15 +49,25 @@
       <td><form:input path="application"  size="64" height="20" /></td>
      </tr>
      <tr>
+      <td></td>   
+      <td></td>
+      <td style="font-size: 12px" ><br>Lifecycle is optional. Generally should be left <b>blank</b> 
+      		<br>(can act as a tie-breaker if your data has multiple rows that use the same Identifier).</td> 
+     </tr>     
+     <tr>     
+     <tr>
       <td>Lifecycle</td>
       <td>:</td>
       <td><form:input path="lifecycle"  value="" size="64" height="20"  /></td>
+     </tr>
+     <tr><td></td><td></td><td><br></td> 
      </tr>
      <tr>
       <td>Useability</td>
       <td>:</td>
       <td><form:select path="useability" items="${Useabilities}"   /></td>
-     </tr>       
+     </tr>  
+     <tr><td></td><td></td><td><br></td>    
      <tr>
       <td>For existing entries</td>
       <td>:</td>
@@ -68,11 +76,11 @@
      <tr>
       <td><br></td>   
       <td></td>
-      <td style="font-size: 12px" >Note that files with a large number of lines (over 100K) may take several minutes to load <br>
-       Application MaxFileSize = 50MB, but you may hit network capacity limits below this.<br></td> 
+      <td style="font-size: 12px" ><br><br>Note that files with a large number of lines (over 100K) may take several minutes to load <br>
+       Application MaxFileSize = 50MB, but you may hit network capacity limits below this.<br><br></td> 
       </tr>     
      <tr>
-      <td><br></td>   
+      <td></td>   
       <td></td>
       <td><input type="file" name="file" /></td>  <%-- set via @RequestParam --%>
      </tr>   

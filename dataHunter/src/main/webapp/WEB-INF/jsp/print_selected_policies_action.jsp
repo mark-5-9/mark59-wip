@@ -34,7 +34,7 @@
 </head>
 <body>
   <br><br>
-  <b>Printing Policies With  :</b>  &nbsp; &nbsp; &nbsp; Application = ${policySelectionCriteria.application}, Lifecycle = ${policySelectionCriteria.lifecycle}, Useability = ${policySelectionCriteria.useability}
+  <b>Printing Items With  :</b>  &nbsp; &nbsp; &nbsp; Application = ${policySelectionCriteria.application}, Lifecycle = ${policySelectionCriteria.lifecycle}, Useability = ${policySelectionCriteria.useability}
   &nbsp; &nbsp;( ${model.rowsAffected} rows )
   <br><br>
 

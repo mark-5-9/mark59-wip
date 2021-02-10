@@ -129,7 +129,7 @@ public class DataHunterLifecycleIteratorPvtScript  extends SeleniumIteratorAbstr
 		jm.endTransaction("DH-lifecycle-0001-gotoDeleteMultiplePoliciesUrl");	
 		
 		DeleteMultiplePoliciesPage deleteMultiplePoliciesPage = new DeleteMultiplePoliciesPage(driver); 
-		assertTrue("check init get url failed!", deleteMultiplePoliciesPage.doesPageContainText("Delete Multiple Policies Matching Selection Criteria" ));		
+		assertTrue("check init get url failed!", "Delete Multiple Items".equals(deleteMultiplePoliciesPage.getPageTitle()));		
 		deleteMultiplePoliciesPage.lifecycle().type(lifecycle);
 
 		jm.startTransaction("DH-lifecycle-0100-deleteMultiplePolicies");		

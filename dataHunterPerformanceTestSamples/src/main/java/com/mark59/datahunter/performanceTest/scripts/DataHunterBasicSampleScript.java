@@ -46,8 +46,8 @@ import com.mark59.selenium.drivers.SeleniumDriverFactory;
  * 
  * <p>This script performs a sub-set of the actions in performed by DataHunterLifecyclePvtScript:
  * <ul>
- * <li>deletes 'DataHunter' rows for a 'lifecycle' (which is set to the thread name) </li>
- * <li>adds a single Policy </li>
+ * <li>deletes 'DataHunter' rows for application 'DATAHUNTER_PV_TEST_BASIC', which have a 'lifecycle' based on the thread name) </li>
+ * <li>adds a single Policy for application 'DATAHUNTER_PV_TEST_BASIC' </li>
  * <li>creates a DataPoint </li>   
  * </ul> 
  *  

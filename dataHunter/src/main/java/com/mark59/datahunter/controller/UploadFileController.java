@@ -54,14 +54,11 @@ public class UploadFileController implements HandlerExceptionResolver  {
 	
 	@RequestMapping("/upload")
 	public ModelAndView showUpload(UploadFile uploadFile, Model model) {
-		List<String> usabilityList = new ArrayList<String>(DataHunterConstants.USEABILITY_LIST);
-		model.addAttribute("Useabilities",usabilityList);	
-		List<String> updateOrBypass = new ArrayList<String>(DataHunterConstants.UPDATE_OR_BYPASS);
-		model.addAttribute("updateOrBypass",updateOrBypass);		
+		createDropdownAttributes(model);		
 		return new ModelAndView("upload");
 	}
 
-	
+
 	@SuppressWarnings("resource")
 	@PostMapping("/upload_action")
 	public ModelAndView fileUpload(@RequestParam("file") MultipartFile file,@ModelAttribute UploadFile uploadFile, 
@@ -71,11 +68,13 @@ public class UploadFileController implements HandlerExceptionResolver  {
 		DataHunterUtils.expireSession(httpServletRequest, 1200); 
 
 		if (file.isEmpty()) {
-			List<String> usabilityList = new ArrayList<String>(DataHunterConstants.USEABILITY_LIST);
-			model.addAttribute("Useabilities",usabilityList);
-			List<String> updateOrBypass = new ArrayList<String>(DataHunterConstants.UPDATE_OR_BYPASS);
-			model.addAttribute("updateOrBypass",updateOrBypass);
+			createDropdownAttributes(model);
 			model.addAttribute("validationerror", "oops, file is empty or not yet chosen");	
+			return new ModelAndView("/upload", "model", model);	
+		}
+		if (uploadFile.getApplication().trim().isEmpty()) {
+			createDropdownAttributes(model);
+			model.addAttribute("validationerror", "oops, the Application cannot be blank");	
 			return new ModelAndView("/upload", "model", model);	
 		}
 
@@ -178,13 +177,21 @@ public class UploadFileController implements HandlerExceptionResolver  {
 	public ModelAndView resolveException(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) {
 		ModelAndView modelAndView = new ModelAndView("/upload");
 		List<String> usabilityList = new ArrayList<String>(DataHunterConstants.USEABILITY_LIST);
-		modelAndView.getModel(). put("Useabilities",usabilityList);
+		modelAndView.getModel().put("Useabilities",usabilityList);
 		List<String> updateOrBypass = new ArrayList<String>(DataHunterConstants.UPDATE_OR_BYPASS);
 		modelAndView.getModel().put("updateOrBypass",updateOrBypass);
 		modelAndView.getModel().put("validationerror", ex.getMessage());	
 		modelAndView.getModel().put("uploadFile", new UploadFile());
 		modelAndView.addObject("uploadFile", new UploadFile());
 		return modelAndView;
+	}
+	
+
+	private void createDropdownAttributes(Model model) {
+		List<String> usabilityList = new ArrayList<String>(DataHunterConstants.USEABILITY_LIST);
+		model.addAttribute("Useabilities",usabilityList);	
+		List<String> updateOrBypass = new ArrayList<String>(DataHunterConstants.UPDATE_OR_BYPASS);
+		model.addAttribute("updateOrBypass",updateOrBypass);
 	}
 
 }	

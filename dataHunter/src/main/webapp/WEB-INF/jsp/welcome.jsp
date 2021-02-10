@@ -56,6 +56,7 @@
 	<tr><td valign="top"><img src="icons/use_next.jpg" height="40" width="40" /></td> 	<td><a href="http://${urltoContext}/next_policy${urlAppReqParm}${urlUseReqParmName}lookup">lookup_next_policy</a></td></tr>
 	<tr><td valign="top"><img src="icons/update.png" height="40" width="40" /></td>	  	<td><a href="http://${urltoContext}/update_policies_use_state${urlAppReqParm}">Update Policy(s) Time and Use State</a></td></tr>
 	<tr><td valign="top"><img src="icons/asynchronous.jpg" height="40" width="40"/></td><td><a href="http://${urltoContext}/async_message_analyzer${urlAppReqParm}">Asynchronous Message Analyzer</a></td></tr>
+	<tr><td valign="top"><img src="icons/upload.png" height="40" width="40"/></td>      <td><a href="http://${urltoContext}/upload${urlAppReqParm}">Upload File</a></td></tr>
 
 	<c:if test="${currentDatabaseProfile == 'h2' }">
 		<tr><td valign="top"><img src="icons/h2-logo.png" height="40" width="40"/></td> <td><a href="http://${urltoContext}/h2-console">H2 Database Console <br>URL: jdbc:h2:~/hunter</a></td></tr>

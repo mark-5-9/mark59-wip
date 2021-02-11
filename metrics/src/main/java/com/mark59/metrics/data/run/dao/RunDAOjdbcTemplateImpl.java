@@ -215,6 +215,13 @@ public class RunDAOjdbcTemplateImpl implements RunDAO
 	
 
 	
+
+	/** 
+	 * Will pick all runs for a given application - that have any transactions.  Runs marked as 'ignore run on graph' will 
+	 * also be returned.<br>
+	 * Note this does not mean every graph will have transactions for every run.  For example, a run may not of captured
+	 * any Server statistics    
+	 */
 	@Override
 	@SuppressWarnings("rawtypes")
 	public List<String> findRunDates(String application){
@@ -392,7 +399,7 @@ public class RunDAOjdbcTemplateImpl implements RunDAO
 			
 		} else { 
 			
-			// makeSure we pick up to the maximum requested number of most recent runs and most recent baselines 
+			// makeSure we pick up to the maximum requested number of most recent runs and most recent baselines,and don't include ignore on graph runs 			
 			
 			List<Map<String, Object>> rows = jdbcTemplate.queryForList(getRunTimeSelectionSQL(application, sqlSelectRunLike, reqSqlSelectRunNotLike));
 			
@@ -406,29 +413,33 @@ public class RunDAOjdbcTemplateImpl implements RunDAO
 			
 				Map<String, Object> row = rows.get(i);
 				
-				if ( "Y".equalsIgnoreCase((String)row.get("BASELINE_RUN"))  &&  numBaseLineRunsFound < numBaselineRunsDisplayed   ){
-					
-					numBaseLineRunsFound++;
-					runTimes.add( (String)row.get("RUN_TIME") );
-//					System.out.println("populating run_times for trending page (a baseline found): " + row.get("RUN_TIME")  ) ;	
-					if (numBaseLineRunsFound >= numBaselineRunsDisplayed ){
-						gotAllRequestedBaselineRuns = true;
-					}
-					
-				} else {    // populate the recent runs (may include a baseline as a 'run, past the requested number of baselines, but not at the end of finding runs)..  	
-					
-					if ( numRunsFound < numRunsDisplayed ){
-						numRunsFound++;
+				if ( ! "Y".equalsIgnoreCase((String)row.get("IS_RUN_IGNORED"))){
+				
+					if ( "Y".equalsIgnoreCase((String)row.get("BASELINE_RUN"))  &&  numBaseLineRunsFound < numBaselineRunsDisplayed ){
+						
+						numBaseLineRunsFound++;
 						runTimes.add( (String)row.get("RUN_TIME") );
-//						System.out.println("populating run_times for trending page (a std run found): " + row.get("RUN_TIME")  ) ;	
-						if (numRunsFound >= numRunsDisplayed ){
-							gotAllRequestRecentRuns = true;
-						}					
-					}	
-					
-				} //else "Y".equalsIgnoreCase
+	//					System.out.println("populating run_times for trending page (a baseline found): " + row.get("RUN_TIME")  ) ;	
+						if (numBaseLineRunsFound >= numBaselineRunsDisplayed ){
+							gotAllRequestedBaselineRuns = true;
+						}
+						
+					} else {    // populate the recent runs.  May include a baseline as a 'run, past the requested number of baselines, but not at the end of finding runs..  	
+						
+						if ( numRunsFound < numRunsDisplayed ){
+							numRunsFound++;
+							runTimes.add( (String)row.get("RUN_TIME") );
+	//						System.out.println("populating run_times for trending page (a std run found): " + row.get("RUN_TIME")  ) ;	
+							if (numRunsFound >= numRunsDisplayed ){
+								gotAllRequestRecentRuns = true;
+							}					
+						}	
+						
+					} //if  BASELINE_RUN
 
-			} //for
+				} // if ! IS_RUN_IGNORED
+			
+			} //for rows
 	
 		}  //useRawRunSQL else
 		
@@ -436,14 +447,16 @@ public class RunDAOjdbcTemplateImpl implements RunDAO
 	}
 
 	
-	/* 
-	 * Pick all runs for a given application - that have any transactions.  Note this does not mean every graph
-	 * will have transactions for every run.  For example, a run may not of captured any Server statistics 
+	/** 
+	 * Pick all runs for a given application, that have any transactions, and that also satisfy any passed 'Like' and
+	 * 'not LiIke' condition (runs marked as 'ignore run on graph' can be included in the results)<br> 
+	 * Note this does not mean every graph will have transactions for every run.  For example, a run may not of captured
+	 * any Server statistics 
 	 */
 	@Override
 	public String getRunTimeSelectionSQL(String application, String sqlSelectRunLike, String reqSqlSelectRunNotLike){	
 	
-		String runTimeSelectionSQL = "select distinct r.RUN_TIME, r.BASELINE_RUN from "
+		String runTimeSelectionSQL = "select distinct r.RUN_TIME, r.BASELINE_RUN, r.IS_RUN_IGNORED from "
 				 + " RUNS r, "
 				 + " TRANSACTION t "
 				 + "   where r.APPLICATION = '" + application + "'"  

@@ -43,18 +43,6 @@
 	    var element = document.getElementById('application');
 	    element.value = requestApp;
 	}	
-
-	//TODO: use this idea to set links when default set?
-	function changeHrefLinks() {
-		alert("start of linkjs");
-	    var x = document.getElementsByName("editLink");
-	    var i;
-	    for (i = 0; i < x.length; i++) {
-	        // if (x[i].type == "checkbox") {
-	            x[i].href = "editSla?txnId=THEQUICKBROXFOX";
-	        // }
-	    }
-	}
 	
 </script>
 </head>

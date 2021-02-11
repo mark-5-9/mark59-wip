@@ -59,6 +59,7 @@ public class PerformanceTest {
 		
 		run.setApplication(application);
 		run.setRunTime(AppConstantsMetrics.RUN_TIME_YET_TO_BE_CALCULATED );
+		run.setIsRunIgnored("N");
 		run.setBaselineRun("N");
 		run.setRunReference(runReferenceArg);
 		run.setComment("");

@@ -54,12 +54,12 @@ public class RunDAOjdbcTemplateImpl implements RunDAO
 	@Override
 	public void insertRun(Run run) {
 		String sql = "INSERT INTO RUNS "
-				+ "(APPLICATION, RUN_TIME, LRS_FILENAME, PERIOD, DURATION, BASELINE_RUN, COMMENT) VALUES (?,?,?,?,?,?,?)";
+				+ "(APPLICATION, RUN_TIME, IS_RUN_IGNORED, RUN_REFERENCE, PERIOD, DURATION, BASELINE_RUN, COMMENT) VALUES (?,?,?,?,?,?,?,?)";
 //		System.out.println("performing : " + sql + " vars: runTime " + run.getRunTime() + ", period " + run.getPeriod() );
 		
 		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
 
-		jdbcTemplate.update(sql,new Object[] { run.getApplication(), run.getRunTime(), run.getRunReference(), 
+		jdbcTemplate.update(sql,new Object[] { run.getApplication(), run.getRunTime(), run.getIsRunIgnored(), run.getRunReference(), 
 												run.getPeriod(),  run.getDuration(), run.getBaselineRun(),  run.getComment() });
 
 		if (StringUtils.isBlank( applicationDAO.findApplication(run.getApplication()).getApplication())) {
@@ -77,14 +77,14 @@ public class RunDAOjdbcTemplateImpl implements RunDAO
 	@Override
 	public void updateRun(Run run) {
 
-		String sql = "UPDATE RUNS set LRS_FILENAME = ? , PERIOD = ?, DURATION = ?, BASELINE_RUN = ?, COMMENT = ? "
+		String sql = "UPDATE RUNS set IS_RUN_IGNORED = ?, RUN_REFERENCE = ?, PERIOD = ?, DURATION = ?, BASELINE_RUN = ?, COMMENT = ? "
 				+ "where  APPLICATION = ? and  RUN_TIME = ? ";
 		
 		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
 
 
 		jdbcTemplate.update(sql,
-				new Object[] {run.getRunReference(), run.getPeriod(),  run.getDuration(), run.getBaselineRun(),  run.getComment(),
+				new Object[] {run.getIsRunIgnored(), run.getRunReference(), run.getPeriod(),  run.getDuration(), run.getBaselineRun(),  run.getComment(),
 				 		run.getApplication(), run.getRunTime(),});
 	}	
 	
@@ -238,7 +238,7 @@ public class RunDAOjdbcTemplateImpl implements RunDAO
 
 		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
 		
-		String runSQL = "select APPLICATION, RUN_TIME, LRS_FILENAME, PERIOD, DURATION, BASELINE_RUN, COMMENT from RUNS " +
+		String runSQL = "select APPLICATION, RUN_TIME, IS_RUN_IGNORED, RUN_REFERENCE, PERIOD, DURATION, BASELINE_RUN, COMMENT from RUNS " +
 		                "   where APPLICATION = '" + application + "'" +
 		                "     and RUN_TIME    = '" + runTime + "'" ;
 		
@@ -250,15 +250,16 @@ public class RunDAOjdbcTemplateImpl implements RunDAO
 		}
 		Map row = rows.get(0);
 		
-		Run runs = new Run();
-		runs.setApplication((String)row.get("APPLICATION"));
-		runs.setRunTime((String)row.get("RUN_TIME"));
-		runs.setRunReference((String)row.get("LRS_FILENAME"));
-		runs.setPeriod((String)row.get("PERIOD"));
-		runs.setDuration((String)row.get("DURATION"));		
-		runs.setBaselineRun((String)row.get("BASELINE_RUN"));
-		runs.setComment((String)row.get("COMMENT"));
-		return  runs;
+		Run run = new Run();
+		run.setApplication((String)row.get("APPLICATION"));
+		run.setRunTime((String)row.get("RUN_TIME"));
+		run.setIsRunIgnored((String)row.get("IS_RUN_IGNORED"));
+		run.setRunReference((String)row.get("RUN_REFERENCE"));
+		run.setPeriod((String)row.get("PERIOD"));
+		run.setDuration((String)row.get("DURATION"));		
+		run.setBaselineRun((String)row.get("BASELINE_RUN"));
+		run.setComment((String)row.get("COMMENT"));
+		return  run;
 	}
 
 	
@@ -270,7 +271,7 @@ public class RunDAOjdbcTemplateImpl implements RunDAO
 		List<Run> runsList = new ArrayList<Run>();
 		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
 		
-		String runsListSelectionSQL        = "select APPLICATION, RUN_TIME, LRS_FILENAME, PERIOD, DURATION, BASELINE_RUN, COMMENT from RUNS ";
+		String runsListSelectionSQL        = "select APPLICATION, RUN_TIME, IS_RUN_IGNORED, RUN_REFERENCE, PERIOD, DURATION, BASELINE_RUN, COMMENT from RUNS ";
 		String runsListSelectionSQLwithApp = "   where APPLICATION = '" + application + "' order by RUN_TIME DESC      ";  
 		
 		String runsListSelectionSQLnoApp   = "   order by APPLICATION  ASC, RUN_TIME DESC "; 		
@@ -284,16 +285,17 @@ public class RunDAOjdbcTemplateImpl implements RunDAO
 		List<Map<String, Object>> rows = jdbcTemplate.queryForList(runsListSelectionSQL);
 		
 		for (Map row : rows) {
-			Run runs = new Run();
-			runs.setApplication((String)row.get("APPLICATION"));
-			runs.setRunTime((String)row.get("RUN_TIME"));
-			runs.setRunReference((String)row.get("LRS_FILENAME"));
-			runs.setPeriod((String)row.get("PERIOD"));
-			runs.setDuration((String)row.get("DURATION"));				
-			runs.setBaselineRun((String)row.get("BASELINE_RUN"));
-			runs.setComment((String)row.get("COMMENT"));
+			Run run = new Run();
+			run.setApplication((String)row.get("APPLICATION"));
+			run.setRunTime((String)row.get("RUN_TIME"));
+			run.setIsRunIgnored((String)row.get("IS_RUN_IGNORED"));			
+			run.setRunReference((String)row.get("RUN_REFERENCE"));
+			run.setPeriod((String)row.get("PERIOD"));
+			run.setDuration((String)row.get("DURATION"));				
+			run.setBaselineRun((String)row.get("BASELINE_RUN"));
+			run.setComment((String)row.get("COMMENT"));
 			
-			runsList.add(runs);
+			runsList.add(run);
 			//System.out.println("values from runDAOjdbcTemplateImpl.run_times  : " + row.get("RUN_TIME")  ) ;
 		}	
 		return  runsList;
@@ -306,7 +308,7 @@ public class RunDAOjdbcTemplateImpl implements RunDAO
 	public Run findLastBaselineRun(String application) {
 		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
 		
-		String runsListSelectionSQL = "select APPLICATION, RUN_TIME, LRS_FILENAME, PERIOD, DURATION, BASELINE_RUN, COMMENT from RUNS "+
+		String runsListSelectionSQL = "select APPLICATION, RUN_TIME, IS_RUN_IGNORED, RUN_REFERENCE, PERIOD, DURATION, BASELINE_RUN, COMMENT from RUNS "+
 									  "  where APPLICATION = '" + application + "' AND BASELINE_RUN = 'Y' order by RUN_TIME DESC      ";  
 
 		List<Map<String, Object>> rows = jdbcTemplate.queryForList(runsListSelectionSQL);
@@ -320,7 +322,8 @@ public class RunDAOjdbcTemplateImpl implements RunDAO
 		Run run = new Run();
 		run.setApplication((String)row.get("APPLICATION"));
 		run.setRunTime((String)row.get("RUN_TIME"));
-		run.setRunReference((String)row.get("LRS_FILENAME"));
+		run.setIsRunIgnored((String)row.get("IS_RUN_IGNORED"));
+		run.setRunReference((String)row.get("RUN_REFERENCE"));
 		run.setPeriod((String)row.get("PERIOD"));
 		run.setDuration((String)row.get("DURATION"));		
 		run.setBaselineRun((String)row.get("BASELINE_RUN"));
@@ -434,7 +437,7 @@ public class RunDAOjdbcTemplateImpl implements RunDAO
 
 	
 	/* 
-	 * Pick all runs for a given application, that have any transactions).  Note this does not mean a particular graph
+	 * Pick all runs for a given application - that have any transactions.  Note this does not mean every graph
 	 * will have transactions for every run.  For example, a run may not of captured any Server statistics 
 	 */
 	@Override

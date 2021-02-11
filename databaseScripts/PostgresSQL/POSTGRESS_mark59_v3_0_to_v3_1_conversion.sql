@@ -2,34 +2,53 @@
 
 **********************************************
 **
-**  TABLE serverprofiles NEEDS TO BE RE-CREATED AS POSTGRESS DOES NOT ALLOW FOR A NEW COLUMN OTHER THAN AT THE END OF THE TABLE
+**  --- PLEASE REVIEW THE MYSQL 3.0 TO 3.1 SQL FILE TO SEE DETIALS OF THE NEW COLUMNS AND THEIR POSITIONS ---
 **
-**  ie, run 'CREATE TABLE IF NOT EXISTS SERVERPROFILES....' in POSTGRESmark59servermetricswebDataBaseCreation.sql. and re-enter data as necessary
+**
+**
+**  mark59servermetricswebdb TABLE serverprofiles NEEDS TO BE RE-CREATED AS POSTGRESS DOES NOT ALLOW FOR A NEW COLUMN OTHER THAN AT THE END OF THE TABLE
+**
+**  ie, run 'CREATE TABLE IF NOT EXISTS SERVERPROFILES....' 
 **
 **  ----------------------------------------------
 **
-**  TABLE transaction  NEEDS TO BE RE-CREATED AS POSTGRESS DOES NOT ALLOW FOR A NEW COLUMN OTHER THAN AT THE END OF THE TABLE
+**  metricsdb  TABLE runs  NEEDS TO BE RE-CREATED AS POSTGRESS DOES NOT ALLOW FOR A NEW COLUMN OTHER THAN AT THE END OF THE TABLE
+**
+**  suggestion : save off data (sql format), edit data by inserting ,'N' at the positions of the new columnn (ignore 
+**
+**   note:  this table also has a column re-rame (see below..LRS_FILENAME TO RUN_REFERENCE)
+**
+**  ----------------------------------------------
+**
+**  metrics db TABLE transaction  NEEDS TO BE RE-CREATED AS POSTGRESS DOES NOT ALLOW FOR A NEW COLUMN OTHER THAN AT THE END OF THE TABLE
 **
 **  suggestion : save off data (sql format), edit data by insertin ',-1.000,-1.000,' at the positions of the new columnns
 **    txn_95th and txn_99th 
 **
 **  ----------------------------------------------
 **
-**  TABLE sla  NEEDS TO BE RE-CREATED AS POSTGRESS DOES NOT ALLOW FOR A NEW COLUMN OTHER THAN AT THE END OF THE TABLE
+**  metricsdb TABLE sla  NEEDS TO BE RE-CREATED AS POSTGRESS DOES NOT ALLOW FOR A NEW COLUMN OTHER THAN AT THE END OF THE TABLE
 **
 **  suggestion : save off data (sql format), edit sql data by inserting ',0.0' at the postion of the new columnn extra_num
 **   and ',-1.000,-1.000,' at the positions of the new columnns SLA_95TH_RESPONSE,SLA_99TH_RESPONSE
 **
 **  ----------------------------------------------
 **
-**  Note/save  any custom graphs off GRAPHMAPPING and re-enter/re-insert
+**  metricsdb : Note/save  any custom graphs off GRAPHMAPPING and re-enter/re-insert
 **
 **
 *************************************************
 
 
+-- mark59servermetricswebdb changes
+
 ALTER TABLE public.COMMANDS alter COLUMN COMMAND SET DATA TYPE character varying(8192)
 ALTER TABLE public.COMMANDS ADD COLUMN PARAM_ANMES character varying(1000) COLLATE pg_catalog."default" DEFAULT NULL;
+
+
+-- metricsdb changes
+
+ALTER TABLE public.runs RENAME COLUMN LRS_FILENAME TO RUN_REFERENCE;
 
 ALTER TABLE public.GRAPHMAPPING alter COLUMN VALUE_DERIVATION set data type character varying(2048);
 

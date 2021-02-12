@@ -79,7 +79,7 @@ import com.mark59.seleniumDSL.pageElements.HtmlTableRow;
 public class DataHunterLifecyclePvtScript  extends SeleniumAbstractJavaSamplerClient {
 
 	private static final Logger LOG = LogManager.getLogger(DataHunterLifecyclePvtScript.class);	
-
+	private static Boolean printedOnce = false;
 	
 	@Override
 	protected Map<String, String> additionalTestParameters() {
@@ -115,11 +115,12 @@ public class DataHunterLifecyclePvtScript  extends SeleniumAbstractJavaSamplerCl
 		String thread = Thread.currentThread().getName();
 		String lifecycle = "thread_" + thread;
 //		System.out.println("Thread " + thread + " is running with LOG level " + LOG.getLevel());
-
+		
 		String dataHunterUrl 	= context.getParameter("DATAHUNTER_URL_HOST_PORT");
 		String application 		= context.getParameter("DATAHUNTER_APPLICATION_ID");
 		int forceTxnFailPercent = Integer.valueOf(context.getParameter("FORCE_TXN_FAIL_PERCENT").trim());
 		String user 			= context.getParameter("USER");
+		PrintSomeMsgOnceAtStartUp(dataHunterUrl);
 
 		DeleteMultiplePoliciesPage deleteMultiplePoliciesPage = new DeleteMultiplePoliciesPage(driver); 
 
@@ -261,7 +262,6 @@ public class DataHunterLifecyclePvtScript  extends SeleniumAbstractJavaSamplerCl
 //		jm.writeBufferedArtifacts();
 	}
 
-	
 
 	private void waitActionPageCheckSqlOk(_GenericDatatHunterActionPage _genericDatatHunterActionPage) {
 		String sqlResultText = _genericDatatHunterActionPage.sqlResult().getText() ;
@@ -270,6 +270,12 @@ public class DataHunterLifecyclePvtScript  extends SeleniumAbstractJavaSamplerCl
 		}
 	}
 	
+	private static synchronized void PrintSomeMsgOnceAtStartUp(String dataHunterUrl) {
+		if (!printedOnce) {			
+			LOG.info(DataHunterLifecyclePvtScript.class.getSimpleName() +  " is using DataHunter with Url " + dataHunterUrl + "/dataHunter");
+			printedOnce = true;
+		}
+	}
 
 	
 	/**

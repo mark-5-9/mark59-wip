@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jmeterTestPlan version="1.2" properties="5.0" jmeter="5.3">
+<jmeterTestPlan version="1.2" properties="5.0" jmeter="5.2.1">
   <hashTree>
     <TestPlan guiclass="TestPlanGui" testclass="TestPlan" testname="DataHunter Selenium Test Plan" enabled="true">
       <stringProp name="TestPlan.comments"></stringProp>
@@ -450,7 +450,7 @@ return 0;</stringProp>
               </elementProp>
               <elementProp name="BROWSER_DIMENSIONS" elementType="Argument">
                 <stringProp name="Argument.name">BROWSER_DIMENSIONS</stringProp>
-                <stringProp name="Argument.value">640,640</stringProp>
+                <stringProp name="Argument.value">900,900</stringProp>
                 <stringProp name="Argument.metadata">=</stringProp>
               </elementProp>
               <elementProp name="PROXY" elementType="Argument">

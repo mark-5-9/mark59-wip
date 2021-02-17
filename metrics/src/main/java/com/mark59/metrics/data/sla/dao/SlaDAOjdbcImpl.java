@@ -16,6 +16,7 @@
 
 package com.mark59.metrics.data.sla.dao;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -47,8 +48,9 @@ public class SlaDAOjdbcImpl implements SlaDAO {
 				+ "SLA_PASS_COUNT, SLA_PASS_COUNT_VARIANCE_PERCENT, SLA_FAIL_COUNT, SLA_FAIL_PERCENT, XTRA_NUM, SLA_REF_URL, COMMENT) "
 				+ "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
-		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
+		sla = nullsToDefaultValues(sla);
 
+		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
 		jdbcTemplate.update(sql,
 				new Object[] { sla.getTxnId(), sla.getApplication(), sla.getIsTxnIgnored(), sla.getSla90thResponse(), 
 						sla.getSla95thResponse(), sla.getSla99thResponse(),	sla.getSlaPassCount(),sla.getSlaPassCountVariancePercent(),
@@ -91,7 +93,10 @@ public class SlaDAOjdbcImpl implements SlaDAO {
 				
 				if ( AppConstantsMetrics.APPLY_TO_ALL_SLAS.equalsIgnoreCase(applyRefUrlOption) && StringUtils.isNotEmpty(passedSlaRefUrl)) {
 					existingSla.setSlaRefUrl(passedSlaRefUrl);
-				}	
+				}
+				if (existingSla.getSlaPassCount() == null){
+					existingSla.setSlaPassCount(new Long(-1));
+				}				
 				sql = "UPDATE SLA set SLA_PASS_COUNT = ?, SLA_REF_URL = ? where APPLICATION=? and TXN_ID = ?";
 				jdbcTemplate = new JdbcTemplate(dataSource);
 				jdbcTemplate.update(sql, new Object[] { existingSla.getSlaPassCount(), existingSla.getSlaRefUrl(), existingSla.getApplication(), existingSla.getTxnId() });
@@ -133,11 +138,14 @@ public class SlaDAOjdbcImpl implements SlaDAO {
 			
 		} else {  // update values for an existing transaction
 				
+			sla = nullsToDefaultValues(sla);
+
 			String sql = "UPDATE SLA set APPLICATION = ?, IS_TXN_IGNORED = ?,SLA_90TH_RESPONSE = ?, SLA_95TH_RESPONSE = ?, SLA_99TH_RESPONSE = ?, "
 					+ "SLA_PASS_COUNT = ?, SLA_PASS_COUNT_VARIANCE_PERCENT = ?, SLA_FAIL_COUNT = ?, SLA_FAIL_PERCENT = ?, XTRA_NUM = ?, SLA_REF_URL = ?, COMMENT = ? "
 					+ "where APPLICATION=? and TXN_ID = ?";
+			
+			
 			JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
-	
 			jdbcTemplate.update(sql, 
 					new Object[] { sla.getApplication(), sla.getIsTxnIgnored(), sla.getSla90thResponse(),sla.getSla95thResponse(), sla.getSla99thResponse(),
 							sla.getSlaPassCount(),sla.getSlaPassCountVariancePercent(),	sla.getSlaFailCount(), sla.getSlaFailPercent(), 
@@ -255,5 +263,28 @@ public class SlaDAOjdbcImpl implements SlaDAO {
 		}	
 		return  ignoredTransactions;
 	}
-
+	
+	/*
+	 *   To prevent null exceptions during SLA processing
+	 */
+	private Sla nullsToDefaultValues(Sla sla) {
+		if (sla.getSla90thResponse() == null)
+			sla.setSla90thResponse(new BigDecimal(-1.0));
+		if (sla.getSla95thResponse() == null)
+			sla.setSla95thResponse(new BigDecimal(-1.0));
+		if (sla.getSla99thResponse() == null)
+			sla.setSla99thResponse(new BigDecimal(-1.0));
+		if (sla.getSlaPassCount() == null)
+			sla.setSlaPassCount(new Long(-1));
+		if (sla.getSlaPassCountVariancePercent() == null)
+			sla.setSlaPassCountVariancePercent(new BigDecimal(10.0));
+		if (sla.getSlaFailCount() == null)
+			sla.setSlaFailCount(new Long(-1));
+		if (sla.getSlaFailPercent() == null)
+			sla.setSlaFailPercent(new BigDecimal(2.0));
+		if (sla.getXtraNum() == null)
+			sla.setXtraNum(new BigDecimal(0.0));
+		return sla;
+	}
+	
 }

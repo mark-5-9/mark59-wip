@@ -604,10 +604,13 @@ function isInArray(value, array) {
 }
 
 
-function clearChosenRuns() {
+function clearChosenRuns(id) {
 	document.getElementById("chosenRuns").value = "";
 	document.getElementById("manuallySelectRuns1").checked = false;		
 	// document.getElementById("useRawRunSQL1").checked = false; // -- deliberate (so you can choose the max runs of a given sql!!  
+	// also remove any dud non-numnerics from the input filed (should only be a number) 
+	runCount = document.getElementById(id).value;
+	document.getElementById(id).value = runCount.replace( /\D+/g, '');
 }
 
 

@@ -92,6 +92,7 @@ public class DataHunterLifecycleIteratorPvtScript  extends SeleniumIteratorAbstr
 		jmeterAdditionalParameters.put("USER", 	user);
 		jmeterAdditionalParameters.put("DRIVER", "CHROME");
 		jmeterAdditionalParameters.put(SeleniumDriverFactory.HEADLESS_MODE, String.valueOf(false));
+		jmeterAdditionalParameters.put(SeleniumDriverFactory.BROWSER_DIMENSIONS, "900,900");		
 		jmeterAdditionalParameters.put(SeleniumDriverFactory.PAGE_LOAD_STRATEGY, PageLoadStrategy.NORMAL.toString());
 		jmeterAdditionalParameters.put(SeleniumDriverFactory.PROXY, "");
 		jmeterAdditionalParameters.put(SeleniumDriverFactory.ADDITIONAL_OPTIONS, "");
@@ -145,32 +146,25 @@ public class DataHunterLifecycleIteratorPvtScript  extends SeleniumIteratorAbstr
 	@Override
 	protected void iterateSeleniumTest(JavaSamplerContext context, JmeterFunctionsForSeleniumScripts jm,  WebDriver driver) {
 
-//		add a set of policies 		
+//		add one policy 		
 		driver.get(dataHunterUrl + TestConstants.ADD_POLICY_URL_PATH + "?application=" + application);
+		SafeSleep.sleep(1000);
 		AddPolicyPage addPolicyPage = new AddPolicyPage(driver);
 		
-		for (int i = 1; i <= 5; i++) {
-			addPolicyPage.identifier().type("TESTID" + i);
-			addPolicyPage.lifecycle().type(lifecycle);
-			addPolicyPage.useability().selectByVisibleText(TestConstants.UNUSED) ;
-			addPolicyPage.otherdata().type(user);		
-			addPolicyPage.epochtime().type(new String(Long.toString(System.currentTimeMillis())));
-			//jm.writeScreenshot("add_policy_" + policy.getIdentifier());
-			
-			jm.startTransaction("DH-lifecycle-0200-addPolicy");
-			addPolicyPage.submit().submit();	
-			AddPolicyActionPage addPolicyActionPage = new AddPolicyActionPage(driver);			
-			waitActionPageCheckSqlOk(addPolicyActionPage);
-			jm.endTransaction("DH-lifecycle-0200-addPolicy");
-			
-			addPolicyActionPage.backLink().click().waitUntilClickable( addPolicyPage.submit() );  // waitUntilClickable(..) isn't necessary here, just to show usage
-		} 
+		addPolicyPage.identifier().type("TESTID_ITER");
+		addPolicyPage.lifecycle().type(lifecycle);
+		addPolicyPage.useability().selectByVisibleText(TestConstants.UNUSED) ;
+		addPolicyPage.otherdata().type(user);		
+		addPolicyPage.epochtime().type(new String(Long.toString(System.currentTimeMillis())));
+		//jm.writeScreenshot("add_policy_" + policy.getIdentifier());
 		
-		if (Thread.currentThread().getName().equals("THREAD NAME I WANT TO SIMULATE A FAILURE ON")){  // e.g. "main" for single thread test
-			System.out.println("SIMULATING FAILURE ON THREAD " + Thread.currentThread().getName());
-			throw new RuntimeException(" -- simulate failure on " + Thread.currentThread().getName() +" -- ");
-		}
-	
+		jm.startTransaction("DH-lifecycle-0200-addPolicy");
+		addPolicyPage.submit().submit();	
+		AddPolicyActionPage addPolicyActionPage = new AddPolicyActionPage(driver);			
+		waitActionPageCheckSqlOk(addPolicyActionPage);
+		jm.endTransaction("DH-lifecycle-0200-addPolicy");
+		
+		
 //		dummy transaction just to test transaction failure behavior 		
 		jm.startTransaction("DH-lifecycle-0299-sometimes-I-fail");
 		int randomNum_1_to_100 = ThreadLocalRandom.current().nextInt(1, 101);

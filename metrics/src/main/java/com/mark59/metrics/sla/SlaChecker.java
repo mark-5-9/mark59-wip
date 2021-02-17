@@ -159,7 +159,7 @@ public class SlaChecker {
 		double minTxnPassCount = 0;
 		double maxTxnPassCount = 0;		
 		
-		if ( slaPassCount > -1 ) {   	// note that 0 can be set as a Pass Count (implies that if this txn exists, an SAL failure will occure)   
+		if ( slaPassCount > -1 ) {   	// note that 0 can be set as a Pass Count (implies that if this txn exists, an SLA failure will occur)   
 			
 			// now check for the minimum and maximum allowed transaction counts
 			

@@ -60,10 +60,10 @@
  	  <td style="white-space:nowrap">graph:  <form:select path="graph" items="${graphs}" />	</td>
  	  <td style="white-space:nowrap; text-align:right">latest<br>runs</td>		 		
  	  <td style="white-space:nowrap">:</td>
- 	  <td ><form:input path="maxRun"  maxlength="5" size="2"  onChange="clearChosenRuns()" /></td>	   	  
+ 	  <td ><form:input path="maxRun"  maxlength="5" size="2"  onChange="clearChosenRuns('maxRun')" /></td>	   	  
  	  <td style="white-space:nowrap; text-align:right">latest<br>baselines</td>
  	  <td style="white-space:nowrap">:</td>
-  	  <td style="white-space:nowrap"><form:input path="maxBaselineRun"   maxlength="5" size="2"  onChange="clearChosenRuns()" /></td>	
+  	  <td style="white-space:nowrap"><form:input path="maxBaselineRun"   maxlength="5" size="2"  onChange="clearChosenRuns('maxBaselineRun')" /></td>	
  	  <td style="white-space:nowrap; text-align:right">only top<br>txn values</td>
  	  <td style="white-space:nowrap">:</td>
   	  <td style="white-space:nowrap"><form:input path="nthRankedTxn"   	maxlength="3" size="1" /></td>	  	  

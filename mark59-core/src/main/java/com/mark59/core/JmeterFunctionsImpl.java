@@ -355,21 +355,23 @@ public class JmeterFunctionsImpl implements JmeterFunctions {
 
 	
 	private void logThreadTransactionResults() {
-		SampleResult[] sampleResut = mainResult.getSubResults();
-		LOG.info(Thread.currentThread().getName() + " sub resuts list : " + sampleResut.length);
-		LOG.info(String.format("%-40s%-10s%-60s%-20s%-20s%n", "Thread", "#", "txn name", "Resp Message", "resp time"));
+		SampleResult[] sampleResult = mainResult.getSubResults();
+		LOG.info("");
+		LOG.info(Thread.currentThread().getName() + " result  (" + mainResult.getResponseMessage() + ")"   ) ; 
+		LOG.info(String.format("%-40s%-10s%-60s%-20s%-20s", "Thread", "#", "txn name", "Resp Message", "resp time"));
 
-		for (int i = 0; i < sampleResut.length; i++) {
-			SampleResult subSR = sampleResut[i];
+		for (int i = 0; i < sampleResult.length; i++) {
+			SampleResult subSR = sampleResult[i];
 			
 			if (StringUtils.isBlank(subSR.getDataType())) {
-				LOG.info(String.format("%-40s%-10s%-60s%-20s%-20s%n", threadName, i, subSR.getSampleLabel(),
+				LOG.info(String.format("%-40s%-10s%-60s%-20s%-20s", threadName, i, subSR.getSampleLabel(),
 						subSR.getResponseMessage(), subSR.getTime()));				
 			} else {
-				LOG.info(String.format("%-40s%-10s%-60s%-20s%-20s%n", threadName, i, subSR.getSampleLabel(),
+				LOG.info(String.format("%-40s%-10s%-60s%-20s%-20s", threadName, i, subSR.getSampleLabel(),
 						subSR.getResponseMessage() + " (" + subSR.getDataType() + ")" , subSR.getTime()));
 			}
 		}
+		LOG.info("");
 	}
 
 	/**

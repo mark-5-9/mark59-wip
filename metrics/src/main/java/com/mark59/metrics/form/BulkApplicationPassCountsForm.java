@@ -30,9 +30,9 @@ public class BulkApplicationPassCountsForm {
 		BigDecimal	sla90thResponse;
 		BigDecimal	sla95thResponse;
 		BigDecimal	sla99thResponse;
-		long		slaPassCount;
+		Long		slaPassCount;
 		BigDecimal	slaPassCountVariancePercent;
-		long		slaFailCount;
+		Long		slaFailCount;
 		BigDecimal	slaFailPercent;
 		BigDecimal	xtraNum;			
 		String		slaRefUrl;
@@ -75,10 +75,10 @@ public class BulkApplicationPassCountsForm {
 		public void setSla99thResponse(BigDecimal sla99thResponse) {
 			this.sla99thResponse = sla99thResponse;
 		}
-		public long getSlaPassCount() {
+		public Long getSlaPassCount() {
 			return slaPassCount;
 		}
-		public void setSlaPassCount(long slaPassCount) {
+		public void setSlaPassCount(Long slaPassCount) {
 			this.slaPassCount = slaPassCount;
 		}
 		public BigDecimal getSlaPassCountVariancePercent() {
@@ -88,10 +88,10 @@ public class BulkApplicationPassCountsForm {
 				BigDecimal slaPassCountVariancePercent) {
 			this.slaPassCountVariancePercent = slaPassCountVariancePercent;
 		}
-		public long getSlaFailCount() {
+		public Long getSlaFailCount() {
 			return slaFailCount;
 		}
-		public void setSlaFailCount(long slaFailCount) {
+		public void setSlaFailCount(Long slaFailCount) {
 			this.slaFailCount = slaFailCount;
 		}
 		public BigDecimal getSlaFailPercent() {

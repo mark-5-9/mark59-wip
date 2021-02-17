@@ -26,8 +26,10 @@ import org.apache.jmeter.samplers.SampleResult;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.PageLoadStrategy;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
 
 import com.mark59.core.Outcome;
 import com.mark59.core.utils.IpUtilities;
@@ -120,7 +122,7 @@ public class DataHunterLifecyclePvtScript  extends SeleniumAbstractJavaSamplerCl
 		String application 		= context.getParameter("DATAHUNTER_APPLICATION_ID");
 		int forceTxnFailPercent = Integer.valueOf(context.getParameter("FORCE_TXN_FAIL_PERCENT").trim());
 		String user 			= context.getParameter("USER");
-		PrintSomeMsgOnceAtStartUp(dataHunterUrl);
+		PrintSomeMsgOnceAtStartUp(dataHunterUrl, driver);
 
 		DeleteMultiplePoliciesPage deleteMultiplePoliciesPage = new DeleteMultiplePoliciesPage(driver); 
 
@@ -158,7 +160,7 @@ public class DataHunterLifecyclePvtScript  extends SeleniumAbstractJavaSamplerCl
 			waitActionPageCheckSqlOk(addPolicyActionPage);
 			jm.endTransaction("DH-lifecycle-0200-addPolicy");
 			
-			addPolicyActionPage.backLink().click().waitUntilClickable( addPolicyPage.submit() ).thenSleep();;    // ** note 1 & note 2
+			addPolicyActionPage.backLink().click().waitUntilClickable( addPolicyPage.submit() ).thenSleep();    // ** note 1 & note 2
 		} 
 	
 //		dummy transaction just to test transaction failure behavior
@@ -264,15 +266,31 @@ public class DataHunterLifecyclePvtScript  extends SeleniumAbstractJavaSamplerCl
 
 
 	private void waitActionPageCheckSqlOk(_GenericDatatHunterActionPage _genericDatatHunterActionPage) {
-		String sqlResultText = _genericDatatHunterActionPage.sqlResult().getText() ;
-		if ( !"PASS".equals(sqlResultText) ) {
-			throw new RuntimeException("SQL issue (" + sqlResultText + ") : " + _genericDatatHunterActionPage.formatResultsMessage(_genericDatatHunterActionPage.getClass().getName()));   
+		String sqlResultText = _genericDatatHunterActionPage.sqlResult().getText();
+		if (!"PASS".equals(sqlResultText)) {
+			throw new RuntimeException("SQL issue (" + sqlResultText + ") : " +
+						_genericDatatHunterActionPage.formatResultsMessage(_genericDatatHunterActionPage.getClass().getName()));
 		}
 	}
 	
-	private static synchronized void PrintSomeMsgOnceAtStartUp(String dataHunterUrl) {
+	@SuppressWarnings("unchecked")
+	private static synchronized void PrintSomeMsgOnceAtStartUp(String dataHunterUrl, WebDriver driver) {
 		if (!printedOnce) {			
-			LOG.info(DataHunterLifecyclePvtScript.class.getSimpleName() +  " is using DataHunter with Url " + dataHunterUrl + "/dataHunter");
+			LOG.info(" " + DataHunterLifecyclePvtScript.class.getSimpleName() +  " is using DataHunter with Url " + dataHunterUrl + "/dataHunter");
+			Capabilities caps = ((ChromeDriver)driver).getCapabilities();
+			LOG.info(" Browser Name and Version : " + caps.getBrowserName() + " " + caps.getVersion());
+			if ("chrome".equalsIgnoreCase(caps.getBrowserName()) && caps.getCapability("chrome") != null ){
+				String chromedriverVersion =  ((Map<String, String>)caps.getCapability("chrome")).get("chromedriverVersion");
+				LOG.info(" Chrome Driver Version    : " +  ((Map<String, String>)caps.getCapability("chrome")).get("chromedriverVersion"));
+				if (chromedriverVersion != null &&  chromedriverVersion.startsWith("2.44") ) {
+					String outDatedDriver = "\n\n You are using the outdated ChromeDriver that ships with the Mark59 Selenium test scripts"
+							+ " project 'dataHunterPerformanceTestSamples'.  It may be unstable or not work at all." 				
+					        +  "\n - Please visit https://chromedriver.chromium.org/downloads and update to a ChomeDriver which supports "
+					        + "Chrome browser version " + caps.getVersion() + "\n";
+					System.out.println(outDatedDriver);
+					LOG.warn(outDatedDriver);
+				}	
+			}
 			printedOnce = true;
 		}
 	}

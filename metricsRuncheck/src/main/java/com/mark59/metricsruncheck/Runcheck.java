@@ -348,7 +348,7 @@ public class Runcheck  implements CommandLineRunner
 		printSlasWitMissingTxnsInThisRun(slasWithMissingTxns);		
 		
 		if (slasWithMissingTxns.isEmpty()  && slaTransactionResults.isEmpty() ){
-			System.out.println( "Runcheck:  No transactionalSLA has been marked as failed, as recorded on the SLA Reference Database");
+			System.out.println( "Runcheck:  No transactional SLA has failed (as recorded on the SLA Reference Database)");
 		} 
 		
 		metricSlaResults = new MetricSlaChecker().listFailedMetricSLAs(application, runTime, null, metricSlaDAO, transactionDAO);
@@ -406,7 +406,7 @@ public class Runcheck  implements CommandLineRunner
 			System.out.println( "Runcheck: " + metricSlaResult.getMessageText()); 
 		}
 		if (metricSlaResults.isEmpty()){
-			System.out.println( "Runcheck:  No metrics SLA has been marked as failed, as recorded on the SLA Metrics Reference Database");
+			System.out.println( "Runcheck:  No metric SLA has failed (as recorded on the SLA Metrics Reference Database)");
 		}
 	}
 

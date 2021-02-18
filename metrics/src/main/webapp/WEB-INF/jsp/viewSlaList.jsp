@@ -22,7 +22,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <html>
 <head>
-<title>Mark59 - Sla Reference List</title>
+<title>Mark59 - Transactional SLAs (View)</title>
 <link rel="shortcut icon"  href="favicon.png" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link href="css/style.css" rel="stylesheet" type="text/css" />
@@ -36,7 +36,7 @@
 
 <div class="content">
 
-<h1>Sla Reference List</h1>
+<h1>Transaction SLA Reference (View)</h1>
 
   <table class="metricsTable">
    <tr>

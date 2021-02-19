@@ -30,17 +30,18 @@
 		</dependency>
       
    		<!-- https://mvnrepository.com/artifact/org.apache.poi/poi -->
+   		<!-- (note there's a reported dep issue with the newer 5.0.0 poi's) -->
 		<dependency>
 		    <groupId>org.apache.poi</groupId>
 		    <artifactId>poi</artifactId>
-		    <version>5.0.0</version>
+		    <version>4.1.2</version>
 		</dependency>
       
 		<!-- https://mvnrepository.com/artifact/org.apache.poi/poi-ooxml -->
 		<dependency>
 		    <groupId>org.apache.poi</groupId>
 		    <artifactId>poi-ooxml</artifactId>
-		    <version>5.0.0</version>
+		    <version>4.1.2</version>
 		</dependency>
 	
 		<!-- https://mvnrepository.com/artifact/com.jcraft/jsch -->
@@ -51,6 +52,7 @@
 		</dependency>
 		
 		<!-- https://mvnrepository.com/artifact/org.json/json -->
+		<!-- (only required for legacy classes) -->		
 		<dependency>
 		    <groupId>org.json</groupId>
 		    <artifactId>json</artifactId>

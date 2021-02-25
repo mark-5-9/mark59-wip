@@ -59,7 +59,6 @@ public class UploadFileController implements HandlerExceptionResolver  {
 	}
 
 
-	@SuppressWarnings("resource")
 	@PostMapping("/upload_action")
 	public ModelAndView fileUpload(@RequestParam("file") MultipartFile file,@ModelAttribute UploadFile uploadFile, 
 			Model model,RedirectAttributes redirectAttributes,HttpServletRequest httpServletRequest) {

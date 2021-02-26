@@ -17,7 +17,6 @@
 package com.mark59.datahunter.controller;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -35,7 +34,6 @@ import com.mark59.datahunter.application.DataHunterUtils;
 import com.mark59.datahunter.data.policies.dao.PoliciesDAO;
 import com.mark59.datahunter.model.AsyncMessageaAnalyzerRequest;
 import com.mark59.datahunter.model.AsyncMessageaAnalyzerResult;
-import com.mark59.datahunter.model.PolicySelectionCriteria;
 import com.mark59.datahunter.model.UpdateUseStateAndEpochTime;
 
 /**

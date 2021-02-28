@@ -81,7 +81,7 @@ public class SeleniumDriverFactory implements DriverWrapperFactory {
 	 */
 	public static final String WRITE_FFOX_BROWSER_LOGFILE = "WRITE_FFOX_BROWSER_LOGFILE";
 	/**
-	 * "PROXY"- set the proxy 
+	 * "PROXY"- used to set the proxy (refer to the 'see also' below for format) 
 	 * @see com.mark59.selenium.drivers.SeleniumDriverBuilder#setProxy(org.openqa.selenium.Proxy) 
 	 */
 	public static final String PROXY = "PROXY";
@@ -92,7 +92,7 @@ public class SeleniumDriverFactory implements DriverWrapperFactory {
 	public static final String BROWSER_DIMENSIONS = "BROWSER_DIMENSIONS";
 	/**
 	 * "ADDITIONAL_OPTIONS" - a comma delimited list used to set of any of the many
-	 *  additional driver options.
+	 *  additional driver options. Refer to the 'see also' below for details. 
 	 *  @see com.mark59.selenium.drivers.SeleniumDriverBuilder#setAdditionalOptions(java.util.List)
 	 */
 	public static final String ADDITIONAL_OPTIONS = "ADDITIONAL_OPTIONS";
@@ -137,7 +137,7 @@ public class SeleniumDriverFactory implements DriverWrapperFactory {
 	 *  <br><b>SeleniumDriverFactory.HEADLESS_MODE</b>&emsp;("HEADLESS_MODE") - default true  
 	 *  <br><b>SeleniumDriverFactory.PAGE_LOAD_STRATEGY</b>&emsp;("PAGE_LOAD_STRATEGY") - PageLoadStrategy.NONE / PageLoadStrategy.NORMAL
 	 *  <br><b>SeleniumDriverFactory.BROWSER_DIMENSIONS</b>&emsp;("BROWSER_DIMENSIONS") - sets the browser size (eg "800,600") default is 1920 x 1080  
-	 *  <br><b>SeleniumDriverFactory.PROXY</b>&emsp;("PROXY") - set the proxy  
+	 *  <br><b>SeleniumDriverFactory.PROXY</b>&emsp;("PROXY") - to set the proxy  
 	 *  <br><b>SeleniumDriverFactory.ADDITIONAL_OPTIONS</b>&emsp;("ADDITIONAL_OPTIONS") - allows for the setting of any of the many additional driver options  
 	 *  <br><b>SeleniumDriverFactory.WRITE_FFOX_BROWSER_LOGFILE</b>&emsp;("WRITE_FFOX_BROWSER_LOGFILE") -
 	 *  Only implemented for Firefox - primary purpose is to redirect gekodriver's copious error logging off the console..

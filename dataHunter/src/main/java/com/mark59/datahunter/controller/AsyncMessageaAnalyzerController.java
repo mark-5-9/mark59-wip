@@ -80,7 +80,8 @@ public class AsyncMessageaAnalyzerController {
 			for (AsyncMessageaAnalyzerResult asyncMessageaAnalyzerResult : asyncMessageaAnalyzerResultList) {
 				updateUse.setApplication(asyncMessageaAnalyzerResult.getApplication());
 				updateUse.setIdentifier(asyncMessageaAnalyzerResult.getIdentifier());
-				updateUse.setLifecycle("");  // not used in async processing
+				// lifecycle updated for all rows of the given id and so left blank (lifecycle is the part of the key that changes for each async event) 
+				updateUse.setLifecycle(""); 
 				String sql = policiesDAO.constructUpdatePoliciesUseStateSql(updateUse);
 				try {
 					policiesDAO.runDatabaseUpdateSql(sql);

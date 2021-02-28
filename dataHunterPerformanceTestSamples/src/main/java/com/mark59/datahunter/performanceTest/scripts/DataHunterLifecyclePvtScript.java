@@ -67,8 +67,8 @@ import com.mark59.seleniumDSL.pageElements.HtmlTableRow;
  * 
  * <p>**Note 1 and 2: the  waitUntilClickable(..) or thenSleep() methods are not necessary here, the simplicity of the pages don't require it.
  * Also, for Note 1, the <code>checkSqlOk</code> already has a wait built into it (<code>getText</code> for the SQL result, so that would give
- * you the correct timing). Included to demo what would be required in more difficult situations such as pages where you need to wait 
- * for async processes.
+ * you the correct timing). Just included to demonstrate what would be required in more difficult situations, such as on pages where you need
+ * to wait for async processes to exectute.
  * <br>
  * 
  * @see SeleniumAbstractJavaSamplerClient
@@ -321,6 +321,5 @@ public class DataHunterLifecyclePvtScript  extends SeleniumAbstractJavaSamplerCl
 //		threadParameters.put(SeleniumDriverFactory.HEADLESS_MODE, java.util.Arrays.asList( "true"        , "false"    , "true"     , "true"));		
 //		thisTest.runMultiThreadedSeleniumTest(4, 2000, threadParameters);
 	}
-
 		
 }

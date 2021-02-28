@@ -41,14 +41,6 @@ import com.mark59.core.utils.ScreenshotLoggingHelper;
  * @author Philip Webb
  * Written: Australian Winter 2019  
  */
-/**
- * @author s62991
- *
- */
-/**
- * @author s62991
- *
- */
 public class SeleniumDriverFactory implements DriverWrapperFactory {
 
 	private static final Logger LOG = LogManager.getLogger(SeleniumDriverFactory.class);

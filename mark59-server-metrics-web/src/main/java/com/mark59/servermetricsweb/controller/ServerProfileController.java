@@ -284,14 +284,11 @@ public class ServerProfileController {
 		
 		ServerProfile serverProfile = serverProfileEditingForm.getServerProfile();
 	
-		System.out.println("insertServerProfile exec change : " + serverProfileEditingForm.getSelectedExecutorChanged());
-		System.out.println("insertServerProfile exec        : " + serverProfileEditingForm.getServerProfile().getExecutor());	
-		System.out.println("insertServerProfile cmd change  : " + serverProfileEditingForm.getSelectedScriptCommandNameChanged() );
-		System.out.println("insertServerProfile cmd         : " + serverProfileEditingForm.getSelectedScriptCommandName());
-
-		System.out.println("insertServerProfile cmd parms   : " + serverProfileEditingForm.getCommandParameters());
-
-		
+//		System.out.println("insertServerProfile exec change : " + serverProfileEditingForm.getSelectedExecutorChanged());
+//		System.out.println("insertServerProfile exec        : " + serverProfileEditingForm.getServerProfile().getExecutor());	
+//		System.out.println("insertServerProfile cmd change  : " + serverProfileEditingForm.getSelectedScriptCommandNameChanged() );
+//		System.out.println("insertServerProfile cmd         : " + serverProfileEditingForm.getSelectedScriptCommandName());
+//		System.out.println("insertServerProfile cmd parms   : " + serverProfileEditingForm.getCommandParameters());
 		
 		if ("true".equalsIgnoreCase(serverProfileEditingForm.getSelectedExecutorChanged())){
 		
@@ -514,8 +511,8 @@ public class ServerProfileController {
 	@RequestMapping("/updateServerProfile")
   public ModelAndView updateServerProfile(@RequestParam(required=false) String reqExecutor, @ModelAttribute ServerProfileEditingForm serverProfileEditingForm) {
 	
-		System.out.println("updateServerProfile cmd change : " + serverProfileEditingForm.getSelectedScriptCommandNameChanged() );
-		System.out.println("updateServerProfile cmd        : " + serverProfileEditingForm.getSelectedScriptCommandName());
+//		System.out.println("updateServerProfile cmd change : " + serverProfileEditingForm.getSelectedScriptCommandNameChanged() );
+//		System.out.println("updateServerProfile cmd        : " + serverProfileEditingForm.getSelectedScriptCommandName());
 		
 		if ("true".equalsIgnoreCase(serverProfileEditingForm.getSelectedScriptCommandNameChanged())){
 			//rebuild form with the newly selected cmd params
@@ -570,7 +567,7 @@ public class ServerProfileController {
 			//assume the first (and should be only) command for this profile is the GROOVY_SCRIPT command you want
 			selectedScriptCommandName = serverProfileWithCommandLinks.getCommandNames().get(0);
 		} 
-		System.out.println("selectedScriptCommandName=" + selectedScriptCommandName);
+//		System.out.println("selectedScriptCommandName=" + selectedScriptCommandName);
 		return selectedScriptCommandName; 	
 	}
 	

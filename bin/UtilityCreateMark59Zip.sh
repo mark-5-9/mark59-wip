@@ -14,7 +14,7 @@
 # DEST_DIR=~/mark59-3.1_PRE_RELEASE"
 
 SOURCE_DIR=~/gitrepo/mark59-wip/
-DEST_DIR=~/mark59-3.1_PRE_RELEASE/ 
+DEST_DIR=~/mark59-3.1/ 
 
 rm -rf ${DEST_DIR}
 mkdir -p ${DEST_DIR}
@@ -28,6 +28,6 @@ rsync -av -m --exclude '.*' --exclude '*/src' --exclude '*/webapp' --exclude '*/
 # When building the full _RELEASE zip file, add the directives in. That is, the end of the command should look like :
 #      ... --exclude 'mark59-core' --exclude 'mark59-selenium-implementation' "${SOURCE_DIR}" "${DEST_DIR}"  
 
-rsync -a -m --exclude '.*' --exclude '*/classes' --exclude '*/test-classes' --exclude '*/maven*' --exclude '*/m2e-wtp*' --exclude '*/surefire*' --exclude '*.log' --exclude '*.original' --exclude '/pom.xml' --exclude 'bin' --exclude 'databaseScripts' --exclude 'dataHunter' --exclude 'mark59-server-metrics' --exclude 'mark59-server-metrics-web' --exclude 'metrics' --exclude 'metricsRuncheck' --exclude 'resultFilesConverter' "${SOURCE_DIR}" "${DEST_DIR}"
+rsync -a -m --exclude '.*' --exclude '*/classes' --exclude '*/test-classes' --exclude '*/maven*' --exclude '*/m2e-wtp*' --exclude '*/surefire*' --exclude '*.log' --exclude '*.original' --exclude '/pom.xml' --exclude 'bin' --exclude 'databaseScripts' --exclude 'dataHunter' --exclude 'mark59-server-metrics' --exclude 'mark59-server-metrics-web' --exclude 'metrics' --exclude 'metricsRuncheck' --exclude 'resultFilesConverter' --exclude 'mark59-core' --exclude 'mark59-selenium-implementation' "${SOURCE_DIR}" "${DEST_DIR}"
 
 $SHELL

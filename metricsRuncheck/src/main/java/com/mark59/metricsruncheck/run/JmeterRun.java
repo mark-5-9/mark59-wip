@@ -84,7 +84,7 @@ public class JmeterRun extends PerformanceTest  {
 		storeSystemMetricSummaries(run);
 		
 		if (String.valueOf(true).equalsIgnoreCase(keeprawresults)) {
-			testTransactionsDAO.deleteAllForRun(run); // clean up in case of re-run (the same run data)
+			testTransactionsDAO.deleteAllForRun(run); // clean up in case of re-run (when the data already exists because this is a re-run)
 			testTransactionsDAO.updateRunTime(run.getApplication(), AppConstantsMetrics.RUN_TIME_YET_TO_BE_CALCULATED, run.getRunTime());
 		}
 	}
@@ -578,8 +578,9 @@ public class JmeterRun extends PerformanceTest  {
 		for (TestTransaction dataSampleKey : dataSampleTxnkeys) {
 
 			EventMapping eventMapping = txnIdToEventMappingLookup.get(dataSampleKey.getTxnId());
-			assert(eventMapping != null);
-			
+			if (eventMapping == null) {
+				throw new RuntimeException("logic error! No event mapping found for " + dataSampleKey.getTxnId());
+			};
 			Transaction eventTransaction = testTransactionsDAO.extractEventSummaryStats(run.getApplication(), dataSampleKey.getTxnType(), dataSampleKey.getTxnId(), eventMapping);
 			eventTransaction.setRunTime(run.getRunTime());
 			transactionDAO.insert(eventTransaction);

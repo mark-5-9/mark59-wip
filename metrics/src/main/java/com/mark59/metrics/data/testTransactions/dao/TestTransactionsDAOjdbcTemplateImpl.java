@@ -184,8 +184,10 @@ public class TestTransactionsDAOjdbcTemplateImpl implements TestTransactionsDAO
 		
 		String sql = "select distinct TXN_ID, TXN_TYPE  from TESTTRANSACTIONS "
 					+ "where APPLICATION = '"  + application + "' "
-					+ "and TXN_TYPE <> 'TRANSACTION' ";
-				
+					+ "  and TXN_TYPE <> 'TRANSACTION' "
+					+   "and RUN_TIME = '" + AppConstantsMetrics.RUN_TIME_YET_TO_BE_CALCULATED + "' ";					
+
+//		System.out.println("TestTransactionsDAOjdbcTemplateImpl.getUniqueListOfSystemMetricNamesByType : " + sql );				
 		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
 		List<Map<String, Object>> rows = jdbcTemplate.queryForList(sql);
 		for (Map<String, Object> row : rows) {
@@ -385,6 +387,8 @@ public class TestTransactionsDAOjdbcTemplateImpl implements TestTransactionsDAO
 	 * run-time of AppConstantsMetrics.RUN_TIME_YET_TO_BE_CALCULATED (zeros) on TESTTRANSACTIONS 
 	 */
 	private Transaction extractEventSummaryStats(Run run, String txnType, String dataSampleLablel, EventMapping eventMapping) {
+		
+//		System.out.println("extractEventSummaryStats txnType: " + txnType + "\n  lablel:" + dataSampleLablel + "\n  eventMapping: " + eventMapping  );
 		
 		String sql = "select TXN_RESULT from TESTTRANSACTIONS "
 				+ " where APPLICATION = '" + run.getApplication() + "' "

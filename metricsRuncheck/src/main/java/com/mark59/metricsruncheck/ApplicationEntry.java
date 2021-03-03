@@ -62,6 +62,6 @@ public class ApplicationEntry  implements CommandLineRunner  {
 		application.setBannerMode(Banner.Mode.OFF);
 		application.run(args);
 		
-		System.out.println("Runcheck completed.");		
+		System.out.println("\nRuncheck completed.");		
 	}
 }

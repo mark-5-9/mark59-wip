@@ -579,7 +579,7 @@ public class JmeterRun extends PerformanceTest  {
 
 			EventMapping eventMapping = txnIdToEventMappingLookup.get(dataSampleKey.getTxnId());
 			if (eventMapping == null) {
-				throw new RuntimeException("logic error! No event mapping found for " + dataSampleKey.getTxnId());
+				throw new RuntimeException("ERROR : No event mapping found for " + dataSampleKey.getTxnId());
 			};
 			Transaction eventTransaction = testTransactionsDAO.extractEventSummaryStats(run.getApplication(), dataSampleKey.getTxnType(), dataSampleKey.getTxnId(), eventMapping);
 			eventTransaction.setRunTime(run.getRunTime());

@@ -168,7 +168,7 @@ public class Runcheck  implements CommandLineRunner
 		if ( !String.valueOf(false).equalsIgnoreCase(argKeeprawresults)  &&  !String.valueOf(true).equalsIgnoreCase(argKeeprawresults)) {
 			formatter.printHelp( "Runcheck", options );
 			printSampleUsage();
-			throw new RuntimeException("The Keeprawresults (k) argument must be set to true or false ! (or not used, in which case false is assumed)");  
+			throw new RuntimeException("The Keeprawresults (k) argument must be set to 'true' or 'false' ! (or not used, in which case 'false' is assumed)");  
 		}
 		if (!StringUtils.isNumeric(argExcludestart) ) {
 			formatter.printHelp( "Runcheck", options );

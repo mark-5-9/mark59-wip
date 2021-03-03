@@ -212,7 +212,8 @@ public class TestTransactionsDAOjdbcTemplateImpl implements TestTransactionsDAO
 	    String earliestTimestamp = (String) jdbcTemplate.queryForObject(sql, String.class);
 	    
 	    if ( ! StringUtils.isNumeric(earliestTimestamp)) {
-	    	throw new RuntimeException(" A valid date range for the test was not found (possible empty datasest?).  Aborting run." + "(found run start time of " + earliestTimestamp + ")" );
+	    	throw new RuntimeException(" A valid date range for the test was not found (possibly no transactions in output dataset?)."
+	    			+ "  Aborting run." + "(found run start time of " + earliestTimestamp + ")" );
 	    }
 	    return Long.valueOf(earliestTimestamp);
 	}
@@ -227,7 +228,8 @@ public class TestTransactionsDAOjdbcTemplateImpl implements TestTransactionsDAO
 	    String latestTimestamp = (String) jdbcTemplate.queryForObject(sql, String.class);
 
 	    if ( ! StringUtils.isNumeric(latestTimestamp)) {
-	    	throw new RuntimeException(" A valid date range for the test was not found (possible empty datasest?).  Aborting run." + "(found run end time of " + latestTimestamp + ")" );
+	    	throw new RuntimeException(" A valid date range for the test was not found (possibly no transactions in output dataset?)."
+	    			+ "  Aborting run." + "(found run end time of " + latestTimestamp + ")" );
 	    }
 	    return Long.valueOf (latestTimestamp);
 	}
@@ -249,7 +251,7 @@ public class TestTransactionsDAOjdbcTemplateImpl implements TestTransactionsDAO
 		
 		List<Transaction> transactions = new ArrayList<Transaction> ();     
 		long startLoadms = System.currentTimeMillis(); 
-		System.out.println("extractTransactionResponsesSummary sql: starts at " + new Date(startLoadms));
+		System.out.println("Collation of test transactional data starts at " + new Date(startLoadms));
 		
 		String dbDependentStdDevAnd90th = null;
 		String dbDependent95th = null;
@@ -366,7 +368,7 @@ public class TestTransactionsDAOjdbcTemplateImpl implements TestTransactionsDAO
 		}
 		
 		long endLoadms = System.currentTimeMillis(); 
-		System.out.println("extractTransactionResponsesSummary sql: completed " + new Date(endLoadms) +  ".   took " + (endLoadms -startLoadms)/1000 + " secs" );		
+		System.out.println("Collation of test transactional data completed " + new Date(endLoadms) +  ". Took " + (endLoadms -startLoadms)/1000 + " secs\n" );		
 		return transactions;
 	}
 

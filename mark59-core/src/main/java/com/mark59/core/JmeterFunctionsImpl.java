@@ -143,7 +143,7 @@ public class JmeterFunctionsImpl implements JmeterFunctions {
 	 * in a script (controlled using an internally created transactionMap holding a key of running transaction names)
 	 * and starts timing the transaction. 
 	 * 
-	 * @param transaction name ('label' in JMeter terminology) for the transaction
+	 * @param transactionLabel ('label' in JMeter terminology) for the transaction
 	 * @throws IllegalArgumentException if the transaction name supplied is an illegal value (null or empty) or already in use.
 	 */
 	@Override
@@ -172,14 +172,9 @@ public class JmeterFunctionsImpl implements JmeterFunctions {
 	 *  transaction name to be re-used if desired.</p>
 	 * 
 	 * @param transactionLabel label for the transaction
-	 * @param result the success or failure state of the transaction
-	 * 
 	 * @throws IllegalArgumentException if the transactionLabel supplied is an illegal value (null or empty)
 	 * @throws NoSuchElementException   if the transactionLabel doesn't exist in the  transactionMap
 	 * @return the JMeter subresult for this transaction - which includes the transaction time (getTime)	 * 
-	 * 
-	 * 
-	 * 
 	 */
 	@Override
 	public SampleResult endTransaction(String transactionLabel) {

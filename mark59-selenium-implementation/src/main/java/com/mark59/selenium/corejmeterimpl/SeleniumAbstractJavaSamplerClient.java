@@ -316,7 +316,7 @@ public abstract class SeleniumAbstractJavaSamplerClient extends AbstractJavaSamp
 	 * By default a browser will close at the end of a JMeter iteration.  This can be changed via this setter:<br>
 	 * <b>KeepBrowserOpen.ALWAYS</b>, <b>KeepBrowserOpen.ONFAILURE</b>, default is <b>KeepBrowserOpen.NEVER</b><br>
 	 * Not expected to be used in the normal course of events (and pretty pointless if the browser is headless).   
-	 * @param keepBrowserOpen
+	 * @param keepBrowserOpen NEVER,ONFAILURE,ALWAYS 
 	 */
 	public void setKeepBrowserOpen(KeepBrowserOpen keepBrowserOpen) {
 		this.keepBrowserOpen = keepBrowserOpen;

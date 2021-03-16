@@ -43,6 +43,7 @@ public interface JmeterFunctions {
 	 * <p>Should be paired with a call to this.startTransaction(String).</p>
 	 * 
 	 * @param transactionID label for the transaction
+	 * @return SampleResult
 	 */
 	SampleResult endTransaction(String transactionID);
 

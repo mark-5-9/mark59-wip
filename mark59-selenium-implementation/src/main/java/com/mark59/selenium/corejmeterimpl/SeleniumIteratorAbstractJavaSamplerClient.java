@@ -168,8 +168,9 @@ public abstract class SeleniumIteratorAbstractJavaSamplerClient  extends  Seleni
 		
 
 	/**
-	 * {@inheritDocc}
-	 * Note the use of the catch on  AssertionError - as this is NOT an Exception but an Error, and therefore need to be explicitly caught. 
+	 * {@inheritDoc}
+	 * 
+	 *  Note the use of the catch on  AssertionError - as this is NOT an Exception but an Error, and therefore need to be explicitly caught. 
 	 */
 	@Override
 	public SampleResult runTest(JavaSamplerContext context) {

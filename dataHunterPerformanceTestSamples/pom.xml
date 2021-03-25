@@ -55,9 +55,13 @@
 
 	<build>
 		<plugins>
+		
+		<!-- Note that as this project has a dependency on the mark59-selenium-sample-dsl project (which is not in Central)
+		     to build this project you can run the mark59 'aggregation' pom, or first build mark59-selenium-sample-dsl,
+		     using Maven goals: clean package install -->
 
 		<!-- Maven Jar Plugin and Dependency Plugin -->
-		<!-- phase/goals: clean package -->
+		<!-- phase/goals: clean package dependency:copy-dependencies -->
 		<!-- The plugins work in conjunction here to produce an output Jar and a directory of its dependencies -->
 		<!-- (both to be copied to lib/ext of target Jmeter instance) -->
 		
@@ -77,18 +81,11 @@
 <!-- 			<plugin> -->
 <!-- 				<groupId>org.apache.maven.plugins</groupId> -->
 <!-- 				<artifactId>maven-dependency-plugin</artifactId> -->
-<!-- 				<executions> -->
-<!-- 					<execution> -->
-<!-- 						<phase>prepare-package</phase> -->
-<!-- 						<goals> -->
-<!-- 							<goal>copy-dependencies</goal> -->
-<!-- 						</goals> -->
-<!-- 						<configuration> -->
-<!-- 							<outputDirectory>${project.build.directory}/${project.artifactId}-dependencies</outputDirectory> -->
-<!-- 							<excludeGroupIds>org.apache.jmeter</excludeGroupIds> -->
-<!-- 						</configuration> -->
-<!-- 					</execution> -->
-<!-- 				</executions> -->
+<!-- 				<version>3.1.1</version>				 -->
+<!-- 				<configuration> -->
+<!-- 					<outputDirectory>${project.build.directory}/${project.artifactId}-dependencies</outputDirectory> -->
+<!-- 					<excludeGroupIds>org.apache.jmeter</excludeGroupIds> -->
+<!-- 				</configuration> -->
 <!-- 			</plugin> -->
 
 
@@ -99,7 +96,9 @@
 			<!-- In those projects use the Maven Jar and Dependency Plugins as described above  -->								
 		
 			<plugin>
-				<artifactId>maven-assembly-plugin</artifactId>
+			    <groupId>org.apache.maven.plugins</groupId>
+			    <artifactId>maven-assembly-plugin</artifactId>
+			    <version>3.3.0</version>
 				<configuration>
 					<appendAssemblyId>false</appendAssemblyId>
 					<descriptorRefs><descriptorRef>jar-with-dependencies</descriptorRef></descriptorRefs>

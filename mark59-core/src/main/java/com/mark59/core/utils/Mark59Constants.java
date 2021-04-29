@@ -26,7 +26,7 @@ import java.util.List;
  */
 public class Mark59Constants {
 	
-	public static final String MARK59_VERSION  = "3.1";	
+	public static final String MARK59_VERSION  = "3.2";	
 		
 	public static final String TRUE = "TRUE";
 	public static final String FALSE = "FALSE";

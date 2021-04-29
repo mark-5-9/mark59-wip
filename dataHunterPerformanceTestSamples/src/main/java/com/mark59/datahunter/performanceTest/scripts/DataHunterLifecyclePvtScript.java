@@ -68,7 +68,7 @@ import com.mark59.seleniumDSL.pageElements.HtmlTableRow;
  * <p>**Note 1 and 2: the  waitUntilClickable(..) or thenSleep() methods are not necessary here, the simplicity of the pages don't require it.
  * Also, for Note 1, the <code>checkSqlOk</code> already has a wait built into it (<code>getText</code> for the SQL result, so that would give
  * you the correct timing). Just included to demonstrate what would be required in more difficult situations, such as on pages where you need
- * to wait for async processes to exectute.
+ * to wait for async processes to execute.
  * <br>
  * 
  * @see SeleniumAbstractJavaSamplerClient
@@ -99,6 +99,7 @@ public class DataHunterLifecyclePvtScript  extends SeleniumAbstractJavaSamplerCl
 		jmeterAdditionalParameters.put(SeleniumDriverFactory.ADDITIONAL_OPTIONS, "");
 		jmeterAdditionalParameters.put(SeleniumDriverFactory.WRITE_FFOX_BROWSER_LOGFILE, String.valueOf(false));
 		jmeterAdditionalParameters.put(IpUtilities.RESTRICT_TO_ONLY_RUN_ON_IPS_LIST, "");			
+		jmeterAdditionalParameters.put(SeleniumDriverFactory.EMULATE_NETWORK_CONDITIONS, "");			
 		return jmeterAdditionalParameters;			
 	}
 	
@@ -113,7 +114,7 @@ public class DataHunterLifecyclePvtScript  extends SeleniumAbstractJavaSamplerCl
 //		jm.logPerformanceLogAtEndOfTransactions(Mark59LogLevels.WRITE);
 		// you need to use jm.writeBufferedArtifacts to output BUFFERed data (see end of this method)		
 //		jm.logAllLogsAtEndOfTransactions(Mark59LogLevels.BUFFER);		
-
+		
 		String thread = Thread.currentThread().getName();
 		String lifecycle = "thread_" + thread;
 //		System.out.println("Thread " + thread + " is running with LOG level " + LOG.getLevel());

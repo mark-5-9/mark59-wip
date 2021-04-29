@@ -61,13 +61,21 @@ import com.mark59.selenium.drivers.SeleniumDriverWrapper;
  *
  * @see SeleniumDriverFactory#makeDriverWrapper(Map)
  * @see SeleniumDriverFactory#getDriverBuilderOfType  
+ * @see com.mark59.selenium.drivers.SeleniumDriverFactory#HEADLESS_MODE 
  * @see com.mark59.selenium.drivers.SeleniumDriverBuilder#setHeadless(boolean)  
- * @see com.mark59.selenium.drivers.SeleniumDriverBuilder#setPageLoadStrategy(PageLoadStrategy)  
- * @see com.mark59.selenium.drivers.SeleniumDriverBuilder#setSize(int width, int height)  
+ * @see com.mark59.selenium.drivers.SeleniumDriverFactory#PAGE_LOAD_STRATEGY 
+ * @see com.mark59.selenium.drivers.SeleniumDriverBuilder#setPageLoadStrategy(PageLoadStrategy) 
+ * @see com.mark59.selenium.drivers.SeleniumDriverFactory#BROWSER_DIMENSIONS 
+ * @see com.mark59.selenium.drivers.SeleniumDriverBuilder#setSize(int width, int height) 
+ * @see com.mark59.selenium.drivers.SeleniumDriverFactory#PROXY 
  * @see com.mark59.selenium.drivers.SeleniumDriverBuilder#setProxy(org.openqa.selenium.Proxy) 
- * @see com.mark59.selenium.drivers.SeleniumDriverBuilder#setAdditionalOptions(java.util.List)  
+ * @see com.mark59.selenium.drivers.SeleniumDriverFactory#ADDITIONAL_OPTIONS 
+ * @see com.mark59.selenium.drivers.SeleniumDriverBuilder#setAdditionalOptions(java.util.List) 
+ * @see com.mark59.selenium.drivers.SeleniumDriverFactory#WRITE_FFOX_BROWSER_LOGFILE 
  * @see com.mark59.selenium.drivers.SeleniumDriverBuilder#setWriteBrowserLogfile(boolean)
+ * @see com.mark59.selenium.drivers.SeleniumDriverFactory#BROWSER_EXECUTABLE  
  * @see com.mark59.selenium.drivers.SeleniumDriverBuilder#setAlternateBrowser(java.nio.file.Path) 
+ * @see com.mark59.selenium.drivers.SeleniumDriverFactory#EMULATE_NETWORK_CONDITIONS 
  * @see IpUtilities#localIPisNotOnListOfIPaddresses(String)   
  * @see JmeterFunctionsForSeleniumScripts
  *
@@ -110,7 +118,7 @@ public abstract class SeleniumAbstractJavaSamplerClient extends AbstractJavaSamp
 		
 		staticMap.put("______________________ miscellaneous: __________________________", "");				
 		staticMap.put(IpUtilities.RESTRICT_TO_ONLY_RUN_ON_IPS_LIST, "");
-		staticMap.put(IpUtilities.RESTRICT_TO_ONLY_RUN_ON_IPS_LIST, "");		
+		staticMap.put(SeleniumDriverFactory.EMULATE_NETWORK_CONDITIONS, "");		
 		
 		staticMap.put("___________________"       , "");			
 		staticMap.put("script build information: ", "using mark59-selenium-implementation version " + Mark59Constants.MARK59_VERSION);	
@@ -150,13 +158,21 @@ public abstract class SeleniumAbstractJavaSamplerClient extends AbstractJavaSamp
 	 * 
 	 * @see SeleniumDriverFactory#makeDriverWrapper(Map)
 	 * @see SeleniumDriverFactory#getDriverBuilderOfType  
+	 * @see com.mark59.selenium.drivers.SeleniumDriverFactory#HEADLESS_MODE 
 	 * @see com.mark59.selenium.drivers.SeleniumDriverBuilder#setHeadless(boolean)  
-	 * @see com.mark59.selenium.drivers.SeleniumDriverBuilder#setPageLoadStrategy(PageLoadStrategy)  
+	 * @see com.mark59.selenium.drivers.SeleniumDriverFactory#PAGE_LOAD_STRATEGY 
+	 * @see com.mark59.selenium.drivers.SeleniumDriverBuilder#setPageLoadStrategy(PageLoadStrategy) 
+	 * @see com.mark59.selenium.drivers.SeleniumDriverFactory#BROWSER_DIMENSIONS 
 	 * @see com.mark59.selenium.drivers.SeleniumDriverBuilder#setSize(int width, int height) 
+	 * @see com.mark59.selenium.drivers.SeleniumDriverFactory#PROXY 
 	 * @see com.mark59.selenium.drivers.SeleniumDriverBuilder#setProxy(org.openqa.selenium.Proxy) 
-	 * @see com.mark59.selenium.drivers.SeleniumDriverBuilder#setAdditionalOptions(java.util.List)  
+	 * @see com.mark59.selenium.drivers.SeleniumDriverFactory#ADDITIONAL_OPTIONS 
+	 * @see com.mark59.selenium.drivers.SeleniumDriverBuilder#setAdditionalOptions(java.util.List) 
+	 * @see com.mark59.selenium.drivers.SeleniumDriverFactory#WRITE_FFOX_BROWSER_LOGFILE 
 	 * @see com.mark59.selenium.drivers.SeleniumDriverBuilder#setWriteBrowserLogfile(boolean)
+	 * @see com.mark59.selenium.drivers.SeleniumDriverFactory#BROWSER_EXECUTABLE  
 	 * @see com.mark59.selenium.drivers.SeleniumDriverBuilder#setAlternateBrowser(java.nio.file.Path) 
+	 * @see com.mark59.selenium.drivers.SeleniumDriverFactory#EMULATE_NETWORK_CONDITIONS 
 	 * @see IpUtilities#localIPisNotOnListOfIPaddresses(String)   
 	 * @see JmeterFunctionsForSeleniumScripts
 	 * 

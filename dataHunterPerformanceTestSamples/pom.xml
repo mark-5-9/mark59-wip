@@ -4,7 +4,7 @@
 	
 	<groupId>com.mark59</groupId>
 	<artifactId>dataHunterPerformanceTestSamples</artifactId>
-	<version>3.1.0</version>
+	<version>3.2.0</version>
 	<packaging>jar</packaging>
 	
 	<name>dataHunterPerformanceTestSamples</name>
@@ -20,15 +20,15 @@
 		<dependency>
 			<groupId>com.mark59</groupId>
 			<artifactId>mark59-selenium-sample-dsl</artifactId>
-			<version>3.1.0</version>
+			<version>3.2.0</version>
 		</dependency>
 
 <!-- 	Not actually required for this project as it is already included as a dependency of mark59-selenium-sample-dsl (above). 
-		adding it anyway as an example for use in  projects not referring the sample DSL project, so they will require it -->
+		adding it anyway as an example for use in projects not referring the sample DSL project, so they will require it -->
 		<dependency>
 			<groupId>com.mark59</groupId>
 			<artifactId>mark59-selenium-implementation</artifactId>
-			<version>3.1</version>
+			<version>3.2</version>
 		</dependency>
 		
 		<!-- https://mvnrepository.com/artifact/org.apache.jmeter/ApacheJMeter_core -->
@@ -68,7 +68,7 @@
 <!-- 			<plugin> -->
 <!-- 				<groupId>org.apache.maven.plugins</groupId> -->
 <!-- 				<artifactId>maven-jar-plugin</artifactId> -->
-<!-- 				<version>3.1.1</version> -->
+<!-- 				<version>3.2.0</version> -->
 <!-- 				<configuration> -->
 <!-- 					<archive> -->
 <!-- 						<manifest> -->
@@ -81,7 +81,7 @@
 <!-- 			<plugin> -->
 <!-- 				<groupId>org.apache.maven.plugins</groupId> -->
 <!-- 				<artifactId>maven-dependency-plugin</artifactId> -->
-<!-- 				<version>3.1.1</version>				 -->
+<!-- 				<version>3.1.2</version>				 -->
 <!-- 				<configuration> -->
 <!-- 					<outputDirectory>${project.build.directory}/${project.artifactId}-dependencies</outputDirectory> -->
 <!-- 					<excludeGroupIds>org.apache.jmeter</excludeGroupIds> -->

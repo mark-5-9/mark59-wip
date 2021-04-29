@@ -50,44 +50,68 @@ public class SeleniumDriverFactory implements DriverWrapperFactory {
 	 *  @see SeleniumDriverFactory#getDriverBuilderOfType  
 	 */
 	public static final String DRIVER = "DRIVER";
+	
 	/**
 	 * "HEADLESS_MODE" - 'true' or 'false', default 'true' 
 	 * @see com.mark59.selenium.drivers.SeleniumDriverBuilder#setHeadless(boolean)   
 	 */
 	public static final String HEADLESS_MODE = "HEADLESS_MODE";
+	
 	/**
 	 * "BROWSER_EXECUTABLE" - Set an alternate browser executable (eg to a Chrome Beta or Chromium instance)
 	 * @see com.mark59.selenium.drivers.SeleniumDriverBuilder#setAlternateBrowser(java.nio.file.Path)
 	 */
 	public static final String BROWSER_EXECUTABLE = "BROWSER_EXECUTABLE";
+	
 	/**
 	 * "PAGE_LOAD_STRATEGY" - PageLoadStrategy.NONE ('NONE') / PageLoadStrategy.NORMAL ('NORMAL').
 	 * Default is 'NORMAL'.
 	 * @see com.mark59.selenium.drivers.SeleniumDriverBuilder#setPageLoadStrategy(PageLoadStrategy)
 	 */
 	public static final String PAGE_LOAD_STRATEGY = "PAGE_LOAD_STRATEGY";
+	
 	/**
 	 * "WRITE_FFOX_BROWSER_LOGFILE" - Only implemented for Firefox.  Primary purpose is to redirect 
 	 * gekodriver's copious error logging off the console.  Set to 'true' or 'false', default is 'false'.
 	 * @see com.mark59.selenium.drivers.SeleniumDriverBuilder#setWriteBrowserLogfile(boolean)
 	 */
 	public static final String WRITE_FFOX_BROWSER_LOGFILE = "WRITE_FFOX_BROWSER_LOGFILE";
+	
 	/**
 	 * "PROXY"- used to set the proxy (refer to the 'see also' below for format) 
 	 * @see com.mark59.selenium.drivers.SeleniumDriverBuilder#setProxy(org.openqa.selenium.Proxy) 
 	 */
 	public static final String PROXY = "PROXY";
+	
 	/**
 	 * "BROWSER_DIMENSIONS") - sets the browser size (eg "800,600") default is 1920 (w) x 1080 (h)
 	 * @see com.mark59.selenium.drivers.SeleniumDriverBuilder#setSize(int width, int height) 
 	 */
 	public static final String BROWSER_DIMENSIONS = "BROWSER_DIMENSIONS";
+	
 	/**
 	 * "ADDITIONAL_OPTIONS" - a comma delimited list used to set of any of the many
 	 *  additional driver options. Refer to the 'see also' below for details. 
 	 *  @see com.mark59.selenium.drivers.SeleniumDriverBuilder#setAdditionalOptions(java.util.List)
 	 */
-	public static final String ADDITIONAL_OPTIONS = "ADDITIONAL_OPTIONS";
+	public static final String ADDITIONAL_OPTIONS = "ADDITIONAL_OPTIONS";	
+
+	/**
+	 * "EMULATE_NETWORK_CONDITIONS" - (Chrome only) allows for network throttling, with parameters for download speed, 
+	 * upload speed, and latency.  Speeds are in kilobits per second (kb/s), and latency in milliseconds (ms).
+	 * For instance, if you intend to emulate a connection download speed of of 12 Mbps (Megabits per second), 
+	 * a typical low-end direct Internet connection in Australia, the download value to enter is 12288 (12 * 1024).
+	 * <p>The three values to enter are comma-delimited, in the order : download speed, upload speed, and latency. So:
+	 * <br><br><b>"12288,1024,10"</b>
+	 * <br><br>represents a connection with 12Mbps download, 1Mbps upload, and 10ms latency      
+	 *
+	 * <p>Note that this throttling is achieved via the Chrome DevTools Protocol command `Network.emulateNetworkConditions`
+	 * (<a href="https://chromedevtools.github.io/devtools-protocol/tot/Network/#method-emulateNetworkConditions"> 
+	 *           https://chromedevtools.github.io/devtools-protocol/tot/Network/#method-emulateNetworkConditions</a> ) 
+	 * <p>The Mark59 framework internally converts the input kb/s speeds into bytes/sec, required by the
+	 *  Network.emulateNetworkConditions command.               
+	 */
+	public static final String EMULATE_NETWORK_CONDITIONS = "EMULATE_NETWORK_CONDITIONS";
 	
 	private static final String CHROME = "CHROME";
 	private static final String FIREFOX = "FIREFOX";

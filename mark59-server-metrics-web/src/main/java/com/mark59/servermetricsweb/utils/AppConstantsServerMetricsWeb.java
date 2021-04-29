@@ -25,7 +25,7 @@ import java.util.List;
  */
 public class AppConstantsServerMetricsWeb {
 	
-	public static final String MARK59_SERVER_METRICS_VERSION = "3.1.0";	
+	public static final String MARK59_SERVER_METRICS_VERSION = "3.2.0";	
 	
 	public static final String MARK59_SERVER_PROFILES_EXCEL_FILE = "mark59serverprofiles.xlsx";  
 

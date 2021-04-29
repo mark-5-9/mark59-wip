@@ -16,8 +16,10 @@
 
 package com.mark59.core.utils;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -178,6 +180,19 @@ public class Mark59Utils {
 			candidateTxnId = candidateTxnId + "_" + metricNameSuffix;
 		}
 		return candidateTxnId;
-	}	
+	}
+	
+	
+	public static List<String> commaDelimStringToStringList(String commaDelimitedString) {
+		List<String> listOfStrings = new ArrayList<String>();
+		// when an empty string is passed to the split, it creates a empty first element ... not what we want .. 
+		if ( ! (commaDelimitedString == null || commaDelimitedString.isEmpty() )){
+			listOfStrings = Arrays.asList(commaDelimitedString.split("\\s*,\\s*"));
+		} 
+		return listOfStrings;
+	}
+	
+	
+	
 	
 }

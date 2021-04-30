@@ -11,10 +11,10 @@
 #   |  Maven central those maven projects must also be incldued.   
 #   --------------------------------------------------------------------------------------------------------------
 # SOURCE_DIR=~/gitrepo/mark-5-9/mark59-wip/
-# DEST_DIR=~/mark59-3.1_PRE_RELEASE"
+# DEST_DIR=~/mark59-3.x_PRE_RELEASE"
 
 SOURCE_DIR=~/gitrepo/mark59-wip/
-DEST_DIR=~/mark59-3.1/ 
+DEST_DIR=~/mark59-3.2/ 
 
 rm -rf ${DEST_DIR}
 mkdir -p ${DEST_DIR}

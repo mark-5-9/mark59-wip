@@ -7,9 +7,26 @@ This is the <b>WORK-IN-PROGRESS</b> repository for Mark59 - be aware it may NOT 
 
 ## Releases 
 
-<p>prepping for next Release (3.1?) <br>
+<p>Release 3.2.(.0) <br>
+  This was a major release 
   <ul>
-    <li>TOTO: Statiscal deviation from the mean between baseline and last run</li>
+    <li>Add Emulation Network Conditions (latency and byte rates)</li>
+    <li>Improve validatoin for SLA data entry</li>
+    <li>DataHunter sample includes a 'once only' run method (out-of-date driver warning)</li>	
+    <li>A Run can now be 'ignored' on trending graphic</li>	
+    <li>DataHunter 'policies' now named 'items' on pages</li>   
+    <li>Trending - show table by default</li>
+    <li>Include computation and graphics for 95 and 99th percentiles</li>	
+    <li>Groovy scripting for mark59-server-metrics-web (required db changes)</li>	
+    <li>Plugin dependenices updated to latest versions</li>	
+	<li>Dependenices update (inc SpringBoot 2.4.5, JMeter 5.4.1)</li>	
+    <li>Improve JavaDocs, fix typos etc</li>
+  </ul>  
+
+
+<p>Release to 3.1 <br>
+  <ul>
+    <li>minor release - please just use 3.2 </li>
   </ul>  
 
 
@@ -18,7 +35,6 @@ This is the <b>WORK-IN-PROGRESS</b> repository for Mark59 - be aware it may NOT 
     <li>Default port for metrics (Trend Analysis) changed from 8080 to 8083</li>
     <li>Sample projects updated, docker-compose files added to allow for the Jenkins Docker Sample </li>
   </ul>  
-
 
 
 <p>Release 3.0.(.0) <br>

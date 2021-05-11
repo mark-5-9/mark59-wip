@@ -313,14 +313,18 @@ public class DataHunterLifecyclePvtScript  extends SeleniumAbstractJavaSamplerCl
 		//1: single
 		thisTest.runSeleniumTest(KeepBrowserOpen.ONFAILURE);
 		
-		//2: multi-thread
+		//2: multi-thread  (with and  without KeepBrowserOpen option) 
 //		thisTest.runMultiThreadedSeleniumTest(2, 2000);
+//		thisTest.runMultiThreadedSeleniumTest(2, 2000, KeepBrowserOpen.ONFAILURE);   
+  
 
 		//3: multi-thread with parms
 //		Map<String, java.util.List<String>>threadParameters = new java.util.LinkedHashMap<String,java.util.List<String>>();
 //		threadParameters.put("USER",                              java.util.Arrays.asList( "USER-MATTHEW", "USER-MARK", "USER-LUKE", "USER-JOHN"));
-//		threadParameters.put(SeleniumDriverFactory.HEADLESS_MODE, java.util.Arrays.asList( "true"        , "false"    , "true"     , "true"));		
+//		threadParameters.put(SeleniumDriverFactory.HEADLESS_MODE, java.util.Arrays.asList( "true"        , "false"    , "true"     , "true"));	
+//		//  (with and  without KeepBrowserOpen option)
 //		thisTest.runMultiThreadedSeleniumTest(4, 2000, threadParameters);
+//		thisTest.runMultiThreadedSeleniumTest(4, 2000, threadParameters, KeepBrowserOpen.ONFAILURE);		
 	}
 		
 }

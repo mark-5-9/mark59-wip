@@ -43,6 +43,26 @@
 
 	<build>
 		<plugins>
+		
+			<!--local build goals: clean package -->	
+			<!--this jar with all dependencies is for 'GROOVY' scripting in JMeter -->			
+			<plugin>
+			    <groupId>org.apache.maven.plugins</groupId>
+			    <artifactId>maven-assembly-plugin</artifactId>
+			    <version>3.3.0</version>
+				<configuration>
+					<appendAssemblyId>false</appendAssemblyId>
+					<descriptorRefs><descriptorRef>jar-with-dependencies</descriptorRef></descriptorRefs>
+					<finalName>${project.artifactId}-${version}-for-JSR223</finalName>
+				</configuration>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals><goal>single</goal></goals>
+					</execution>
+				</executions>
+			</plugin>	
+			
 			<!--local build goals: clean package install -->	
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -54,6 +74,7 @@
 						<goals><goal>jar</goal></goals>
 					</execution>
 				</executions>
+
 			</plugin>
 		</plugins>
 	</build>

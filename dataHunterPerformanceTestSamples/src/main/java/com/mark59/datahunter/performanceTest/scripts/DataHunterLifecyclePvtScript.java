@@ -19,6 +19,7 @@ package com.mark59.datahunter.performanceTest.scripts;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Properties;
 import java.util.concurrent.ThreadLocalRandom;
 
 import org.apache.jmeter.protocol.java.sampler.JavaSamplerContext;
@@ -81,7 +82,6 @@ import com.mark59.seleniumDSL.pageElements.HtmlTableRow;
 public class DataHunterLifecyclePvtScript  extends SeleniumAbstractJavaSamplerClient {
 
 	private static final Logger LOG = LogManager.getLogger(DataHunterLifecyclePvtScript.class);	
-	private static Boolean printedOnce = false;
 	
 	@Override
 	protected Map<String, String> additionalTestParameters() {
@@ -274,25 +274,27 @@ public class DataHunterLifecyclePvtScript  extends SeleniumAbstractJavaSamplerCl
 		}
 	}
 	
+	
 	@SuppressWarnings("unchecked")
 	private static synchronized void PrintSomeMsgOnceAtStartUp(String dataHunterUrl, WebDriver driver) {
-		if (!printedOnce) {			
-			LOG.info(" " + DataHunterLifecyclePvtScript.class.getSimpleName() +  " is using DataHunter with Url " + dataHunterUrl + "/dataHunter");
+		Properties sysprops = System.getProperties();
+		if (!"true".equals(sysprops.get("printedOnce")) ) {	
+			LOG.info("  using DataHunter with Url " + dataHunterUrl + "/dataHunter");
 			Capabilities caps = ((ChromeDriver)driver).getCapabilities();
 			LOG.info(" Browser Name and Version : " + caps.getBrowserName() + " " + caps.getVersion());
 			if ("chrome".equalsIgnoreCase(caps.getBrowserName()) && caps.getCapability("chrome") != null ){
 				String chromedriverVersion =  ((Map<String, String>)caps.getCapability("chrome")).get("chromedriverVersion");
 				LOG.info(" Chrome Driver Version    : " +  ((Map<String, String>)caps.getCapability("chrome")).get("chromedriverVersion"));
 				if (chromedriverVersion != null &&  chromedriverVersion.startsWith("2.44") ) {
-					String outDatedDriver = "\n\n You are using the outdated ChromeDriver that ships with the Mark59 Selenium test scripts"
-							+ " project 'dataHunterPerformanceTestSamples'.  It may be unstable or not work at all." 				
-					        +  "\n - Please visit https://chromedriver.chromium.org/downloads and update to a ChomeDriver which supports "
-					        + "Chrome browser version " + caps.getVersion() + "\n";
+					String outDatedDriver = "\n\n You are using the outdated ChromeDriver that ships with the Mark59 Selenium test scripts " +
+							" project 'dataHunterPerformanceTestSamples'.  It may be unstable or not work at all." + 				
+							"\n - Please visit https://chromedriver.chromium.org/downloads and update to a ChomeDriver which supports " +
+							"Chrome browser version " + caps.getVersion() + "\n";
 					System.out.println(outDatedDriver);
 					LOG.warn(outDatedDriver);
 				}	
 			}
-			printedOnce = true;
+			sysprops.put("printedOnce", "true");
 		}
 	}
 

@@ -1,8 +1,10 @@
-package com.mark59.datahunter.performanceTest.scripts;
+package com.mark59.datahunter.performanceTest.scripts.jsr223format;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Properties;
 import java.util.concurrent.ThreadLocalRandom;
+
 import org.apache.jmeter.protocol.java.sampler.JavaSamplerContext;
 import org.apache.logging.log4j.Level;
 import org.openqa.selenium.By;
@@ -12,16 +14,16 @@ import org.openqa.selenium.PageLoadStrategy;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 
-import com.mark59.core.*;
+import com.mark59.core.Outcome;
 import com.mark59.core.utils.*;
 import com.mark59.selenium.corejmeterimpl.*;
 import com.mark59.selenium.drivers.SeleniumDriverFactory;
-import com.mark59.seleniumDSL.core.*;
+import com.mark59.seleniumDSL.core._GenericPage;
 import com.mark59.seleniumDSL.pageElements.*;
 
 
 // >> --------- COMMENT OUT THE NEXT TWO LINES ---------  
-public class DataHunterLifecyclePvtScriptAsSingleJSR223  {
+public class DataHunterLifecyclePvtScriptJSR223Format  {
 public static void main(String[] args) throws InterruptedException{
 // <<  
 	
@@ -29,15 +31,15 @@ public static void main(String[] args) throws InterruptedException{
 class ThisScript extends SeleniumAbstractJavaSamplerClient {
 	
 	final class TestConstants {
-		public static final String DELETE_MULTIPLE_POLICIES_URL_PATH	= "/dataHunter/delete_multiple_policies";
-		public static final String COUNT_POLICIES_URL_PATH 				= "/dataHunter/count_policies";	
-		public static final String ADD_POLICY_URL_PATH      			= "/dataHunter/add_policy";
-		public static final String PRINT_SELECTED_POLICIES_URL_PATH		= "/dataHunter/print_selected_policies";
-		public static final String COUNT_POLICIES_BREAKDOWN_URL_PATH	= "/dataHunter/count_policies_breakdown";		
-		public static final String NEXT_POLICY_URL_PATH					= "/dataHunter/next_policy";	
-		public static final String UNUSED								= "UNUSED";  
-		public static final String EQUALS 								= "EQUALS";
-		public static final String SELECT_MOST_RECENTLY_ADDED 			= "SELECT_MOST_RECENTLY_ADDED";  
+		public static final String DELETE_MULTIPLE_POLICIES_URL_PATH    = "/dataHunter/delete_multiple_policies";
+		public static final String COUNT_POLICIES_URL_PATH              = "/dataHunter/count_policies";	
+		public static final String ADD_POLICY_URL_PATH                  = "/dataHunter/add_policy";
+		public static final String PRINT_SELECTED_POLICIES_URL_PATH     = "/dataHunter/print_selected_policies";
+		public static final String COUNT_POLICIES_BREAKDOWN_URL_PATH    = "/dataHunter/count_policies_breakdown";		
+		public static final String NEXT_POLICY_URL_PATH                 = "/dataHunter/next_policy";	
+		public static final String UNUSED                               = "UNUSED";  
+		public static final String EQUALS                               = "EQUALS";
+		public static final String SELECT_MOST_RECENTLY_ADDED           = "SELECT_MOST_RECENTLY_ADDED";  
 	}
 	
 	final class DataHunterInputPages extends _GenericPage {
@@ -69,7 +71,6 @@ class ThisScript extends SeleniumAbstractJavaSamplerClient {
 		public SubmitBtn submit() {
 			return new SubmitBtn(driver, By.id("submit"));
 		};
-	
 	}
 	
 	
@@ -111,7 +112,7 @@ class ThisScript extends SeleniumAbstractJavaSamplerClient {
 					", rows affected [" +  rowsAffected().getText() + "], details [" + sqlResultText().getText() + "]";		
 		}
 	}
-	
+
 	
 	@Override
 	protected Map<String, String> additionalTestParameters() {
@@ -159,7 +160,7 @@ class ThisScript extends SeleniumAbstractJavaSamplerClient {
 		DatatHunterActionPages resultsPage = new DatatHunterActionPages(driver);
 		
 		jm.startTransaction("DH-lifecycle-0100-deleteMultiplePolicies");		
-		dataHunterInputPages.submit().submit().waitUntilClickable( resultsPage.backLink() );   // ** note 1
+		dataHunterInputPages.submit().submit().waitUntilClickable( resultsPage.backLink() );  
 		waitActionPageCheckSqlOk(new DatatHunterActionPages(driver));
 		jm.endTransaction("DH-lifecycle-0100-deleteMultiplePolicies");	
 	
@@ -175,11 +176,11 @@ class ThisScript extends SeleniumAbstractJavaSamplerClient {
 //			jm.writeScreenshot("add_policy_TESTID" + i);
 
 			jm.startTransaction("DH-lifecycle-0200-addPolicy");
-			dataHunterInputPages.submit().submit().waitUntilClickable( resultsPage.backLink() );   // ** note 1;	
+			dataHunterInputPages.submit().submit().waitUntilClickable( resultsPage.backLink() );   
 			waitActionPageCheckSqlOk(resultsPage);
 			jm.endTransaction("DH-lifecycle-0200-addPolicy");
 			
-			resultsPage.backLink().click().waitUntilClickable( dataHunterInputPages.submit() ).thenSleep();    // ** note 1 & note 2
+			resultsPage.backLink().click().waitUntilClickable( dataHunterInputPages.submit() ).thenSleep();    
 		} 
 	
 //		dummy transaction just to test transaction failure behavior
@@ -279,9 +280,11 @@ class ThisScript extends SeleniumAbstractJavaSamplerClient {
 		}
 	}
 	
+
 	@SuppressWarnings("unchecked")
 	private synchronized void PrintSomeMsgOnceAtStartUp(String dataHunterUrl, WebDriver driver) {
-		if (!"true".equals(System.getProperty("printedOnce")) ) {	
+		Properties sysprops = System.getProperties();
+		if (!"true".equals(sysprops.get("printedOnce")) ) {	
 			LOG.info("  using DataHunter with Url " + dataHunterUrl + "/dataHunter");
 			Capabilities caps = ((ChromeDriver)driver).getCapabilities();
 			LOG.info(" Browser Name and Version : " + caps.getBrowserName() + " " + caps.getVersion());
@@ -297,10 +300,11 @@ class ThisScript extends SeleniumAbstractJavaSamplerClient {
 					LOG.warn(outDatedDriver);
 				}	
 			}
-			System.setProperty("printedOnce", "true");
+			sysprops.put("printedOnce", "true");
 		}
 	}
 };
+
 
 // >> --------- COMMENT OUT THE NEXT THREE LINES ---------  
 org.apache.jmeter.samplers.SampleResult SampleResult = new org.apache.jmeter.samplers.SampleResult();
@@ -308,18 +312,12 @@ SampleResult.sampleStart();
 Log4jConfigurationHelper.init(Level.INFO) ;
 // << 
 
-if (System.getProperty("printedOnce") == null) {
-    System.setProperty("printedOnce", "false");
-}
-ThisScript thisScript = new ThisScript();
-org.apache.jmeter.samplers.SampleResult testSampleResult = thisScript.runSeleniumTest(KeepBrowserOpen.NEVER);
-org.apache.jmeter.samplers.SampleResult[] testsubResults = testSampleResult.getSubResults();
-
-for (int i = 0; i < testSampleResult.getSubResults().length; i++) {
-	SampleResult.addSubResult(testsubResults[i], false);
+for (org.apache.jmeter.samplers.SampleResult subResult : new ThisScript().runSeleniumTest(KeepBrowserOpen.NEVER).getSubResults()) {
+	SampleResult.addSubResult(subResult, false);
 }
 SampleResult.setDataType("PARENT" );
 SampleResult.setEndTime(0);
+
 // >> --------- COMMENT OUT THE END BRACES BELOW --------- 
 }
 }

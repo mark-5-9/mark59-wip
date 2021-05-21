@@ -312,8 +312,11 @@ SampleResult.sampleStart();
 Log4jConfigurationHelper.init(Level.INFO) ;
 // << 
 
-for (org.apache.jmeter.samplers.SampleResult subResult : new ThisScript().runSeleniumTest(KeepBrowserOpen.NEVER).getSubResults()) {
-	SampleResult.addSubResult(subResult, false);
+org.apache.jmeter.samplers.SampleResult testResults = new ThisScript().runSeleniumTest(KeepBrowserOpen.NEVER);
+if (testResults != null) {
+	for (org.apache.jmeter.samplers.SampleResult subResult : testResults.getSubResults()) {
+		SampleResult.addSubResult(subResult, false);
+	}
 }
 SampleResult.setDataType("PARENT" );
 SampleResult.setEndTime(0);

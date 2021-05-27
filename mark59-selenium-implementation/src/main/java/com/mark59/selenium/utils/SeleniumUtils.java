@@ -16,8 +16,6 @@ package com.mark59.selenium.utils
  * limitations under the License.
  */
 
-
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.InputStreamReader;
@@ -107,7 +105,7 @@ public class SeleniumUtils {
 	 * <p>This is a 'hacky' work-around to see if Chrome is now installed at the newer location.  Just meant to help make the 'demo'     
 	 * script run, and intended for internal use only.  
 	 * 
-	 * @return updated Browser Executable location
+	 * @return updated chrome.exe file location
 	 */
 	public static String legacyChromedriverHack() {
 		String legacyWinChromeLocation = "C:/Program Files (x86)/Google/Chrome/Application/chrome.exe";

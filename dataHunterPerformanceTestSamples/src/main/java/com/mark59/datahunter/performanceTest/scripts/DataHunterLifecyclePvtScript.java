@@ -77,7 +77,6 @@ import com.mark59.seleniumDSL.pageElements.HtmlTableRow;
  * @author Philip Webb
  * Written: Australian Winter 2019
  * 
- * 
  */
 public class DataHunterLifecyclePvtScript  extends SeleniumAbstractJavaSamplerClient {
 

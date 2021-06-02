@@ -435,6 +435,7 @@ public class LrRunAccessDatabase {
 		serverTransaction.setTxnFirst(txnFirst);
 		serverTransaction.setTxnLast(txnLast);
 		serverTransaction.setTxnSum(totalOfValues);		
+		serverTransaction.setTxnDelay(new BigDecimal(-1.0));		
 
 		return serverTransaction;
 	}

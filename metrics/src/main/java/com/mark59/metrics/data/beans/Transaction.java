@@ -42,6 +42,7 @@ public class Transaction {
 	BigDecimal	txnFirst;	
 	BigDecimal	txnLast;	
 	BigDecimal	txnSum;	
+	BigDecimal	txnDelay;	
 
 	
 	public String getApplication() {
@@ -102,13 +103,13 @@ public class Transaction {
 		return txn95th;
 	}
 	public void setTxn95th(BigDecimal txn95th) {
-		this.txn95th = txn95th;
+		this.txn95th = txn95th.setScale(3, RoundingMode.HALF_UP);
 	}
 	public BigDecimal getTxn99th() {
 		return txn99th;
 	}
 	public void setTxn99th(BigDecimal txn99th) {
-		this.txn99th = txn99th;
+		this.txn99th = txn99th.setScale(3, RoundingMode.HALF_UP);
 	}
 	public Long getTxnPass() {
 		return txnPass;
@@ -146,13 +147,18 @@ public class Transaction {
 	public void setTxnSum(BigDecimal txnSum) {
 		this.txnSum = txnSum.setScale(3, RoundingMode.HALF_UP);
 	}
-	
+	public BigDecimal getTxnDelay() {
+		return txnDelay;
+	}
+	public void setTxnDelay(BigDecimal txnDelay) {
+		this.txnDelay = txnDelay.setScale(3, RoundingMode.HALF_UP);;
+	}
+
 	@Override
 	public String toString() {
 		String prettyPrint = "transaction : " + application
 				+ ", runTime="+runTime
 				+ ", txnId="+txnId
-//				+ ", txnName="+txnName
 				+ ", txnType="+txnType
 				+ ", txnMinimum="+txnMinimum
 				+ ", txnAverage="+txnAverage
@@ -166,6 +172,7 @@ public class Transaction {
 				+ ", txnFirst="+txnFirst
 				+ ", txnLast="+txnLast
 				+ ", txnSum="+txnSum
+				+ ", txnDelay="+txnDelay
 				;
 		return prettyPrint;
 	} 

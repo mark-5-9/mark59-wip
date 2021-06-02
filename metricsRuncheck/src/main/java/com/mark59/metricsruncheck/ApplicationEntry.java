@@ -27,8 +27,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import com.mark59.metrics.application.AppConstantsMetrics;
 
 /**
- * Entry point into RunCheck.  This process loads test run data into database, usable by the Mark59 Metric Trends Analysis web application,
- * checking transaction and metric SLAs for the run in the process 
+ * Entry point into RunCheck.  Runcheck loads test run the data into a database used by the Mark59 Metric Trends Analysis web application,
+ * checking transaction and metric SLAs for the run in the process.  
  *
  */
 @SpringBootApplication
@@ -41,7 +41,6 @@ public class ApplicationEntry  implements CommandLineRunner  {
 	public void run(String... args) throws Exception {
 	};
 
-	
 	
 	//For a quick and dirty test set the args at the start of the main  (examples in the commented out lines below):
 

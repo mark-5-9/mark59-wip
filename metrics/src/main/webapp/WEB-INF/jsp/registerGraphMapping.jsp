@@ -69,7 +69,7 @@
       <td>Value Derivation:</td>
       <td colspan=2 style="font-size: 12px" ><br>
       		<b>predefined:</b> Minimum, Maximum, Average, StdDeviation, 90th, 95th, 99th, Pass, Fail, Stop, First, Last, Sum  <br>
-          	<b>available within sql:</b> TXN_MINIMUM, TXN_AVERAGE, TXN_MAXIMUM, TXN_STD_DEVIATION, TXN_90TH, TXN_95TH, TXN_99TH, TXN_PASS, TXN_FAIL, TXN_STOP<br>
+          	<b>available within sql:</b> TXN_MINIMUM, TXN_AVERAGE, TXN_MAXIMUM, TXN_STD_DEVIATION, TXN_90TH, TXN_95TH, TXN_99TH, TXN_PASS, TXN_FAIL, TXN_STOP, TXN_DELAY<br>
           	<b>sample sql computation:</b><span style="font-family:'Courier New'">&nbsp;&nbsp;COALESCE( 100*TXN_FAIL/(TXN_PASS+TXN_FAIL) , -1)</span><br>
           	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;For testing purposes, a sql computation could be validated manually using sql such as:<br>
           	<span style="font-family:'Courier New'"> 

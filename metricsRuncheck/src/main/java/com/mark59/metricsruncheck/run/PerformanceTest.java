@@ -16,6 +16,7 @@
 
 package com.mark59.metricsruncheck.run;
 
+import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -29,9 +30,11 @@ import com.mark59.core.utils.Mark59Constants;
 import com.mark59.metrics.application.AppConstantsMetrics;
 import com.mark59.metrics.data.beans.DateRangeBean;
 import com.mark59.metrics.data.beans.Run;
+import com.mark59.metrics.data.beans.Sla;
 import com.mark59.metrics.data.beans.Transaction;
 import com.mark59.metrics.data.eventMapping.dao.EventMappingDAO;
 import com.mark59.metrics.data.run.dao.RunDAO;
+import com.mark59.metrics.data.sla.dao.SlaDAO;
 import com.mark59.metrics.data.testTransactions.dao.TestTransactionsDAO;
 import com.mark59.metrics.data.transaction.dao.TransactionDAO;
 
@@ -45,6 +48,7 @@ public class PerformanceTest {
 	protected TransactionDAO transactionDAO; 	
 	protected TestTransactionsDAO testTransactionsDAO; 	
 	protected EventMappingDAO eventMappingDAO; 
+	protected SlaDAO slaAO; 
 
 	protected Run run = new Run();
 	private List<Transaction> transactionSummariesThisRun;
@@ -56,6 +60,7 @@ public class PerformanceTest {
 		transactionDAO = (TransactionDAO)context.getBean("transactionDAO");
 		testTransactionsDAO = (TestTransactionsDAO)context.getBean("testTransactionsDAO");		
 		eventMappingDAO = (EventMappingDAO)context.getBean("eventMappingDAO");	
+		slaAO = (SlaDAO)context.getBean("slaDAO");	
 		
 		run.setApplication(application);
 		run.setRunTime(AppConstantsMetrics.RUN_TIME_YET_TO_BE_CALCULATED );
@@ -111,6 +116,11 @@ public class PerformanceTest {
 		transactionSummariesThisRun = testTransactionsDAO.extractTransactionResponsesSummary(run.getApplication(), Mark59Constants.DatabaseTxnTypes.TRANSACTION.name() );  
       	for (Transaction transaction : transactionSummariesThisRun) {  // insert a row for each transaction captured 
       		transaction.setRunTime(run.getRunTime());
+      		
+      		Sla sla = slaAO.getSla(run.getApplication(), transaction.getTxnId());
+      		if (sla != null && sla.getTxnDelay() != null ){
+      			transaction.setTxnDelay(sla.getTxnDelay());
+      		}
       		transactionDAO.insert(transaction);
       	}		
 		return transactionSummariesThisRun;

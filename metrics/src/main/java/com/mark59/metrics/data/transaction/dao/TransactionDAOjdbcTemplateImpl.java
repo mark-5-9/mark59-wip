@@ -58,8 +58,8 @@ public class TransactionDAOjdbcTemplateImpl implements TransactionDAO
 		String sql = "INSERT INTO TRANSACTION "
 				+ "(APPLICATION, RUN_TIME, TXN_ID, TXN_TYPE, "
 				+ "TXN_MINIMUM, TXN_AVERAGE, TXN_MAXIMUM, TXN_STD_DEVIATION, TXN_90TH, TXN_95TH, TXN_99TH, "
-				+ "TXN_PASS, TXN_FAIL, TXN_STOP, TXN_FIRST, TXN_LAST, TXN_SUM  )"
-				+ " VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+				+ "TXN_PASS, TXN_FAIL, TXN_STOP, TXN_FIRST, TXN_LAST, TXN_SUM, TXN_DELAY)"
+				+ " VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 		
 //		System.out.println("TransactionDAOjdbcTemplateImpl insert [" + transaction.toString() + "]"   );
 		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
@@ -70,7 +70,7 @@ public class TransactionDAOjdbcTemplateImpl implements TransactionDAO
 				transaction.getTxnMinimum(), transaction.getTxnAverage(), transaction.getTxnMaximum(),
 				transaction.getTxnStdDeviation(), transaction.getTxn90th(), transaction.getTxn95th(), transaction.getTxn99th(),
 				transaction.getTxnPass(), transaction.getTxnFail(), transaction.getTxnStop(), 
-				transaction.getTxnFirst(), transaction.getTxnLast(), transaction.getTxnSum() });
+				transaction.getTxnFirst(), transaction.getTxnLast(), transaction.getTxnSum(), transaction.getTxnDelay() });
 	}
 	
 	
@@ -174,17 +174,15 @@ public class TransactionDAOjdbcTemplateImpl implements TransactionDAO
 		List<Transaction> selectedTransactions = selectTopNthRankedTransactionsByValue(transactionListOrderedByValue, nthRankedTxn);  
 		return selectedTransactions;
 	}
-	
- 
 	 
 	 
 	/**
-	 * Note: The supplied database installs supplied will put the lists is in UTF-8 order (h2 default, MySQL utf8mb4_0900_bin collation)
-	 * This should be pretty close, but to avoid any  potential for issues for odd non-standard chars or a different collation being chosen
-	 * on a database, the returned list is re-ordered in the natural order of Java sorting.
+	 * Note: The supplied database installs (DDL) will put the lists is in UTF-8 order (h2 default, MySQL utf8mb4_0900_bin collation)
+	 * This should be pretty close to the ordering used by Java, but to avoid any  potential for issues for odd non-standard chars or
+	 * a different collation being chosen on a database, the returned list is re-ordered in the natural order of Java sorting.
 	 * 
-	 * Important as this list is supplied to graph datapoints creation where a string compareTo is done.  The datapoints would be out of 
-	 * sequence and the graph could fail if the compareTo did not work properly because the list was out of natural Java order.  
+	 * This is Important as this list is supplied to the graph datapoints creation routine where a string compareTo is done.  The datapoints
+	 * would be out of sequence and the graph could fail if the compareTo did not work properly because the list was out of natural Java order.  
 	 */
 	@Override
 	public List<String> returnListOfSelectedTransactionIds(String transactionIdsSQL, String nthRankedTxn){

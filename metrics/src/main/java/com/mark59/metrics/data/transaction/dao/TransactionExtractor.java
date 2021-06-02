@@ -51,6 +51,7 @@ public class TransactionExtractor implements ResultSetExtractor<Transaction> {
 	  transaction.setTxnFirst(resultSet.getBigDecimal(15));
 	  transaction.setTxnLast(resultSet.getBigDecimal(16));
 	  transaction.setTxnSum(resultSet.getBigDecimal(17));
+	  transaction.setTxnDelay(resultSet.getBigDecimal(18));	  
 	  
 	  return transaction;
 	 }

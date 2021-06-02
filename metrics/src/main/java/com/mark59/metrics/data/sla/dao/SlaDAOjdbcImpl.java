@@ -45,8 +45,9 @@ public class SlaDAOjdbcImpl implements SlaDAO {
 		/* transaction name and id the same thing for now.. */
 		String sql = "INSERT INTO SLA "
 				+ "(TXN_ID, APPLICATION, IS_TXN_IGNORED, SLA_90TH_RESPONSE, SLA_95TH_RESPONSE, SLA_99TH_RESPONSE, "
-				+ "SLA_PASS_COUNT, SLA_PASS_COUNT_VARIANCE_PERCENT, SLA_FAIL_COUNT, SLA_FAIL_PERCENT, XTRA_NUM, SLA_REF_URL, COMMENT) "
-				+ "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)";
+				+ "SLA_PASS_COUNT, SLA_PASS_COUNT_VARIANCE_PERCENT, SLA_FAIL_COUNT, SLA_FAIL_PERCENT, "
+				+ "TXN_DELAY, XTRA_NUM, XTRA_INT, SLA_REF_URL, COMMENT) "
+				+ "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
 		sla = nullsToDefaultValues(sla);
 
@@ -54,7 +55,8 @@ public class SlaDAOjdbcImpl implements SlaDAO {
 		jdbcTemplate.update(sql,
 				new Object[] { sla.getTxnId(), sla.getApplication(), sla.getIsTxnIgnored(), sla.getSla90thResponse(), 
 						sla.getSla95thResponse(), sla.getSla99thResponse(),	sla.getSlaPassCount(),sla.getSlaPassCountVariancePercent(),
-						sla.getSlaFailCount(), sla.getSlaFailPercent(), sla.getXtraNum(), sla.getSlaRefUrl(), sla.getComment()});
+						sla.getSlaFailCount(), sla.getSlaFailPercent(), 
+						sla.getTxnDelay(), sla.getXtraNum(), sla.getXtraInt(), sla.getSlaRefUrl(), sla.getComment()});
 	}
 
 
@@ -141,7 +143,8 @@ public class SlaDAOjdbcImpl implements SlaDAO {
 			sla = nullsToDefaultValues(sla);
 
 			String sql = "UPDATE SLA set APPLICATION = ?, IS_TXN_IGNORED = ?,SLA_90TH_RESPONSE = ?, SLA_95TH_RESPONSE = ?, SLA_99TH_RESPONSE = ?, "
-					+ "SLA_PASS_COUNT = ?, SLA_PASS_COUNT_VARIANCE_PERCENT = ?, SLA_FAIL_COUNT = ?, SLA_FAIL_PERCENT = ?, XTRA_NUM = ?, SLA_REF_URL = ?, COMMENT = ? "
+					+ "SLA_PASS_COUNT = ?, SLA_PASS_COUNT_VARIANCE_PERCENT = ?, SLA_FAIL_COUNT = ?, SLA_FAIL_PERCENT = ?, "
+					+ "TXN_DELAY = ?, XTRA_NUM = ?, XTRA_INT = ?, SLA_REF_URL = ?, COMMENT = ? "
 					+ "where APPLICATION=? and TXN_ID = ?";
 			
 			
@@ -149,7 +152,7 @@ public class SlaDAOjdbcImpl implements SlaDAO {
 			jdbcTemplate.update(sql, 
 					new Object[] { sla.getApplication(), sla.getIsTxnIgnored(), sla.getSla90thResponse(),sla.getSla95thResponse(), sla.getSla99thResponse(),
 							sla.getSlaPassCount(),sla.getSlaPassCountVariancePercent(),	sla.getSlaFailCount(), sla.getSlaFailPercent(), 
-							sla.getXtraNum(),sla.getSlaRefUrl(), sla.getComment(),
+							sla.getTxnDelay(), sla.getXtraNum(), sla.getXtraInt(), sla.getSlaRefUrl(), sla.getComment(),
 							sla.getApplication(), sla.getTxnId() });
 		}
 	}
@@ -282,8 +285,12 @@ public class SlaDAOjdbcImpl implements SlaDAO {
 			sla.setSlaFailCount(new Long(-1));
 		if (sla.getSlaFailPercent() == null)
 			sla.setSlaFailPercent(new BigDecimal(2.0));
+		if (sla.getTxnDelay() == null)
+			sla.setTxnDelay(new BigDecimal(0.0));		
 		if (sla.getXtraNum() == null)
 			sla.setXtraNum(new BigDecimal(0.0));
+		if (sla.getXtraInt() == null)
+			sla.setXtraInt(new Long(0));		
 		return sla;
 	}
 	

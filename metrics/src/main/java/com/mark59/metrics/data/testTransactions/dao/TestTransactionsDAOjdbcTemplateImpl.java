@@ -363,6 +363,7 @@ public class TestTransactionsDAOjdbcTemplateImpl implements TestTransactionsDAO
       		transaction.setTxnFirst(new BigDecimal(-1.0));
       		transaction.setTxnLast(new BigDecimal(-1.0));
       		transaction.setTxnSum(new BigDecimal(-1.0));
+      		transaction.setTxnDelay(new BigDecimal(0.0));		      		
       		transactions.add(transaction);
 //			System.out.println("populating extractTransactionStats: " + row.get("TXN_ID")  ) ;
 		}
@@ -497,6 +498,7 @@ public class TestTransactionsDAOjdbcTemplateImpl implements TestTransactionsDAO
 		metricTransaction.setTxnFirst(txnFirst);
 		metricTransaction.setTxnLast(txnLast);
 		metricTransaction.setTxnSum(totalOfValues);		
+		metricTransaction.setTxnDelay(new BigDecimal(0.0));		
 
 		return metricTransaction;
 	}

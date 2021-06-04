@@ -168,4 +168,28 @@ public class SlaTransactionResult {
 		this.slaPassCountVariancePercent = slaPassCountVariancePercent;
 	}
 
+	@Override
+	public String toString() {
+		String prettyPrint = "txnId : " + txnId
+				+ ", passedAllSlas="+passedAllSlas
+				+ ", foundSLAforTxnId="+foundSLAforTxnId
+				+ ", passed90thResponse="+passed90thResponse
+				+ ", txn90thResponse="+txn90thResponse
+				+ ", sla90thResponse="+sla90thResponse
+				+ ", passed95thResponse="+passed95thResponse
+				+ ", txn95thResponse="+txn95thResponse
+				+ ", sla95thResponse="+sla95thResponse
+				+ ", passed99thResponse="+passed99thResponse
+				+ ", txn99thResponse="+txn99thResponse
+				+ ", sla99thResponse="+sla99thResponse
+				+ ", passedFailPercent="+passedFailPercent
+				+ ", txnFailurePercent="+txnFailurePercent
+				+ ", slaFailurePercent="+slaFailurePercent
+				+ ", passedPassCount="+passedPassCount
+				+ ", txnPassCount="+txnPassCount
+				+ ", slaPassCount="+slaPassCount
+				+ ", slaPassCountVariancePercent="+slaPassCountVariancePercent
+				;
+		return prettyPrint;
+	} 
 }

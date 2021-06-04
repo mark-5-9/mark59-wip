@@ -156,7 +156,7 @@ public class Transaction {
 
 	@Override
 	public String toString() {
-		String prettyPrint = "transaction : " + application
+		String prettyPrint = "application="+application
 				+ ", runTime="+runTime
 				+ ", txnId="+txnId
 				+ ", txnType="+txnType

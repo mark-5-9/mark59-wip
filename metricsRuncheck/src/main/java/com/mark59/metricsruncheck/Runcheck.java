@@ -104,7 +104,9 @@ public class Runcheck  implements CommandLineRunner
 	private static String argKeeprawresults;
 	private static String argTimeZone;
 
+	private PerformanceTest performanceTest;
 	private List<MetricSlaResult> metricSlaResults = new ArrayList<MetricSlaResult>();
+	private List<SlaTransactionResult> slaTransactionResults = new ArrayList<SlaTransactionResult>();
 
 	
 	public static void parseArguments(String[] args) {
@@ -154,7 +156,7 @@ public class Runcheck  implements CommandLineRunner
 		argExcludestart  	= commandLine.getOptionValue("x", "0");		
 		argCaptureperiod  	= commandLine.getOptionValue("c", AppConstantsMetrics.ALL );
 		argIgnoredErrors	= commandLine.getOptionValue("e", "");				
-		argSimulationLog	= commandLine.getOptionValue("s", "simulation.log");				
+		argSimulationLog	= commandLine.getOptionValue("l", "simulation.log");				
 		argKeeprawresults	= commandLine.getOptionValue("k", String.valueOf(false));
 		argTimeZone  		= commandLine.getOptionValue("z", new GregorianCalendar().getTimeZone().getID() );				
 		
@@ -341,8 +343,6 @@ public class Runcheck  implements CommandLineRunner
 	
 	public void loadTestRun(String tool, String application, String input, String runReference, String excludestart, String captureperiod, 
 			String timeZone, String keeprawresults, String ignoredErrors, String simulationLog) throws IOException {
-
-		PerformanceTest performanceTest;
 		
 		if (AppConstantsMetrics.JMETER.equalsIgnoreCase(tool)){		
 			performanceTest = new JmeterRun(context, application, input, runReference, excludestart, captureperiod, keeprawresults);
@@ -352,7 +352,7 @@ public class Runcheck  implements CommandLineRunner
 			performanceTest = new GatlingRun(context, application, input, runReference, excludestart, captureperiod, ignoredErrors, simulationLog);
 		}
 		
-		List<SlaTransactionResult> slaTransactionResults = new SlaChecker().listTransactionsWithFailedSlas(application, performanceTest.getTransactionSummariesThisRun(), slaDAO);;
+		slaTransactionResults = new SlaChecker().listTransactionsWithFailedSlas(application, performanceTest.getTransactionSummariesThisRun(), slaDAO);;
 		printTransactionalMetricSlaResults(slaTransactionResults);
 		
 		String runTime = performanceTest.getRunSummary().getRunTime(); 
@@ -412,7 +412,6 @@ public class Runcheck  implements CommandLineRunner
 		return allPassed;
 	}
 
-
 	
 	private void printMetricSlaResults(List<MetricSlaResult> metricSlaResults) {
 		for (MetricSlaResult metricSlaResult : metricSlaResults) {
@@ -423,6 +422,21 @@ public class Runcheck  implements CommandLineRunner
 		}
 	}
 
+	
+	/**
+	 * for testing purposes
+	 * @return performanceTest
+	 */
+	public PerformanceTest getPerformanceTest(){
+		return performanceTest;
+	}	
+	/**
+	 * for testing purposes
+	 * @return metricSlaResults
+	 */
+	public List<SlaTransactionResult> getSlaTransactionResults() {
+		return slaTransactionResults;
+	}
 	/**
 	 * for testing purposes
 	 * @return metricSlaResults

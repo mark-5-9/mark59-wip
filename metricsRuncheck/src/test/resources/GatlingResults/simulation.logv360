@@ -1,4 +1,4 @@
-GettrashSimulation	gettrashsimulation	1622678945084	 	3.6.0
+RUN	Simulations.GetTrashSimulation	gettrashsimulation	1622677317818	 	3.6.0
 USER	Get trash list scenario	START	1622677319290
 REQUEST		Get trash List	1622677319320	1622677339399	KO	i.n.c.ConnectTimeoutException: connection timed out: les-trash/111.666.17.18:8080
 ERROR	Get Single trash Record: Failed to build request: No attribute named 'randomCSV' is defined 	1622677339405

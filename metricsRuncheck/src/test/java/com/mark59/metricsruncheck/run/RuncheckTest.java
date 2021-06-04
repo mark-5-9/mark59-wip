@@ -105,7 +105,7 @@ public class RuncheckTest extends TestCase {
 	
 	@Test
 	public void testRuncheckJMeterGeneralTest() {
-		Runcheck.parseArguments(new String[] { "-a", "DataHunter", "-i", "./src/test/resources/JmeterResults", "-d", Mark59Constants.H2MEM, "-s","metricsmem" });
+		Runcheck.parseArguments(new String[] { "-a", "DataHunter", "-i", "./src/test/resources/JmeterResultsDataHunterGeneral", "-d", Mark59Constants.H2MEM, "-s","metricsmem" });
 		SpringApplication springApplication = new SpringApplication(Runcheck.class);
 		springApplication.setWebApplicationType(WebApplicationType.NONE);
 		springApplication.setBannerMode(Banner.Mode.OFF);	

@@ -20,6 +20,8 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
@@ -108,8 +110,10 @@ public class JmeterRun extends PerformanceTest  {
 				try {
 					sampleCount = sampleCount + loadTestTransactionDataForaJmeterFile(jmeterResultsFile, application);
 				} catch (IOException e) {
-					System.out.println( "Error: problem with processing Jmeter results file transactions " + jmeterResultsFile.getName() );
-					e.printStackTrace();
+					System.out.println( "Error : problem with processing Jmeter results file transactions " + jmeterResultsFile.getName() );
+					StringWriter sw = new StringWriter();
+					e.printStackTrace(new PrintWriter(sw));
+					throw new RuntimeException(e.getMessage());
 				}
 			} else {
 				System.out.println("   " + jmeterResultsFile.getName() + " bypassed (only files in the input folder with a suffix of .xml, .csv or .jtl are processed)"  ); 
@@ -367,8 +371,7 @@ public class JmeterRun extends PerformanceTest  {
 	    		String transactionNameLabel = csvDataLineFields[fieldPoslabel];
 	    		String inputDatatype 		= csvDataLineFields[fieldPosdataType];
 
-	    		if (!transactionNameLabel.startsWith(IGNORE) &&
-	    			!inputDatatype.equals(JMeterFileDatatypes.PARENT.getDatatypeText() )){
+	    		if (!transactionNameLabel.startsWith(IGNORE) &&  !inputDatatype.equals(JMeterFileDatatypes.PARENT.getDatatypeText() )){
 	    			addCsvSampleToTestTransactionList(testTransactionList, csvDataLineFields, application);
 					samplesCreated++;
 		    	} 	    		

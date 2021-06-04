@@ -50,6 +50,7 @@ public class AppConstantsMetrics {
 	
 	public static final String LOADRUNNER 	= "Loadrunner";
 	public static final String JMETER		= "Jmeter";	
+	public static final String GATLING		= "Gatling";	
 	
 	
 	public static final String RUN_TIME_YET_TO_BE_CALCULATED	= "000000000000";

@@ -129,32 +129,32 @@ public class RuncheckTest extends TestCase {
 		assertEquals(9, transactions.size() );
 		for (Transaction transaction : transactions) {
 			if ("DH-lifecycle-0001-gotoDeleteMultiplePoliciesUrl".equals(transaction.getTxnId())){
-				assertEquals ("application=DataHunter, runTime=202005151700, txnId=DH-lifecycle-0001-gotoDeleteMultiplePoliciesUrl, txnType=TRANSACTION, txnMinimum=0.016, txnAverage=0.493, txnMaximum=2.115,"
-						+ " txn90th=1.175, txn95th=2.030, txn99th=2.115, txnPass=28, txnFail=0, txnStop=0, txnFirst=-1.000, txnLast=-1.000, txnSum=-1.000, txnDelay=0.000", transaction.toString());
+				assertEquals ("application=DataHunter, runTime=202005151700, txnId=DH-lifecycle-0001-gotoDeleteMultiplePoliciesUrl, txnType=TRANSACTION, txnMinimum=0.016, txnAverage=0.493, txnMedian=0.026,"
+						+ " txnMaximum=2.115, txn90th=1.175, txn95th=2.030, txn99th=2.115, txnPass=28, txnFail=0, txnStop=0, txnFirst=-1.000, txnLast=-1.000, txnSum=-1.000, txnDelay=0.000", transaction.toString());
 			} else if ("DH-lifecycle-0100-deleteMultiplePolicies".equals(transaction.getTxnId())){
-				assertEquals ("application=DataHunter, runTime=202005151700, txnId=DH-lifecycle-0100-deleteMultiplePolicies, txnType=TRANSACTION, txnMinimum=0.117, txnAverage=0.181, txnMaximum=0.488,"
-						+ " txn90th=0.235, txn95th=0.359, txn99th=0.488, txnPass=28, txnFail=0, txnStop=0, txnFirst=-1.000, txnLast=-1.000, txnSum=-1.000, txnDelay=0.200", transaction.toString());
+				assertEquals ("application=DataHunter, runTime=202005151700, txnId=DH-lifecycle-0100-deleteMultiplePolicies, txnType=TRANSACTION, txnMinimum=0.117, txnAverage=0.181, txnMedian=0.148,"
+						+ " txnMaximum=0.488, txn90th=0.235, txn95th=0.359, txn99th=0.488, txnPass=28, txnFail=0, txnStop=0, txnFirst=-1.000, txnLast=-1.000, txnSum=-1.000, txnDelay=0.200", transaction.toString());
 			} else if ("DH-lifecycle-0200-addPolicy".equals(transaction.getTxnId())){
-				assertEquals ("application=DataHunter, runTime=202005151700, txnId=DH-lifecycle-0200-addPolicy, txnType=TRANSACTION, txnMinimum=0.111, txnAverage=0.156, txnMaximum=0.377,"
-						+ " txn90th=0.194, txn95th=0.217, txn99th=0.350, txnPass=90, txnFail=0, txnStop=0, txnFirst=-1.000, txnLast=-1.000, txnSum=-1.000, txnDelay=0.000", transaction.toString());
+				assertEquals ("application=DataHunter, runTime=202005151700, txnId=DH-lifecycle-0200-addPolicy, txnType=TRANSACTION, txnMinimum=0.111, txnAverage=0.156, txnMedian=0.147,"
+						+ " txnMaximum=0.377, txn90th=0.194, txn95th=0.217, txn99th=0.350, txnPass=90, txnFail=0, txnStop=0, txnFirst=-1.000, txnLast=-1.000, txnSum=-1.000, txnDelay=0.000", transaction.toString());
 			} else if ("DH-lifecycle-0299-sometimes-I-fail".equals(transaction.getTxnId())){
-				assertEquals ("application=DataHunter, runTime=202005151700, txnId=DH-lifecycle-0299-sometimes-I-fail, txnType=TRANSACTION, txnMinimum=0.000, txnAverage=0.000, txnMaximum=0.001,"
-						+ " txn90th=0.000, txn95th=0.000, txn99th=0.001, txnPass=18, txnFail=0, txnStop=0, txnFirst=-1.000, txnLast=-1.000, txnSum=-1.000, txnDelay=0.000", transaction.toString());
+				assertEquals ("application=DataHunter, runTime=202005151700, txnId=DH-lifecycle-0299-sometimes-I-fail, txnType=TRANSACTION, txnMinimum=0.000, txnAverage=0.000, txnMedian=0.000,"
+						+ " txnMaximum=0.001, txn90th=0.000, txn95th=0.000, txn99th=0.001, txnPass=18, txnFail=0, txnStop=0, txnFirst=-1.000, txnLast=-1.000, txnSum=-1.000, txnDelay=0.000", transaction.toString());
 			} else if ("DH-lifecycle-0300-countUnusedPolicies".equals(transaction.getTxnId())){
-				assertEquals ("application=DataHunter, runTime=202005151700, txnId=DH-lifecycle-0300-countUnusedPolicies, txnType=TRANSACTION, txnMinimum=0.117, txnAverage=0.170, txnMaximum=0.462,"
-						+ " txn90th=0.189, txn95th=0.208, txn99th=0.462, txnPass=18, txnFail=0, txnStop=0, txnFirst=-1.000, txnLast=-1.000, txnSum=-1.000, txnDelay=0.000", transaction.toString());
+				assertEquals ("application=DataHunter, runTime=202005151700, txnId=DH-lifecycle-0300-countUnusedPolicies, txnType=TRANSACTION, txnMinimum=0.117, txnAverage=0.170, txnMedian=0.146,"
+						+ " txnMaximum=0.462, txn90th=0.189, txn95th=0.208, txn99th=0.462, txnPass=18, txnFail=0, txnStop=0, txnFirst=-1.000, txnLast=-1.000, txnSum=-1.000, txnDelay=0.000", transaction.toString());
 			} else if ("DH-lifecycle-0400-countUnusedPoliciesCurrentThread".equals(transaction.getTxnId())){
-				assertEquals ("application=DataHunter, runTime=202005151700, txnId=DH-lifecycle-0400-countUnusedPoliciesCurrentThread, txnType=TRANSACTION, txnMinimum=0.118, txnAverage=0.162, txnMaximum=0.440,"
-						+ " txn90th=0.175, txn95th=0.175, txn99th=0.440, txnPass=18, txnFail=0, txnStop=0, txnFirst=-1.000, txnLast=-1.000, txnSum=-1.000, txnDelay=0.000", transaction.toString());
+				assertEquals ("application=DataHunter, runTime=202005151700, txnId=DH-lifecycle-0400-countUnusedPoliciesCurrentThread, txnType=TRANSACTION, txnMinimum=0.118, txnAverage=0.162, txnMedian=0.142,"
+						+ " txnMaximum=0.440, txn90th=0.175, txn95th=0.175, txn99th=0.440, txnPass=18, txnFail=0, txnStop=0, txnFirst=-1.000, txnLast=-1.000, txnSum=-1.000, txnDelay=0.000", transaction.toString());
 			} else if ("DH-lifecycle-0500-useNextPolicy".equals(transaction.getTxnId())){
-				assertEquals ("application=DataHunter, runTime=202005151700, txnId=DH-lifecycle-0500-useNextPolicy, txnType=TRANSACTION, txnMinimum=0.121, txnAverage=0.155, txnMaximum=0.326,"
-						+ " txn90th=0.177, txn95th=0.254, txn99th=0.326, txnPass=18, txnFail=0, txnStop=0, txnFirst=-1.000, txnLast=-1.000, txnSum=-1.000, txnDelay=0.000", transaction.toString());
+				assertEquals ("application=DataHunter, runTime=202005151700, txnId=DH-lifecycle-0500-useNextPolicy, txnType=TRANSACTION, txnMinimum=0.121, txnAverage=0.155, txnMedian=0.134,"
+						+ " txnMaximum=0.326, txn90th=0.177, txn95th=0.254, txn99th=0.326, txnPass=18, txnFail=0, txnStop=0, txnFirst=-1.000, txnLast=-1.000, txnSum=-1.000, txnDelay=0.000", transaction.toString());
 			} else if ("DH-lifecycle-0600-displaySelectedPolicies".equals(transaction.getTxnId())){
-				assertEquals ("application=DataHunter, runTime=202005151700, txnId=DH-lifecycle-0600-displaySelectedPolicies, txnType=TRANSACTION, txnMinimum=0.121, txnAverage=0.178, txnMaximum=0.365,"
-						+ " txn90th=0.155, txn95th=0.365, txn99th=0.365, txnPass=6, txnFail=0, txnStop=0, txnFirst=-1.000, txnLast=-1.000, txnSum=-1.000, txnDelay=0.000", transaction.toString());
+				assertEquals ("application=DataHunter, runTime=202005151700, txnId=DH-lifecycle-0600-displaySelectedPolicies, txnType=TRANSACTION, txnMinimum=0.121, txnAverage=0.178, txnMedian=0.144,"
+						+ " txnMaximum=0.365, txn90th=0.155, txn95th=0.365, txn99th=0.365, txnPass=6, txnFail=0, txnStop=0, txnFirst=-1.000, txnLast=-1.000, txnSum=-1.000, txnDelay=0.000", transaction.toString());
 			} else if ("DH-lifecycle-9999-finalize-deleteMultiplePolicies".equals(transaction.getTxnId())){
-				assertEquals ("application=DataHunter, runTime=202005151700, txnId=DH-lifecycle-9999-finalize-deleteMultiplePolicies, txnType=TRANSACTION, txnMinimum=0.114, txnAverage=0.119, txnMaximum=0.125,"
-						+ " txn90th=0.125, txn95th=0.125, txn99th=0.125, txnPass=4, txnFail=0, txnStop=0, txnFirst=-1.000, txnLast=-1.000, txnSum=-1.000, txnDelay=0.000", transaction.toString());
+				assertEquals ("application=DataHunter, runTime=202005151700, txnId=DH-lifecycle-9999-finalize-deleteMultiplePolicies, txnType=TRANSACTION, txnMinimum=0.114, txnAverage=0.119, txnMedian=0.117,"
+						+ " txnMaximum=0.125, txn90th=0.125, txn95th=0.125, txn99th=0.125, txnPass=4, txnFail=0, txnStop=0, txnFirst=-1.000, txnLast=-1.000, txnSum=-1.000, txnDelay=0.000", transaction.toString());
 			} else {
 				fail("unexpectedTransaction: " + transaction.getTxnId() );
 			}

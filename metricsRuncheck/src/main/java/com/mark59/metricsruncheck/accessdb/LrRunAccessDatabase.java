@@ -417,8 +417,9 @@ public class LrRunAccessDatabase {
 		serverTransaction.setRunTime(run.getRunTime()); 
 		serverTransaction.setTxnId(eventAttributes.getTxnId()); 
 		serverTransaction.setTxnType(eventAttributes.getEventMapping().getTxnType());  
-		serverTransaction.setTxnAverage(tnxAverage); 
 		serverTransaction.setTxnMinimum(txnMinimum); 		      		
+		serverTransaction.setTxnAverage(tnxAverage); 
+		serverTransaction.setTxnMedian(new BigDecimal(-1.0));
 		serverTransaction.setTxnMaximum(txnMaximum);
 		serverTransaction.setTxnStdDeviation(new BigDecimal(-1.0));
 

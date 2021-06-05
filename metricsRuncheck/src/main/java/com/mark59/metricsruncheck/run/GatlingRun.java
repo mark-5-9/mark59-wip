@@ -50,17 +50,13 @@ import com.opencsv.exceptions.CsvValidationException;
  * Written: Australian Winter 2019  
  */
 public class GatlingRun extends PerformanceTest  {
-
 	
 	private static final String GATLING_VER_lATEST_FORMAT ="3.4-3.6";         
 	private static final String GATLING_VER_3_3_FORMAT ="3.3";
 	
 	private static final String RUN = "RUN";
 	private static final String REQUEST = "REQUEST";
-	
-	private static final String OK = "OK";
 	private static final String KO = "KO";
-	
 	
 	private Map<String,String> optimizedTxnTypeLookup = new HashMap<String, String>();;
 	private Map<String,EventMapping> txnIdToEventMappingLookup = new HashMap<String, EventMapping>();
@@ -95,20 +91,16 @@ public class GatlingRun extends PerformanceTest  {
 
 	private void loadTestTransactionDataFromGatlingSimulationLog(String application, String inputdirectory, String ignoredErrors, String simulationLog) {
 		int sampleCount = 0;
-
-		try {
-			// File simulationlogFile = new File(inputdirectory + File.separator + simulationlog);
-			File simulationLogFile = new File(inputdirectory + "/" + simulationLog);
 		
+		try {
+			File simulationLogFile = new File(inputdirectory + "/" + simulationLog);
 			sampleCount = loadTestTransactionDataFromGatlingSimulationLogFile(simulationLogFile, application, ignoredErrors);
-			
 		} catch (IOException e) {
 			System.out.println( "Error : problem with processing Gatling simulation log file  " + inputdirectory + "/" + simulationLog );
 			StringWriter sw = new StringWriter();
 			e.printStackTrace(new PrintWriter(sw));
 			throw new RuntimeException(e.getMessage());
 		}
-		
 	    System.out.println("____________________________________" );
 	    System.out.println(sampleCount + " Total samples written" );
 	    System.out.println(" " );	    
@@ -116,7 +108,7 @@ public class GatlingRun extends PerformanceTest  {
 
 	
 	/**
-	 * A validly name named Gatling simulation log file is expected to be passed, now need determine the data format and extract results 
+	 * A validly name named Gatling simulation log file is expected to be passed, now need determine its version and extract results 
 	 */
 	private int loadTestTransactionDataFromGatlingSimulationLogFile(File simulationLogFile, String application, String ignoredErrors) throws IOException {
 
@@ -266,7 +258,6 @@ public class GatlingRun extends PerformanceTest  {
 		}
 		return isErrorToBeIgnored;
 	}
-
 
 	
 	/**

@@ -31,6 +31,7 @@ public class Transaction {
 	String		txnType;
 	BigDecimal	txnMinimum;
 	BigDecimal	txnAverage;
+	BigDecimal	txnMedian;
 	BigDecimal	txnMaximum;
 	BigDecimal	txnStdDeviation;
 	BigDecimal	txn90th;
@@ -80,6 +81,12 @@ public class Transaction {
 	}
 	public void setTxnAverage(BigDecimal txnAverage) {
 		this.txnAverage = txnAverage.setScale(3, RoundingMode.HALF_UP);
+	}
+	public BigDecimal getTxnMedian() {
+		return txnMedian;
+	}
+	public void setTxnMedian(BigDecimal txnMedian) {
+		this.txnMedian = txnMedian.setScale(3, RoundingMode.HALF_UP);;
 	}
 	public BigDecimal getTxnMaximum() {
 		return txnMaximum;
@@ -162,6 +169,7 @@ public class Transaction {
 				+ ", txnType="+txnType
 				+ ", txnMinimum="+txnMinimum
 				+ ", txnAverage="+txnAverage
+				+ ", txnMedian="+txnMedian
 				+ ", txnMaximum="+txnMaximum
 				+ ", txn90th="+txn90th
 				+ ", txn95th="+txn95th

@@ -89,8 +89,9 @@ public class AppConstantsMetrics {
     private static Map<String, String> createTxnFieldsMap() {
         Map<String, String> result = new HashMap<String, String>();
         result.put("Minimum",        "TXN_MINIMUM");
-        result.put("Maximum",        "TXN_MAXIMUM");
         result.put("Average",        "TXN_AVERAGE");
+        result.put("Median",         "TXN_MEDIAN");
+        result.put("Maximum",        "TXN_MAXIMUM");
         result.put("StdDeviation",   "TXN_STD_DEVIATION");
         result.put("90th",           "TXN_90TH");
         result.put("95th",           "TXN_95TH");
@@ -101,6 +102,7 @@ public class AppConstantsMetrics {
         result.put("First",          "TXN_FIRST");
         result.put("Last",           "TXN_LAST");
         result.put("Sum",            "TXN_SUM");
+        result.put("Delay",          "TXN_DELAY");
         result.put("PercentOver90",  "TXN_90TH");
         return Collections.unmodifiableMap(result);
     }
@@ -109,6 +111,6 @@ public class AppConstantsMetrics {
 	}
 	
 	public static final List<String>  DIRECT_VALUE_DERIVATONS =  
-			Arrays.asList("Minimum","Maximum","Average","StdDeviation","90th","95th","99th","Pass","Fail","Stop","First","Last","Sum","PercentOver90");  
+			Arrays.asList("Minimum","Average","Median","Maximum","StdDeviation","90th","95th","99th","Pass","Fail","Stop","First","Last","Sum","Delay","PercentOver90");  
 	
 }

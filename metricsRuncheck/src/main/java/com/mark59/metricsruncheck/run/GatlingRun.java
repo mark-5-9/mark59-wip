@@ -245,20 +245,6 @@ public class GatlingRun extends PerformanceTest  {
 		return testTransaction;
 	}
 
-
-	private boolean errorToBeIgnored(String errorMsg, List<String> ignoredErrorsList) {
-		if (StringUtils.isBlank(errorMsg))
-			return false;
-		
-		boolean isErrorToBeIgnored = false;
-		for (String ignoredError : ignoredErrorsList) {
-			if (errorMsg.startsWith(ignoredError)){
-				isErrorToBeIgnored = true;
-			}
-		}
-		return isErrorToBeIgnored;
-	}
-
 	
 	/**
 	 * If an event mapping is found for the given transaction / tool / Database Data type (relating to a a sample line), 

@@ -165,6 +165,21 @@ public class PerformanceTest {
 		return filteredDateRangeBean;
 	}
 	
+	
+	public boolean errorToBeIgnored(String errorMsg, List<String> ignoredErrorsList) {
+		if (StringUtils.isBlank(errorMsg))
+			return false;
+		
+		boolean isErrorToBeIgnored = false;
+		for (String ignoredError : ignoredErrorsList) {
+			if (errorMsg.startsWith(ignoredError)){
+				isErrorToBeIgnored = true;
+			}
+		}
+		return isErrorToBeIgnored;
+	}
+	
+	
 
 	public Run getRunSummary() {
 		return run;

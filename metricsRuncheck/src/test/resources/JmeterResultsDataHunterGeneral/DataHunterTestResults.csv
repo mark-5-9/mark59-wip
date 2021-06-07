@@ -287,11 +287,12 @@ timeStamp,elapsed,label,responseCode,responseMessage,threadName,dataType,success
 1589526108019,121,DH-lifecycle-0500-useNextPolicy,200,PASS,DataHunterLifecycleIterator 2-2,,true,,0,0,1,1,null,0,COMPUTER0,0,0
 1589526108140,18,DH-lifecycle-0001-gotoDeleteMultiplePoliciesUrl,200,PASS,DataHunterLifecycleIterator 2-2,,true,,0,0,1,1,null,0,COMPUTER0,0,0
 1589526108295,138,DH-lifecycle-0100-deleteMultiplePolicies,200,PASS,DataHunterLifecycleIterator 2-2,,true,,0,0,1,1,null,0,COMPUTER0,0,0
-1589526112343,127,DH-lifecycle-0200-addPolicy,200,PASS,DataHunterLifecycleIterator 2-2,,true,,0,0,1,1,null,0,COMPUTER0,0,0
-1589526113096,146,DH-lifecycle-0200-addPolicy,200,PASS,DataHunterLifecycleIterator 2-2,,true,,0,0,1,1,null,0,COMPUTER0,0,0
+1589526112343,127,DH-lifecycle-0200-addPolicy,200,PASS,DataHunterLifecycleIterator 2-2,,false,"The operation lasted too long: It took 3 milliseconds, but should not have lasted longer than 1 milliseconds.",0,0,1,1,null,0,COMPUTER0,0,0
+1589526113096,146,DH-lifecycle-0200-addPolicy,200,PASS,DataHunterLifecycleIterator 2-2,,false,Test failed: text expected to contain /sqlResult>mockupPASS/,0,0,1,1,null,0,COMPUTER0,0,0
 1589526113864,130,DH-lifecycle-0200-addPolicy,200,PASS,DataHunterLifecycleIterator 2-2,,true,,0,0,1,1,null,0,COMPUTER0,0,0
-1589526114578,118,DH-lifecycle-0200-addPolicy,200,PASS,DataHunterLifecycleIterator 2-2,,true,,0,0,1,1,null,0,COMPUTER0,0,0
+1589526114578,118,DH-lifecycle-0200-addPolicy,200,PASS,DataHunterLifecycleIterator 2-2,,false,"The result was the wrong size: It was 3,263 bytes, but should have been equal to 22 bytes.",0,0,1,1,null,0,COMPUTER0,0,0
 1589526115335,123,DH-lifecycle-0200-addPolicy,200,PASS,DataHunterLifecycleIterator 2-2,,true,,0,0,1,1,null,0,COMPUTER0,0,0
+1589526115335,666,DH-lifecycle-0200-addPolicy,200,PASS,DataHunterLifecycleIterator 2-2,,false,"A mocked up failed transaction should be reported as a faulure",0,0,1,1,null,0,COMPUTER0,0,0
 1589526115570,0,DH-lifecycle-0299-sometimes-I-fail,200,PASS,DataHunterLifecycleIterator 2-2,,true,,0,0,1,1,null,0,COMPUTER0,0,0
 1589526116669,137,DH-lifecycle-0300-countUnusedPolicies,200,PASS,DataHunterLifecycleIterator 2-2,,true,,0,0,1,1,null,0,COMPUTER0,0,0
 1589526116848,10,DATAHUNTER_PV_TEST_Total_Unused_Policy_Count,,PASS,DataHunterLifecycleIterator 2-2,DATAPOINT,true,,0,0,1,1,null,0,COMPUTER0,0,0
@@ -300,4 +301,5 @@ timeStamp,elapsed,label,responseCode,responseMessage,threadName,dataType,success
 1589526117560,130,DH-lifecycle-0500-useNextPolicy,200,PASS,DataHunterLifecycleIterator 2-2,,true,,0,0,1,1,null,0,COMPUTER0,0,0
 1589526117690,27,DH-lifecycle-0001-gotoDeleteMultiplePoliciesUrl,200,PASS,DataHunterLifecycleIterator 2-2,,true,,0,0,1,1,null,0,COMPUTER0,0,0
 1589526117858,124,DH-lifecycle-0100-deleteMultiplePolicies,200,PASS,DataHunterLifecycleIterator 2-2,,true,,0,0,1,1,null,0,COMPUTER0,0,0
+1589526121967,117,DH-lifecycle-9999-finalize-deleteMultiplePolicies,200,MOCKUP,DataHunterLifecycleIterator 2-2,,false,mockedupfail,0,0,1,1,null,0,COMPUTER0,0,0
 1589526121968,117,DH-lifecycle-9999-finalize-deleteMultiplePolicies,200,PASS,DataHunterLifecycleIterator 2-2,,true,,0,0,1,1,null,0,COMPUTER0,0,0

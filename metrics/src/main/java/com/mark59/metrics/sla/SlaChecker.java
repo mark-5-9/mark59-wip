@@ -17,6 +17,7 @@
 package com.mark59.metrics.sla;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -128,20 +129,20 @@ public class SlaChecker {
 
 
 	
-	private double calculateTxnFailurePercent(Transaction transaction) {
-		double txnFailurePercent = 0;
+	private BigDecimal calculateTxnFailurePercent(Transaction transaction) {
+		double txnFailurePercentDbl = 0;
 		if ( transaction.getTxnFail() > 0   ) {
-			txnFailurePercent =   (double)((double)transaction.getTxnFail() / ( transaction.getTxnFail() + transaction.getTxnPass() )*100 );  
+			txnFailurePercentDbl =   (double)((double)transaction.getTxnFail() / ( transaction.getTxnFail() + transaction.getTxnPass() )*100 );  
 		}
-		return txnFailurePercent;
+		return new BigDecimal(txnFailurePercentDbl).setScale(3, RoundingMode.HALF_UP);
 	}	
 	
 	
-	private Boolean checkFailPercent(String txnId, double txnFailurePercent, BigDecimal slaFailPercent) {
+	private Boolean checkFailPercent(String txnId, BigDecimal txnFailurePercent, BigDecimal slaFailPercent) {
 		boolean passThisSla = true;
 		if (slaFailPercent != null  ){
-			if ( slaFailPercent.doubleValue()  > -0.001  &&  txnFailurePercent> 0   ) {
-				if ( txnFailurePercent > slaFailPercent.doubleValue() ){
+			if ( slaFailPercent.doubleValue() > -0.001  &&  txnFailurePercent.doubleValue() > 0   ) {
+				if ( txnFailurePercent.compareTo(slaFailPercent) == 1 ){   // txnFailurePercent > slaFailPercent
 //		    		System.out.println( "    " + txnId + " has failed it's % error rate SLA as recorded on the SLA database ! "  );
 //		    		System.out.println( "                      error rate was " + new DecimalFormat("#.##").format(txnFailurePercent)  + "%, "
 //		    							+ "( SLA % of " + slaFailPercent );

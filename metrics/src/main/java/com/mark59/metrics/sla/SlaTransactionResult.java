@@ -41,7 +41,7 @@ public class SlaTransactionResult {
 	private BigDecimal sla99thResponse;	
 	
 	private boolean passedFailPercent;
-	private double txnFailurePercent;
+	private BigDecimal txnFailurePercent;
 	private BigDecimal slaFailurePercent;
 	
 	private boolean passedPassCount;
@@ -130,10 +130,10 @@ public class SlaTransactionResult {
 	public void setSla99thResponse(BigDecimal sla99thResponse) {
 		this.sla99thResponse = sla99thResponse;
 	}
-	public double getTxnFailurePercent() {
+	public BigDecimal getTxnFailurePercent() {
 		return txnFailurePercent;
 	}
-	public void setTxnFailurePercent(double txnFailurePercent) {
+	public void setTxnFailurePercent(BigDecimal txnFailurePercent) {
 		this.txnFailurePercent = txnFailurePercent;
 	}
 	public BigDecimal getSlaFailurePercent() {
@@ -142,7 +142,6 @@ public class SlaTransactionResult {
 	public void setSlaFailurePercent(BigDecimal slaFailurePercent) {
 		this.slaFailurePercent = slaFailurePercent;
 	}
-
 	public boolean isPassedPassCount() {
 		return passedPassCount;
 	}

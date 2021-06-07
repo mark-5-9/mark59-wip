@@ -128,10 +128,10 @@ public class Runcheck  implements CommandLineRunner
 		options.addOption("q", "dbxtraurlparms",		true, "Any special parameters to append to the end of the database URL (include the ?). Eg \"?allowPublicKeyRetrieval=truee&useSSL=false\" (the quotes are needed to escape the ampersand)");				
 		options.addOption("x", "eXcludestart",     		true, "exclude results at the start of the test for the given number of minutes (defaults to 0)" );			
 		options.addOption("c", "captureperiod",    		true, "Only capture test results for the given number of minutes, from the excluded start period (default is all results except those skipped by the excludestart parm are included)" );			
-		options.addOption("e", "ignoredErrors",    		true, "(Gatling only) A list of pipe (|) delimited strings.  When an error msg starts with any of the strings in the list, it will be treated as a Passed transaction rather that an Error." );	
-		options.addOption("l", "simulationLog",			true, "(Gatling only) Simuation log file name - must be in the Input directory (defaults to simulation.log)" );			
-		options.addOption("k", "keeprawresults", 		true, "(JMeter only) Keep Raw Test Resuts. If 'true' will keep each JMeter transaction for each run in the database. This can use a large amount of storage and is not recommended (defaults to false).");
-		options.addOption("z", "timeZone",    			true, "(Loadrunner only) Required when running extract from zone other than where Analysis Report was generated. Also, internal raw stored time"
+		options.addOption("e", "ignoredErrors",    		true, "Gatling, JMeter(csv) only. A list of pipe (|) delimited strings.  When an error msg starts with any of the strings in the list, it will be treated as a Passed transaction rather that an Error." );	
+		options.addOption("l", "simulationLog",			true, "Gatling only. Simuation log file name - must be in the Input directory (defaults to simulation.log)" );			
+		options.addOption("k", "keeprawresults", 		true, "JMeter only. Keep Raw Test Resuts. If 'true' will keep each JMeter transaction for each run in the database. This can use a large amount of storage and is not recommended (defaults to false).");
+		options.addOption("z", "timeZone",    			true, "Loadrunner only. Required when running extract from zone other than where Analysis Report was generated. Also, internal raw stored time"
 				+ " may not take daylight saving into account.  Two format options 1) offset against GMT. Eg 'GMT+02:00' or 2) IANA Time Zone Database (TZDB) codes. Refer to https://en.wikipedia.org/wiki/List_of_tz_database_time_zones. Eg 'Australia/Sydney' ");   	
 
 		
@@ -345,7 +345,7 @@ public class Runcheck  implements CommandLineRunner
 			String timeZone, String keeprawresults, String ignoredErrors, String simulationLog) throws IOException {
 		
 		if (AppConstantsMetrics.JMETER.equalsIgnoreCase(tool)){		
-			performanceTest = new JmeterRun(context, application, input, runReference, excludestart, captureperiod, keeprawresults);
+			performanceTest = new JmeterRun(context, application, input, runReference, excludestart, captureperiod, ignoredErrors, keeprawresults);
 		} else if (AppConstantsMetrics.LOADRUNNER.equalsIgnoreCase(tool)){		
 			performanceTest = new LrRun(context, application, input, runReference, excludestart, captureperiod, timeZone );
 		} else {

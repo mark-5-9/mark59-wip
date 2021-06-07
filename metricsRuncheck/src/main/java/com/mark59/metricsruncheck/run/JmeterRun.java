@@ -62,16 +62,18 @@ public class JmeterRun extends PerformanceTest  {
 	private int fieldPoslabel;	
 	private int fieldPosdataType;	
 	private int fieldPossuccess;	
+	private int fieldPosfailureMessage;	
 
 	
-	public JmeterRun(ApplicationContext context, String application, String inputdirectory, String runReference, String excludestart, String captureperiod, String keeprawresults) {
+	public JmeterRun(ApplicationContext context, String application, String inputdirectory, String runReference, String excludestart, String captureperiod,
+			String ignoredErrors, String keeprawresults) {
 		
 		super(context,application, runReference);
 		
 		//clean up before  
 		testTransactionsDAO.deleteAllForRun(run);  // RUN_TIME_YET_TO_BE_CALCULATED
 		
-		loadTestTransactionAllDataFromJmeterFiles(run.getApplication(), inputdirectory);
+		loadTestTransactionAllDataFromJmeterFiles(run.getApplication(), inputdirectory, ignoredErrors );
 		
 		DateRangeBean dateRangeBean = getRunDateRangeUsingTestTransactionalData(run.getApplication());
 		run = new Run( calculateAndSetRunTimesUsingEpochStartAndEnd(run, dateRangeBean));
@@ -92,7 +94,7 @@ public class JmeterRun extends PerformanceTest  {
 	}
 
 
-	private void loadTestTransactionAllDataFromJmeterFiles(String application, String inputdirectory) {
+	private void loadTestTransactionAllDataFromJmeterFiles(String application, String inputdirectory, String ignoredErrors) {
 		int sampleCount = 0;
 		File[] jmeterResultsDirFiles = new File(inputdirectory).listFiles();;
 		
@@ -108,7 +110,7 @@ public class JmeterRun extends PerformanceTest  {
 					jmeterResultsFile.getName().toUpperCase().endsWith(".XML") || 
 					jmeterResultsFile.getName().toUpperCase().endsWith(".CSV"))){
 				try {
-					sampleCount = sampleCount + loadTestTransactionDataForaJmeterFile(jmeterResultsFile, application);
+					sampleCount = sampleCount + loadTestTransactionDataForaJmeterFile(jmeterResultsFile, application, ignoredErrors);
 				} catch (IOException e) {
 					System.out.println( "Error : problem with processing Jmeter results file transactions " + jmeterResultsFile.getName() );
 					StringWriter sw = new StringWriter();
@@ -130,7 +132,7 @@ public class JmeterRun extends PerformanceTest  {
 	/**
 	 * A validly name named jmeter results file is expected to be passed for conversion, now need determine the data format 
 	 */
-	private int loadTestTransactionDataForaJmeterFile(File jmeterResultsFile, String application) throws IOException {
+	private int loadTestTransactionDataForaJmeterFile(File jmeterResultsFile, String application, String ignoredErrors) throws IOException {
 
 		BufferedReader brOneLine = new BufferedReader(new FileReader(jmeterResultsFile));
 		String firstLineOfFile = brOneLine.readLine();
@@ -141,14 +143,17 @@ public class JmeterRun extends PerformanceTest  {
 			return 0;
 		
 		} else  if (firstLineOfFile.trim().startsWith("<")) {
+			if (StringUtils.isNotBlank(ignoredErrors)){
+				System.out.println("   Warning : " + " the -e ('ignoredErrors') runtime option is not implemented for XML files");
+			}
 			return loadXMLFile(jmeterResultsFile, application);
 			
 		} else if (firstLineOfFile.trim().startsWith("timeStamp") &&  firstLineOfFile.matches("timeStamp.elapsed.*")){	
-			return loadCSVFile(jmeterResultsFile, true, application);
+			return loadCSVFile(jmeterResultsFile, true, application, ignoredErrors);
 
 		} else if ( firstLineOfFile.length() > 28 && StringUtils.countMatches(firstLineOfFile, ",") > 14  && firstLineOfFile.indexOf(",") == 13   ){  
-			//assuming a headerless CSV file in default layout	
-			return loadCSVFile(jmeterResultsFile, false, application);
+			System.out.println("   Info : " + " the file " + jmeterResultsFile.getName() + " appears to be headerless (default field positions assumed)");
+			return loadCSVFile(jmeterResultsFile, false, application, ignoredErrors);
 			
 		} else {
 			System.out.println("   Warning : " + jmeterResultsFile.getName()
@@ -324,7 +329,7 @@ public class JmeterRun extends PerformanceTest  {
 	 * @return
 	 * @throws IOException
 	 */
-	private int loadCSVFile(File inputCsvFileName, boolean hasHeader, String application) throws IOException {
+	private int loadCSVFile(File inputCsvFileName, boolean hasHeader, String application, String ignoredErrors) throws IOException {
 		
 		int samplesCreated=0; 
 		CSVReader csvReader = new CSVReader(new BufferedReader(new FileReader(inputCsvFileName)));
@@ -343,11 +348,12 @@ public class JmeterRun extends PerformanceTest  {
 				throw new RuntimeException("failed to process expected CVS header fields (line 1 of file) " + e.getMessage());
 			}
 
-			fieldPostimeStamp = csvHeaderFieldsList.indexOf("timeStamp"); 
-			fieldPoselapsed   = csvHeaderFieldsList.indexOf("elapsed"); 
-			fieldPoslabel     = csvHeaderFieldsList.indexOf("label"); 
-			fieldPosdataType  = csvHeaderFieldsList.indexOf("dataType"); 
-			fieldPossuccess   = csvHeaderFieldsList.indexOf("success"); 
+			fieldPostimeStamp      = csvHeaderFieldsList.indexOf("timeStamp"); 
+			fieldPoselapsed        = csvHeaderFieldsList.indexOf("elapsed"); 
+			fieldPoslabel          = csvHeaderFieldsList.indexOf("label"); 
+			fieldPosdataType       = csvHeaderFieldsList.indexOf("dataType"); 
+			fieldPossuccess        = csvHeaderFieldsList.indexOf("success"); 
+			fieldPosfailureMessage = csvHeaderFieldsList.indexOf("failureMessage"); 
 			
 			if (fieldPostimeStamp==-1 || fieldPoselapsed==-1 || fieldPoslabel==-1 || fieldPosdataType==-1 || fieldPossuccess==-1 ){
 				System.out.println("\n   Severe Error.  Unexpected csv file header format, terminating run");
@@ -363,6 +369,8 @@ public class JmeterRun extends PerformanceTest  {
 		List<TestTransaction> testTransactionList = new ArrayList<TestTransaction>();
 		String[] csvDataLineFields = csvReadNextLine(csvReader, inputCsvFileName);
 		
+		List<String> ignoredErrorsList = Mark59Utils.pipeDelimStringToStringList(ignoredErrors);
+		
 	   	while ( csvDataLineFields != null ) {
 	   		
 	   		// if not enough fields or first field cannot be a time stamp, bypass 	
@@ -372,7 +380,7 @@ public class JmeterRun extends PerformanceTest  {
 	    		String inputDatatype 		= csvDataLineFields[fieldPosdataType];
 
 	    		if (!transactionNameLabel.startsWith(IGNORE) &&  !inputDatatype.equals(JMeterFileDatatypes.PARENT.getDatatypeText() )){
-	    			addCsvSampleToTestTransactionList(testTransactionList, csvDataLineFields, application);
+	    			addCsvSampleToTestTransactionList(testTransactionList, csvDataLineFields, application, ignoredErrorsList);
 					samplesCreated++;
 		    	} 	    		
 	    	} 
@@ -426,16 +434,17 @@ public class JmeterRun extends PerformanceTest  {
 		fieldPoslabel     		= 2;
 		fieldPosdataType  		= 6; 
 		fieldPossuccess   		= 7; 
+		fieldPosfailureMessage	= 8; 
 	}
 
-	private void addCsvSampleToTestTransactionList(List<TestTransaction> testTransactionList, String[] csvDataLineFields, String application) {
-		TestTransaction testTransaction = extractTransactionFromJmeterCSVsample(csvDataLineFields);
+	private void addCsvSampleToTestTransactionList(List<TestTransaction> testTransactionList, String[] csvDataLineFields, String application, List<String> ignoredErrorsList) {
+		TestTransaction testTransaction = extractTransactionFromJmeterCSVsample(csvDataLineFields, ignoredErrorsList);
 		testTransaction.setApplication(application);
 		testTransaction.setRunTime(AppConstantsMetrics.RUN_TIME_YET_TO_BE_CALCULATED);
 		testTransactionList.add(testTransaction);		
 	}
 
-	private TestTransaction extractTransactionFromJmeterCSVsample(String[] csvDataLineFields) {
+	private TestTransaction extractTransactionFromJmeterCSVsample(String[] csvDataLineFields, List<String> ignoredErrorsList) {
 		TestTransaction testTransaction = new TestTransaction();
 
 		testTransaction.setTxnId(csvDataLineFields[fieldPoslabel]);
@@ -462,11 +471,11 @@ public class JmeterRun extends PerformanceTest  {
 				invalidDatapointMessageAndFail(Arrays.toString(csvDataLineFields), e);
 			}
 		}		
-		
-		testTransaction.setTxnPassed("N");
-		if ( "true".equalsIgnoreCase(csvDataLineFields[fieldPossuccess])){
-			testTransaction.setTxnPassed("Y");
-		}
+
+		testTransaction.setTxnPassed("Y");
+		if ("false".equalsIgnoreCase(csvDataLineFields[fieldPossuccess]) && !errorToBeIgnored(csvDataLineFields[fieldPosfailureMessage], ignoredErrorsList)){
+			testTransaction.setTxnPassed("N");
+		}		
 				
 		testTransaction.setTxnEpochTime(csvDataLineFields[fieldPostimeStamp]);
 		return testTransaction;
@@ -476,7 +485,7 @@ public class JmeterRun extends PerformanceTest  {
 	private void invalidDatapointMessageAndFail(String jmeterFileLine, Exception e) {
 		System.out.println("!! Error : looks like an invalid datapoint value or type has been entered. ");
 		System.out.println("           Time (t) must be an integer.  Datatype (dt) must be a know datatype + optional multiplier.  eg DATAPOINT or CPU_1000 .. ");
-		System.out.println("           The line (by field for csv) uin issue:  ");
+		System.out.println("           The line (by field for csv) with the issue:  ");
 		System.out.println("           " + jmeterFileLine);	
 		e.printStackTrace();
 		throw new RuntimeException("  " + e.getClass());

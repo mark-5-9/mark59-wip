@@ -105,7 +105,8 @@ public class RuncheckTest extends TestCase {
 	
 	@Test
 	public void testRuncheckJMeterGeneralTest() {
-		Runcheck.parseArguments(new String[] { "-a", "DataHunter", "-i", "./src/test/resources/JmeterResultsDataHunterGeneral", "-d", Mark59Constants.H2MEM, "-s","metricsmem" });
+		Runcheck.parseArguments(new String[] { "-a", "DataHunter", "-i", "./src/test/resources/JmeterResultsDataHunterGeneral", "-d", Mark59Constants.H2MEM, "-s","metricsmem",
+				"-e","The operation lasted too long:|Test failed: text expected to contain|The result was the wrong size" });
 		SpringApplication springApplication = new SpringApplication(Runcheck.class);
 		springApplication.setWebApplicationType(WebApplicationType.NONE);
 		springApplication.setBannerMode(Banner.Mode.OFF);	
@@ -118,11 +119,22 @@ public class RuncheckTest extends TestCase {
 				, metricSlaResults.get(0).getMessageText()  );
 		
 		List<SlaTransactionResult> slaTransactionResults = runcheck.getSlaTransactionResults();
-		assertEquals(1, slaTransactionResults.size() );
-		assertEquals ("txnId : DH-lifecycle-0200-addPolicy, passedAllSlas=false, foundSLAforTxnId=true, passed90thResponse=true, txn90thResponse=0.194, sla90thResponse=0.400,"
-				+ " passed95thResponse=true, txn95thResponse=0.217, sla95thResponse=-1.000, passed99thResponse=true, txn99thResponse=0.350, sla99thResponse=-1.000,"
-				+ " passedFailPercent=true, txnFailurePercent=0.0, slaFailurePercent=2.000, passedPassCount=false, txnPassCount=90, slaPassCount=46, slaPassCountVariancePercent=20.000"
-				, slaTransactionResults.get(0).toString());
+		assertEquals(2, slaTransactionResults.size() );
+		for (SlaTransactionResult slaTransactionResult : slaTransactionResults){ 
+			if ("DH-lifecycle-0200-addPolicy".equals(slaTransactionResult.getTxnId())){
+				assertEquals ("txnId : DH-lifecycle-0200-addPolicy, passedAllSlas=false, foundSLAforTxnId=true, passed90thResponse=true, txn90thResponse=0.194, sla90thResponse=0.400,"
+						+ " passed95thResponse=true, txn95thResponse=0.217, sla95thResponse=-1.000, passed99thResponse=true, txn99thResponse=0.350, sla99thResponse=-1.000,"
+						+ " passedFailPercent=true, txnFailurePercent=1.099, slaFailurePercent=2.000, passedPassCount=false, txnPassCount=90, slaPassCount=46, slaPassCountVariancePercent=20.000"
+						, slaTransactionResult.toString());
+			} else if ("DH-lifecycle-9999-finalize-deleteMultiplePolicies".equals(slaTransactionResult.getTxnId())){
+				assertEquals ("txnId : DH-lifecycle-9999-finalize-deleteMultiplePolicies, passedAllSlas=false, foundSLAforTxnId=true, passed90thResponse=true, txn90thResponse=0.125, sla90thResponse=-1.000,"
+						+ " passed95thResponse=true, txn95thResponse=0.125, sla95thResponse=-1.000, passed99thResponse=true, txn99thResponse=0.125, sla99thResponse=-1.000,"
+						+ " passedFailPercent=false, txnFailurePercent=20.000, slaFailurePercent=2.000, passedPassCount=true, txnPassCount=4, slaPassCount=4, slaPassCountVariancePercent=50.000"
+						, slaTransactionResult.toString());
+			} else {
+				fail("Unexpected slaTransactionResult: " + slaTransactionResult.getTxnId() );
+			}
+		}
 		
 		PerformanceTest performanceTest = runcheck.getPerformanceTest();
 		List<Transaction> transactions = performanceTest.getTransactionSummariesThisRun();
@@ -136,7 +148,7 @@ public class RuncheckTest extends TestCase {
 						+ " txnMaximum=0.488, txn90th=0.235, txn95th=0.359, txn99th=0.488, txnPass=28, txnFail=0, txnStop=0, txnFirst=-1.000, txnLast=-1.000, txnSum=-1.000, txnDelay=0.200", transaction.toString());
 			} else if ("DH-lifecycle-0200-addPolicy".equals(transaction.getTxnId())){
 				assertEquals ("application=DataHunter, runTime=202005151700, txnId=DH-lifecycle-0200-addPolicy, txnType=TRANSACTION, txnMinimum=0.111, txnAverage=0.156, txnMedian=0.147,"
-						+ " txnMaximum=0.377, txn90th=0.194, txn95th=0.217, txn99th=0.350, txnPass=90, txnFail=0, txnStop=0, txnFirst=-1.000, txnLast=-1.000, txnSum=-1.000, txnDelay=0.000", transaction.toString());
+						+ " txnMaximum=0.377, txn90th=0.194, txn95th=0.217, txn99th=0.350, txnPass=90, txnFail=1, txnStop=0, txnFirst=-1.000, txnLast=-1.000, txnSum=-1.000, txnDelay=0.000", transaction.toString());
 			} else if ("DH-lifecycle-0299-sometimes-I-fail".equals(transaction.getTxnId())){
 				assertEquals ("application=DataHunter, runTime=202005151700, txnId=DH-lifecycle-0299-sometimes-I-fail, txnType=TRANSACTION, txnMinimum=0.000, txnAverage=0.000, txnMedian=0.000,"
 						+ " txnMaximum=0.001, txn90th=0.000, txn95th=0.000, txn99th=0.001, txnPass=18, txnFail=0, txnStop=0, txnFirst=-1.000, txnLast=-1.000, txnSum=-1.000, txnDelay=0.000", transaction.toString());
@@ -154,7 +166,7 @@ public class RuncheckTest extends TestCase {
 						+ " txnMaximum=0.365, txn90th=0.155, txn95th=0.365, txn99th=0.365, txnPass=6, txnFail=0, txnStop=0, txnFirst=-1.000, txnLast=-1.000, txnSum=-1.000, txnDelay=0.000", transaction.toString());
 			} else if ("DH-lifecycle-9999-finalize-deleteMultiplePolicies".equals(transaction.getTxnId())){
 				assertEquals ("application=DataHunter, runTime=202005151700, txnId=DH-lifecycle-9999-finalize-deleteMultiplePolicies, txnType=TRANSACTION, txnMinimum=0.114, txnAverage=0.119, txnMedian=0.117,"
-						+ " txnMaximum=0.125, txn90th=0.125, txn95th=0.125, txn99th=0.125, txnPass=4, txnFail=0, txnStop=0, txnFirst=-1.000, txnLast=-1.000, txnSum=-1.000, txnDelay=0.000", transaction.toString());
+						+ " txnMaximum=0.125, txn90th=0.125, txn95th=0.125, txn99th=0.125, txnPass=4, txnFail=1, txnStop=0, txnFirst=-1.000, txnLast=-1.000, txnSum=-1.000, txnDelay=0.000", transaction.toString());
 			} else {
 				fail("unexpectedTransaction: " + transaction.getTxnId() );
 			}

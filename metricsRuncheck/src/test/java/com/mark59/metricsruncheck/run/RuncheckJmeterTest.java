@@ -43,7 +43,7 @@ import junit.framework.TestCase;
 
 
 
-public class RuncheckTest extends TestCase {
+public class RuncheckJmeterTest extends TestCase {
 
 	@Autowired
 	DataSource dataSource;

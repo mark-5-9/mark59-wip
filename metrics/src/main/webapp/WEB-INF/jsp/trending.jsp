@@ -261,9 +261,16 @@
          </tr> 	
 
 	     <tr> 
-           <td width="15%">Failed Sla for Txn Failure Rate Transaction Ids</td> 
+           <td width="15%">Failed Sla for Txn FAIL Percent Transaction Ids</td> 
            <td width="85%"> 
            	<textarea id='trxnIdsWithFailedSlaFailPercentId' style="width:100%;height:50px" >${trxnIdsWithFailedSlaFailPercentId}</textarea> 
+           </td> 	
+         </tr> 	
+
+	     <tr> 
+           <td width="15%">Failed Sla FAIL Count Transaction Ids</td> 
+           <td width="85%"> 
+           	<textarea id='trxnIdsWithFailedSlaFailCount' style="width:100%;height:50px" >${trxnIdsWithFailedSlaFailCount}</textarea> 
            </td> 	
          </tr> 	
 

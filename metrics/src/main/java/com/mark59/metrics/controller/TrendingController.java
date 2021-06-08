@@ -385,6 +385,7 @@ public class TrendingController {
 		List<String> trxnIdsWithFailedSla95thResponse = new ArrayList<String>();
 		List<String> trxnIdsWithFailedSla99thResponse = new ArrayList<String>();
 		List<String> trxnIdsWithFailedSlaFailPercent = new ArrayList<String>();
+		List<String> trxnIdsWithFailedSlaFailCount = new ArrayList<String>();
 		List<String> trxnIdsWithFailedSlaPassCount = new ArrayList<String>();		
 
 		for (SlaTransactionResult slaTransactionResult : slaTransactionResultList) {
@@ -404,6 +405,9 @@ public class TrendingController {
 			if ( !slaTransactionResult.isPassedFailPercent()){
 				trxnIdsWithFailedSlaFailPercent.add(slaTransactionResult.getTxnId());
 			}
+			if ( !slaTransactionResult.isPassedFailCount()){
+				trxnIdsWithFailedSlaFailCount.add(slaTransactionResult.getTxnId());
+			}				
 			if ( !slaTransactionResult.isPassedPassCount()){
 				trxnIdsWithFailedSlaPassCount.add(slaTransactionResult.getTxnId());
 			}			
@@ -420,6 +424,7 @@ public class TrendingController {
 		model.addAttribute("trxnIdsWithFailedSla95thResponseId", UtilsMetrics.stringListToCommaDelimString(trxnIdsWithFailedSla95thResponse) );	
 		model.addAttribute("trxnIdsWithFailedSla99thResponseId", UtilsMetrics.stringListToCommaDelimString(trxnIdsWithFailedSla99thResponse) );	
 		model.addAttribute("trxnIdsWithFailedSlaFailPercentId", UtilsMetrics.stringListToCommaDelimString(trxnIdsWithFailedSlaFailPercent) );
+		model.addAttribute("trxnIdsWithFailedSlaFailCount", UtilsMetrics.stringListToCommaDelimString(trxnIdsWithFailedSlaFailCount) );
 		model.addAttribute("trxnIdsWithFailedSlaPassCount", UtilsMetrics.stringListToCommaDelimString(trxnIdsWithFailedSlaPassCount) );
 		model.addAttribute("missingTransactionsId", UtilsMetrics.stringListToCommaDelimString(missingTransactions) );				
 		

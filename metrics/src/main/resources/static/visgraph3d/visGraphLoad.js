@@ -275,9 +275,11 @@ function drawSummaryTable(data, sortby){
 	if ( selectedGraph == "TXN_99TH"  ){
 		trxnIdsForFailedSlaRelatingToThisGraphArray = document.getElementById("trxnIdsWithFailedSla99thResponseId").value.split(',');
 	}	
-	if ( selectedGraph == "TXN_FAIL" ||
-		 selectedGraph == "TXN_FAIL_PERCENT"	){
+	if ( selectedGraph == "TXN_FAIL_PERCENT"	){
 		trxnIdsForFailedSlaRelatingToThisGraphArray = document.getElementById("trxnIdsWithFailedSlaFailPercentId").value.split(',');
+	}	
+	if ( selectedGraph == "TXN_FAIL" ){
+		trxnIdsForFailedSlaRelatingToThisGraphArray = document.getElementById("trxnIdsWithFailedSlaFailCount").value.split(',');
 	}
 	if ( selectedGraph == "TXN_PASS"  ){
 		trxnIdsForFailedSlaRelatingToThisGraphArray = document.getElementById("trxnIdsWithFailedSlaPassCount").value.split(',');

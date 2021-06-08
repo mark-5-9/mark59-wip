@@ -183,7 +183,7 @@ INSERT IGNORE INTO SLA VALUES ('DH-lifecycle-0200-addPolicy','DataHunter','N',0.
 INSERT IGNORE INTO SLA VALUES ('DH-lifecycle-0299-sometimes-I-fail','DataHunter','N',0.100,-1.000,-1.000,20,40.000,-1,-1.000,0.000,0,0.000,'<a href=''http://localhost:8083/metrics/sampleReport/DataHunter_Result%20_370.html''>Run 370</a>','');
 INSERT IGNORE INTO SLA VALUES ('DH-lifecycle-0300-countUnusedPolicies','DataHunter','N',0.400,-1.000,-1.000,20,20.000,-1,2.000,0.000,0,0.000,'<a href=''http://localhost:8083/metrics/sampleReport/DataHunter_Result%20_370.html''>Run 370</a>','');
 INSERT IGNORE INTO SLA VALUES ('DH-lifecycle-0500-useNextPolicy','DataHunter','N',0.400,-1.000,-1.000,20,20.000,-1,2.000,0.000,0,0.000,'<a href=''http://localhost:8083/metrics/sampleReport/DataHunter_Result%20_370.html''>Run 370</a>','');
-INSERT IGNORE INTO SLA VALUES ('DH-lifecycle-9999-finalize-deleteMultiplePolicies','DataHunter','Y',-1.000,-1.000,-1.000,4,50.000,-1,2.000,0.000,0,0.000,'<a href=''http://localhost:8083/metrics/sampleReport/DataHunter_Result%20_370.html''>Run 370</a>','');
+INSERT IGNORE INTO SLA VALUES ('DH-lifecycle-9999-finalize-deleteMultiplePolicies','DataHunter','Y',31.100,32.200,33.300,4,50.000,0,2.000,0.000,0,0.000,'<a href=''http://localhost:8083/metrics/sampleReport/DataHunter_Result%20_370.html''>Run 370</a>','');
 
 
 INSERT IGNORE INTO RUNS VALUES ('DataHunter','201909051309','N','na','20190905_130941 - 20190905_131058','1','N','');

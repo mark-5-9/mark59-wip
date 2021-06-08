@@ -121,14 +121,15 @@ public class RuncheckTest extends TestCase {
 		List<SlaTransactionResult> slaTransactionResults = runcheck.getSlaTransactionResults();
 		assertEquals(2, slaTransactionResults.size() );
 		for (SlaTransactionResult slaTransactionResult : slaTransactionResults){ 
+			// System.out.println("slaRes>>" + slaTransactionResult);
 			if ("DH-lifecycle-0200-addPolicy".equals(slaTransactionResult.getTxnId())){
 				assertEquals ("txnId : DH-lifecycle-0200-addPolicy, passedAllSlas=false, foundSLAforTxnId=true, passed90thResponse=true, txn90thResponse=0.194, sla90thResponse=0.400,"
-						+ " passed95thResponse=true, txn95thResponse=0.217, sla95thResponse=-1.000, passed99thResponse=true, txn99thResponse=0.350, sla99thResponse=-1.000,"
-						+ " passedFailPercent=true, txnFailurePercent=1.099, slaFailurePercent=2.000, passedPassCount=false, txnPassCount=90, slaPassCount=46, slaPassCountVariancePercent=20.000"
-						, slaTransactionResult.toString());
+						+ " passed95thResponse=true, txn95thResponse=0.217, sla95thResponse=-1.000, passed99thResponse=true, txn99thResponse=0.350, sla99thResponse=-1.000, passedFailPercent=true,"
+						+ " txnFailurePercent=1.099, slaFailurePercent=2.000, passedPassCount=false, txnPassCount=90, slaPassCount=46, slaPassCountVariancePercent=20.000"
+						, slaTransactionResult.toString());				
 			} else if ("DH-lifecycle-9999-finalize-deleteMultiplePolicies".equals(slaTransactionResult.getTxnId())){
-				assertEquals ("txnId : DH-lifecycle-9999-finalize-deleteMultiplePolicies, passedAllSlas=false, foundSLAforTxnId=true, passed90thResponse=true, txn90thResponse=0.125, sla90thResponse=-1.000,"
-						+ " passed95thResponse=true, txn95thResponse=0.125, sla95thResponse=-1.000, passed99thResponse=true, txn99thResponse=0.125, sla99thResponse=-1.000,"
+				assertEquals ("txnId : DH-lifecycle-9999-finalize-deleteMultiplePolicies, passedAllSlas=false, foundSLAforTxnId=true, passed90thResponse=false, txn90thResponse=55.117, sla90thResponse=31.100,"
+						+ " passed95thResponse=false, txn95thResponse=55.117, sla95thResponse=32.200, passed99thResponse=false, txn99thResponse=55.117, sla99thResponse=33.300,"
 						+ " passedFailPercent=false, txnFailurePercent=20.000, slaFailurePercent=2.000, passedPassCount=true, txnPassCount=4, slaPassCount=4, slaPassCountVariancePercent=50.000"
 						, slaTransactionResult.toString());
 			} else {
@@ -140,6 +141,7 @@ public class RuncheckTest extends TestCase {
 		List<Transaction> transactions = performanceTest.getTransactionSummariesThisRun();
 		assertEquals(9, transactions.size() );
 		for (Transaction transaction : transactions) {
+			// System.out.println("Txn>>" + transaction);
 			if ("DH-lifecycle-0001-gotoDeleteMultiplePoliciesUrl".equals(transaction.getTxnId())){
 				assertEquals ("application=DataHunter, runTime=202005151700, txnId=DH-lifecycle-0001-gotoDeleteMultiplePoliciesUrl, txnType=TRANSACTION, txnMinimum=0.016, txnAverage=0.493, txnMedian=0.026,"
 						+ " txnMaximum=2.115, txn90th=1.175, txn95th=2.030, txn99th=2.115, txnPass=28, txnFail=0, txnStop=0, txnFirst=-1.000, txnLast=-1.000, txnSum=-1.000, txnDelay=0.000", transaction.toString());
@@ -165,8 +167,8 @@ public class RuncheckTest extends TestCase {
 				assertEquals ("application=DataHunter, runTime=202005151700, txnId=DH-lifecycle-0600-displaySelectedPolicies, txnType=TRANSACTION, txnMinimum=0.121, txnAverage=0.178, txnMedian=0.144,"
 						+ " txnMaximum=0.365, txn90th=0.155, txn95th=0.365, txn99th=0.365, txnPass=6, txnFail=0, txnStop=0, txnFirst=-1.000, txnLast=-1.000, txnSum=-1.000, txnDelay=0.000", transaction.toString());
 			} else if ("DH-lifecycle-9999-finalize-deleteMultiplePolicies".equals(transaction.getTxnId())){
-				assertEquals ("application=DataHunter, runTime=202005151700, txnId=DH-lifecycle-9999-finalize-deleteMultiplePolicies, txnType=TRANSACTION, txnMinimum=0.114, txnAverage=0.119, txnMedian=0.117,"
-						+ " txnMaximum=0.125, txn90th=0.125, txn95th=0.125, txn99th=0.125, txnPass=4, txnFail=1, txnStop=0, txnFirst=-1.000, txnLast=-1.000, txnSum=-1.000, txnDelay=0.000", transaction.toString());
+				assertEquals ("application=DataHunter, runTime=202005151700, txnId=DH-lifecycle-9999-finalize-deleteMultiplePolicies, txnType=TRANSACTION, txnMinimum=22.114, txnAverage=35.869, txnMedian=22.125,"
+						+ " txnMaximum=55.117, txn90th=55.117, txn95th=55.117, txn99th=55.117, txnPass=4, txnFail=1, txnStop=0, txnFirst=-1.000, txnLast=-1.000, txnSum=-1.000, txnDelay=0.000", transaction.toString());
 			} else {
 				fail("unexpectedTransaction: " + transaction.getTxnId() );
 			}

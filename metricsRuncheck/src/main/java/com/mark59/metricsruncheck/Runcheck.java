@@ -403,6 +403,12 @@ public class Runcheck  implements CommandLineRunner
 	    		System.out.println( "                      % error was " + new DecimalFormat("#.##").format(slaTransactionResult.getTxnFailurePercent()) + 
 	    				" %, SLA of " +  slaTransactionResult.getSlaFailurePercent());				
 			}
+			if ( !slaTransactionResult.isPassedFailCount()){
+	    		System.out.println( "Runcheck: SLA Failed : Error : " + slaTransactionResult.getTxnId() + " has failed it's Fail Count SLA as recorded on the SLA database ! "  );
+	    		System.out.println( "                      count was " + slaTransactionResult.getTxnFailCount() + 
+	    				" Fail Count SLA is " +  slaTransactionResult.getSlaFailCount());				
+			}
+	
 			if ( !slaTransactionResult.isPassedPassCount()){
 	    		System.out.println( "Runcheck: SLA Failed : Error : " + slaTransactionResult.getTxnId() + " has failed it's Pass Count SLA as recorded on the SLA database ! "  );
 	    		System.out.println( "                      count was " + slaTransactionResult.getTxnPassCount() + 

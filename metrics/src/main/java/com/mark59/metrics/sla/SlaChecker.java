@@ -50,7 +50,7 @@ public class SlaChecker {
 
 	
 	public List<String> checkForMissingTransactionsWithDatabaseSLAs(String application, String runTime, SlaDAO slaDAO) {
-		
+
 		List<String> slasWithMissingTxns = slaDAO.getSlasWithMissingTxnsInThisRun(application, runTime  );		
 		return slasWithMissingTxns;
 	}
@@ -83,7 +83,10 @@ public class SlaChecker {
 			slaTransactionResult.setTxnFailurePercent(calculateTxnFailurePercent(transaction));
 			slaTransactionResult.setSlaFailurePercent(transactionSla.getSlaFailPercent());
 			slaTransactionResult.setPassedFailPercent(checkFailPercent(transaction.getTxnId(), slaTransactionResult.getTxnFailurePercent() , transactionSla.getSlaFailPercent()));
-		
+
+			slaTransactionResult.setTxnFailCount(transaction.getTxnFail());
+			slaTransactionResult.setSlaFailCount(transactionSla.getSlaFailCount());
+			slaTransactionResult.setPassedFailCount(checkFailCount(transaction.getTxnId(), transaction.getTxnFail(), transactionSla.getSlaFailCount())); 			
 
 			slaTransactionResult.setTxnPassCount(transaction.getTxnPass());
 			slaTransactionResult.setSlaPassCount(transactionSla.getSlaPassCount());
@@ -98,6 +101,7 @@ public class SlaChecker {
 			slaTransactionResult.setPassed95thResponse(true); 
 			slaTransactionResult.setPassed99thResponse(true); 
 			slaTransactionResult.setPassedFailPercent(true); 
+			slaTransactionResult.setPassedFailCount(true); 
 			slaTransactionResult.setPassedPassCount(true); 
 		}
 		
@@ -106,6 +110,7 @@ public class SlaChecker {
 			 slaTransactionResult.isPassed95thResponse() && 
 			 slaTransactionResult.isPassed99thResponse() && 
 			 slaTransactionResult.isPassedFailPercent() && 
+			 slaTransactionResult.isPassedFailCount() && 
 			 slaTransactionResult.isPassedPassCount() ){
 			slaTransactionResult.setPassedAllSlas(true);
 		}
@@ -153,6 +158,15 @@ public class SlaChecker {
 		return passThisSla;
 	}	
 	
+	private Boolean checkFailCount(String txnId, long txnFailCount, long slaFailCount) {
+		boolean passThisSla = true;
+		if ( slaFailCount > -1 ) {   	// note that 0 can be set as a Fail Count (implies that if this txn exists, any txn failure means a SLA failure will occur)   
+			if ( txnFailCount >  slaFailCount ){
+	    		passThisSla = false;
+			}
+		}
+		return passThisSla;
+	}
 	
 	
 	private Boolean checkPassCount(String txnId, long txnPassCount, long slaPassCount, BigDecimal slaPassCountVariancePercent  ) {

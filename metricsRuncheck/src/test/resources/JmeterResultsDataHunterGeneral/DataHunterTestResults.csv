@@ -87,7 +87,7 @@ timeStamp,elapsed,label,responseCode,responseMessage,threadName,dataType,success
 1589526072115,122,DH-lifecycle-0500-useNextPolicy,200,PASS,DataHunterLifecycleIterator 2-1,,true,,0,0,2,5,null,0,COMPUTER0,0,0
 1589526072237,16,DH-lifecycle-0001-gotoDeleteMultiplePoliciesUrl,200,PASS,DataHunterLifecycleIterator 2-1,,true,,0,0,2,5,null,0,COMPUTER0,0,0
 1589526072395,134,DH-lifecycle-0100-deleteMultiplePolicies,200,PASS,DataHunterLifecycleIterator 2-1,,true,,0,0,2,5,null,0,COMPUTER0,0,0
-1589526076336,114,DH-lifecycle-9999-finalize-deleteMultiplePolicies,200,PASS,DataHunterLifecycleIterator 2-1,,true,,0,0,2,5,null,0,COMPUTER0,0,0
+1589526076336,22114,DH-lifecycle-9999-finalize-deleteMultiplePolicies,200,PASS,DataHunterLifecycleIterator 2-1,,true,,0,0,2,5,null,0,COMPUTER0,0,0
 1589526070100,13485,DataHunterLifecycle,200,PASS,DataHunterLifecycle 1-1,PARENT,true,,0,0,2,5,null,0,COMPUTER0,0,0
 1589526070100,1131,DH-lifecycle-0001-gotoDeleteMultiplePoliciesUrl,200,PASS,DataHunterLifecycle 1-1,,true,,0,0,2,5,null,0,COMPUTER0,0,0
 1589526071448,166,DH-lifecycle-0100-deleteMultiplePolicies,200,PASS,DataHunterLifecycle 1-1,,true,,0,0,2,5,null,0,COMPUTER0,0,0
@@ -153,7 +153,7 @@ timeStamp,elapsed,label,responseCode,responseMessage,threadName,dataType,success
 1589526080845,150,DH-lifecycle-0500-useNextPolicy,200,PASS,DataHunterLifecycleIterator 2-2,,true,,0,0,2,5,null,0,COMPUTER0,0,0
 1589526080995,18,DH-lifecycle-0001-gotoDeleteMultiplePoliciesUrl,200,PASS,DataHunterLifecycleIterator 2-2,,true,,0,0,2,5,null,0,COMPUTER0,0,0
 1589526081159,132,DH-lifecycle-0100-deleteMultiplePolicies,200,PASS,DataHunterLifecycleIterator 2-2,,true,,0,0,2,5,null,0,COMPUTER0,0,0
-1589526084738,125,DH-lifecycle-9999-finalize-deleteMultiplePolicies,200,PASS,DataHunterLifecycleIterator 2-2,,true,,0,0,2,5,null,0,COMPUTER0,0,0
+1589526084738,22125,DH-lifecycle-9999-finalize-deleteMultiplePolicies,200,PASS,DataHunterLifecycleIterator 2-2,,true,,0,0,2,5,null,0,COMPUTER0,0,0
 1589526076238,13802,DataHunterLifecycle,200,PASS,DataHunterLifecycle 1-2,PARENT,true,,0,0,2,5,null,0,COMPUTER0,0,0
 1589526076238,1173,DH-lifecycle-0001-gotoDeleteMultiplePoliciesUrl,200,PASS,DataHunterLifecycle 1-2,,true,,0,0,2,5,null,0,COMPUTER0,0,0
 1589526077599,235,DH-lifecycle-0100-deleteMultiplePolicies,200,PASS,DataHunterLifecycle 1-2,,true,,0,0,2,5,null,0,COMPUTER0,0,0
@@ -238,7 +238,7 @@ timeStamp,elapsed,label,responseCode,responseMessage,threadName,dataType,success
 1589526109748,148,DH-lifecycle-0500-useNextPolicy,200,PASS,DataHunterLifecycleIterator 2-1,,true,,0,0,2,3,null,0,COMPUTER0,0,0
 1589526109896,16,DH-lifecycle-0001-gotoDeleteMultiplePoliciesUrl,200,PASS,DataHunterLifecycleIterator 2-1,,true,,0,0,2,3,null,0,COMPUTER0,0,0
 1589526110062,130,DH-lifecycle-0100-deleteMultiplePolicies,200,PASS,DataHunterLifecycleIterator 2-1,,true,,0,0,2,3,null,0,COMPUTER0,0,0
-1589526113809,120,DH-lifecycle-9999-finalize-deleteMultiplePolicies,200,PASS,DataHunterLifecycleIterator 2-1,,true,,0,0,2,3,null,0,COMPUTER0,0,0
+1589526113809,44120,DH-lifecycle-9999-finalize-deleteMultiplePolicies,200,PASS,DataHunterLifecycleIterator 2-1,,true,,0,0,2,3,null,0,COMPUTER0,0,0
 1589526106121,13376,DataHunterLifecycle,200,PASS,DataHunterLifecycle 1-2,PARENT,true,,0,0,1,2,null,0,COMPUTER0,0,0
 1589526106121,1121,DH-lifecycle-0001-gotoDeleteMultiplePoliciesUrl,200,PASS,DataHunterLifecycle 1-2,,true,,0,0,1,2,null,0,COMPUTER0,0,0
 1589526107458,233,DH-lifecycle-0100-deleteMultiplePolicies,200,PASS,DataHunterLifecycle 1-2,,true,,0,0,1,2,null,0,COMPUTER0,0,0
@@ -301,5 +301,5 @@ timeStamp,elapsed,label,responseCode,responseMessage,threadName,dataType,success
 1589526117560,130,DH-lifecycle-0500-useNextPolicy,200,PASS,DataHunterLifecycleIterator 2-2,,true,,0,0,1,1,null,0,COMPUTER0,0,0
 1589526117690,27,DH-lifecycle-0001-gotoDeleteMultiplePoliciesUrl,200,PASS,DataHunterLifecycleIterator 2-2,,true,,0,0,1,1,null,0,COMPUTER0,0,0
 1589526117858,124,DH-lifecycle-0100-deleteMultiplePolicies,200,PASS,DataHunterLifecycleIterator 2-2,,true,,0,0,1,1,null,0,COMPUTER0,0,0
-1589526121967,117,DH-lifecycle-9999-finalize-deleteMultiplePolicies,200,MOCKUP,DataHunterLifecycleIterator 2-2,,false,mockedupfail,0,0,1,1,null,0,COMPUTER0,0,0
-1589526121968,117,DH-lifecycle-9999-finalize-deleteMultiplePolicies,200,PASS,DataHunterLifecycleIterator 2-2,,true,,0,0,1,1,null,0,COMPUTER0,0,0
+1589526121967,66117,DH-lifecycle-9999-finalize-deleteMultiplePolicies,200,MOCKUP,DataHunterLifecycleIterator 2-2,,false,mockedupfail,0,0,1,1,null,0,COMPUTER0,0,0
+1589526121968,55117,DH-lifecycle-9999-finalize-deleteMultiplePolicies,200,PASS,DataHunterLifecycleIterator 2-2,,true,,0,0,1,1,null,0,COMPUTER0,0,0

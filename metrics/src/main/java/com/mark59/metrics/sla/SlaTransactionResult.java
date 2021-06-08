@@ -44,6 +44,10 @@ public class SlaTransactionResult {
 	private BigDecimal txnFailurePercent;
 	private BigDecimal slaFailurePercent;
 	
+	private boolean passedFailCount;
+	private long txnFailCount;
+	private long slaFailCount;	
+	
 	private boolean passedPassCount;
 	private long txnPassCount;
 	private long slaPassCount;	
@@ -144,6 +148,24 @@ public class SlaTransactionResult {
 	}
 	public boolean isPassedPassCount() {
 		return passedPassCount;
+	}
+	public boolean isPassedFailCount() {
+		return passedFailCount;
+	}
+	public void setPassedFailCount(boolean passedFailCount) {
+		this.passedFailCount = passedFailCount;
+	}
+	public long getTxnFailCount() {
+		return txnFailCount;
+	}
+	public void setTxnFailCount(long txnFailCount) {
+		this.txnFailCount = txnFailCount;
+	}
+	public long getSlaFailCount() {
+		return slaFailCount;
+	}
+	public void setSlaFailCount(long slaFailCount) {
+		this.slaFailCount = slaFailCount;
 	}
 	public void setPassedPassCount(boolean passedPassCount) {
 		this.passedPassCount = passedPassCount;

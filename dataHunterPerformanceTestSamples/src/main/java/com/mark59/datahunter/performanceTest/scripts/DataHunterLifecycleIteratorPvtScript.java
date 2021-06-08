@@ -137,6 +137,7 @@ public class DataHunterLifecycleIteratorPvtScript  extends SeleniumIteratorAbstr
 		jm.startTransaction("DH-lifecycle-0100-deleteMultiplePolicies");		
 		deleteMultiplePoliciesPage.submit().submit();
 		waitActionPageCheckSqlOk(new DeleteMultiplePoliciesActionPage(driver));
+		SafeSleep.sleep(200);  // Mocking a 200 ms txn delay
 		jm.endTransaction("DH-lifecycle-0100-deleteMultiplePolicies");	
 	}
 	
@@ -225,11 +226,15 @@ public class DataHunterLifecycleIteratorPvtScript  extends SeleniumIteratorAbstr
 		DeleteMultiplePoliciesPage deleteMultiplePoliciesPage = new DeleteMultiplePoliciesPage(driver); 
 		jm.startTransaction("DH-lifecycle-0001-gotoDeleteMultiplePoliciesUrl");		
 		driver.get(dataHunterUrl + TestConstants.DELETE_MULTIPLE_POLICIES_URL_PATH + "?application=" + application);
-		jm.endTransaction("DH-lifecycle-0001-gotoDeleteMultiplePoliciesUrl");	
+		jm.endTransaction("DH-lifecycle-0001-gotoDeleteMultiplePoliciesUrl");
+		
 		deleteMultiplePoliciesPage.lifecycle().type(lifecycle);
+		
+		DeleteMultiplePoliciesActionPage deleteMultiplePoliciesActionPage = new DeleteMultiplePoliciesActionPage(driver);
 		jm.startTransaction("DH-lifecycle-0100-deleteMultiplePolicies");		
 		deleteMultiplePoliciesPage.submit().submit();
-		waitActionPageCheckSqlOk(new DeleteMultiplePoliciesActionPage(driver));
+		waitActionPageCheckSqlOk(deleteMultiplePoliciesActionPage);
+		SafeSleep.sleep(200);  // Mocking a 200 ms txn delay
 		jm.endTransaction("DH-lifecycle-0100-deleteMultiplePolicies");	
 		
 //		jm.writeBufferedArtifacts();

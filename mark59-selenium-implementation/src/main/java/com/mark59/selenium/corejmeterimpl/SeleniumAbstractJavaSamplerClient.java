@@ -340,9 +340,10 @@ public abstract class SeleniumAbstractJavaSamplerClient extends AbstractJavaSamp
 
 	
 	/**
-	 * Convenience method to a single-threaded script execution (rather than needing to use JMeter).  It can also be 
-	 * used in a JRS223 sampler in order to execute a script written directly in JMeter (see the DataHunterLifecyclePvtScriptAsSingleJSR223 
-	 * sample script)    
+	 * Convenience method to a single-threaded script execution (rather than needing to use JMeter).  
+	 * <p>It can also be used in a JRS223 sampler in order to execute a script written directly in JMeter. See  the 
+	 * DataHunterLifecyclePvtScriptAsSingleJSR223 thread group in the the DataHunterSeleniumTestPlan.jmx test plan and
+	 * com.mark59.datahunter.performanceTest.scripts.jsr223format package in the dataHunterPerformanceTestSamples project.    
 	 * <p>See method runMultiThreadedSeleniumTest to executed a multi-thread test
 	 * <p>You can control if the browser closes at the end of the test. 
 	 * EG: <b>KeepBrowserOpen.ONFAILURE</b> will keep the browser open at test end if the test fails (unless running in headless mode). 

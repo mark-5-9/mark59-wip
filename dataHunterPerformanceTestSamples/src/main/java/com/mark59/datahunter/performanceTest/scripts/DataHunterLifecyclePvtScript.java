@@ -53,6 +53,7 @@ import com.mark59.selenium.corejmeterimpl.JmeterFunctionsForSeleniumScripts;
 import com.mark59.selenium.corejmeterimpl.KeepBrowserOpen;
 import com.mark59.selenium.corejmeterimpl.SeleniumAbstractJavaSamplerClient;
 import com.mark59.selenium.drivers.SeleniumDriverFactory;
+import com.mark59.seleniumDSL.core.SafeSleep;
 import com.mark59.seleniumDSL.pageElements.HtmlTable;
 import com.mark59.seleniumDSL.pageElements.HtmlTableRow;
 
@@ -138,7 +139,8 @@ public class DataHunterLifecyclePvtScript  extends SeleniumAbstractJavaSamplerCl
 		
 		jm.startTransaction("DH-lifecycle-0100-deleteMultiplePolicies");		
 		deleteMultiplePoliciesPage.submit().submit().waitUntilClickable( deleteMultiplePoliciesActionPage.backLink() );   // ** note 1
-		waitActionPageCheckSqlOk(new DeleteMultiplePoliciesActionPage(driver));
+		waitActionPageCheckSqlOk(deleteMultiplePoliciesActionPage);
+		SafeSleep.sleep(200);  // Mocking a 200 ms txn delay
 		jm.endTransaction("DH-lifecycle-0100-deleteMultiplePolicies");	
 	
 //		add a set of policies 		
@@ -258,7 +260,8 @@ public class DataHunterLifecyclePvtScript  extends SeleniumAbstractJavaSamplerCl
 		
 		jm.startTransaction("DH-lifecycle-0100-deleteMultiplePolicies");		
 		deleteMultiplePoliciesPage.submit().submit();
-		waitActionPageCheckSqlOk(new DeleteMultiplePoliciesActionPage(driver));
+		waitActionPageCheckSqlOk(deleteMultiplePoliciesActionPage);
+		SafeSleep.sleep(200);  // Mocking a 200 ms txn delay
 		jm.endTransaction("DH-lifecycle-0100-deleteMultiplePolicies");	
 		
 //		jm.writeBufferedArtifacts();

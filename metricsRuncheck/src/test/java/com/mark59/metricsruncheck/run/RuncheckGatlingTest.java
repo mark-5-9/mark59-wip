@@ -164,6 +164,10 @@ public class RuncheckGatlingTest extends TestCase {
 			}
 		}
 		
+		List<String> slasWithMissingTxns = runcheck.getSlasWithMissingTxns();
+		assertEquals(1, slasWithMissingTxns.size());		
+		assertEquals("DH-lifecycle-0200-addPolicy", slasWithMissingTxns.get(0));		
+		
 		PerformanceTest performanceTest = runcheck.getPerformanceTest();
 		List<Transaction> transactions = performanceTest.getTransactionSummariesThisRun();
 		assertEquals(7, transactions.size() );

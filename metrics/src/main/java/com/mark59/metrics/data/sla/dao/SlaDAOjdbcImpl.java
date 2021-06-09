@@ -210,12 +210,10 @@ public class SlaDAOjdbcImpl implements SlaDAO {
 	}
 
 
-	
-	/* 
-	 * Reports on transactions which appear on the SLA table, but do not exist in the run.  
-	 *           
-	 * Transactions on the SLA table which have the 'Ignore on Graphs' flag set are also included in the check, although only reported if any SLA is actually set ( a count
-	 * or response time other than -1 has been entered against it)           
+	/*
+	 *  Reports on transactions which appear on the SLA table, but do not exist in the run.
+	 *  Also, at least one SLA must actually be set (a value other than -1 has been set against an SLA).
+	 *  Note transactions marked as 'ignored on graphs' are also reported.    
 	 */
 	@Override
 	@SuppressWarnings("rawtypes")	
@@ -229,13 +227,8 @@ public class SlaDAOjdbcImpl implements SlaDAO {
 					+ "       and RUN_TIME = '" + runTime + "' " 
 					+ "       and TXN_TYPE = 'TRANSACTION' ) " 					
 					+ "  and TXN_ID != '-" + application + "-DEFAULT-SLA-' "
-					+ "  and (   IS_TXN_IGNORED != 'Y' "  
-					+ "          or "
-					+ "          ( IS_TXN_IGNORED = 'Y' "
-					+ "            and (not SLA_90TH_RESPONSE < 0.0 or not SLA_95TH_RESPONSE < 0 or not SLA_99TH_RESPONSE < 0 "
-					+ "                 or not SLA_PASS_COUNT < 0 or not SLA_FAIL_COUNT < 0 or not SLA_FAIL_PERCENT < 0.0 )"
-					+ "          ) "
-      				+ "      ) "    
+					+ "  and (not SLA_90TH_RESPONSE < 0.0 or not SLA_95TH_RESPONSE < 0 or not SLA_99TH_RESPONSE < 0 "
+					+ "        or not SLA_PASS_COUNT < 0 or not SLA_FAIL_COUNT < 0 or not SLA_FAIL_PERCENT < 0.0 )"
 					+ " order by TXN_ID";
 
 //		System.out.println("getSlasWithMissingTxnsInThisRun sql : " + sql  );

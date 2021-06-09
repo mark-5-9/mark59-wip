@@ -107,7 +107,7 @@ public class Runcheck  implements CommandLineRunner
 	private PerformanceTest performanceTest;
 	private List<MetricSlaResult> metricSlaResults = new ArrayList<MetricSlaResult>();
 	private List<SlaTransactionResult> slaTransactionResults = new ArrayList<SlaTransactionResult>();
-
+	private List<String> slasWithMissingTxns = new ArrayList<String>(); 
 	
 	public static void parseArguments(String[] args) {
 		Options options = new Options(); 
@@ -357,7 +357,7 @@ public class Runcheck  implements CommandLineRunner
 		
 		String runTime = performanceTest.getRunSummary().getRunTime(); 
 
-		List<String> slasWithMissingTxns  =  new SlaChecker().checkForMissingTransactionsWithDatabaseSLAs(application, runTime, slaDAO  ); 
+		slasWithMissingTxns  =  new SlaChecker().checkForMissingTransactionsWithDatabaseSLAs(application, runTime, slaDAO  ); 
 		printSlasWitMissingTxnsInThisRun(slasWithMissingTxns);		
 		
 		if (slasWithMissingTxns.isEmpty()  && slaTransactionResults.isEmpty() ){
@@ -450,5 +450,14 @@ public class Runcheck  implements CommandLineRunner
 	public List<MetricSlaResult> getMetricSlaResults() {
 		return metricSlaResults;
 	}
+	/**
+	 * for testing purposes
+	 * @return metricSlaResults
+	 */
+	public List<String> getSlasWithMissingTxns() {
+		return slasWithMissingTxns;
+	}
+
+	
 	
 }

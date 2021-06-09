@@ -104,7 +104,7 @@ public class RuncheckGatlingTest extends TestCase {
 	}
 	
 	@Test
-	public void testRuncheckJMeterGeneralTest() {
+	public void testRuncheckGatlin__341_GeneralTest() {
 		Runcheck.parseArguments(new String[] { "-a", "DataHunter", "-i", "./src/test/resources/GatlingResults", "-l","simulation.logv341",
 				"-d", Mark59Constants.H2MEM, "-s","metricsmem",	"-e","responseTimeInMillis|errormsgStartsWith2|errormsgStartsWith3",  "-t","GATLING"  });
 		SpringApplication springApplication = new SpringApplication(Runcheck.class);
@@ -197,6 +197,127 @@ public class RuncheckGatlingTest extends TestCase {
 			} else if ("load simulation file".equals(transaction.getTxnId())){
 				assertEquals ("application=DataHunter, runTime=202104081812, txnId=load simulation file, txnType=TRANSACTION, txnMinimum=0.093, txnAverage=0.093, txnMedian=0.093, txnMaximum=0.093, txn90th=0.093,"
 						+ " txn95th=0.093, txn99th=0.093, txnPass=1, txnFail=0, txnStop=0, txnFirst=-1.000, txnLast=-1.000, txnSum=-1.000, txnDelay=0.000", transaction.toString());				
+			} else {
+				fail("unexpectedTransaction: " + transaction.getTxnId() );
+			}
+		}
+	}
+	
+	
+	@Test
+	public void testRuncheckGatling331Test() {
+		Runcheck.parseArguments(new String[] { "-a", "junit331", "-i", "./src/test/resources/GatlingResults", "-l","simulation.logv331",
+				"-d", Mark59Constants.H2MEM, "-s","metricsmem",	"-e","responseTimeInMillis|errormsgStartsWith2|errormsgStartsWith",  "-t","GATLING"  });
+		SpringApplication springApplication = new SpringApplication(Runcheck.class);
+		springApplication.setWebApplicationType(WebApplicationType.NONE);
+		springApplication.setBannerMode(Banner.Mode.OFF);	
+		context = springApplication.run();
+		
+		Runcheck runcheck = (Runcheck) context.getBean("runcheck");	
+		assertEquals(0, runcheck.getMetricSlaResults().size());
+		assertEquals(0, runcheck.getSlaTransactionResults().size() );
+		assertEquals(0, runcheck.getSlasWithMissingTxns().size());		
+		
+		List<Transaction> transactions = runcheck.getPerformanceTest().getTransactionSummariesThisRun();
+		assertEquals(2, transactions.size() );
+		for (Transaction transaction : transactions) {
+			// System.out.println("Txn>>" + transaction);
+			if ("Get Info".equals(transaction.getTxnId())){
+				assertEquals ("application=junit331, runTime=202103171627, txnId=Get Info, txnType=TRANSACTION, txnMinimum=0.220, txnAverage=0.220, txnMedian=0.220,"
+						+ " txnMaximum=0.220, txn90th=0.220, txn95th=0.220, txn99th=0.220, txnPass=2, txnFail=0, txnStop=0, txnFirst=-1.000, txnLast=-1.000, txnSum=-1.000, txnDelay=0.000", transaction.toString());
+			} else if ("MGSX".equals(transaction.getTxnId())){
+				assertEquals ("application=junit331, runTime=202103171627, txnId=MGSX, txnType=TRANSACTION, txnMinimum=0.020, txnAverage=0.020, txnMedian=0.020,"
+						+ " txnMaximum=0.020, txn90th=0.020, txn95th=0.020, txn99th=0.020, txnPass=1, txnFail=0, txnStop=0, txnFirst=-1.000, txnLast=-1.000, txnSum=-1.000, txnDelay=0.000", transaction.toString());
+			} else {
+				fail("unexpectedTransaction: " + transaction.getTxnId() );
+			}
+		}
+	}
+	
+	
+	@Test
+	public void testRuncheckGatling351Test() {
+		Runcheck.parseArguments(new String[] { "-a", "junit351", "-i", "./src/test/resources/GatlingResults", "-l","simulation.logv351",
+				"-d", Mark59Constants.H2MEM, "-s","metricsmem",	"-t","GATLING"  });
+		SpringApplication springApplication = new SpringApplication(Runcheck.class);
+		springApplication.setWebApplicationType(WebApplicationType.NONE);
+		springApplication.setBannerMode(Banner.Mode.OFF);	
+		context = springApplication.run();
+		
+		Runcheck runcheck = (Runcheck) context.getBean("runcheck");	
+		assertEquals(0, runcheck.getMetricSlaResults().size());
+		assertEquals(0, runcheck.getSlaTransactionResults().size() );
+		assertEquals(0, runcheck.getSlasWithMissingTxns().size());		
+		
+		List<Transaction> transactions = runcheck.getPerformanceTest().getTransactionSummariesThisRun();
+		assertEquals(1, transactions.size() );
+		for (Transaction transaction : transactions) {
+			// System.out.println("Txn>>" + transaction);
+			if ("Get trash List".equals(transaction.getTxnId())){
+				assertEquals ("application=junit351, runTime=202106031419, txnId=Get trash List, txnType=TRANSACTION, txnMinimum=0.057, txnAverage=0.096, txnMedian=0.057,"
+						+ " txnMaximum=0.134, txn90th=0.134, txn95th=0.134, txn99th=0.134, txnPass=2, txnFail=0, txnStop=0, txnFirst=-1.000, txnLast=-1.000, txnSum=-1.000, txnDelay=0.000", transaction.toString());
+			} else {
+				fail("unexpectedTransaction: " + transaction.getTxnId() );
+			}
+		}
+	}
+
+	
+	@Test
+	public void testRuncheckGatling360Test() {
+		Runcheck.parseArguments(new String[] { "-a", "junit360", "-i", "./src/test/resources/GatlingResults", "-l","simulation.logv360",
+				"-d", Mark59Constants.H2MEM, "-s","metricsmem",	"-e","responseTimeInMillis",  "-t","GATLING"  });
+		SpringApplication springApplication = new SpringApplication(Runcheck.class);
+		springApplication.setWebApplicationType(WebApplicationType.NONE);
+		springApplication.setBannerMode(Banner.Mode.OFF);	
+		context = springApplication.run();
+		
+		Runcheck runcheck = (Runcheck) context.getBean("runcheck");	
+		assertEquals(0, runcheck.getMetricSlaResults().size());
+		assertEquals(0, runcheck.getSlaTransactionResults().size() );
+		assertEquals(0, runcheck.getSlasWithMissingTxns().size());		
+		
+		List<Transaction> transactions = runcheck.getPerformanceTest().getTransactionSummariesThisRun();
+		assertEquals(2, transactions.size() );
+		for (Transaction transaction : transactions) {
+			System.out.println("Txn>>" + transaction);
+			if ("Get Single trash Record".equals(transaction.getTxnId())){
+				assertEquals ("application=junit360, runTime=202106030941, txnId=Get Single trash Record, txnType=TRANSACTION, txnMinimum=0.057, txnAverage=0.057, txnMedian=0.057,"
+						+ " txnMaximum=0.057, txn90th=0.057, txn95th=0.057, txn99th=0.057, txnPass=1, txnFail=0, txnStop=0, txnFirst=-1.000, txnLast=-1.000, txnSum=-1.000, txnDelay=0.000", transaction.toString());
+			} else if ("Get trash List".equals(transaction.getTxnId())){
+				assertEquals ("application=junit360, runTime=202106030941, txnId=Get trash List, txnType=TRANSACTION, txnMinimum=0.265, txnAverage=0.265, txnMedian=0.265,"
+						+ " txnMaximum=0.265, txn90th=0.265, txn95th=0.265, txn99th=0.265, txnPass=1, txnFail=1, txnStop=0, txnFirst=-1.000, txnLast=-1.000, txnSum=-1.000, txnDelay=0.000", transaction.toString());
+			} else {
+				fail("unexpectedTransaction: " + transaction.getTxnId() );
+			}
+		}
+	}
+	
+	
+	@Test
+	public void testRuncheckGatling900CustomTest() {
+		Runcheck.parseArguments(new String[] { "-a", "junit900", "-i", "./src/test/resources/GatlingResults", "-l","simulation.log900Custom",
+				"-d", Mark59Constants.H2MEM, "-s","metricsmem",	"-m","3,4,5,6,7",  "-t","GATLING"  });
+		SpringApplication springApplication = new SpringApplication(Runcheck.class);
+		springApplication.setWebApplicationType(WebApplicationType.NONE);
+		springApplication.setBannerMode(Banner.Mode.OFF);	
+		context = springApplication.run();
+		
+		Runcheck runcheck = (Runcheck) context.getBean("runcheck");	
+		assertEquals(0, runcheck.getMetricSlaResults().size());
+		assertEquals(0, runcheck.getSlaTransactionResults().size() );
+		assertEquals(0, runcheck.getSlasWithMissingTxns().size());		
+		
+		List<Transaction> transactions = runcheck.getPerformanceTest().getTransactionSummariesThisRun();
+		assertEquals(2, transactions.size() );
+		for (Transaction transaction : transactions) {
+			System.out.println("Txn>>" + transaction);
+			if ("Get Single trash Record".equals(transaction.getTxnId())){
+				assertEquals ("application=junit900, runTime=202106030941, txnId=Get Single trash Record, txnType=TRANSACTION, txnMinimum=0.057, txnAverage=0.057, txnMedian=0.057,"
+						+ " txnMaximum=0.057, txn90th=0.057, txn95th=0.057, txn99th=0.057, txnPass=1, txnFail=0, txnStop=0, txnFirst=-1.000, txnLast=-1.000, txnSum=-1.000, txnDelay=0.000", transaction.toString());
+			} else if ("Get trash List".equals(transaction.getTxnId())){
+				assertEquals ("application=junit900, runTime=202106030941, txnId=Get trash List, txnType=TRANSACTION, txnMinimum=0.265, txnAverage=0.265, txnMedian=0.265,"
+						+ " txnMaximum=0.265, txn90th=0.265, txn95th=0.265, txn99th=0.265, txnPass=1, txnFail=1, txnStop=0, txnFirst=-1.000, txnLast=-1.000, txnSum=-1.000, txnDelay=0.000", transaction.toString());
 			} else {
 				fail("unexpectedTransaction: " + transaction.getTxnId() );
 			}

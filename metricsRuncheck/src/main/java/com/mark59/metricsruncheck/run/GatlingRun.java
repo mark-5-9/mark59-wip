@@ -29,6 +29,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.context.ApplicationContext;
 
 import com.mark59.core.utils.Mark59Constants;
@@ -50,6 +51,7 @@ import com.opencsv.exceptions.CsvValidationException;
  */
 public class GatlingRun extends PerformanceTest  {
 	
+	private static final String GATLING_FORMAT_UNKNOWN ="UNKNOWN";
 	private static final String GATLING_VER_lATEST_FORMAT ="3.4-3.6";         
 	private static final String GATLING_VER_3_3_FORMAT ="3.3";
 	
@@ -67,14 +69,14 @@ public class GatlingRun extends PerformanceTest  {
 	private int fieldPosRequestErrorMsg;
 	
 	public GatlingRun(ApplicationContext context, String application, String inputdirectory, String runReference, String excludestart, String captureperiod, 
-			String ignoredErrors, String simulationLog) {
+			String ignoredErrors, String simulationLog, String simlogCustom) {
 		
 		super(context,application, runReference);
 		
 		//clean up before  
 		testTransactionsDAO.deleteAllForRun(run);  // RUN_TIME_YET_TO_BE_CALCULATED
 		
-		loadTestTransactionDataFromGatlingSimulationLog(run.getApplication(), inputdirectory, ignoredErrors, simulationLog);
+		loadTestTransactionDataFromGatlingSimulationLog(run.getApplication(), inputdirectory, ignoredErrors, simulationLog, simlogCustom);
 		
 		DateRangeBean dateRangeBean = getRunDateRangeUsingTestTransactionalData(run.getApplication());
 		run = new Run( calculateAndSetRunTimesUsingEpochStartAndEnd(run, dateRangeBean));
@@ -88,12 +90,12 @@ public class GatlingRun extends PerformanceTest  {
 	}
 
 
-	private void loadTestTransactionDataFromGatlingSimulationLog(String application, String inputdirectory, String ignoredErrors, String simulationLog) {
+	private void loadTestTransactionDataFromGatlingSimulationLog(String application, String inputdirectory, String ignoredErrors, String simulationLog, String simlogCustom) {
 		int sampleCount = 0;
 		
 		try {
 			File simulationLogFile = new File(inputdirectory + "/" + simulationLog);
-			sampleCount = loadTestTransactionDataFromGatlingSimulationLogFile(simulationLogFile, application, ignoredErrors);
+			sampleCount = loadTestTransactionDataFromGatlingSimulationLogFile(simulationLogFile, application, ignoredErrors, simlogCustom);
 		} catch (IOException e) {
 			System.out.println( "Error : problem with processing Gatling simulation log file  " + inputdirectory + "/" + simulationLog );
 			StringWriter sw = new StringWriter();
@@ -109,7 +111,7 @@ public class GatlingRun extends PerformanceTest  {
 	/**
 	 * A validly name named Gatling simulation log file is expected to be passed, now need determine its version and extract results 
 	 */
-	private int loadTestTransactionDataFromGatlingSimulationLogFile(File simulationLogFile, String application, String ignoredErrors) throws IOException {
+	private int loadTestTransactionDataFromGatlingSimulationLogFile(File simulationLogFile, String application, String ignoredErrors, String simlogCustom) throws IOException {
 
 		List<TestTransaction> testTransactionList = new ArrayList<TestTransaction>();
 		long startLoadms = System.currentTimeMillis(); 
@@ -127,34 +129,70 @@ public class GatlingRun extends PerformanceTest  {
 			return 0;
 		} 
 		
-		String gatlingVersion = GATLING_VER_lATEST_FORMAT;
-		boolean stillLookingForRUN = true; 
-
-		while ( csvDataLineFields != null && stillLookingForRUN){
-			if (RUN.equals(csvDataLineFields[0])){
-				gatlingVersion = csvDataLineFields[5];
-				System.out.println("  Gatling ver: " + gatlingVersion);
-				if (gatlingVersion == null) {
-					System.out.println("\n  Info :  The version of Gatling being used could not be determined ! ");
-					System.out.println("\n  Proceeding on assuption the format is compatable with Gatling version " + GATLING_VER_lATEST_FORMAT  + "\n" );
-				} else if (gatlingVersion.startsWith("3.3")) {
-					gatlingVersion = GATLING_VER_3_3_FORMAT;	
-				} else if ( ! (gatlingVersion.startsWith("3.4") || gatlingVersion.startsWith("3.5")  || gatlingVersion.startsWith("3.6"))) {
-					System.out.println("\n  Info :  The version of Gatling being used (" + gatlingVersion + ") has not been catered for ! ");
-					System.out.println("\n  Proceeding on assuption the format is compatable with Gatling version " + GATLING_VER_lATEST_FORMAT  + "\n" );					
+		String gatlingFormat = GATLING_FORMAT_UNKNOWN;
+		
+		if (StringUtils.isNotBlank(simlogCustom)) {
+			System.out.println("\n  A custom 'REQUEST' field layout has been requested for this Gatling file load !" );
+			System.out.println("\n  The 'RUN' (verion info) line will be bypassed, and the first REQUEST start time in the simulation log will be used as the test start time.\n" );				
+		
+		} else {
+			
+			boolean stillLookingForRUN = true; 
+			while ( csvDataLineFields != null && stillLookingForRUN ){
+				if (RUN.equals(csvDataLineFields[0].trim())){
+					String gatlingVersion = csvDataLineFields[5].trim();
+					System.out.println("Gatling version: " + gatlingVersion);
+					if (StringUtils.isBlank(gatlingVersion)) {
+						System.out.println("\n  Info :  The version of Gatling being used could not be determined ! ");
+						System.out.println("\n  Proceeding on assuption the format is compatable with Gatling version " + GATLING_VER_lATEST_FORMAT);
+						System.out.println("\n  If the field positions for 'REQUEST' are incompatable the 'simlogcustoM' (m) parameter may be of assistance.\n" );
+						gatlingFormat = GATLING_VER_lATEST_FORMAT;	
+					} else if ( gatlingVersion.startsWith("3.3")) {
+						gatlingFormat = GATLING_VER_3_3_FORMAT;	
+					} else if ( gatlingVersion.startsWith("3.4") || gatlingVersion.startsWith("3.5")  || gatlingVersion.startsWith("3.6") ){
+						gatlingFormat = GATLING_VER_lATEST_FORMAT;					
+					} else {
+						System.out.println("\n  Info :  The version of Gatling being used (" + gatlingFormat + ") has not been catered for ! ");
+						System.out.println("\n  Proceeding on assuption the format is compatable with Gatling version " + GATLING_VER_lATEST_FORMAT);						
+						System.out.println("\n  If the field positions for 'REQUEST' are incompatable the 'simlogcustoM' (m) parameter may be of assistance.\n" );
+						gatlingFormat = GATLING_VER_lATEST_FORMAT;	
+					}
+					stillLookingForRUN = false;
 				}
-				stillLookingForRUN = false;
+				lineCount++;
+				csvDataLineFields = csvReadNextLine(csvReader, simulationLogFile);
 			}
-			lineCount++;
-			csvDataLineFields = csvReadNextLine(csvReader, simulationLogFile);
+		}
+		
+		if (GATLING_VER_lATEST_FORMAT.equals(gatlingFormat)){
+			fieldPosTxnId = 2;	
+			fieldPosTimeStampStart = 3;
+			fieldPosTimeStampEnd = 4;
+			fieldPosSuccess = 5;	
+			fieldPosRequestErrorMsg = 6;
+		} else if (GATLING_VER_3_3_FORMAT.equals(gatlingFormat)){
+			fieldPosTxnId = 3;	
+			fieldPosTimeStampStart = 4;
+			fieldPosTimeStampEnd = 5;
+			fieldPosSuccess = 6;	
+			fieldPosRequestErrorMsg = 7;
+		} else if (StringUtils.isNotBlank(simlogCustom)) {
+			List<String> mPos = Mark59Utils.commaDelimStringToStringList(simlogCustom);
+			fieldPosTxnId            = Integer.parseInt(mPos.get(0));	
+			fieldPosTimeStampStart   = Integer.parseInt(mPos.get(1));	
+			fieldPosTimeStampEnd     = Integer.parseInt(mPos.get(2));	
+			fieldPosSuccess          = Integer.parseInt(mPos.get(3));		
+			fieldPosRequestErrorMsg  = Integer.parseInt(mPos.get(4));				
+		} else {
+			throw new RuntimeException("Logic Error finding Gatling format " + gatlingFormat);
 		}
 		
 		List<String> ignoredErrorsList = Mark59Utils.pipeDelimStringToStringList(ignoredErrors);
 		
 		while ( csvDataLineFields != null ) {
 		
-			if (REQUEST.equals(csvDataLineFields[0])) {
-    			addSampleToTestTransactionList(testTransactionList, csvDataLineFields, application, gatlingVersion, ignoredErrorsList);
+			if (REQUEST.equals(csvDataLineFields[0].trim())) {
+    			addSampleToTestTransactionList(testTransactionList, csvDataLineFields, application, ignoredErrorsList);
 				samplesCreated++;
 			}
 
@@ -205,30 +243,16 @@ public class GatlingRun extends PerformanceTest  {
 	}
 	
 	
-	private void addSampleToTestTransactionList(List<TestTransaction> testTransactionList, String[] csvDataLineFields, String application, String gatlingVersion, List<String> ignoredErrorsList){
-		TestTransaction testTransaction = extractTransactionFromGatlingLine(csvDataLineFields, gatlingVersion, ignoredErrorsList);
+	private void addSampleToTestTransactionList(List<TestTransaction> testTransactionList, String[] csvDataLineFields, String application, List<String> ignoredErrorsList){
+		TestTransaction testTransaction = extractTransactionFromGatlingLine(csvDataLineFields, ignoredErrorsList);
 		testTransaction.setApplication(application);
 		testTransaction.setRunTime(AppConstantsMetrics.RUN_TIME_YET_TO_BE_CALCULATED);
 		testTransactionList.add(testTransaction);		
 	}
 
 	
-	private TestTransaction extractTransactionFromGatlingLine(String[] csvDataLineFields, String gatlingVersion, List<String> ignoredErrorsList) {
+	private TestTransaction extractTransactionFromGatlingLine(String[] csvDataLineFields, List<String> ignoredErrorsList) {
 
-		if (GATLING_VER_lATEST_FORMAT.equals(gatlingVersion)){
-			fieldPosTxnId = 1;	
-			fieldPosTimeStampStart = 2;
-			fieldPosTimeStampEnd = 3;
-			fieldPosSuccess = 4;	
-			fieldPosRequestErrorMsg = 5;
-		} else { // 3.3
-			fieldPosTxnId = 2;	
-			fieldPosTimeStampStart = 3;
-			fieldPosTimeStampEnd = 4;
-			fieldPosSuccess = 5;	
-			fieldPosRequestErrorMsg = 6;
-		}
-		
 		TestTransaction testTransaction = new TestTransaction();
 		testTransaction.setTxnId(csvDataLineFields[fieldPosTxnId]);
 		testTransaction.setTxnType(eventMappingTxnTypeTransform(testTransaction.getTxnId(), AppConstantsMetrics.JMETER, Mark59Constants.DatabaseTxnTypes.TRANSACTION.name()));

@@ -38,6 +38,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
 
 import com.mark59.core.utils.Mark59Constants;
+import com.mark59.core.utils.Mark59Utils;
 import com.mark59.core.utils.SimpleAES;
 import com.mark59.metrics.application.AppConstantsMetrics;
 import com.mark59.metrics.data.eventMapping.dao.EventMappingDAO;
@@ -102,6 +103,7 @@ public class Runcheck  implements CommandLineRunner
 	private static String argIgnoredErrors;
 	private static String argSimulationLog;
 	private static String argKeeprawresults;
+	private static String argSimlogCustom;
 	private static String argTimeZone;
 
 	private PerformanceTest performanceTest;
@@ -129,7 +131,9 @@ public class Runcheck  implements CommandLineRunner
 		options.addOption("x", "eXcludestart",     		true, "exclude results at the start of the test for the given number of minutes (defaults to 0)" );			
 		options.addOption("c", "captureperiod",    		true, "Only capture test results for the given number of minutes, from the excluded start period (default is all results except those skipped by the excludestart parm are included)" );			
 		options.addOption("e", "ignoredErrors",    		true, "Gatling, JMeter(csv) only. A list of pipe (|) delimited strings.  When an error msg starts with any of the strings in the list, it will be treated as a Passed transaction rather that an Error." );	
-		options.addOption("l", "simulationLog",			true, "Gatling only. Simuation log file name - must be in the Input directory (defaults to simulation.log)" );			
+		options.addOption("l", "simulationLog",			true, "Gatling only. Simulation log file name - must be in the Input directory (defaults to simulation.log)" );
+		options.addOption("m", "simlogcustoM",			true, "Gatling only. Simulation log comma-separated cumtomized 'REQUEST' field column positions in order : txn name, epoch start, epoch end, tnx OK, error msg. The text 'REQUEST' is assumed in position 1. "
+				+ " EG: for a 3.6.1 layout: '2,3,4,5,6,' (This parameter may assist with un-catered for Gatling versions)" );
 		options.addOption("k", "keeprawresults", 		true, "JMeter only. Keep Raw Test Resuts. If 'true' will keep each JMeter transaction for each run in the database. This can use a large amount of storage and is not recommended (defaults to false).");
 		options.addOption("z", "timeZone",    			true, "Loadrunner only. Required when running extract from zone other than where Analysis Report was generated. Also, internal raw stored time"
 				+ " may not take daylight saving into account.  Two format options 1) offset against GMT. Eg 'GMT+02:00' or 2) IANA Time Zone Database (TZDB) codes. Refer to https://en.wikipedia.org/wiki/List_of_tz_database_time_zones. Eg 'Australia/Sydney' ");   	
@@ -157,6 +161,7 @@ public class Runcheck  implements CommandLineRunner
 		argCaptureperiod  	= commandLine.getOptionValue("c", AppConstantsMetrics.ALL );
 		argIgnoredErrors	= commandLine.getOptionValue("e", "");				
 		argSimulationLog	= commandLine.getOptionValue("l", "simulation.log");				
+		argSimlogCustom		= commandLine.getOptionValue("m", "");				
 		argKeeprawresults	= commandLine.getOptionValue("k", String.valueOf(false));
 		argTimeZone  		= commandLine.getOptionValue("z", new GregorianCalendar().getTimeZone().getID() );				
 		
@@ -189,6 +194,17 @@ public class Runcheck  implements CommandLineRunner
 			formatter.printHelp( "Runcheck", options );
 			printSampleUsage();
 			throw new RuntimeException("The captureperiod (c) parameter must be numeric or " +  (AppConstantsMetrics.ALL) );  
+		}
+		if (StringUtils.isNotBlank(argSimlogCustom)){
+				List<String> mPos = Mark59Utils.commaDelimStringToStringList(argSimlogCustom); 
+				if (mPos.size() != 5  ||
+					mPos.size() == 5 && ( !StringUtils.isNumeric(mPos.get(0)) || !StringUtils.isNumeric(mPos.get(1)) ||
+							              !StringUtils.isNumeric(mPos.get(2)) || !StringUtils.isNumeric(mPos.get(3)) ||
+							              !StringUtils.isNumeric(mPos.get(4)) )) {
+				formatter.printHelp( "Runcheck", options );
+				printSampleUsage();
+				throw new RuntimeException("The simlogcustoM (m) parameter must blank or 5 comma-delimited integers") ;  
+			}
 		}
 		if (! ( argTimeZone.equals("GMT") || !TimeZone.getTimeZone(argTimeZone).getID().equals("GMT"))){
 			// https://stackoverflow.com/questions/13092865/timezone-validation-in-java
@@ -278,6 +294,7 @@ public class Runcheck  implements CommandLineRunner
 		System.out.println(" captureperiod  : " + argCaptureperiod + " (mins)"  );
 		System.out.println(" ignoredErrors  : " + argIgnoredErrors );		
 		System.out.println(" simulationlog  : " + argSimulationLog );		
+		System.out.println(" simlogcustoM   : " + argSimlogCustom );		
 		System.out.println(" keeprawresults : " + argKeeprawresults );		
 		System.out.println(" timeZone       : " + argTimeZone );		
 		System.out.println("------------------------------------------------   " );				    
@@ -337,19 +354,20 @@ public class Runcheck  implements CommandLineRunner
 			System.out.println();			
 		}
 		
-		loadTestRun(argTool, argApplication, argInput, argReference, argExcludestart, argCaptureperiod, argTimeZone, argKeeprawresults, argIgnoredErrors, argSimulationLog);
+		loadTestRun(argTool, argApplication, argInput, argReference, argExcludestart, argCaptureperiod,
+				argTimeZone, argKeeprawresults, argIgnoredErrors, argSimulationLog, argSimlogCustom);
 	};
 
 	
 	public void loadTestRun(String tool, String application, String input, String runReference, String excludestart, String captureperiod, 
-			String timeZone, String keeprawresults, String ignoredErrors, String simulationLog) throws IOException {
+			String timeZone, String keeprawresults, String ignoredErrors, String simulationLog, String simlogCustom) throws IOException {
 		
 		if (AppConstantsMetrics.JMETER.equalsIgnoreCase(tool)){		
 			performanceTest = new JmeterRun(context, application, input, runReference, excludestart, captureperiod, ignoredErrors, keeprawresults);
 		} else if (AppConstantsMetrics.LOADRUNNER.equalsIgnoreCase(tool)){		
 			performanceTest = new LrRun(context, application, input, runReference, excludestart, captureperiod, timeZone );
 		} else {
-			performanceTest = new GatlingRun(context, application, input, runReference, excludestart, captureperiod, ignoredErrors, simulationLog);
+			performanceTest = new GatlingRun(context, application, input, runReference, excludestart, captureperiod, ignoredErrors, simulationLog, simlogCustom);
 		}
 		
 		slaTransactionResults = new SlaChecker().listTransactionsWithFailedSlas(application, performanceTest.getTransactionSummariesThisRun(), slaDAO);;

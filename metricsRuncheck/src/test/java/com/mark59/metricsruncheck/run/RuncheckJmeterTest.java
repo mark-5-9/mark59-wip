@@ -173,6 +173,36 @@ public class RuncheckJmeterTest extends TestCase {
 				fail("unexpectedTransaction: " + transaction.getTxnId() );
 			}
 		}
+
+		List<Transaction> metricTxns = performanceTest.getMetricTransactionSummariesThisRun();
+		assertEquals(7, metricTxns.size() );
+		for (Transaction transaction : metricTxns) {
+			// System.out.println("metricTxns>>" + transaction);
+			if ("localhost".equals(transaction.getTxnId())){
+				assertEquals ("application=DataHunter, runTime=202005151700, txnId=localhost, txnType=CPU_UTIL, txnMinimum=60.000, txnAverage=65.250, txnMedian=-1.000,"
+						+ " txnMaximum=69.000, txn90th=0.000, txn95th=-1.000, txn99th=-1.000, txnPass=4, txnFail=-1, txnStop=-1, txnFirst=64.000, txnLast=69.000, txnSum=261.000, txnDelay=0.000", transaction.toString());
+			} else if ("This_Thread_Unused_Policy_Count".equals(transaction.getTxnId())){
+				assertEquals ("application=DataHunter, runTime=202005151700, txnId=This_Thread_Unused_Policy_Count, txnType=DATAPOINT, txnMinimum=5.000, txnAverage=5.000, txnMedian=-1.000,"
+						+ " txnMaximum=5.000, txn90th=-1.000, txn95th=-1.000, txn99th=-1.000, txnPass=18, txnFail=-1, txnStop=-1, txnFirst=5.000, txnLast=5.000, txnSum=90.000, txnDelay=0.000", transaction.toString());
+			} else if ("Total_Unused_Policy_Count".equals(transaction.getTxnId())){
+				assertEquals ("application=DataHunter, runTime=202005151700, txnId=Total_Unused_Policy_Count, txnType=DATAPOINT, txnMinimum=5.000, txnAverage=10.167, txnMedian=-1.000,"
+						+ " txnMaximum=9.000, txn90th=-1.000, txn95th=-1.000, txn99th=-1.000, txnPass=18, txnFail=-1, txnStop=-1, txnFirst=8.000, txnLast=9.000, txnSum=183.000, txnDelay=0.000", transaction.toString());
+			} else if ("UNUSED-count-html-demo".equals(transaction.getTxnId())){
+				assertEquals ("application=DataHunter, runTime=202005151700, txnId=UNUSED-count-html-demo, txnType=DATAPOINT, txnMinimum=4.000, txnAverage=9.000, txnMedian=-1.000,"
+						+ " txnMaximum=9.000, txn90th=-1.000, txn95th=-1.000, txn99th=-1.000, txnPass=6, txnFail=-1, txnStop=-1, txnFirst=16.000, txnLast=4.000, txnSum=54.000, txnDelay=0.000", transaction.toString());
+			} else if ("USED-count-html-demo".equals(transaction.getTxnId())){
+				assertEquals ("application=DataHunter, runTime=202005151700, txnId=USED-count-html-demo, txnType=DATAPOINT, txnMinimum=1.000, txnAverage=1.000, txnMedian=-1.000,"
+						+ " txnMaximum=1.000, txn90th=-1.000, txn95th=-1.000, txn99th=-1.000, txnPass=6, txnFail=-1, txnStop=-1, txnFirst=1.000, txnLast=1.000, txnSum=6.000, txnDelay=0.000", transaction.toString());
+			} else if ("Memory_localhost_FreePhysicalG".equals(transaction.getTxnId())){
+				assertEquals ("application=DataHunter, runTime=202005151700, txnId=Memory_localhost_FreePhysicalG, txnType=MEMORY, txnMinimum=17.000, txnAverage=17.000, txnMedian=-1.000,"
+						+ " txnMaximum=17.000, txn90th=-1.000, txn95th=-1.000, txn99th=-1.000, txnPass=4, txnFail=-1, txnStop=-1, txnFirst=17.000, txnLast=17.000, txnSum=68.000, txnDelay=0.000", transaction.toString());
+			} else if ("Memory_localhost_FreeVirtualG".equals(transaction.getTxnId())){
+				assertEquals ("application=DataHunter, runTime=202005151700, txnId=Memory_localhost_FreeVirtualG, txnType=MEMORY, txnMinimum=15.000, txnAverage=15.500, txnMedian=-1.000,"
+						+ " txnMaximum=16.000, txn90th=-1.000, txn95th=-1.000, txn99th=-1.000, txnPass=4, txnFail=-1, txnStop=-1, txnFirst=16.000, txnLast=16.000, txnSum=62.000, txnDelay=0.000", transaction.toString());
+			} else {
+				fail("unexpectedTransaction: " + transaction.getTxnId() );
+			}
+		}
 	}
 	
 }

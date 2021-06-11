@@ -85,7 +85,7 @@ public class GatlingRun extends PerformanceTest  {
 		
 		storeTransactionSummaries(run);
 		
-		storeSystemMetricSummaries(run);
+		storeMetricTransactionSummaries(run);
 		
 		if (String.valueOf(true).equalsIgnoreCase(keeprawresults)) {
 			testTransactionsDAO.deleteAllForRun(run); // clean up in case of re-run (when the data already exists because this is a re-run)

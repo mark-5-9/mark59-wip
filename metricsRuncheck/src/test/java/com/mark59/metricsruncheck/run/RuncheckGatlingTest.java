@@ -13,6 +13,7 @@ import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabase;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
@@ -20,6 +21,7 @@ import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
 import com.mark59.core.utils.Mark59Constants;
 import com.mark59.metrics.data.application.dao.ApplicationDAO;
 import com.mark59.metrics.data.application.dao.ApplicationDAOjdbcTemplateImpl;
+import com.mark59.metrics.data.beans.EventMapping;
 import com.mark59.metrics.data.beans.Transaction;
 import com.mark59.metrics.data.eventMapping.dao.EventMappingDAO;
 import com.mark59.metrics.data.eventMapping.dao.EventMappingDAOjdbcTemplateImpl;
@@ -104,7 +106,7 @@ public class RuncheckGatlingTest extends TestCase {
 	}
 	
 	@Test
-	public void testRuncheckGatlin__341_GeneralTest() {
+	public void testRuncheckGatling341GeneralTest() {
 		Runcheck.parseArguments(new String[] { "-a", "DataHunter", "-i", "./src/test/resources/GatlingResults", "-l","simulation.logv341",
 				"-d", Mark59Constants.H2MEM, "-s","metricsmem",	"-e","responseTimeInMillis|errormsgStartsWith2|errormsgStartsWith3",  "-t","GATLING"  });
 		SpringApplication springApplication = new SpringApplication(Runcheck.class);
@@ -201,6 +203,9 @@ public class RuncheckGatlingTest extends TestCase {
 				fail("unexpectedTransaction: " + transaction.getTxnId() );
 			}
 		}
+		
+		List<Transaction> metricTxns = runcheck.getPerformanceTest().getMetricTransactionSummariesThisRun();
+		assertEquals(0, metricTxns.size() );
 	}
 	
 	
@@ -236,7 +241,25 @@ public class RuncheckGatlingTest extends TestCase {
 	
 	
 	@Test
-	public void testRuncheckGatling351Test() {
+	public void testRuncheckGatling351andMockupDatapointTest() {
+		EventMapping eventMapping = new EventMapping();
+		eventMapping.setTxnType("DATAPOINT");
+		eventMapping.setPerformanceTool("Gatling");
+		eventMapping.setMetricSource("Gatling_TRANSACTION");
+		eventMapping.setMatchWhenLike("dpmock%");
+		eventMapping.setTargetNameLB("");
+		eventMapping.setTargetNameRB("");
+		eventMapping.setIsPercentage("N");
+		eventMapping.setIsInvertedPercentage("N");
+		eventMapping.setComment(""); 
+		
+        JdbcTemplate jdbcTemplate = new JdbcTemplate(db);
+		String sql = "INSERT INTO EVENTMAPPING (TXN_TYPE, PERFORMANCE_TOOL, METRIC_SOURCE, MATCH_WHEN_LIKE, TARGET_NAME_LB, TARGET_NAME_RB,"
+				+ " IS_PERCENTAGE, IS_INVERTED_PERCENTAGE, COMMENT) VALUES (?,?,?,?,?,?,?,?,?)";	
+		jdbcTemplate.update(sql, new Object[] { 
+			eventMapping.getTxnType(),eventMapping.getPerformanceTool(), eventMapping.getMetricSource(), eventMapping.getMatchWhenLike(), eventMapping.getTargetNameLB(), eventMapping.getTargetNameRB(), 
+			eventMapping.getIsPercentage(), eventMapping.getIsInvertedPercentage(), eventMapping.getComment()});
+		
 		Runcheck.parseArguments(new String[] { "-a", "junit351", "-i", "./src/test/resources/GatlingResults", "-l","simulation.logv351",
 				"-d", Mark59Constants.H2MEM, "-s","metricsmem",	"-t","GATLING"  });
 		SpringApplication springApplication = new SpringApplication(Runcheck.class);
@@ -256,6 +279,18 @@ public class RuncheckGatlingTest extends TestCase {
 			if ("Get trash List".equals(transaction.getTxnId())){
 				assertEquals ("application=junit351, runTime=202106031419, txnId=Get trash List, txnType=TRANSACTION, txnMinimum=0.057, txnAverage=0.096, txnMedian=0.057,"
 						+ " txnMaximum=0.134, txn90th=0.134, txn95th=0.134, txn99th=0.134, txnPass=2, txnFail=0, txnStop=0, txnFirst=-1.000, txnLast=-1.000, txnSum=-1.000, txnDelay=0.000", transaction.toString());
+			} else {
+				fail("unexpectedTransaction: " + transaction.getTxnId() );
+			}
+		}
+		
+		List<Transaction> metricTxns = runcheck.getPerformanceTest().getMetricTransactionSummariesThisRun();
+		assertEquals(1, metricTxns.size() );
+		for (Transaction transaction : metricTxns) {
+			System.out.println("metricTxns>>" + transaction);
+			if ("dpmockupmetric".equals(transaction.getTxnId())){
+				assertEquals ("application=junit351, runTime=202106031419, txnId=dpmockupmetric, txnType=DATAPOINT, txnMinimum=0.134, txnAverage=0.134, txnMedian=-1.000,"
+						+ " txnMaximum=0.134, txn90th=-1.000, txn95th=-1.000, txn99th=-1.000, txnPass=1, txnFail=-1, txnStop=-1, txnFirst=0.134, txnLast=0.134, txnSum=0.134, txnDelay=0.000", transaction.toString());
 			} else {
 				fail("unexpectedTransaction: " + transaction.getTxnId() );
 			}
@@ -311,7 +346,7 @@ public class RuncheckGatlingTest extends TestCase {
 		List<Transaction> transactions = runcheck.getPerformanceTest().getTransactionSummariesThisRun();
 		assertEquals(2, transactions.size() );
 		for (Transaction transaction : transactions) {
-			System.out.println("Txn>>" + transaction);
+			// System.out.println("Txn>>" + transaction);
 			if ("Get Single trash Record".equals(transaction.getTxnId())){
 				assertEquals ("application=junit900, runTime=202106030941, txnId=Get Single trash Record, txnType=TRANSACTION, txnMinimum=0.057, txnAverage=0.057, txnMedian=0.057,"
 						+ " txnMaximum=0.057, txn90th=0.057, txn95th=0.057, txn99th=0.057, txnPass=1, txnFail=0, txnStop=0, txnFirst=-1.000, txnLast=-1.000, txnSum=-1.000, txnDelay=0.000", transaction.toString());

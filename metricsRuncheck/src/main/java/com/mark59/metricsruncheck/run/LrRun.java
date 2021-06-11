@@ -31,15 +31,12 @@ import com.mark59.metricsruncheck.accessdb.LrRunAccessDatabase;
  */
 public class LrRun extends PerformanceTest  {
 	
-	//private LrRunAccessDatabase lrRundb;
-	
 	public LrRun(ApplicationContext context, String application, String inputAccessDbFileNmae, String runReference, String excludestart, String captureperiod, String timeZone) {
 		super(context, application, runReference);
 		LrRunAccessDatabase lrRundb = new LrRunAccessDatabase(inputAccessDbFileNmae);
 		System.out.println("Processing Loadrunner access DB file " + inputAccessDbFileNmae);
 		storePerformanceTest(lrRundb, excludestart, captureperiod, timeZone);	
 	}
-
 
 	
 	private void storePerformanceTest(LrRunAccessDatabase lrRundb,  String excludestart, String captureperiod,  String timeZone ) {
@@ -65,15 +62,14 @@ public class LrRun extends PerformanceTest  {
 
 		//for Loadrunner, metric data is not placed in the testTransactions table, it is summarized directly from the LR Access DB tables and inserted directly onto the transaction table 
 		
-		storeSystemMetricSummariesFromLoadrunnerAccessDB(run, lrRundb, dateRangeBean, filteredDateRangeBean);
+		storeMetricTransactionSummariesFromLoadrunnerAccessDB(run, lrRundb, dateRangeBean, filteredDateRangeBean);
 
 		//clean up after
 		//testTransactionsDAO.deleteAllForApplication(run.getApplication());		
-		
 	}
 
 		
-	private void storeSystemMetricSummariesFromLoadrunnerAccessDB(Run run, LrRunAccessDatabase lrRundb, DateRangeBean dateRangeBean, DateRangeBean filteredDateRangeBean) {
+	private void storeMetricTransactionSummariesFromLoadrunnerAccessDB(Run run, LrRunAccessDatabase lrRundb, DateRangeBean dateRangeBean, DateRangeBean filteredDateRangeBean) {
 		
 		List<Transaction> eventTransactions = lrRundb.extractSystemMetricEventsFromMDB(run, eventMappingDAO, dateRangeBean, filteredDateRangeBean);      	
       	for (Transaction eventTransaction : eventTransactions ) {

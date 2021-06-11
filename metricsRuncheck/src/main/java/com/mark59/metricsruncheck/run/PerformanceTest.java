@@ -18,6 +18,7 @@ package com.mark59.metricsruncheck.run;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -55,6 +56,7 @@ public class PerformanceTest {
 
 	protected Run run = new Run();
 	private List<Transaction> transactionSummariesThisRun;
+	private List<Transaction> metricTransactionSummariesThisRun = new ArrayList<Transaction>();  // currently only used for testing 	
 
 	private Map<String,String> optimizedTxnTypeLookup = new HashMap<String, String>();;
 	private Map<String,EventMapping> txnIdToEventMappingLookup = new HashMap<String, EventMapping>();
@@ -133,8 +135,7 @@ public class PerformanceTest {
 	}
 	
 	
-	protected void storeSystemMetricSummaries(Run run) {
-
+	protected List<Transaction> storeMetricTransactionSummaries(Run run) {
 		// Creates a list of the names of metric transactions for the run, with their types (bit of an abuse of the 'TestTransaction' bean)  
 		List<TestTransaction> dataSampleTxnkeys = testTransactionsDAO.getUniqueListOfSystemMetricNamesByType(run.getApplication()); 
 		
@@ -147,7 +148,9 @@ public class PerformanceTest {
 			Transaction eventTransaction = testTransactionsDAO.extractEventSummaryStats(run.getApplication(), dataSampleKey.getTxnType(), dataSampleKey.getTxnId(), eventMapping);
 			eventTransaction.setRunTime(run.getRunTime());
 			transactionDAO.insert(eventTransaction);
+			metricTransactionSummariesThisRun.add(eventTransaction);
 		} 
+		return metricTransactionSummariesThisRun; 
 	}
 	
 	
@@ -263,14 +266,14 @@ public class PerformanceTest {
 		Long runEndTime   = testTransactionsDAO.getLatestTimestamp(application);
 		return new DateRangeBean(runStartTime, runEndTime);
 	}
-	
 
 	public Run getRunSummary() {
 		return run;
 	}
-	
 	public List<Transaction> getTransactionSummariesThisRun() {
 		return transactionSummariesThisRun;
 	}
-	
+	public List<Transaction> getMetricTransactionSummariesThisRun() {
+		return metricTransactionSummariesThisRun;
+	}
 }

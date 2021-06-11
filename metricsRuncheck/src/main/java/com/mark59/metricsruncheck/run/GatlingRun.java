@@ -25,9 +25,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.context.ApplicationContext;
@@ -36,7 +34,6 @@ import com.mark59.core.utils.Mark59Constants;
 import com.mark59.core.utils.Mark59Utils;
 import com.mark59.metrics.application.AppConstantsMetrics;
 import com.mark59.metrics.data.beans.DateRangeBean;
-import com.mark59.metrics.data.beans.EventMapping;
 import com.mark59.metrics.data.beans.Run;
 import com.mark59.metrics.data.beans.TestTransaction;
 import com.opencsv.CSVParser;
@@ -66,7 +63,7 @@ public class GatlingRun extends PerformanceTest  {
 	private int fieldPosRequestErrorMsg;
 	
 	public GatlingRun(ApplicationContext context, String application, String inputdirectory, String runReference, String excludestart, String captureperiod, 
-			String ignoredErrors, String keeprawresults, String simulationLog, String simlogCustom) {
+			String keeprawresults, String ignoredErrors, String simulationLog, String simlogCustom) {
 		
 		super(context,application, runReference);
 		

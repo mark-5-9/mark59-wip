@@ -130,13 +130,15 @@ public class Runcheck  implements CommandLineRunner
 		options.addOption("q", "dbxtraurlparms",		true, "Any special parameters to append to the end of the database URL (include the ?). Eg \"?allowPublicKeyRetrieval=truee&useSSL=false\" (the quotes are needed to escape the ampersand)");				
 		options.addOption("x", "eXcludestart",     		true, "exclude results at the start of the test for the given number of minutes (defaults to 0)" );			
 		options.addOption("c", "captureperiod",    		true, "Only capture test results for the given number of minutes, from the excluded start period (default is all results except those skipped by the excludestart parm are included)" );			
+		options.addOption("k", "keeprawresults", 		true, "Keep Raw Test Resuts. If 'true' will keep each transaction for each run in the database (System metrics data is not capured for Loadrunner). "
+																+ "This can use a large amount of storage and is not recommended (defaults to false).");
 		options.addOption("e", "ignoredErrors",    		true, "Gatling, JMeter(csv) only. A list of pipe (|) delimited strings.  When an error msg starts with any of the strings in the list, it will be treated as a Passed transaction rather that an Error." );	
 		options.addOption("l", "simulationLog",			true, "Gatling only. Simulation log file name - must be in the Input directory (defaults to simulation.log)" );
-		options.addOption("m", "simlogcustoM",			true, "Gatling only. Simulation log comma-separated cumtomized 'REQUEST' field column positions in order : txn name, epoch start, epoch end, tnx OK, error msg. The text 'REQUEST' is assumed in position 1. "
-				+ " EG: for a 3.6.1 layout: '2,3,4,5,6,' (This parameter may assist with un-catered for Gatling versions)" );
-		options.addOption("k", "keeprawresults", 		true, "JMeter only. Keep Raw Test Resuts. If 'true' will keep each JMeter transaction for each run in the database. This can use a large amount of storage and is not recommended (defaults to false).");
+		options.addOption("m", "simlogcustoM",			true, "Gatling only. Simulation log comma-separated cumtomized 'REQUEST' field column positions in order : txn name, epoch start, epoch end, tnx OK, error msg. "
+																+ "The text 'REQUEST' is assumed in position 1. EG: for a 3.6.1 layout: '2,3,4,5,6,' (This parameter may assist with un-catered for Gatling versions)" );
 		options.addOption("z", "timeZone",    			true, "Loadrunner only. Required when running extract from zone other than where Analysis Report was generated. Also, internal raw stored time"
-				+ " may not take daylight saving into account.  Two format options 1) offset against GMT. Eg 'GMT+02:00' or 2) IANA Time Zone Database (TZDB) codes. Refer to https://en.wikipedia.org/wiki/List_of_tz_database_time_zones. Eg 'Australia/Sydney' ");   	
+																+ " may not take daylight saving into account.  Two format options 1) offset against GMT. Eg 'GMT+02:00' or 2) IANA Time Zone Database (TZDB) codes."
+																+ " Refer to https://en.wikipedia.org/wiki/List_of_tz_database_time_zones. Eg 'Australia/Sydney' ");   	
 
 		
 		
@@ -359,15 +361,15 @@ public class Runcheck  implements CommandLineRunner
 	};
 
 	
-	public void loadTestRun(String tool, String application, String input, String runReference, String excludestart, String captureperiod, 
-			String timeZone, String keeprawresults, String ignoredErrors, String simulationLog, String simlogCustom) throws IOException {
+	public void loadTestRun(String tool, String application, String input, String runReference, String excludestart, String captureperiod, String keeprawresults,  
+			String timeZone, String ignoredErrors, String simulationLog, String simlogCustom) throws IOException {
 		
 		if (AppConstantsMetrics.JMETER.equalsIgnoreCase(tool)){		
-			performanceTest = new JmeterRun(context, application, input, runReference, excludestart, captureperiod, ignoredErrors, keeprawresults);
+			performanceTest = new JmeterRun(context, application, input, runReference, excludestart, captureperiod, keeprawresults, ignoredErrors );
 		} else if (AppConstantsMetrics.GATLING.equalsIgnoreCase(tool)){	
-			performanceTest = new GatlingRun(context, application, input, runReference, excludestart, captureperiod, ignoredErrors, keeprawresults, simulationLog, simlogCustom);
+			performanceTest = new GatlingRun(context, application, input, runReference, excludestart, captureperiod, keeprawresults, ignoredErrors, simulationLog, simlogCustom);
 		} else { 
-			performanceTest = new LrRun(context, application, input, runReference, excludestart, captureperiod, timeZone );
+			performanceTest = new LrRun(context, application, input, runReference, excludestart, captureperiod, keeprawresults, timeZone );
 		}
 		
 		slaTransactionResults = new SlaChecker().listTransactionsWithFailedSlas(application, performanceTest.getTransactionSummariesThisRun(), slaDAO);;

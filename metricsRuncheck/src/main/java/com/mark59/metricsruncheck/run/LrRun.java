@@ -20,6 +20,7 @@ import java.util.List;
 
 import org.springframework.context.ApplicationContext;
 
+import com.mark59.metrics.application.AppConstantsMetrics;
 import com.mark59.metrics.data.beans.DateRangeBean;
 import com.mark59.metrics.data.beans.Run;
 import com.mark59.metrics.data.beans.Transaction;
@@ -31,18 +32,15 @@ import com.mark59.metricsruncheck.accessdb.LrRunAccessDatabase;
  */
 public class LrRun extends PerformanceTest  {
 	
-	public LrRun(ApplicationContext context, String application, String inputAccessDbFileNmae, String runReference, String excludestart, String captureperiod, String timeZone) {
+	public LrRun(ApplicationContext context, String application, String inputAccessDbFileNmae, String runReference, String excludestart, String captureperiod,
+			String keeprawresults, String timeZone) {
 		super(context, application, runReference);
+		
 		LrRunAccessDatabase lrRundb = new LrRunAccessDatabase(inputAccessDbFileNmae);
 		System.out.println("Processing Loadrunner access DB file " + inputAccessDbFileNmae);
-		storePerformanceTest(lrRundb, excludestart, captureperiod, timeZone);	
-	}
-
-	
-	private void storePerformanceTest(LrRunAccessDatabase lrRundb,  String excludestart, String captureperiod,  String timeZone ) {
 		
 		//clean up before  
-		testTransactionsDAO.deleteAllForApplication(run.getApplication());
+		testTransactionsDAO.deleteAllForRun(run);  // RUN_TIME_YET_TO_BE_CALCULATED
 		
 		DateRangeBean dateRangeBean = lrRundb.getRunDateRangeUsingLoadrunnerAccessDB(timeZone);
 		lrRundb.loadTestTransactionForTransactionsOnlyFromLoadrunnAccessDB(run.getApplication(), testTransactionsDAO, dateRangeBean.getRunStartTime());  
@@ -63,9 +61,12 @@ public class LrRun extends PerformanceTest  {
 		//for Loadrunner, metric data is not placed in the testTransactions table, it is summarized directly from the LR Access DB tables and inserted directly onto the transaction table 
 		
 		storeMetricTransactionSummariesFromLoadrunnerAccessDB(run, lrRundb, dateRangeBean, filteredDateRangeBean);
-
-		//clean up after
-		//testTransactionsDAO.deleteAllForApplication(run.getApplication());		
+		
+		if (String.valueOf(true).equalsIgnoreCase(keeprawresults)) {
+			testTransactionsDAO.deleteAllForRun(run); // clean up in case of re-run (when the data already exists because this is a re-run)
+			testTransactionsDAO.updateRunTime(run.getApplication(), AppConstantsMetrics.RUN_TIME_YET_TO_BE_CALCULATED, run.getRunTime());
+		}
+		
 	}
 
 		

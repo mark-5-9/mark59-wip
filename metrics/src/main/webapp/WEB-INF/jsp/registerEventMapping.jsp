@@ -33,10 +33,10 @@
 function showHideMappingByTool() {
 	var selectedMetricSource = document.getElementById('metricSource').value;
 	if ( selectedMetricSource.startsWith('Loadrunner') ){
-		document.getElementById('MatchJmeter').style.display = 'none';
+		document.getElementById('MatchOtherTools').style.display = 'none';
 		document.getElementById('MatchLoadrunner').style.display = 'table-row';		
 	} else {
-		document.getElementById('MatchJmeter').style.display = 'table-row';
+		document.getElementById('MatchOtherTools').style.display = 'table-row';
 		document.getElementById('MatchLoadrunner').style.display = 'none';		
  	}
 }
@@ -47,7 +47,7 @@ function setMatchWhenLike() {
 	if ( selectedMetricSource.startsWith('Loadrunner') ){
 		document.getElementById("matchWhenLike").value = document.getElementById("lrEventType").value + ":" + document.getElementById("LikelrEventName").value; 	
 	} else {
-		document.getElementById("matchWhenLike").value = document.getElementById("jmeterMatchWhenLike").value; 
+		document.getElementById("matchWhenLike").value = document.getElementById("otherToolsMatchWhenLike").value; 
 	}	
 }
 
@@ -78,9 +78,9 @@ function setMatchWhenLike() {
       <td><form:select path="metricSource"  items="${map.metricSources}" value="${map.reqMetricSource}" onchange="showHideMappingByTool();"   /></td>
      </tr>
 
-     <tr id=MatchJmeter>
-      <td>Match When Jmeter Label Like : <br>(SQL format)<br></td>
-      <td><input id="jmeterMatchWhenLike" name="jmeterMatchWhenLike" type="text"  value=""   size="140" height="20" maxlength="149"  /></td>
+     <tr id=MatchOtherTools>
+      <td>Match When Transaction Name Like : <br>(SQL format)<br></td>
+      <td><input id="otherToolsMatchWhenLike" name="otherToolsMatchWhenLike" type="text"  value=""   size="140" height="20" maxlength="149"  /></td>
      </tr>
 	 
  

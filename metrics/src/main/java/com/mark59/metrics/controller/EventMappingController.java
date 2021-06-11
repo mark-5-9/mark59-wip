@@ -199,7 +199,8 @@ public class EventMappingController {
 	
 	private List<String> populatePerformanceToolsDropdown() {
 		List<String> performanceToolsList =  new ArrayList<String>(Arrays.asList(AppConstantsMetrics.JMETER,
-																		     	 AppConstantsMetrics.LOADRUNNER));
+																		     	 AppConstantsMetrics.LOADRUNNER,
+																		     	 AppConstantsMetrics.GATLING));
 		return performanceToolsList;
 	}	
 	
@@ -210,7 +211,8 @@ public class EventMappingController {
 																			AppConstantsMetrics.METRIC_SOURCE_JMETER_DATAPOINT,
 																			AppConstantsMetrics.METRIC_SOURCE_JMETER_TRANSACTION,																		  
 																			AppConstantsMetrics.METRIC_SOURCE_LOADRUNNER_DATAPOINT_METER, 
-																			AppConstantsMetrics.METRIC_SOURCE_LOADRUNNER_MONITOR_METER ));
+																			AppConstantsMetrics.METRIC_SOURCE_LOADRUNNER_MONITOR_METER,
+																			AppConstantsMetrics.METRIC_SOURCE_GATLING_TRANSACTION ));
 		return metricSourceList;
 	}	
 	
@@ -223,13 +225,13 @@ public class EventMappingController {
 	
 	
 	private String determinePerformanceTool(String metricSource) {
-		String tool  =  AppConstantsMetrics.JMETER;
+		String tool = AppConstantsMetrics.JMETER;
 		if (metricSource.startsWith(AppConstantsMetrics.LOADRUNNER)){
 			tool = AppConstantsMetrics.LOADRUNNER;
-		}
+		} else if (metricSource.startsWith(AppConstantsMetrics.GATLING)){
+			tool = AppConstantsMetrics.GATLING;
+		}	
 		return tool;
 	}
-	
-	
-	
+
 }

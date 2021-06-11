@@ -68,7 +68,9 @@ public class AppConstantsMetrics {
 	public static final String METRIC_SOURCE_JMETER_DATAPOINT	  		= JMETER + "_" + Mark59Constants.DatabaseTxnTypes.DATAPOINT.name(); 	
 	public static final String METRIC_SOURCE_JMETER_CPU      	  		= JMETER + "_" + Mark59Constants.DatabaseTxnTypes.CPU_UTIL.name(); 	
 	public static final String METRIC_SOURCE_JMETER_MEMORY     	  		= JMETER + "_" + Mark59Constants.DatabaseTxnTypes.MEMORY.name(); 	
-	public static final String METRIC_SOURCE_JMETER_TRANSACTION	  		= JMETER + "_" + Mark59Constants.DatabaseTxnTypes.TRANSACTION.name(); 	
+	public static final String METRIC_SOURCE_JMETER_TRANSACTION	  		= JMETER + "_" + Mark59Constants.DatabaseTxnTypes.TRANSACTION.name();
+	// there is no concept of datatype for Gatling, so all incoming simulation log entries will be TRANSACTIONs
+	public static final String METRIC_SOURCE_GATLING_TRANSACTION		= GATLING + "_" + Mark59Constants.DatabaseTxnTypes.TRANSACTION.name(); 
 		
 
 	// bit of a stretch here for a constants - unmodifiable map for value lookups

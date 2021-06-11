@@ -27,6 +27,7 @@ import javax.sql.DataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 
+import com.mark59.metrics.application.AppConstantsMetrics;
 import com.mark59.metrics.data.beans.EventMapping;
 
 /**
@@ -148,7 +149,7 @@ public class EventMappingDAOjdbcTemplateImpl implements EventMappingDAO
 		
 		if (matchWhenLikeSplit.length != 2) {
 			throw new RuntimeException("Unexpected Metric_Source Format on EventMapping Table for a Loadrunner event. \n "
-					+ "Expected underscord separated value (Loadrunncer_EventType) but got : " + eventMapping.getMetricSource()
+					+ "Expected underscored separated value (Loadrunncer_EventType) but got : " + eventMapping.getMetricSource()
 					+ "\n   ,EventMapping : " + eventMapping.toString()
 					+ "\n   ,for eventType = " + eventType + ", eventName = " + eventName );
 	
@@ -166,8 +167,8 @@ public class EventMappingDAOjdbcTemplateImpl implements EventMappingDAO
 
 
 	/**
-	 *   See if the passed transaction id / metric source type (eg 'Jmeter_DATAPONT') matches to an event on the event mapping table  
-	 *   (if it does, it will be the mapped data type that will used for SLA checking with this transaction).
+	 *   See if the passed transaction id / metric source type (eg 'Jmeter_DATAPOINT' - refer to AppConstantsMetrics ) matches to an event 
+	 *   on the event mapping table (if it does, it will be the mapped data type that will used for SLA checking with this transaction).
 	 *   
 	 *   <p>Selection is based on a "best-guess" algorithm as to what a user was attempting to match against when multiple rows 
 	 *   match the passed transaction id / metric source:
@@ -175,7 +176,7 @@ public class EventMappingDAOjdbcTemplateImpl implements EventMappingDAO
 	 *   <li>any rows with no percent symbol (no free wild-cards) take precedence
 	 *   <li>next is the length of the match (minus the number of free wild-cards - high to low)
 	 *   <li>then next is the total length boundary characters (longest to shortest)   
-	 *   </ul>	    
+	 *   </ul>
 	 **/
 	@Override
 	public EventMapping findAnEventForTxnIdAndSource(String txnId, String metricSource) {

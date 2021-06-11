@@ -267,7 +267,7 @@ public class LrRunAccessDatabase {
 	/**	
 	 * 	For Loadrunner we only match against the Event Mapping Reference Table, we only use the 'MATCH_WHEN_LIKE' column of the event table.
 	 * 	So for example a  MATCH_WHEN_LIKE value of 'DataPoint:myfavouritedp' would match an entry on the LR Event Map Table of Event Type = 'DataPoint' and Event Name = 'myfavouritedp' 
-	 * 	The METRIC_SOURCE column is later used to tell what LR table to find the recored events on (either DataPoint_meteror Monitor_Metor)  
+	 * 	The METRIC_SOURCE column is later used to tell what LR table to find the recorded events on (either DataPoint_Meter Monitor_Meter)  
 	 */
 	private List<EventAttributes> findMetricsToBeReportedForThisMdbEventId(LrEventMapBean lrEventMapBean, EventMappingDAO eventMappingDAO ){
 		

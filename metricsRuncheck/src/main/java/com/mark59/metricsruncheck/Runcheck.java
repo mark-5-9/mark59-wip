@@ -364,10 +364,10 @@ public class Runcheck  implements CommandLineRunner
 		
 		if (AppConstantsMetrics.JMETER.equalsIgnoreCase(tool)){		
 			performanceTest = new JmeterRun(context, application, input, runReference, excludestart, captureperiod, ignoredErrors, keeprawresults);
-		} else if (AppConstantsMetrics.LOADRUNNER.equalsIgnoreCase(tool)){		
+		} else if (AppConstantsMetrics.GATLING.equalsIgnoreCase(tool)){	
+			performanceTest = new GatlingRun(context, application, input, runReference, excludestart, captureperiod, ignoredErrors, keeprawresults, simulationLog, simlogCustom);
+		} else { 
 			performanceTest = new LrRun(context, application, input, runReference, excludestart, captureperiod, timeZone );
-		} else {
-			performanceTest = new GatlingRun(context, application, input, runReference, excludestart, captureperiod, ignoredErrors, simulationLog, simlogCustom);
 		}
 		
 		slaTransactionResults = new SlaChecker().listTransactionsWithFailedSlas(application, performanceTest.getTransactionSummariesThisRun(), slaDAO);;

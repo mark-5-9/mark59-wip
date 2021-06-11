@@ -58,9 +58,6 @@ public class GatlingRun extends PerformanceTest  {
 	private static final String RUN = "RUN";
 	private static final String REQUEST = "REQUEST";
 	private static final String KO = "KO";
-	
-	private Map<String,String> optimizedTxnTypeLookup = new HashMap<String, String>();;
-	private Map<String,EventMapping> txnIdToEventMappingLookup = new HashMap<String, EventMapping>();
 
 	private int fieldPosTxnId;	
 	private int fieldPosTimeStampStart;
@@ -69,7 +66,7 @@ public class GatlingRun extends PerformanceTest  {
 	private int fieldPosRequestErrorMsg;
 	
 	public GatlingRun(ApplicationContext context, String application, String inputdirectory, String runReference, String excludestart, String captureperiod, 
-			String ignoredErrors, String simulationLog, String simlogCustom) {
+			String ignoredErrors, String keeprawresults, String simulationLog, String simlogCustom) {
 		
 		super(context,application, runReference);
 		
@@ -87,6 +84,13 @@ public class GatlingRun extends PerformanceTest  {
 		transactionDAO.deleteAllForRun(run.getApplication(), run.getRunTime());	
 		
 		storeTransactionSummaries(run);
+		
+		storeSystemMetricSummaries(run);
+		
+		if (String.valueOf(true).equalsIgnoreCase(keeprawresults)) {
+			testTransactionsDAO.deleteAllForRun(run); // clean up in case of re-run (when the data already exists because this is a re-run)
+			testTransactionsDAO.updateRunTime(run.getApplication(), AppConstantsMetrics.RUN_TIME_YET_TO_BE_CALCULATED, run.getRunTime());
+		}		
 	}
 
 
@@ -255,7 +259,9 @@ public class GatlingRun extends PerformanceTest  {
 
 		TestTransaction testTransaction = new TestTransaction();
 		testTransaction.setTxnId(csvDataLineFields[fieldPosTxnId]);
-		testTransaction.setTxnType(eventMappingTxnTypeTransform(testTransaction.getTxnId(), AppConstantsMetrics.JMETER, Mark59Constants.DatabaseTxnTypes.TRANSACTION.name()));
+		
+		// not sure if there is much point doing this transform for Gatling as most tests just capture http response times and are always TRANSACTIONS, but just for completeness.. 
+		testTransaction.setTxnType(eventMappingTxnTypeTransform(testTransaction.getTxnId(), AppConstantsMetrics.GATLING, Mark59Constants.DatabaseTxnTypes.TRANSACTION.name()));
 
 		BigDecimal elapsedTime = new BigDecimal(Long.parseLong(csvDataLineFields[fieldPosTimeStampEnd]) - Long.parseLong(csvDataLineFields[fieldPosTimeStampStart])); 	
 		testTransaction.setTxnResult(elapsedTime.divide(AppConstantsMetrics.THOUSAND, 3, RoundingMode.HALF_UP));
@@ -268,64 +274,5 @@ public class GatlingRun extends PerformanceTest  {
 		return testTransaction;
 	}
 
-	
-	/**
-	 * If an event mapping is found for the given transaction / tool / Database Data type (relating to a a sample line), 
-	 * then the Database Data type for that mapping is returned<br>
-	 * If a event mapping for the sample line is not found, then it is taken to be a TRANSACTION<br>
-	 * TODO: PERFMON<br>
-	 * TODO: also allow for transforms to TRANSACTION in event mapping<br>
-	 * @param txnId
-	 * @param performanceTool
-	 * @param sampleLineDbDataType -will be a string value of enum Mark59Constants.DatabaseDatatypes (DATAPOINT, CPU_UTIL, MEMORY, TRANSACTION)
-	 * @return txnType -  will be a string value of enum Mark59Constants.DatabaseDatatypes (DATAPOINT, CPU_UTIL, MEMORY, TRANSACTION)
-	 */
-	private String eventMappingTxnTypeTransform(String txnId, String performanceTool, String sampleLineRawDbDataType) {
-		
-		String eventMappingTxnType = null;
-		String metricSource = performanceTool + "_" + sampleLineRawDbDataType;   // (eg 'Jmeter_CPU_UTIL',  'Jmeter_TRANSACTION' ..)
-		
-		String txnId_MetricSource_Key = txnId + "-" + metricSource; 
-			
-		if (optimizedTxnTypeLookup.get(txnId_MetricSource_Key) != null ){
-			
-			//As we could be processing large files, a Map of type by transaction ids (labels) is held for ids that have already had a lookup on the eventMapping table.  
-			// Done to minimise sql calls - each different label / data type in the jmeter file just gets one lookup to see if it has a match on Event Mapping table.
-			
-			eventMappingTxnType = optimizedTxnTypeLookup.get(txnId_MetricSource_Key);
-			
-		} else {
-			
-			eventMappingTxnType = Mark59Constants.DatabaseTxnTypes.TRANSACTION.name();   
-			
-			EventMapping eventMapping = eventMappingDAO.findAnEventForTxnIdAndSource(txnId, metricSource);
-			
-			if ( eventMapping != null ) {
-				// this not a standard TRANSACTION (it's one of the metric types) - store eventMapping for later use 
-				eventMappingTxnType = eventMapping.getTxnType();
-				txnIdToEventMappingLookup.put(txnId, eventMapping);
-			}
-			optimizedTxnTypeLookup.put(txnId_MetricSource_Key, eventMappingTxnType);
-		}
-		return eventMappingTxnType;
-	}
-
-		
-	/**
-	 * Once all transaction and metrics data has been stored for the run, work out the start and end 
-	 * time for the run.  Start/end times are taken lowest and highest transaction epoch time for the
-	 * application run. 
-	 *  
-	 * The times are actually an approximation, as any time difference between the timestamp and the time
-	 * to take the sample is not considered, nor is any running time before/after the first/last sample.
-	 * 
-	 * NOTE: When this method is called currently assumed the run being processed will have a  
-	 * run-time of AppConstantsMetrics.RUN_TIME_YET_TO_BE_CALCULATED (zeros) on TESTTRANSACTIONS 	  
-	 */
-	private DateRangeBean getRunDateRangeUsingTestTransactionalData(String application){
-		Long runStartTime = testTransactionsDAO.getEarliestTimestamp(application);
-		Long runEndTime   = testTransactionsDAO.getLatestTimestamp(application);
-		return new DateRangeBean(runStartTime, runEndTime);
-	}
 
 }

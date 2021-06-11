@@ -54,9 +54,6 @@ public class JmeterRun extends PerformanceTest  {
 
 	private static final String IGNORE ="IGNORE";
 	
-	private Map<String,String> optimizedTxnTypeLookup = new HashMap<String, String>();;
-	private Map<String,EventMapping> txnIdToEventMappingLookup = new HashMap<String, EventMapping>();
-	
 	private int fieldPostimeStamp;
 	private int fieldPoselapsed;	
 	private int fieldPoslabel;	
@@ -460,11 +457,10 @@ public class JmeterRun extends PerformanceTest  {
 //		      return code, but to be handed by Event Mapping lookup?
 		
 		BigDecimal txnResultMsBigD = new BigDecimal(csvDataLineFields[fieldPoselapsed]);
-		testTransaction.setTxnResult( txnResultMsBigD.divide(AppConstantsMetrics.THOUSAND, 3, RoundingMode.HALF_UP)  );			
 	
 		if ( Mark59Constants.DatabaseTxnTypes.TRANSACTION.name().equals(testTransaction.getTxnType())) {
-			testTransaction.setTxnResult( txnResultMsBigD.divide(AppConstantsMetrics.THOUSAND, 3, RoundingMode.HALF_UP)  );			
-		} else {
+			testTransaction.setTxnResult( txnResultMsBigD.divide(AppConstantsMetrics.THOUSAND, 3, RoundingMode.HALF_UP)  );	
+		} else {	
 			try {
 				testTransaction.setTxnResult( validateAndDetermineMetricValue(txnResultMsBigD, testTransaction.getTxnType()));
 			} catch (Exception e) {
@@ -491,50 +487,6 @@ public class JmeterRun extends PerformanceTest  {
 		throw new RuntimeException("  " + e.getClass());
 	}
 	
-	
-
-	
-	/**
-	 * If an event mapping is found for the given transaction / tool / Database Data type (relating to a a sample line), 
-	 * then the Database Data type for that mapping is returned<br>
-	 * If a event mapping for the sample line is not found, then it is taken to be a TRANSACTION<br>
-	 * TODO: PERFMON<br>
-	 * TODO: also allow for transforms to TRANSACTION in event mapping<br>
-	 * @param txnId
-	 * @param performanceTool
-	 * @param sampleLineDbDataType -will be a string value of enum Mark59Constants.DatabaseDatatypes (DATAPOINT, CPU_UTIL, MEMORY, TRANSACTION)
-	 * @return txnType -  will be a string value of enum Mark59Constants.DatabaseDatatypes (DATAPOINT, CPU_UTIL, MEMORY, TRANSACTION)
-	 */
-	private String eventMappingTxnTypeTransform(String txnId, String performanceTool, String sampleLineRawDbDataType) {
-		
-		String eventMappingTxnType = null;
-		String metricSource = performanceTool + "_" + sampleLineRawDbDataType;   // (eg 'Jmeter_CPU_UTIL',  'Jmeter_TRANSACTION' ..)
-		
-		String txnId_MetricSource_Key = txnId + "-" + metricSource; 
-			
-		if (optimizedTxnTypeLookup.get(txnId_MetricSource_Key) != null ){
-			
-			//As we could be processing large files, a Map of type by transaction ids (labels) is held for ids that have already had a lookup on the eventMapping table.  
-			// Done to minimise sql calls - each different label / data type in the jmeter file just gets one lookup to see if it has a match on Event Mapping table.
-			
-			eventMappingTxnType = optimizedTxnTypeLookup.get(txnId_MetricSource_Key);
-			
-		} else {
-			
-			eventMappingTxnType = Mark59Constants.DatabaseTxnTypes.TRANSACTION.name();   
-			
-			EventMapping eventMapping = eventMappingDAO.findAnEventForTxnIdAndSource(txnId, metricSource);
-			
-			if ( eventMapping != null ) {
-				// this not a standard TRANSACTION (it's one of the metric types) - store eventMapping for later use 
-				eventMappingTxnType = eventMapping.getTxnType();
-				txnIdToEventMappingLookup.put(txnId, eventMapping);
-			}
-			optimizedTxnTypeLookup.put(txnId_MetricSource_Key, eventMappingTxnType);
-		}
-		return eventMappingTxnType;
-	}
-
 
 	/**
 	 * Calculate the datapoint value, using the multiplier passed in the jmeter datatype ("dt") field.
@@ -555,48 +507,10 @@ public class JmeterRun extends PerformanceTest  {
 				if (StringUtils.isNotBlank(passedMultipler)) {
 					valueMultiplier = new BigDecimal(passedMultipler);
 				}
-
 				return txnResultMsBigD.divide(valueMultiplier, 3, RoundingMode.HALF_UP) ;
 			}
 		}
-
-	    throw new Exception("ERORR unexpected datatype present :  " +  sampleLineDataType    ) ;
-	}
-
-		
-	/**
-	 * Once all transaction and metrics data has been stored for the run, work out the start and end 
-	 * time for the run.  Start/end times are taken lowest and highest transaction epoch time for the
-	 * application run. 
-	 *  
-	 * The times are actually an approximation, as any time difference between the timestamp and the time
-	 * to take the sample is not considered, nor is any running time before/after the first/last sample.
-	 * 
-	 * NOTE: When this method is called currently assumed the run being processed will have a  
-	 * run-time of AppConstantsMetrics.RUN_TIME_YET_TO_BE_CALCULATED (zeros) on TESTTRANSACTIONS 	  
-	 */
-	private DateRangeBean getRunDateRangeUsingTestTransactionalData(String application){
-		Long runStartTime = testTransactionsDAO.getEarliestTimestamp(application);
-		Long runEndTime   = testTransactionsDAO.getLatestTimestamp(application);
-		return new DateRangeBean(runStartTime, runEndTime);
-	}
-
-	
-	private void storeSystemMetricSummaries(Run run) {
-
-		// Creates a list of the names of metric transactions for the run, with their types (bit of an abuse of the 'TestTransaction' bean)  
-		List<TestTransaction> dataSampleTxnkeys = testTransactionsDAO.getUniqueListOfSystemMetricNamesByType(run.getApplication()); 
-		
-		for (TestTransaction dataSampleKey : dataSampleTxnkeys) {
-
-			EventMapping eventMapping = txnIdToEventMappingLookup.get(dataSampleKey.getTxnId());
-			if (eventMapping == null) {
-				throw new RuntimeException("ERROR : No event mapping found for " + dataSampleKey.getTxnId());
-			};
-			Transaction eventTransaction = testTransactionsDAO.extractEventSummaryStats(run.getApplication(), dataSampleKey.getTxnType(), dataSampleKey.getTxnId(), eventMapping);
-			eventTransaction.setRunTime(run.getRunTime());
-			transactionDAO.insert(eventTransaction);
-		} 
+	    throw new RuntimeException("ERROR : unexpected datatype present :  " +  sampleLineDataType    ) ;
 	}
 
 }

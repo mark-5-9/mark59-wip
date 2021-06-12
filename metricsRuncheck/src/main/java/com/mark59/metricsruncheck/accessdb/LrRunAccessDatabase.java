@@ -102,7 +102,7 @@ public class LrRunAccessDatabase {
 	
 	public DateRangeBean getRunDateRangeUsingLoadrunnerAccessDB(String timeZone) {
 		long runStartTime;
-		long runEndTime;;
+		long runEndTime;
 		int resultTableTimeZoneOffestMs;
 		try {
 			Table table = db.getTable("Result");
@@ -119,6 +119,10 @@ public class LrRunAccessDatabase {
 			
 			// it appears the stored epoch time actually goes 1 hour ahead during Australian daylight savings, this 'hack' seems to cater for that   
 			
+			if (StringUtils.isBlank(timeZone)) {
+				timeZone = new GregorianCalendar().getTimeZone().getID();
+				System.out.println("The 'timeZone'(z) parameter was blank! Assuming a timezone id of : " + timeZone);	
+			}	
 			Date runStartTimeDate = new Date(runStartTime);
 			GregorianCalendar runStartTimeCal = new GregorianCalendar();
 			runStartTimeCal.setTimeZone(TimeZone.getTimeZone(timeZone));

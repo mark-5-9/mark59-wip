@@ -72,8 +72,8 @@ public class JmeterRun extends PerformanceTest  {
 		run = new Run( calculateAndSetRunTimesUsingEpochStartAndEnd(run, dateRangeBean));
 		runDAO.deleteRun(run.getApplication(), run.getRunTime());
 		runDAO.insertRun(run);
-
 		applyTimingRangeFilters(excludestart, captureperiod, dateRangeBean);
+
 		transactionDAO.deleteAllForRun(run.getApplication(), run.getRunTime());	
 		
 		storeTransactionSummaries(run);

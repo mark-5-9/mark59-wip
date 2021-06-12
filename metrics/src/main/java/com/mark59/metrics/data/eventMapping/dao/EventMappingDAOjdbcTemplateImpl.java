@@ -27,7 +27,6 @@ import javax.sql.DataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 
-import com.mark59.metrics.application.AppConstantsMetrics;
 import com.mark59.metrics.data.beans.EventMapping;
 
 /**
@@ -226,8 +225,5 @@ public class EventMappingDAOjdbcTemplateImpl implements EventMappingDAO
 		eventMapping.setComment((String)row.get("COMMENT"));
 		return eventMapping;
 	}
-
-
-
 	
 }

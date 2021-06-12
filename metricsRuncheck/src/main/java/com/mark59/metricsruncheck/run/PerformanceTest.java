@@ -95,14 +95,15 @@ public class PerformanceTest {
 			Long durationInMinutes = TimeUnit.MILLISECONDS.toMinutes(durationMs);
 			run.setDuration(durationInMinutes.toString());
 			
-			//period is set really just to keep everything to the same format as a default Loadrunner report does
+			// period (local time from/to format) is set really just to keep everything to the same format as a default Loadrunner report does
 			
 			DateFormat formatterSecPrecision = new SimpleDateFormat("yyyyMMddHHmmss");
 			
 			String period = formatterSecPrecision.format(runStartDate).substring(0,8) + "_"
 				 		  + formatterSecPrecision.format(runStartDate).substring(8,14) + " - "
 				 		  + formatterSecPrecision.format(runEndDate).substring(0,8) + "_"
-						  + formatterSecPrecision.format(runEndDate).substring(8,14);	
+						  + formatterSecPrecision.format(runEndDate).substring(8,14) 
+						  + "<br>(" + runStartTime + " - " + runEndTime + ")";
 			run.setPeriod(period);
 			
 			System.out.println("\nRun start time set as " + run.getRunTime() + "  [ " + runStartDate 

@@ -44,6 +44,7 @@ public class Transaction {
 	BigDecimal	txnLast;	
 	BigDecimal	txnSum;	
 	BigDecimal	txnDelay;	
+	String		txnIdURLencoded;
 
 	
 	public String getApplication() {
@@ -160,7 +161,14 @@ public class Transaction {
 	public void setTxnDelay(BigDecimal txnDelay) {
 		this.txnDelay = txnDelay.setScale(3, RoundingMode.HALF_UP);;
 	}
-
+	public String getTxnIdURLencoded() {
+		return txnIdURLencoded;
+	}
+	public void setTxnIdURLencoded(String txnIdURLencoded) {
+		this.txnIdURLencoded = txnIdURLencoded;
+	}
+	
+	
 	@Override
 	public String toString() {
 		String prettyPrint = "application="+application

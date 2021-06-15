@@ -22,6 +22,7 @@ if (reqApp != null && !reqApp.isEmpty()) {
   <a <% if (path.contains("/slalist") || path.contains("copysla") || path.contains("registersla") || path.contains("editsla") || path.contains("deletesla") || path.contains("bulkapplication") || path.contains("applicationsla") )
                                        { %> class="active" <% } %> href="slaList<%= reqAppUrlParm %>">SLA Transactions</a> 
   <a <% if (path.contains("metricsla")){ %> class="active" <% } %> href="metricSlaList<%= reqAppUrlParm %>" >SLA Metrics</a>
+  <a <% if (path.contains("transaction")){ %> class="active" <% } %> href="transactionList">Rename Transactions</a>
   <a <% if (path.contains("eventmapping")){ %> class="active" <% } %> href="eventMappingList">Event Mapping Admin</a>
   <a <% if (path.contains("graphmapping")){ %> class="active" <% } %> href="graphMappingList">Graph Mapping Admin</a>
  

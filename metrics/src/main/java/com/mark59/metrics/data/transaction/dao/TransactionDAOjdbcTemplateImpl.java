@@ -16,7 +16,9 @@
 
 package com.mark59.metrics.data.transaction.dao;
 
+import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
@@ -35,6 +37,7 @@ import com.mark59.metrics.application.AppConstantsMetrics;
 import com.mark59.metrics.data.beans.Datapoint;
 import com.mark59.metrics.data.beans.GraphMapping;
 import com.mark59.metrics.data.beans.Run;
+import com.mark59.metrics.data.beans.TestTransaction;
 import com.mark59.metrics.data.beans.Transaction;
 import com.mark59.metrics.data.graphMapping.dao.GraphMappingDAO;
 import com.mark59.metrics.sla.SlaUtilities;
@@ -94,6 +97,57 @@ public class TransactionDAOjdbcTemplateImpl implements TransactionDAO
 	
 	
 	@Override
+	public List<Transaction> getUniqueListOfTransactionsByType(String application) {
+		// bit of a hack using the 'transaction' bean (should be a new form bean really...)
+		List<Transaction> transactionKeyList = new ArrayList<Transaction>();
+		String sql = "SELECT DISTINCT TXN_ID, TXN_TYPE, MAX(RUN_TIME) AS MAX_RUN_TIME, COUNT(*) AS TXN_COUNT "
+					+ "FROM TRANSACTION "
+					+ "WHERE APPLICATION = '" + application + "' "
+					+ "GROUP BY TXN_ID, TXN_TYPE "
+					+ "ORDER BY 2 DESC, 1 ASC "; 
+				
+		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
+		List<Map<String, Object>> rows = jdbcTemplate.queryForList(sql);
+		for (Map<String, Object> row : rows) {
+			Transaction transactionKey = new Transaction();
+			transactionKey.setApplication(application); 
+			transactionKey.setTxnId((String)row.get("TXN_ID")); 
+			transactionKey.setTxnType((String)row.get("TXN_TYPE")); 
+			transactionKey.setRunTime((String)row.get("MAX_RUN_TIME")); 
+			transactionKey.setTxnPass((Long)row.get("TXN_COUNT"));   // big hack 
+			try {
+				transactionKey.setTxnIdURLencoded(URLEncoder.encode(transactionKey.getTxnId(), "UTF-8")) ;
+			} catch (UnsupportedEncodingException e) {	e.printStackTrace();	}	  
+			transactionKeyList.add(transactionKey);
+		}	
+		return transactionKeyList;		
+	}
+
+	
+	/**
+	 *  Used to check to see if any runs contain BOTH transactions 
+	 */
+	@Override	
+	public long countRunsContainsBothTxnIds(String aplication, String txnType, String txnId1, String txnId2 ){
+		Long rowCount;
+		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
+		
+		String sql =  "SELECT COUNT(DISTINCT R.RUN_TIME) FROM RUNS R, TRANSACTION T "    
+				   + " WHERE R.APPLICATION = '" + aplication + "' " 
+				   + " AND R.APPLICATION = T.APPLICATION AND R.RUN_TIME = T.RUN_TIME "   
+				   + " AND R.RUN_TIME IN ( SELECT RUN_TIME FROM TRANSACTION WHERE TXN_TYPE = '" + txnType + "'" 
+				   														+ " AND TXN_ID = '" + txnId1 + "') " 
+				   + " AND R.RUN_TIME IN ( SELECT RUN_TIME FROM TRANSACTION WHERE TXN_TYPE = '" + txnType + "'" 
+				   														+ " AND TXN_ID = '" + txnId2 + "') "; 
+		
+		System.out.println("countRunsContainsBothTxnIds sql = " + sql );
+		
+		rowCount = Long.valueOf(jdbcTemplate.queryForObject(sql, String.class));
+		return rowCount;
+	}	
+	
+
+	@Override
 	public Object getTransactionValue(String application, String txnType, String runTime, String txnId, String transactionField) {
 
 		List<Object> transactionValues =  new ArrayList<Object>();  
@@ -143,6 +197,7 @@ public class TransactionDAOjdbcTemplateImpl implements TransactionDAO
 		jdbcTemplate.update(sql);
 	}
 
+	
 	
 	/**
 	 *  The returned list of Transactions is ordered by the ranking of the target values
@@ -381,6 +436,7 @@ public class TransactionDAOjdbcTemplateImpl implements TransactionDAO
 		String sqlIn =" AND TXN_ID IN ( '" +  chosenTxnsListWithQuotes + "' ) ";  
 		return sqlIn;
 	}
-	
+
+
 	
 }

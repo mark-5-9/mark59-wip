@@ -81,8 +81,8 @@ public class MetricSlaDAOjdbcImpl implements MetricSlaDAO {
 //				",  txnType = " + metricSla.getMetricTxnType() + ",  field = " + metricSla.getValueDerivation() +", orig= " + metricSla.getOriginalMetricName() );	
 		
 		if (existingSla == null ){  //a MetricsName rename from the original name to the new one
-			deleteData(metricSla.getApplication(), metricSla.getOriginalMetricName(),metricSla.getMetricTxnType(),metricSla.getValueDerivation() );
 			insertData(metricSla);
+			deleteData(metricSla.getApplication(), metricSla.getOriginalMetricName(),metricSla.getMetricTxnType(),metricSla.getValueDerivation() );
 			
 		} else {  // update values for an existing transaction
 			

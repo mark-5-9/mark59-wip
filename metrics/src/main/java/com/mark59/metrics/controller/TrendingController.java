@@ -284,6 +284,13 @@ public class TrendingController {
 	}
 
 	
+	/**
+	 * labelRunShortDescriptionsId id used by the graphic to populate the run labels 
+	 * 
+	 * @param application
+	 * @param runDatesToGraphId
+	 * @return labelRunShortDescriptionsId
+	 */
 	private String populateLabelRunShortDescriptionsId(String application, String runDatesToGraphId) {
 
 		List<String> runDatesToGraph = UtilsMetrics.commaDelimStringToStringList(runDatesToGraphId);
@@ -309,13 +316,13 @@ public class TrendingController {
 			if (runReferenceLinkText == null ){
 				runReferenceLinkText = run.getRunReference();
 			}
-			runDescriptionsb.append(runReferenceLinkText);
+			runDescriptionsb.append(runReferenceLinkText.replace(',',' '));
 			
-			if ( run.getComment() != null  &&  !run.getComment().isEmpty() ){
+			if (StringUtils.isNotBlank(run.getComment())){
 				if (run.getComment().length() > 20 ){
-					runDescriptionsb.append(" " +  run.getComment().substring(0,20));
+					runDescriptionsb.append(" " +  run.getComment().replace(',',' ').substring(0,20));
 				} else {
-					runDescriptionsb.append(" " +  run.getComment());
+					runDescriptionsb.append(" " +  run.getComment().replace(',',' '));
 				}
 			}
 			runShortDescriptionsList.add(runDescriptionsb.toString() );
@@ -327,6 +334,13 @@ public class TrendingController {
 	
 
 	
+	/**
+	 * labelRunDescriptionsId is used for the run descriptions in the Comparison Table
+	 * 
+	 * @param application
+	 * @param runDatesToGraphId
+	 * @return labelRunDescriptionsId
+	 */
 	private String populateLabelRunDescriptionsId(String application, String runDatesToGraphId) {
 
 		List<String> runDatesToGraph = UtilsMetrics.commaDelimStringToStringList(runDatesToGraphId);
@@ -335,13 +349,14 @@ public class TrendingController {
 		for (int i = 0; i < runDatesToGraph.size();  i++) {
 			Run run = runDAO.findRun(application, runDatesToGraph.get(i));
 			StringBuilder runDescriptionsb   = new StringBuilder();
-			runDescriptionsb.append(run.getRunReference());
 			
-			if ( run.getComment() != null  &&  !run.getComment().isEmpty() ){
+			runDescriptionsb.append(run.getRunReference().replace(',',' '));
+			
+			if (StringUtils.isNotBlank(run.getComment())){
 				if (run.getComment().length() > 20 ){
-					runDescriptionsb.append("<br><br><div style='color:grey;'>" +  run.getComment().substring(0,20) + "..</div>" );
+					runDescriptionsb.append("<br><br><div style='color:grey;'>" +  run.getComment().replace(',',' ').substring(0,20) + "..</div>" );
 				} else {
-					runDescriptionsb.append("<br><br><div style='color:grey;'>" +  run.getComment() + "</div>" );
+					runDescriptionsb.append("<br><br><div style='color:grey;'>" +  run.getComment().replace(',',' ') + "</div>" );
 				}
 			}
 			if ( "Y".equalsIgnoreCase(run.getBaselineRun())){

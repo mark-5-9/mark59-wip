@@ -65,11 +65,10 @@ public class TransactionController {
 		List<String> applicationList = populateApplicationDropdown();
 		if (StringUtils.isBlank(reqApp) && applicationList.size() > 1  ){
 			// when no application request parameter has been sent, take the first application  
-			reqApp = (String)applicationList.get(1);
+			reqApp = (String)applicationList.get(0);
 		}		
-		
 		List<Transaction> transactionList = transactionDAO.getUniqueListOfTransactionsByType(reqApp);
-
+		
 		Map<String, Object> map = new HashMap<String, Object>(); 
 		map.put("transactionList",transactionList);
 		map.put("reqApp",reqApp);
@@ -78,12 +77,10 @@ public class TransactionController {
 	}
 	
 	
-	
 	@RequestMapping("/transactionRenameDataEntry") 
 	public Object renameTransactionEntry(@RequestParam String reqApp,  @RequestParam String reqTxnId, @RequestParam String reqTxnType,
 			@ModelAttribute TransactionRenameForm transactionRenameForm  ) {
-		System.out.println("@ transactionRenameDataEntry : reqTxnId=" + reqTxnId + "reqTxnType=" + reqTxnType + ", TrRenameFm=" + transactionRenameForm);
-
+//		System.out.println("@ transactionRenameDataEntry : reqTxnId=" + reqTxnId + "reqTxnType=" + reqTxnType + ", TrRenameFm=" + transactionRenameForm);
 		transactionRenameForm.setApplication(reqApp); ;
 		transactionRenameForm.setFromTxnId(reqTxnId);
 		transactionRenameForm.setTxnType(reqTxnType);
@@ -108,7 +105,6 @@ public class TransactionController {
 			transactionRenameForm.setValidationMsg("<p style='color:red'>The transaction names must differ !</p>");
 			return new ModelAndView("transactionRenameValidate", "transactionRenameForm" , transactionRenameForm  );
 		}		
-		
 		
 		long clashOfTxns = transactionDAO.countRunsContainsBothTxnIds(transactionRenameForm.getApplication(), 
 																		transactionRenameForm.getTxnType(),
@@ -160,9 +156,17 @@ public class TransactionController {
 			
 		} else {  // a valid rename
 			
-			String validationOkMsg = "<p>Please press the Rename button to rename the transaction."
-					+ "<p>If a SLA entry exists for the original transaction it will also be renamed, "
-					+ "unless an entry for the new transaction name already exists.";
+			String validationOkMsg = "<p>Please press the Rename button to rename the transaction.";
+					
+			if (Mark59Constants.DatabaseTxnTypes.TRANSACTION.name().equals(transactionRenameForm.getTxnType())){					
+				validationOkMsg = validationOkMsg +
+					"<p>If an SLA exists for the original transaction it will also be renamed, " +
+					"unless an SLA with the new transaction name already exists.";
+			} else {
+				validationOkMsg = validationOkMsg +
+					"<p>If metric SLA(s) exist for the original transaction / txn type, they will also be renamed, " +
+					"unless any SLA with the new transaction name (for the same txn type) already exists.";				
+			}
 			
 			long doesToTxnIdExist = transactionDAO.countRunsContainsBothTxnIds(transactionRenameForm.getApplication(), 
 																				transactionRenameForm.getTxnType(),
@@ -170,7 +174,7 @@ public class TransactionController {
 																				transactionRenameForm.getToTxnId()); //repeated!
 			if (doesToTxnIdExist > 0 ) {
 				validationOkMsg = validationOkMsg +
-				  	"<p>Some runs already contain transactions named " + transactionRenameForm.getToTxnId() + ".</b><br>" +
+				  	"<p>Some runs already contain transactions named " + transactionRenameForm.getToTxnId() + ".<br>" +
 				  	"This means that this rename action may <b>not be reversible</b> (you are doing a merge of two transaction Ids)." + 
 					"<p>Check everything is OK before you Rename !"; 
 			}
@@ -192,7 +196,7 @@ public class TransactionController {
 			Sla slaFromTxnId = slaDAO.getSla(transactionRenameForm.getApplication(), transactionRenameForm.getFromTxnId()); 
 			Sla slaToTxnId   = slaDAO.getSla(transactionRenameForm.getApplication(), transactionRenameForm.getToTxnId()); 
 			
-			if (slaFromTxnId != null && slaToTxnId == null ){  // ok to rename the sla 
+			if (slaFromTxnId != null && slaToTxnId == null ){  // okay to rename the SLA 
 				slaToTxnId = new Sla(slaFromTxnId);
 				slaToTxnId.setTxnId(transactionRenameForm.getToTxnId());
 				slaDAO.insertData(slaToTxnId);
@@ -220,14 +224,11 @@ public class TransactionController {
 		return "redirect:/transactionList?reqApp=" + transactionRenameForm.getApplication()   ;
 	}
 
-
 	
 	private List<String> populateApplicationDropdown() {
 		List<String> applicationList = new ArrayList<String>();
 		applicationList = runDAO.findApplications();
-		applicationList.add(0, "");
 		return applicationList;
 	}		
-
 	
 }

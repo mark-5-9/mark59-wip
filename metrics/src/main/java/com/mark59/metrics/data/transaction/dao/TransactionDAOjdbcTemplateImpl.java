@@ -37,7 +37,6 @@ import com.mark59.metrics.application.AppConstantsMetrics;
 import com.mark59.metrics.data.beans.Datapoint;
 import com.mark59.metrics.data.beans.GraphMapping;
 import com.mark59.metrics.data.beans.Run;
-import com.mark59.metrics.data.beans.TestTransaction;
 import com.mark59.metrics.data.beans.Transaction;
 import com.mark59.metrics.data.graphMapping.dao.GraphMappingDAO;
 import com.mark59.metrics.sla.SlaUtilities;
@@ -128,23 +127,41 @@ public class TransactionDAOjdbcTemplateImpl implements TransactionDAO
 	 *  Used to check to see if any runs contain BOTH transactions 
 	 */
 	@Override	
-	public long countRunsContainsBothTxnIds(String aplication, String txnType, String txnId1, String txnId2 ){
+	public long countRunsContainsBothTxnIds(String application, String txnType, String txnId1, String txnId2 ){
 		Long rowCount;
 		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
 		
 		String sql =  "SELECT COUNT(DISTINCT R.RUN_TIME) FROM RUNS R, TRANSACTION T "    
-				   + " WHERE R.APPLICATION = '" + aplication + "' " 
+				   + " WHERE R.APPLICATION = '" + application + "' " 
+				   + " AND T.TXN_TYPE = '" + txnType + "'" 
 				   + " AND R.APPLICATION = T.APPLICATION AND R.RUN_TIME = T.RUN_TIME "   
-				   + " AND R.RUN_TIME IN ( SELECT RUN_TIME FROM TRANSACTION WHERE TXN_TYPE = '" + txnType + "'" 
+				   + " AND R.RUN_TIME IN ( SELECT RUN_TIME FROM TRANSACTION  WHERE APPLICATION = '" + application + "' " 
+				   														+ " AND TXN_TYPE = '" + txnType + "'" 
 				   														+ " AND TXN_ID = '" + txnId1 + "') " 
-				   + " AND R.RUN_TIME IN ( SELECT RUN_TIME FROM TRANSACTION WHERE TXN_TYPE = '" + txnType + "'" 
+				   + " AND R.RUN_TIME IN ( SELECT RUN_TIME FROM TRANSACTION  WHERE APPLICATION = '" + application + "' " 
+				   														+ " AND TXN_TYPE = '" + txnType + "'" 
 				   														+ " AND TXN_ID = '" + txnId2 + "') "; 
 		
-		System.out.println("countRunsContainsBothTxnIds sql = " + sql );
 		
 		rowCount = Long.valueOf(jdbcTemplate.queryForObject(sql, String.class));
+//		System.out.println("countRunsContainsBothTxnIds sql = " + sql + "\n - rowCount = " + rowCount );
 		return rowCount;
 	}	
+	
+	
+	/**
+	 *  Validation need to be done before the rename (see {@link #countRunsContainsBothTxnIds(String, String, String, String)}. 
+	 */
+	@Override
+	public void renameTransactions(String application, String txnType, String fromTxnId, String toTxnId) {
+		String sql = "UPDATE TRANSACTION SET TXN_ID = '" + toTxnId + "'"  
+					+ " WHERE APPLICATION='" + application + "'"  
+					+ "   AND TXN_TYPE='" + txnType + "'"
+					+ "   AND TXN_ID='" + fromTxnId + "'";
+		System.out.println("TransactionDAOjdbcTemplateImpl.renameTransactions : " + sql );
+		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
+		jdbcTemplate.update(sql);	
+	}
 	
 
 	@Override
@@ -436,7 +453,6 @@ public class TransactionDAOjdbcTemplateImpl implements TransactionDAO
 		String sqlIn =" AND TXN_ID IN ( '" +  chosenTxnsListWithQuotes + "' ) ";  
 		return sqlIn;
 	}
-
 
 	
 }

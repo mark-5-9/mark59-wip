@@ -33,8 +33,12 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.mark59.core.utils.Mark59Constants;
 import com.mark59.metrics.application.UtilsMetrics;
+import com.mark59.metrics.data.beans.MetricSla;
+import com.mark59.metrics.data.beans.Sla;
 import com.mark59.metrics.data.beans.Transaction;
+import com.mark59.metrics.data.metricSla.dao.MetricSlaDAO;
 import com.mark59.metrics.data.run.dao.RunDAO;
+import com.mark59.metrics.data.sla.dao.SlaDAO;
 import com.mark59.metrics.data.transaction.dao.TransactionDAO;
 import com.mark59.metrics.form.TransactionRenameForm;
 
@@ -50,6 +54,11 @@ public class TransactionController {
 	TransactionDAO transactionDAO; 
 	@Autowired
 	RunDAO runDAO; 
+	@Autowired
+	SlaDAO slaDAO; 	
+	@Autowired
+	MetricSlaDAO metricSlaDAO; 	
+	
 	
 	@RequestMapping("/transactionList")
 	public ModelAndView getTransactionList(@RequestParam(required=false) String reqApp) {
@@ -84,7 +93,7 @@ public class TransactionController {
 
 	
 	@RequestMapping("/transactionRenameValidate") 
-	public Object transactionRenameValidate(@ModelAttribute TransactionRenameForm transactionRenameForm ) {
+	public Object transactionRenameValidate(@ModelAttribute TransactionRenameForm transactionRenameForm){
 		System.out.println("@ transactionRenameValidate : TrRenameFm=" + transactionRenameForm  );		
 		transactionRenameForm.setPassedValidation("Y");
 		
@@ -111,22 +120,24 @@ public class TransactionController {
 			
 			transactionRenameForm.setPassedValidation("N");
 			String baseUrl = ServletUriComponentsBuilder.fromCurrentContextPath().build().toUriString();
-			
-			String clashSql =  "SELECT DISTINCT R.RUN_TIME, R.BASELINE_RUN, R.IS_RUN_IGNORED FROM RUNS R, TRANSACTION T "    
-							   + " WHERE R.APPLICATION = '" + transactionRenameForm.getApplication() + "' " 
-							   + " AND R.APPLICATION = T.APPLICATION AND R.RUN_TIME = T.RUN_TIME "   
-							   + " AND R.RUN_TIME IN ( SELECT RUN_TIME FROM TRANSACTION WHERE TXN_TYPE = '" + transactionRenameForm.getTxnType() + "'" 
-							   														+ " AND TXN_ID = '" + transactionRenameForm.getFromTxnId() + "') " 
-							   + " AND R.RUN_TIME IN ( SELECT RUN_TIME FROM TRANSACTION WHERE TXN_TYPE = '" + transactionRenameForm.getTxnType() + "'" 
-							   														+ " AND TXN_ID = '" + transactionRenameForm.getToTxnId() + "') " 
-							   + " ORDER BY R.RUN_TIME DESC";  			
 
+			String clashSql = "SELECT DISTINCT R.RUN_TIME, R.BASELINE_RUN, R.IS_RUN_IGNORED FROM RUNS R, TRANSACTION T "    
+					   + " WHERE R.APPLICATION = '" + transactionRenameForm.getApplication() + "' " 
+					   + " AND T.TXN_TYPE = '" + transactionRenameForm.getTxnType() + "'" 
+					   + " AND R.APPLICATION = T.APPLICATION AND R.RUN_TIME = T.RUN_TIME "   
+					   + " AND R.RUN_TIME IN ( SELECT RUN_TIME FROM TRANSACTION  WHERE APPLICATION = '" + transactionRenameForm.getApplication() + "' " 
+					   														+ " AND TXN_TYPE = '" + transactionRenameForm.getTxnType() + "'" 
+					   														+ " AND TXN_ID = '" + transactionRenameForm.getFromTxnId() + "') " 
+					   + " AND R.RUN_TIME IN ( SELECT RUN_TIME FROM TRANSACTION  WHERE APPLICATION = '" + transactionRenameForm.getApplication() + "' " 
+					   														+ " AND TXN_TYPE = '" + transactionRenameForm.getTxnType() + "'" 
+					   														+ " AND TXN_ID = '" + transactionRenameForm.getToTxnId() + "') "; 			
 			System.out.println("clashSql=" + clashSql);
 			
 			String encodedClashSql = UtilsMetrics.encodeBase64urlParam(clashSql);
 
 			if (   Mark59Constants.DatabaseTxnTypes.TRANSACTION.name().equals(transactionRenameForm.getTxnType())){
-				String clashLink = baseUrl + "/trending?reqApp=" + transactionRenameForm.getApplication() + "&reqUseRawRunSQL=true&reqRunTimeSelectionSQL=" + encodedClashSql;
+				String clashLink = baseUrl + "/trending?reqApp=" + transactionRenameForm.getApplication() + 
+						"&reqUseRawRunSQL=true&reqRunTimeSelectionSQL=" + encodedClashSql;
 				transactionRenameForm.setValidationMsg("<p style='color:red'><b>Invalid Rename. There are run(s) containing both transaction names.</b></p>" +
 						"<p>Please refer to the link below to examine these runs</p>" + 
 						"<p><a href='" + clashLink + "'>Trend Analysis Graph for Runs with both Transaction Names</a></p>" ); 
@@ -138,7 +149,8 @@ public class TransactionController {
 				} else if  (Mark59Constants.DatabaseTxnTypes.DATAPOINT.name().equals(transactionRenameForm.getTxnType())){
 					graph = "DATAPOINT_AVE";
 				}  
-				String clashLink = baseUrl + "/trending?reqApp=" + transactionRenameForm.getApplication() + "&reqGraph=" + graph +"&reqUseRawRunSQL=true&reqRunTimeSelectionSQL=" + encodedClashSql;
+				String clashLink = baseUrl + "/trending?reqApp=" + transactionRenameForm.getApplication() + "&reqGraph=" + graph +
+						"&reqUseRawRunSQL=true&reqRunTimeSelectionSQL=" + encodedClashSql;
 				transactionRenameForm.setValidationMsg("<p style='color:red'><b>Invalid Rename. There are run(s) containing both transaction names.</b></p>" +
 						"<p>Please refer to the link below to examine these runs</p>" + 
 						"<p>Note for metric transaction types the Graph names that delpoy with Mark59 are assumed to exist.</p>" + 
@@ -151,36 +163,63 @@ public class TransactionController {
 			String validationOkMsg = "<p>Please press the Rename button to rename the transaction."
 					+ "<p>If a SLA entry exists for the original transaction it will also be renamed, "
 					+ "unless an entry for the new transaction name already exists.";
-					
 			
 			long doesToTxnIdExist = transactionDAO.countRunsContainsBothTxnIds(transactionRenameForm.getApplication(), 
 																				transactionRenameForm.getTxnType(),
 																				transactionRenameForm.getToTxnId(),
 																				transactionRenameForm.getToTxnId()); //repeated!
-			System.out.println("doesToTxnIdExist = " + doesToTxnIdExist);
-			
 			if (doesToTxnIdExist > 0 ) {
 				validationOkMsg = validationOkMsg +
 				  	"<p>Some runs already contain transactions named " + transactionRenameForm.getToTxnId() + ".</b><br>" +
-				  	"This means that this rename action may not be reversible (you are doing a merge of two transaction Ids)." + 
-					"<p><b>Check everything is OK before you Rename !</b>"; 
+				  	"This means that this rename action may <b>not be reversible</b> (you are doing a merge of two transaction Ids)." + 
+					"<p>Check everything is OK before you Rename !"; 
 			}
-			
 			transactionRenameForm.setValidationMsg(validationOkMsg);
 		}
-	
 		return new ModelAndView("transactionRenameValidate", "transactionRenameForm" , transactionRenameForm  );	
 	}	
 
+	
+	@RequestMapping("/updateTransactionTables")
+	public String updateTransactionTables(@ModelAttribute TransactionRenameForm transactionRenameForm){
+		transactionDAO.renameTransactions(transactionRenameForm.getApplication(), 
+											transactionRenameForm.getTxnType(),
+											transactionRenameForm.getFromTxnId(),
+											transactionRenameForm.getToTxnId());
+		
+		if (Mark59Constants.DatabaseTxnTypes.TRANSACTION.name().equals(transactionRenameForm.getTxnType())){
+			
+			Sla slaFromTxnId = slaDAO.getSla(transactionRenameForm.getApplication(), transactionRenameForm.getFromTxnId()); 
+			Sla slaToTxnId   = slaDAO.getSla(transactionRenameForm.getApplication(), transactionRenameForm.getToTxnId()); 
+			
+			if (slaFromTxnId != null && slaToTxnId == null ){  // ok to rename the sla 
+				slaToTxnId = new Sla(slaFromTxnId);
+				slaToTxnId.setTxnId(transactionRenameForm.getToTxnId());
+				slaDAO.insertData(slaToTxnId);
+				slaDAO.deleteData(transactionRenameForm.getApplication(), transactionRenameForm.getFromTxnId());
+			}				
+		
+		} else { // a metric txn type	
+			
+			List<MetricSla> slaFromMetricTxnIds = metricSlaDAO.getMetricSlaList(transactionRenameForm.getApplication(), 
+																				transactionRenameForm.getFromTxnId(),
+																				transactionRenameForm.getTxnType());
+			List<MetricSla> slaToMetricTxnIds   = metricSlaDAO.getMetricSlaList(transactionRenameForm.getApplication(), 
+																				transactionRenameForm.getToTxnId(),
+																				transactionRenameForm.getTxnType());
+			if (slaFromMetricTxnIds.size() > 0 && slaToMetricTxnIds.size() == 0 ){  
+				// ok to rename the SLA(s) - may be multiple 'Value Derivations'
+				for (MetricSla metricSla : slaFromMetricTxnIds) {
+					metricSla.setMetricName(transactionRenameForm.getToTxnId());
+					metricSlaDAO.insertData(metricSla);
+				}
+				metricSlaDAO.deleteData(transactionRenameForm.getApplication(), transactionRenameForm.getFromTxnId(), transactionRenameForm.getTxnType());
+			}	
+		}
+		
+		return "redirect:/transactionList?reqApp=" + transactionRenameForm.getApplication()   ;
+	}
 
-//	TODO	
-//	@RequestMapping("/updateTransaction")
-//	public String updateTransaction(@RequestParam(required=false) String reqApp, @ModelAttribute Transaction transaction) {
-////		System.out.println("@ updateSla : reqApp=" + reqApp + ", app=" + sla.getApplication() + ",  origTxn=" + sla.getSlaOriginalTxnId() + ", txnId=" + sla.getTxnId() + " ,90th=" + sla.getSla90thResponse()   );
-//		transactionDAO.updateData(transaction);
-//		return "redirect:/transactionList?reqApp=" + reqApp  ;
-//	}
-//
 
 	
 	private List<String> populateApplicationDropdown() {

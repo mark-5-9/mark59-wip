@@ -42,7 +42,7 @@
 <p>&nbsp;</p>
   
   <div>
-   <form:form method="post" action="transactionRenameValidate" modelAttribute="transactionRenameForm">
+   <form:form method="post" action="updateTransactionTables" modelAttribute="transactionRenameForm">
     <table>
      <tr>
       <td>Application</td><td>:</td><td> ${transactionRenameForm.application} </td>

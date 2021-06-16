@@ -52,9 +52,6 @@ public interface TransactionDAO
 
 	public long countRunsContainsBothTxnIds(String aplication, String txnType, String txnId1, String txnId2);
 
-
-
-
-
+	public void renameTransactions(String application, String txnType, String fromTxnId, String toTxnId);
 	
 }

@@ -67,7 +67,7 @@
      </tr>
      
      <tr>
-      <td colspan="3"><a href="metricSlaList?reqApp=${map.reqApp}">Cancel</a></td>
+      <td colspan="3"><a href="transactionList?reqApp=${transactionRenameForm.application}">Cancel</a></td>      
      </tr>     
      
     </table>

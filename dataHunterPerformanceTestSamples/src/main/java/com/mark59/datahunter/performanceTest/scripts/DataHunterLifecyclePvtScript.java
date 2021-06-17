@@ -36,6 +36,7 @@ import com.mark59.core.Outcome;
 import com.mark59.core.utils.IpUtilities;
 import com.mark59.core.utils.Log4jConfigurationHelper;
 import com.mark59.core.utils.Mark59Constants;
+import com.mark59.core.utils.SafeSleep;
 import com.mark59.datahunter.performanceTest.dsl.datahunterSpecificPages.AddPolicyActionPage;
 import com.mark59.datahunter.performanceTest.dsl.datahunterSpecificPages.AddPolicyPage;
 import com.mark59.datahunter.performanceTest.dsl.datahunterSpecificPages.CountPoliciesActionPage;
@@ -53,7 +54,6 @@ import com.mark59.selenium.corejmeterimpl.JmeterFunctionsForSeleniumScripts;
 import com.mark59.selenium.corejmeterimpl.KeepBrowserOpen;
 import com.mark59.selenium.corejmeterimpl.SeleniumAbstractJavaSamplerClient;
 import com.mark59.selenium.drivers.SeleniumDriverFactory;
-import com.mark59.seleniumDSL.core.SafeSleep;
 import com.mark59.seleniumDSL.pageElements.HtmlTable;
 import com.mark59.seleniumDSL.pageElements.HtmlTableRow;
 

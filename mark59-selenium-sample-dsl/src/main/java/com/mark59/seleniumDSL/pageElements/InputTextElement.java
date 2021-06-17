@@ -5,9 +5,9 @@ import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
+import com.mark59.core.utils.SafeSleep;
 import com.mark59.seleniumDSL.core.Elemental;
 import com.mark59.seleniumDSL.core.FluentWaitFactory;
-import com.mark59.seleniumDSL.core.SafeSleep;
 
 public class InputTextElement extends Elemental {
 

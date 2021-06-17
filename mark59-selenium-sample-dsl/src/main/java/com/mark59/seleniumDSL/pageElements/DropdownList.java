@@ -6,9 +6,9 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 
+import com.mark59.core.utils.SafeSleep;
 import com.mark59.seleniumDSL.core.Elemental;
 import com.mark59.seleniumDSL.core.FluentWaitFactory;
-import com.mark59.seleniumDSL.core.SafeSleep;
 
 
 public class DropdownList extends Elemental {

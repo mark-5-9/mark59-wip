@@ -80,18 +80,17 @@ public class TransactionController {
 	@RequestMapping("/transactionRenameDataEntry") 
 	public Object renameTransactionEntry(@RequestParam String reqApp,  @RequestParam String reqTxnId, @RequestParam String reqTxnType,
 			@ModelAttribute TransactionRenameForm transactionRenameForm  ) {
-//		System.out.println("@ transactionRenameDataEntry : reqTxnId=" + reqTxnId + "reqTxnType=" + reqTxnType + ", TrRenameFm=" + transactionRenameForm);
+//		System.out.println("@ transactionRenameDataEntry : reqTxnId=" + reqTxnId + "reqTxnType=" + reqTxnType + ", Form=" + transactionRenameForm);
 		transactionRenameForm.setApplication(reqApp); ;
 		transactionRenameForm.setFromTxnId(reqTxnId);
 		transactionRenameForm.setTxnType(reqTxnType);
-		
 		return new ModelAndView("transactionRenameDataEntry", "transactionRenameForm", transactionRenameForm);
 	}
 
 	
 	@RequestMapping("/transactionRenameValidate") 
 	public Object transactionRenameValidate(@ModelAttribute TransactionRenameForm transactionRenameForm){
-		System.out.println("@ transactionRenameValidate : TrRenameFm=" + transactionRenameForm  );		
+//		System.out.println("@ transactionRenameValidate : Form=" + transactionRenameForm  );		
 		transactionRenameForm.setPassedValidation("Y");
 		
 		if (StringUtils.isBlank(transactionRenameForm.getToTxnId())){
@@ -110,9 +109,7 @@ public class TransactionController {
 																		transactionRenameForm.getTxnType(),
 																		transactionRenameForm.getFromTxnId(),
 																		transactionRenameForm.getToTxnId());
-		System.out.println("clashOfTxns=" + clashOfTxns);
-		
-		if (clashOfTxns > 0  ){
+		if (clashOfTxns > 0 ){
 			
 			transactionRenameForm.setPassedValidation("N");
 			String baseUrl = ServletUriComponentsBuilder.fromCurrentContextPath().build().toUriString();
@@ -127,8 +124,6 @@ public class TransactionController {
 					   + " AND R.RUN_TIME IN ( SELECT RUN_TIME FROM TRANSACTION  WHERE APPLICATION = '" + transactionRenameForm.getApplication() + "' " 
 					   														+ " AND TXN_TYPE = '" + transactionRenameForm.getTxnType() + "'" 
 					   														+ " AND TXN_ID = '" + transactionRenameForm.getToTxnId() + "') "; 			
-			System.out.println("clashSql=" + clashSql);
-			
 			String encodedClashSql = UtilsMetrics.encodeBase64urlParam(clashSql);
 
 			if (   Mark59Constants.DatabaseTxnTypes.TRANSACTION.name().equals(transactionRenameForm.getTxnType())){
@@ -186,6 +181,7 @@ public class TransactionController {
 	
 	@RequestMapping("/updateTransactionTables")
 	public String updateTransactionTables(@ModelAttribute TransactionRenameForm transactionRenameForm){
+		
 		transactionDAO.renameTransactions(transactionRenameForm.getApplication(), 
 											transactionRenameForm.getTxnType(),
 											transactionRenameForm.getFromTxnId(),

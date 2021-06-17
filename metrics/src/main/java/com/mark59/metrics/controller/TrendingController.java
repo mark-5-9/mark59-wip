@@ -62,25 +62,18 @@ public class TrendingController {
 	
 	@Autowired
 	ApplicationDAO applicationDAO; 
-
 	@Autowired
 	RunDAO runDAO; 	
-	
 	@Autowired
 	TransactionDAO transactionDAO;
-	
 	@Autowired
 	SlaDAO slaDAO; 	
-
 	@Autowired	
 	MetricSlaDAO metricSlaDAO;
-		
 	@Autowired
 	GraphMappingDAO graphMappingDAO; 	
-	
 	@Autowired
 	VisGraphicDataProductionInterface visGraphicDataProduction;
-	
 
 	 //TODO: increase and rationalize input validation (messages, prevent fails etc).   
 	
@@ -191,7 +184,7 @@ public class TrendingController {
 	
 		trendingForm.setNthRankedTxn(UtilsMetrics.defaultIfBlank(reqNthRankedTxn, AppConstantsMetrics.ALL));
 		
-		System.out.println("TrendingController trendingForm : " + trendingForm  );
+//		System.out.println("TrendingController trendingForm : " + trendingForm  );
 		
 		String runDatesToGraphId = runDAO.determineRunDatesToGraph(	trendingForm.getApplication(),
 																	trendingForm.getSqlSelectRunLike(),
@@ -428,7 +421,6 @@ public class TrendingController {
 			}			
 		}
 		
-		
 		List<String> missingTransactions  =  new SlaChecker().checkForMissingTransactionsWithDatabaseSLAs(application, latestRunTime, slaDAO  );
 		for (String missingTnxId : missingTransactions) {
 			trxnIdsWithAnyFailedSla.add(missingTnxId);
@@ -442,10 +434,6 @@ public class TrendingController {
 		model.addAttribute("trxnIdsWithFailedSlaFailCount", UtilsMetrics.stringListToCommaDelimString(trxnIdsWithFailedSlaFailCount) );
 		model.addAttribute("trxnIdsWithFailedSlaPassCount", UtilsMetrics.stringListToCommaDelimString(trxnIdsWithFailedSlaPassCount) );
 		model.addAttribute("missingTransactionsId", UtilsMetrics.stringListToCommaDelimString(missingTransactions) );				
-		
-//		System.out.println(" trxnIdsWithFailedSla90thResponseId: " + UtilsMetrics.stringListToCommaDelimString(trxnIdsWithFailedSla90thResponse)   );
-//		System.out.println(" trxnIdsWithFailedSlaFailPercentId: "  + UtilsMetrics.stringListToCommaDelimString(trxnIdsWithFailedSlaFailPercent)   );
-//		System.out.println(" trxnIdsWithFailedSlaPassCount: "      + UtilsMetrics.stringListToCommaDelimString(trxnIdsWithFailedSlaPassCount)   );
 	}	
 	
 	private void populateIgnoredTransactionsList(String application, Model model){

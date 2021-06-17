@@ -141,8 +141,6 @@ public class TransactionDAOjdbcTemplateImpl implements TransactionDAO
 				   + " AND R.RUN_TIME IN ( SELECT RUN_TIME FROM TRANSACTION  WHERE APPLICATION = '" + application + "' " 
 				   														+ " AND TXN_TYPE = '" + txnType + "'" 
 				   														+ " AND TXN_ID = '" + txnId2 + "') "; 
-		
-		
 		rowCount = Long.valueOf(jdbcTemplate.queryForObject(sql, String.class));
 //		System.out.println("countRunsContainsBothTxnIds sql = " + sql + "\n - rowCount = " + rowCount );
 		return rowCount;
@@ -158,7 +156,7 @@ public class TransactionDAOjdbcTemplateImpl implements TransactionDAO
 					+ " WHERE APPLICATION='" + application + "'"  
 					+ "   AND TXN_TYPE='" + txnType + "'"
 					+ "   AND TXN_ID='" + fromTxnId + "'";
-		System.out.println("TransactionDAOjdbcTemplateImpl.renameTransactions : " + sql );
+//		System.out.println("TransactionDAOjdbcTemplateImpl.renameTransactions : " + sql );
 		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
 		jdbcTemplate.update(sql);	
 	}

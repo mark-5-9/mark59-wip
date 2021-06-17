@@ -716,10 +716,15 @@ function trendingBuildPageLink() {
 }
 
 
-
-function buildHomePageink(){
+function buildTitleHomePageLink(){
 	var host =  window.location.host; 	
-	url="http://" + host + "/metrics?reqApp=" + document.getElementById("application").value
+	url="http://" + host + "/metrics/overview?reqApp=" + document.getElementById("application").value
+	document.getElementById('titleHomePageLink').href = url;  
+}
+
+function buildHomePageLink(){
+	var host =  window.location.host; 	
+	url="http://" + host + "/metrics/overview?reqApp=" + document.getElementById("application").value
 	document.getElementById('homePageLink').href = url;  	
 }
 

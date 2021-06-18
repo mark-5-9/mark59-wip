@@ -55,6 +55,7 @@ public class PerformanceTest {
 	protected SlaDAO slaAO; 
 
 	protected Run run = new Run();
+	
 	private List<Transaction> transactionSummariesThisRun;
 	private List<Transaction> metricTransactionSummariesThisRun = new ArrayList<Transaction>();  // currently only used for testing 	
 
@@ -69,7 +70,7 @@ public class PerformanceTest {
 		testTransactionsDAO = (TestTransactionsDAO)context.getBean("testTransactionsDAO");		
 		eventMappingDAO = (EventMappingDAO)context.getBean("eventMappingDAO");	
 		slaAO = (SlaDAO)context.getBean("slaDAO");	
-		
+
 		run.setApplication(application);
 		run.setRunTime(AppConstantsMetrics.RUN_TIME_YET_TO_BE_CALCULATED );
 		run.setIsRunIgnored("N");
@@ -155,7 +156,7 @@ public class PerformanceTest {
 	}
 	
 	
-	protected DateRangeBean applyTimingRangeFilters(String excludestart, String captureperiod, DateRangeBean dateRangeBean) {
+	protected DateRangeBean applyTimeRangeFiltersToTestTransactions(String excludestart, String captureperiod, DateRangeBean dateRangeBean) {
 		
 		DateRangeBean filteredDateRangeBean = new DateRangeBean(dateRangeBean.getRunStartTime(), dateRangeBean.getRunEndTime(), false );
 			
@@ -261,6 +262,9 @@ public class PerformanceTest {
 	 * 
 	 * NOTE: When this method is called currently assumed the run being processed will have a  
 	 * run-time of AppConstantsMetrics.RUN_TIME_YET_TO_BE_CALCULATED (zeros) on TESTTRANSACTIONS 	  
+	 * 
+	 * @param application
+	 * @return DateRangeBean
 	 */
 	protected DateRangeBean getRunDateRangeUsingTestTransactionalData(String application){
 		Long runStartTime = testTransactionsDAO.getEarliestTimestamp(application);
@@ -268,6 +272,21 @@ public class PerformanceTest {
 		return new DateRangeBean(runStartTime, runEndTime);
 	}
 
+	
+	/**
+	 * Save off testTransaction data if request, otherwise clean it up at the end of the run.
+	 * @param keeprawresults
+	 */
+	protected void endOfRunCleanupTestTransactions(String keeprawresults) {
+		if (String.valueOf(true).equalsIgnoreCase(keeprawresults)) {
+			testTransactionsDAO.deleteAllForRun(run.getApplication(), run.getRunTime()); // clean up in case of re-run (the data already exists)
+			testTransactionsDAO.updateRunTime(run.getApplication(), AppConstantsMetrics.RUN_TIME_YET_TO_BE_CALCULATED, run.getRunTime());
+		} else {
+			testTransactionsDAO.deleteAllForRun(run.getApplication(), AppConstantsMetrics.RUN_TIME_YET_TO_BE_CALCULATED);
+		}
+	}
+		
+	
 	public Run getRunSummary() {
 		return run;
 	}

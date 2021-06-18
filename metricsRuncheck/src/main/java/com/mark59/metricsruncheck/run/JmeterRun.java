@@ -62,9 +62,7 @@ public class JmeterRun extends PerformanceTest  {
 			String keeprawresults, String ignoredErrors) {
 		
 		super(context,application, runReference);
-		
-		//clean up before  
-		testTransactionsDAO.deleteAllForRun(run);  // RUN_TIME_YET_TO_BE_CALCULATED
+		testTransactionsDAO.deleteAllForRun(run.getApplication(), AppConstantsMetrics.RUN_TIME_YET_TO_BE_CALCULATED);
 		
 		loadTestTransactionAllDataFromJmeterFiles(run.getApplication(), inputdirectory, ignoredErrors );
 		
@@ -72,7 +70,8 @@ public class JmeterRun extends PerformanceTest  {
 		run = new Run( calculateAndSetRunTimesUsingEpochStartAndEnd(run, dateRangeBean));
 		runDAO.deleteRun(run.getApplication(), run.getRunTime());
 		runDAO.insertRun(run);
-		applyTimingRangeFilters(excludestart, captureperiod, dateRangeBean);
+		
+		applyTimeRangeFiltersToTestTransactions(excludestart, captureperiod, dateRangeBean);
 
 		transactionDAO.deleteAllForRun(run.getApplication(), run.getRunTime());	
 		
@@ -80,10 +79,7 @@ public class JmeterRun extends PerformanceTest  {
 		
 		storeMetricTransactionSummaries(run);
 		
-		if (String.valueOf(true).equalsIgnoreCase(keeprawresults)) {
-			testTransactionsDAO.deleteAllForRun(run); // clean up in case of re-run (when the data already exists because this is a re-run)
-			testTransactionsDAO.updateRunTime(run.getApplication(), AppConstantsMetrics.RUN_TIME_YET_TO_BE_CALCULATED, run.getRunTime());
-		}
+		endOfRunCleanupTestTransactions(keeprawresults);
 	}
 
 

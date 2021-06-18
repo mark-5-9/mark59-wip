@@ -147,13 +147,13 @@ public class TestTransactionsDAOjdbcTemplateImpl implements TestTransactionsDAO
 	
 	
 	@Override
-	public void deleteAllForRun(Run run) {
-		String sql = "delete from TESTTRANSACTIONS where APPLICATION='" + run.getApplication() + "' "
-												     + "and RUN_TIME='" + run.getRunTime() + "'";
-//		System.out.println("performing TestTransactionsDAOjdbcTemplateImpl.deleteAllForRun : " + sql );
+	public void deleteAllForRun(String application,  String runTime) {
+		String sql = "delete from TESTTRANSACTIONS where APPLICATION='" + application + "' "
+													 + "and RUN_TIME='" + runTime + "'";
+//		System.out.println("deleteAllForRun : " + sql );
 		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
-		jdbcTemplate.update(sql);
-	}
+		jdbcTemplate.update(sql);	
+	}	
 		
 	
 	@Override

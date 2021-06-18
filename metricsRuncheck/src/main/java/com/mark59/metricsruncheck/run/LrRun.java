@@ -39,8 +39,7 @@ public class LrRun extends PerformanceTest  {
 		LrRunAccessDatabase lrRundb = new LrRunAccessDatabase(inputAccessDbFileNmae);
 		System.out.println("Processing Loadrunner access DB file " + inputAccessDbFileNmae);
 		
-		//clean up before  
-		testTransactionsDAO.deleteAllForRun(run);  // RUN_TIME_YET_TO_BE_CALCULATED
+		testTransactionsDAO.deleteAllForRun(run.getApplication(), AppConstantsMetrics.RUN_TIME_YET_TO_BE_CALCULATED);
 		
 		DateRangeBean dateRangeBean = lrRundb.getRunDateRangeUsingLoadrunnerAccessDB(timeZone);
 		lrRundb.loadTestTransactionForTransactionsOnlyFromLoadrunnAccessDB(run.getApplication(), testTransactionsDAO, dateRangeBean.getRunStartTime());  
@@ -49,29 +48,26 @@ public class LrRun extends PerformanceTest  {
 		runDAO.deleteRun(run.getApplication(), run.getRunTime());
 		runDAO.insertRun(run);
 
-		DateRangeBean filteredDateRangeBean = applyTimingRangeFilters(excludestart, captureperiod, dateRangeBean);
+		DateRangeBean filteredDateRangeBean = applyTimeRangeFiltersToTestTransactions(excludestart, captureperiod, dateRangeBean);
 		if (filteredDateRangeBean.isFilterApplied()) {
-			System.out.println("   Note that for Loadrunner results the removed count applies to transactions only, "
-					+ "but the time filter will also be applied to system metrics (Monitor_meter and  DataPoint_meter mdb tables)");
+			System.out.println("   Note that for Loadrunner results the 'transactions removed by filter' count applies to transactions only, "
+					+ " - however time filter is also applied to system metrics (Monitor_meter and  DataPoint_meter mdb tables)");
 		}
 		
 		transactionDAO.deleteAllForRun(run.getApplication(), run.getRunTime());				
 		storeTransactionSummaries(run);
 
-		//for Loadrunner, metric data is not placed in the testTransactions table, it is summarized directly from the LR Access DB tables and inserted directly onto the transaction table 
+		// for Loadrunner, metric data is not placed in the testTransactions table,
+		// it is summarized directly from the LR Access DB tables and inserted directly onto the transaction table 
 		
 		storeMetricTransactionSummariesFromLoadrunnerAccessDB(run, lrRundb, dateRangeBean, filteredDateRangeBean);
 		
-		if (String.valueOf(true).equalsIgnoreCase(keeprawresults)) {
-			testTransactionsDAO.deleteAllForRun(run); // clean up in case of re-run (when the data already exists because this is a re-run)
-			testTransactionsDAO.updateRunTime(run.getApplication(), AppConstantsMetrics.RUN_TIME_YET_TO_BE_CALCULATED, run.getRunTime());
-		}
-		
+		endOfRunCleanupTestTransactions(keeprawresults);
 	}
 
-		
+
 	private void storeMetricTransactionSummariesFromLoadrunnerAccessDB(Run run, LrRunAccessDatabase lrRundb, DateRangeBean dateRangeBean, DateRangeBean filteredDateRangeBean) {
-		
+
 		List<Transaction> eventTransactions = lrRundb.extractSystemMetricEventsFromMDB(run, eventMappingDAO, dateRangeBean, filteredDateRangeBean);      	
       	for (Transaction eventTransaction : eventTransactions ) {
       		transactionDAO.insert(eventTransaction);

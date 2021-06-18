@@ -69,8 +69,9 @@ public class RuncheckJmeterTest extends TestCase {
 	
 		Run run = performanceTest.getRunSummary();
 		assertEquals("DataHunter", run.getApplication());
-		assertEquals("1589526041321", StringUtils.substringBetween(run.getPeriod(),"(", " - " ).trim());
-		assertEquals("1589526121968", StringUtils.substringBetween(run.getPeriod(),"1589526041321 - ", ")" ).trim());
+		assertEquals("1589526041321", StringUtils.substringBetween(run.getPeriod(), "[", ":" ).trim());
+		assertEquals("1589526121968", StringUtils.substringBetween(run.getPeriod(), ":", "]" ).trim());
+
 		String apprun = StringUtils.substringBefore(run.toString(), "isRunIgnored");
 
 		List<Transaction> transactions = performanceTest.getTransactionSummariesThisRun();

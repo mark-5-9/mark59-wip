@@ -107,7 +107,7 @@ public class RuncheckGatlingTest extends TestCase {
 		List<Transaction> transactions = performanceTest.getTransactionSummariesThisRun();
 		assertEquals(7, transactions.size() );
 		for (Transaction transaction : transactions) {
-			System.out.println("Txn>>" + transaction);
+			// System.out.println("Txn>>" + transaction);
 			if ("DH-lifecycle-0001-gotoDeleteMultiplePoliciesUrl".equals(transaction.getTxnId())){
 				assertEquals (apprun +  "txnId=DH-lifecycle-0001-gotoDeleteMultiplePoliciesUrl, txnType=TRANSACTION, txnMinimum=0.307, txnAverage=0.340, txnMedian=0.307,"
 						+ " txnMaximum=0.372, txn90th=0.372, txn95th=0.372, txn99th=0.372, txnPass=2, txnFail=0, txnStop=0, txnFirst=-1.000, txnLast=-1.000, txnSum=-1.000, txnDelay=0.000", transaction.toString());
@@ -208,8 +208,8 @@ public class RuncheckGatlingTest extends TestCase {
 			
 		Run run = runcheck.getPerformanceTest().getRunSummary();
 		assertEquals("junit351", run.getApplication());
-		assertEquals("1622693982008", StringUtils.substringBetween(run.getPeriod(),"(", " - " ).trim());
-		assertEquals("1622693982162", StringUtils.substringBetween(run.getPeriod(),"1622693982008 - ", ")" ).trim());
+		assertEquals("1622693982008", StringUtils.substringBetween(run.getPeriod(), "[", ":" ).trim());
+		assertEquals("1622693982162", StringUtils.substringBetween(run.getPeriod(), ":", "]" ).trim());
 		String apprun = StringUtils.substringBefore(run.toString(), "isRunIgnored");
 		
 		List<Transaction> transactions = runcheck.getPerformanceTest().getTransactionSummariesThisRun();
@@ -259,7 +259,7 @@ public class RuncheckGatlingTest extends TestCase {
 		List<Transaction> transactions = runcheck.getPerformanceTest().getTransactionSummariesThisRun();
 		assertEquals(2, transactions.size() );
 		for (Transaction transaction : transactions) {
-			System.out.println("Txn>>" + transaction);
+			// System.out.println("Txn>>" + transaction);
 			if ("Get Single trash Record".equals(transaction.getTxnId())){
 				assertEquals (apprun + "txnId=Get Single trash Record, txnType=TRANSACTION, txnMinimum=0.057, txnAverage=0.057, txnMedian=0.057,"
 						+ " txnMaximum=0.057, txn90th=0.057, txn95th=0.057, txn99th=0.057, txnPass=1, txnFail=0, txnStop=0, txnFirst=-1.000, txnLast=-1.000, txnSum=-1.000, txnDelay=0.000", transaction.toString());

@@ -103,13 +103,14 @@ public class PerformanceTest {
 			String period = formatterSecPrecision.format(runStartDate).substring(0,8) + "_"
 				 		  + formatterSecPrecision.format(runStartDate).substring(8,14) + " - "
 				 		  + formatterSecPrecision.format(runEndDate).substring(0,8) + "_"
-						  + formatterSecPrecision.format(runEndDate).substring(8,14) 
-						  + "<br>(" + runStartTime + " - " + runEndTime + ")";
-			run.setPeriod(period);
+						  + formatterSecPrecision.format(runEndDate).substring(8,14); 
 			
 			System.out.println("\nRun start time set as " + run.getRunTime() + "  [ " + runStartDate 
-				+ ", Timestamp " + runStartTime + " ], with a duration of " + run.getDuration() + " mins,  period of " + run.getPeriod());
+				+ ", Timestamp " + runStartTime + " ] with a duration of " + run.getDuration());
+			System.out.println("Run period of " + period );			
 			System.out.println("Epoch Range (msec)  " + dateRangeBean.prettyPrint() + "\n"  );		
+			
+			run.setPeriod(period + "<br>" + dateRangeBean.prettyPrint());			
 			
 			// generate the run reference from the run start time, if a reference argument was not passed
 			

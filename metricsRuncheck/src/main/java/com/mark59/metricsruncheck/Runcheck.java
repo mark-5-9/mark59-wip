@@ -115,9 +115,9 @@ public class Runcheck  implements CommandLineRunner
 		Options options = new Options(); 
 		options.addRequiredOption("a", "application",	true, "Application Id, as it will appear in the Trending Graph Application dropdown selections");
 		options.addRequiredOption("i", "input",			true, "The directory or file containing the performance test results.  Multiple xml/csv/jtl results files allowed for Jmeter within a directory, a single .mdb file is required for Loadrunner");			
-		options.addOption("d", "databasetype",			true, "Load data to a 'h2', 'pg' or 'mysql' database (defaults to 'h2')");			
+		options.addOption("d", "databasetype",			true, "Load data to a 'h2', 'pg' or 'mysql' database (defaults to 'mysql')");			
 		options.addOption("r", "reference",		 		true, "A reference.  Usual purpose would be to identify this run (possibly by a link). Eg <a href='http://ciServer/job/myJob/001/HTML_Report'>run 001</a>");
-		options.addOption("t", "tool",      			true, "Performance Tool used to generate the results to be processed { JMETER (default) | LOADRUNNER }" );
+		options.addOption("t", "tool",      			true, "Performance Tool used to generate the results to be processed { JMETER (default) | GATLING | LOADRUNNER }" );
 		options.addOption("h", "dbserver",				true, "Server hosting the database where results will be held (defaults to localhost). \n"
 																+ "*******************************************\n"
 																+ "** NOTE: all db options applicable to MySQL or Postgres ONLY\n"  
@@ -312,7 +312,12 @@ public class Runcheck  implements CommandLineRunner
 		System.out.println( "   The graph application name will be MY_COMPANY_BIG_APP, with a reference for this run of 'run ref 645'.");
 		System.out.println( "   The metricsdb database is hosted locally on a MySql instance assigned to port 3309 (default user/password of admin/admin) : "  );
 		System.out.println( "   java -jar metricsRuncheck.jar -a MY_COMPANY_BIG_APP -i C:/jmeter-results/BIGAPP -r \"run ref 645\" -p 3309  ");
-		System.out.println( "   2. Loadrunner example");		
+		System.out.println( "   2. Gatling example ");
+		System.out.println( "   Process Gatling simulation.log in directory C:/GatlingProjects/myBigApp");
+		System.out.println( "   The graph application name will be MY_COMPANY_BIG_APP, with a reference for this run of 'GatlingIsCool'.");
+		System.out.println( "   The metricsdb database is hosted locally on a Postgress instance using all defaults (but you want to disable sslmode) "  );
+		System.out.println( "   java -jar metricsRuncheck.jar -a MY_COMPANY_BIG_APP -i C:/GatlingProjects/myBigApp -d pg -q \"?sslmode=disable\" -t GATLING  -r \"GatlingIsCool\" ");		
+		System.out.println( "   3. Loadrunner example");		
 		System.out.println( "   Process Loadrunner analysis result at C:/templr/BIGAPP/AnalysisSession (containing file AnalysisSession.mdb).  ");
 		System.out.println( "   The graph application name will be MY_COMPANY_BIG_APP, with a reference for this run of 'run ref 644'.");
 		System.out.println( "   The metricsdb database is hosted locally on a MySql instance assigned to port 3309 (default user/password of admin/admin) : "  );

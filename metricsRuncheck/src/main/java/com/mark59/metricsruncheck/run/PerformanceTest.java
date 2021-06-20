@@ -106,7 +106,7 @@ public class PerformanceTest {
 						  + formatterSecPrecision.format(runEndDate).substring(8,14); 
 			
 			System.out.println("\nRun start time set as " + run.getRunTime() + "  [ " + runStartDate 
-				+ ", Timestamp " + runStartTime + " ] with a duration of " + run.getDuration());
+				+ ", Timestamp " + runStartTime + " ] with a duration of " + run.getDuration() + " minutes.");
 			System.out.println("Run period of " + period );			
 			System.out.println("Epoch Range (msec)  " + dateRangeBean.prettyPrint() + "\n"  );		
 			

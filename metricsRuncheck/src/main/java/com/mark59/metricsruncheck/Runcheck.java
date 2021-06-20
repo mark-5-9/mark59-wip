@@ -361,8 +361,8 @@ public class Runcheck  implements CommandLineRunner
 			System.out.println();			
 		}
 		
-		loadTestRun(argTool, argApplication, argInput, argReference, argExcludestart, argCaptureperiod,
-				argTimeZone, argKeeprawresults, argIgnoredErrors, argSimulationLog, argSimlogCustom);
+		loadTestRun(argTool, argApplication, argInput, argReference, argExcludestart, argCaptureperiod, argKeeprawresults,
+				argTimeZone, argIgnoredErrors, argSimulationLog, argSimlogCustom);
 	};
 
 	

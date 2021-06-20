@@ -52,7 +52,7 @@ public class ApplicationEntry  implements CommandLineRunner  {
 //		args = new String[] { "-a", "DataHunter", "-i", "C:/Mark59_Runs/Jmeter_Results/DataHunter", "-d","pg",    "-h","localhost", "-t", "JMETER", "-q", "?sslmode=disable", "-r", "sample_run_pg01"  };
 //      args = new String[] { "-a", "DataHunter", "-i", "C:/Mark59_Runs/Jmeter_Results/DataHunter", "-d","h2" }; //	h2mem h2tcpclient	
 //		args = new String[] { "-a", "DataHunter", "-i", "./src/test/resources/JmeterResultsDataHunterGeneral", "-d","h2" }; 	
-//      args = new String[] { "-a", "UsingLRapp", "-i", "C:/Mark59_Runs/LR/UsingLRapp/An_Session1/An_Session1.mdb", "-d","h2", "-t","LOADRUNNER"};
+//		args = new String[] { "-a", "UsingLRapp", "-i", "C:/Mark59_Runs/LR_Results/LRapp/An_Session1/An_Session1.mdb", "-d","mysql", "-t","LOADRUNNER"};
 //		args = new String[] { "-a", "DataHunter", "-i", "./src/test/resources/GatlingResults", "-l","simulation.logv341", "-e","responseTimeInMillis", "-d","h2", "-t","GATLING" };		
 //		args = new String[] { "-a", "MyApp", "-i", "C:/Mark59_Runs/Gatling_Results/MyApp", "-e","responseTimeInMillis|someOtherAssert", "-d","h2", "-t","GATLING" };		
 	

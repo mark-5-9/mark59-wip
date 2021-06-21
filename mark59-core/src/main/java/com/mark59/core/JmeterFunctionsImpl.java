@@ -277,7 +277,7 @@ public class JmeterFunctionsImpl implements JmeterFunctions {
 	 * 
 	 * @param transactionLabel label for the transaction
 	 * @param transactionTime time taken for the transaction. Expects Milliseconds.
-	 * @param success the success or failure state of the transaction
+	 * @param boolean the success (true) or failure (false) state of the transaction
 	 * 
 	 * @throws IllegalArgumentException if the transactionLabel is null or empty
 	 * @return SampleResult
@@ -301,7 +301,7 @@ public class JmeterFunctionsImpl implements JmeterFunctions {
 	 * 
 	 * @param transactionLabel label for the transaction
 	 * @param transactionTime time taken for the transaction
-	 * @param success success state of the transaction
+	 * @param boolean the success (true) or failure (false) state of the transaction
 	 * @param responseCode response message (useful for error transactions)
 	 *   
 	 * @throws IllegalArgumentException if the transactionLabel is null or empty
@@ -398,7 +398,6 @@ public class JmeterFunctionsImpl implements JmeterFunctions {
 	 * @param label the transaction label for the SampleResults to locate.
 	 * @return  a list of sample results
 	 */
-
 	public List<SampleResult> getSampleResultFromMainResultWithLabel(String label) {
 		return Arrays.asList(mainResult.getSubResults()).stream()
 				.filter(sr -> sr.getSampleLabel().equals(label))

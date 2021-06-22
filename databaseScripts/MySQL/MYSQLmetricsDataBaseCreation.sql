@@ -9,6 +9,15 @@ USE metricsdb;
 -- The collation for the database is set to utf8mb4_bin
 -- This allows for stuff like case-sensitive eventmapping matching.  Also aligns H2 database and Java case sensitive sorting.      
 
+
+--
+-- As noted in the mark59 documentation, ensure GLOBAL variable group_concat_max_len is set to your implementation's maximum value -  
+--    however it appears to simply 'truncate' the value to the maximum allowed for the installation.  Check with
+--    SHOW VARIABLES  LIKE 'group_concat_max_len' 
+--
+
+SET PERSIST group_concat_max_len = 18446744073709551615;  -- SEE NOTE ABOVE  
+
 -- create tables  -- 
 
 CREATE TABLE IF NOT EXISTS APPLICATIONS (

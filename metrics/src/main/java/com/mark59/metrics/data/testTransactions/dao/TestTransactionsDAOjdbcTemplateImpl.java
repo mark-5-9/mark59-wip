@@ -247,6 +247,7 @@ public class TestTransactionsDAOjdbcTemplateImpl implements TestTransactionsDAO
 		//     may have something to do with the way integer rounding is implemented in MySql   
 		// https://stackoverflow.com/questions/2567000/mysql-and-group-concat-maximum-length
 		// https://dev.mysql.com/doc/refman/8.0/en/server-system-variables.html#sysvar_group_concat_max_len
+		//     SET PERSIST group_concat_max_len = 18446744073709551615; SHOW GLOBAL VARIABLES  LIKE 'group_concat_max_len'  
 		// Note that transaction statistics are only calculated for Passed transactions
 		
 		List<Transaction> transactions = new ArrayList<Transaction> ();     

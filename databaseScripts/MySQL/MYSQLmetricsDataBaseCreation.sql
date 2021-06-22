@@ -12,11 +12,13 @@ USE metricsdb;
 
 --
 -- As noted in the mark59 documentation, ensure GLOBAL variable group_concat_max_len is set to your implementation's maximum value -  
---    however it appears to simply 'truncate' the value to the maximum allowed for the installation.  Check with
+--    however on WINDOWS it appears to simply 'truncate' the value to the maximum allowed for the installation.  Check with
 --    SHOW VARIABLES  LIKE 'group_concat_max_len' 
+--    on LINUX the SET PERSIST statement may not work, so this file also has:   SET group_concat_max_len = 18446744073709551615;
 --
 
-SET PERSIST group_concat_max_len = 18446744073709551615;  -- SEE NOTE ABOVE  
+SET group_concat_max_len = 18446744073709551615;           -- works on Linux (tested Mint)  
+SET PERSIST group_concat_max_len = 18446744073709551615;   -- works on Win   (see notes above)  
 
 -- create tables  -- 
 

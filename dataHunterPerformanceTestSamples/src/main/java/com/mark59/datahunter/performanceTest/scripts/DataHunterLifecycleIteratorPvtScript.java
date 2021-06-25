@@ -136,7 +136,7 @@ public class DataHunterLifecycleIteratorPvtScript  extends SeleniumIteratorAbstr
 
 		jm.startTransaction("DH-lifecycle-0100-deleteMultiplePolicies");		
 		deleteMultiplePoliciesPage.submit().submit();
-		waitActionPageCheckSqlOk(new DeleteMultiplePoliciesActionPage(driver));
+		waitForSqlResultsTextOnActionPageAndCheckOk(new DeleteMultiplePoliciesActionPage(driver));
 		SafeSleep.sleep(200);  // Mocking a 200 ms txn delay
 		jm.endTransaction("DH-lifecycle-0100-deleteMultiplePolicies");	
 	}
@@ -163,7 +163,7 @@ public class DataHunterLifecycleIteratorPvtScript  extends SeleniumIteratorAbstr
 		jm.startTransaction("DH-lifecycle-0200-addPolicy");
 		addPolicyPage.submit().submit();	
 		AddPolicyActionPage addPolicyActionPage = new AddPolicyActionPage(driver);			
-		waitActionPageCheckSqlOk(addPolicyActionPage);
+		waitForSqlResultsTextOnActionPageAndCheckOk(addPolicyActionPage);
 		jm.endTransaction("DH-lifecycle-0200-addPolicy");
 		
 		
@@ -183,7 +183,7 @@ public class DataHunterLifecycleIteratorPvtScript  extends SeleniumIteratorAbstr
 		jm.startTransaction("DH-lifecycle-0300-countUnusedPolicies");
 		countPoliciesPage.submit().submit();
 		CountPoliciesActionPage countPoliciesActionPage = new CountPoliciesActionPage(driver);	
-		waitActionPageCheckSqlOk(countPoliciesActionPage);
+		waitForSqlResultsTextOnActionPageAndCheckOk(countPoliciesActionPage);
 		jm.endTransaction("DH-lifecycle-0300-countUnusedPolicies");
 		
 		Long countPolicies = Long.valueOf( countPoliciesActionPage.rowsAffected().getText());
@@ -199,7 +199,7 @@ public class DataHunterLifecycleIteratorPvtScript  extends SeleniumIteratorAbstr
 		jm.startTransaction("DH-lifecycle-0400-countUnusedPoliciesCurrentThread");		
 		countPoliciesBreakdownPage.submit().submit();
 		CountPoliciesBreakdownActionPage countPoliciesBreakdownActionPage = new CountPoliciesBreakdownActionPage(driver);	
-		waitActionPageCheckSqlOk(countPoliciesBreakdownActionPage);		
+		waitForSqlResultsTextOnActionPageAndCheckOk(countPoliciesBreakdownActionPage);		
 		jm.endTransaction("DH-lifecycle-0400-countUnusedPoliciesCurrentThread");				
 		
 		// direct access to required row-column table element by computing the id:
@@ -217,7 +217,7 @@ public class DataHunterLifecycleIteratorPvtScript  extends SeleniumIteratorAbstr
 		jm.startTransaction("DH-lifecycle-0500-useNextPolicy");		
 		nextPolicyPage.submit().submit();
 		NextPolicyActionPage nextPolicyActionPage = new NextPolicyActionPage(driver);		
-		waitActionPageCheckSqlOk(nextPolicyActionPage);			
+		waitForSqlResultsTextOnActionPageAndCheckOk(nextPolicyActionPage);			
 		jm.endTransaction("DH-lifecycle-0500-useNextPolicy");	
 		
 		if (LOG.isDebugEnabled() ) {LOG.debug("useNextPolicy: " + application + "-" + lifecycle + " : " + nextPolicyActionPage.identifier() );	}
@@ -233,7 +233,7 @@ public class DataHunterLifecycleIteratorPvtScript  extends SeleniumIteratorAbstr
 		DeleteMultiplePoliciesActionPage deleteMultiplePoliciesActionPage = new DeleteMultiplePoliciesActionPage(driver);
 		jm.startTransaction("DH-lifecycle-0100-deleteMultiplePolicies");		
 		deleteMultiplePoliciesPage.submit().submit();
-		waitActionPageCheckSqlOk(deleteMultiplePoliciesActionPage);
+		waitForSqlResultsTextOnActionPageAndCheckOk(deleteMultiplePoliciesActionPage);
 		SafeSleep.sleep(200);  // Mocking a 200 ms txn delay
 		jm.endTransaction("DH-lifecycle-0100-deleteMultiplePolicies");	
 		
@@ -251,7 +251,7 @@ public class DataHunterLifecycleIteratorPvtScript  extends SeleniumIteratorAbstr
 		deleteMultiplePoliciesPage.lifecycle().type(lifecycle);
 		jm.startTransaction("DH-lifecycle-9999-finalize-deleteMultiplePolicies");		
 		deleteMultiplePoliciesPage.submit().submit();
-		waitActionPageCheckSqlOk(new DeleteMultiplePoliciesActionPage(driver));
+		waitForSqlResultsTextOnActionPageAndCheckOk(new DeleteMultiplePoliciesActionPage(driver));
 		jm.endTransaction("DH-lifecycle-9999-finalize-deleteMultiplePolicies");	
 	}
 
@@ -270,14 +270,19 @@ public class DataHunterLifecycleIteratorPvtScript  extends SeleniumIteratorAbstr
 		driver.get(dataHunterUrl + "/dataHunter");	
 	}
 	
-
-	private void waitActionPageCheckSqlOk(_GenericDatatHunterActionPage _genericDatatHunterActionPage) {
+	
+	/*
+	 * At first glance this may seem not to have any 'wait for element' conditions.  However the 'getText()'
+	 * method (indirectly) invokes a Fluent Wait condition 
+	 */
+	private void waitForSqlResultsTextOnActionPageAndCheckOk(_GenericDatatHunterActionPage _genericDatatHunterActionPage) {
 		String sqlResultText = _genericDatatHunterActionPage.sqlResult().getText();
-		if ( !"PASS".equals(sqlResultText) ) {
-			throw new RuntimeException("SQL issue (" + sqlResultText + ") : " + _genericDatatHunterActionPage.formatResultsMessage(_genericDatatHunterActionPage.getClass().getName()));   
+		if (!"PASS".equals(sqlResultText)) {
+			throw new RuntimeException("SQL issue (" + sqlResultText + ") : " +
+						_genericDatatHunterActionPage.formatResultsMessage(_genericDatatHunterActionPage.getClass().getName()));
 		}
 	}
-	
+
 	
 	/**
 	 * A main method to assist with script testing outside JMeter.  The samples below demonstrate three ways of running the script: <br><br>

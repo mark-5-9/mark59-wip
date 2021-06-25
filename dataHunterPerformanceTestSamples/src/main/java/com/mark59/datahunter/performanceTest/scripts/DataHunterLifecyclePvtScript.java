@@ -139,7 +139,7 @@ public class DataHunterLifecyclePvtScript  extends SeleniumAbstractJavaSamplerCl
 		
 		jm.startTransaction("DH-lifecycle-0100-deleteMultiplePolicies");		
 		deleteMultiplePoliciesPage.submit().submit().waitUntilClickable( deleteMultiplePoliciesActionPage.backLink() );   // ** note 1
-		waitActionPageCheckSqlOk(deleteMultiplePoliciesActionPage);
+		waitForSqlResultsTextOnActionPageAndCheckOk(deleteMultiplePoliciesActionPage);
 		SafeSleep.sleep(200);  // Mocking a 200 ms txn delay
 		jm.endTransaction("DH-lifecycle-0100-deleteMultiplePolicies");	
 	
@@ -159,7 +159,7 @@ public class DataHunterLifecyclePvtScript  extends SeleniumAbstractJavaSamplerCl
 			
 			jm.startTransaction("DH-lifecycle-0200-addPolicy");
 			addPolicyPage.submit().submit().waitUntilClickable( addPolicyActionPage.backLink() );   // ** note 1;	
-			waitActionPageCheckSqlOk(addPolicyActionPage);
+			waitForSqlResultsTextOnActionPageAndCheckOk(addPolicyActionPage);
 			jm.endTransaction("DH-lifecycle-0200-addPolicy");
 			
 			addPolicyActionPage.backLink().click().waitUntilClickable( addPolicyPage.submit() ).thenSleep();    // ** note 1 & note 2
@@ -182,7 +182,7 @@ public class DataHunterLifecyclePvtScript  extends SeleniumAbstractJavaSamplerCl
 
 		jm.startTransaction("DH-lifecycle-0300-countUnusedPolicies");
 		countPoliciesPage.submit().submit().waitUntilClickable( countPoliciesActionPage.backLink() );
-		waitActionPageCheckSqlOk(countPoliciesActionPage);
+		waitForSqlResultsTextOnActionPageAndCheckOk(countPoliciesActionPage);
 		jm.endTransaction("DH-lifecycle-0300-countUnusedPolicies");
 		
 		Long countPolicies = Long.valueOf( countPoliciesActionPage.rowsAffected().getText());
@@ -199,7 +199,7 @@ public class DataHunterLifecyclePvtScript  extends SeleniumAbstractJavaSamplerCl
 
 		jm.startTransaction("DH-lifecycle-0400-countUnusedPoliciesCurrentThread");		
 		countPoliciesBreakdownPage.submit().submit();
-		waitActionPageCheckSqlOk(countPoliciesBreakdownActionPage);		
+		waitForSqlResultsTextOnActionPageAndCheckOk(countPoliciesBreakdownActionPage);		
 		jm.endTransaction("DH-lifecycle-0400-countUnusedPoliciesCurrentThread");				
 		
 		// direct access to required row-column table element by computing the id:
@@ -218,7 +218,7 @@ public class DataHunterLifecyclePvtScript  extends SeleniumAbstractJavaSamplerCl
 		
 		jm.startTransaction("DH-lifecycle-0500-useNextPolicy");		
 		nextPolicyPage.submit().submit();
-		waitActionPageCheckSqlOk(nextPolicyActionPage);			
+		waitForSqlResultsTextOnActionPageAndCheckOk(nextPolicyActionPage);			
 		jm.endTransaction("DH-lifecycle-0500-useNextPolicy");	
 		
 		if (LOG.isDebugEnabled() ) {LOG.debug("useNextPolicy: " + application + "-" + lifecycle + " : " + nextPolicyActionPage.identifier() );	}
@@ -235,7 +235,7 @@ public class DataHunterLifecyclePvtScript  extends SeleniumAbstractJavaSamplerCl
 		
 		jm.startTransaction("DH-lifecycle-0600-displaySelectedPolicies");	
 		printSelectedPoliciesPage.submit().submit();
-		waitActionPageCheckSqlOk(printSelectedPoliciesActionPage);
+		waitForSqlResultsTextOnActionPageAndCheckOk(printSelectedPoliciesActionPage);
 		// demo how to extract a transaction time from with a running script 
 		SampleResult sr_0600 = jm.endTransaction("DH-lifecycle-0600-displaySelectedPolicies");
 		
@@ -260,7 +260,7 @@ public class DataHunterLifecyclePvtScript  extends SeleniumAbstractJavaSamplerCl
 		
 		jm.startTransaction("DH-lifecycle-0100-deleteMultiplePolicies");		
 		deleteMultiplePoliciesPage.submit().submit();
-		waitActionPageCheckSqlOk(deleteMultiplePoliciesActionPage);
+		waitForSqlResultsTextOnActionPageAndCheckOk(deleteMultiplePoliciesActionPage);
 		SafeSleep.sleep(200);  // Mocking a 200 ms txn delay
 		jm.endTransaction("DH-lifecycle-0100-deleteMultiplePolicies");	
 		
@@ -268,7 +268,11 @@ public class DataHunterLifecyclePvtScript  extends SeleniumAbstractJavaSamplerCl
 	}
 
 
-	private void waitActionPageCheckSqlOk(_GenericDatatHunterActionPage _genericDatatHunterActionPage) {
+	/*
+	 * At first glance this may seem not to have any 'wait for element' conditions.  However the 'getText()'
+	 * method (indirectly) invokes a Fluent Wait condition 
+	 */
+	private void waitForSqlResultsTextOnActionPageAndCheckOk(_GenericDatatHunterActionPage _genericDatatHunterActionPage) {
 		String sqlResultText = _genericDatatHunterActionPage.sqlResult().getText();
 		if (!"PASS".equals(sqlResultText)) {
 			throw new RuntimeException("SQL issue (" + sqlResultText + ") : " +

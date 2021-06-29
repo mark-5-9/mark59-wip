@@ -47,6 +47,7 @@
 			<li>Run List</li>
 			<li>SLA Transactions</li>
 			<li>SLA Metrics</li>
+			<li>Rename Transactions</li>
 			<li>Event Mapping Admin</li>
 			<li>Graph Mapping Admin</li>
 		</ul>

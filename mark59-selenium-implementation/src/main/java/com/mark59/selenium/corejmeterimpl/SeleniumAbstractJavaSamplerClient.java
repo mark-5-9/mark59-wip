@@ -375,8 +375,8 @@ public abstract class SeleniumAbstractJavaSamplerClient extends AbstractJavaSamp
 	 * @see #runMultiThreadedSeleniumTest(int, int)
 	 * @see #runMultiThreadedSeleniumTest(int, int, Map)	  
 	 */
-	protected void runSeleniumTest() {
-		runSeleniumTest(KeepBrowserOpen.ONFAILURE);
+	protected SampleResult runSeleniumTest() {
+		return runSeleniumTest(KeepBrowserOpen.ONFAILURE);
 	}
 
 	/**

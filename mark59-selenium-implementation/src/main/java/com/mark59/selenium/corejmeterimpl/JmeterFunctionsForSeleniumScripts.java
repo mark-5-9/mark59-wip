@@ -162,8 +162,8 @@ public class JmeterFunctionsForSeleniumScripts extends JmeterFunctionsImpl {
 	 * As per {@link #startTransaction(String)}, but also allows for forcing switch-off of screenshot logging for this
 	 * transaction (set to false). 
 	 * 
-	 * @param transactionLabel
-	 * @param includeInStartOfTransactionScreenshotLogs
+	 * @param transactionLabel transaction name
+	 * @param includeInStartOfTransactionScreenshotLogs boolean option to switch on/off screenshot logs for transaction ends 
 	 */
 	public void startTransaction(String transactionLabel, boolean includeInStartOfTransactionScreenshotLogs) {
 		if (includeInStartOfTransactionScreenshotLogs) {
@@ -195,8 +195,8 @@ public class JmeterFunctionsForSeleniumScripts extends JmeterFunctionsImpl {
 	 * As per {@link #endTransaction(String)}, but also allows for forcing switch-off of screenshot logging for this
 	 * transaction (set to false). 
 	 * 
-	 * @param transactionLabel
-	 * @param includeInEndOfTransactionshots
+	 * @param transactionLabel transaction name
+	 * @param includeInEndOfTransactionshots boolean option to switch on/off screenshot logs for transaction ends 
 	 * @return the JMeter sub-result for this transaction (which includes the transaction time)
 	 */
 	public SampleResult endTransaction(String transactionLabel, boolean includeInEndOfTransactionshots) {
@@ -214,9 +214,9 @@ public class JmeterFunctionsForSeleniumScripts extends JmeterFunctionsImpl {
 	 * As per {@link #endTransaction(String, Outcome)}, but also allows for forcing switch-off of screenshot logging for this
 	 * transaction (set to false). 
 	 * 
-	 * @param transactionLabel
-	 * @param result
-	 * @param includeInEndOfTransactionScreenshotLogs
+	 * @param transactionLabel transaction name
+	 * @param result transaction pass or fail as Outcome
+	 * @param includeInEndOfTransactionScreenshotLogs boolean option to switch on/off screenshot logs for transaction ends 
 	 * @return the JMeter sub-result for this transaction (which includes the transaction time)
 	 */
 	public SampleResult endTransaction(String transactionLabel, Outcome result, boolean includeInEndOfTransactionScreenshotLogs) {
@@ -233,11 +233,12 @@ public class JmeterFunctionsForSeleniumScripts extends JmeterFunctionsImpl {
 	 * As per {@link #endTransaction(String, Outcome, String)}, but also allows for forcing switch-off of screenshot logging for this
 	 * transaction (includeInEndOfTransactionshots set to false). 
 	 * 
-	 * @param transactionLabel
-	 * @param result
-	 * @param responseCode
-	 * @param includeInEndOfTransactionScreenshotLogs
-	 * @return the JMeter sub-result for this transaction (which includes the transaction time)
+	 * @param transactionLabel transaction name
+	 * @param result transaction pass or fail as Outcome
+	 * @param responseCode response code text
+	 * @param includeInEndOfTransactionScreenshotLogs boolean option to switch on/off screenshot logs for transaction ends 
+	 * 
+	 * @return SampleResult the JMeter sub-result for this transaction (which includes the transaction time)
 	 */
 	public SampleResult endTransaction(String transactionLabel, Outcome result, String responseCode, boolean includeInEndOfTransactionScreenshotLogs) {
 		
@@ -290,10 +291,10 @@ public class JmeterFunctionsForSeleniumScripts extends JmeterFunctionsImpl {
 	 * As per {@link #setTransaction(String, long, boolean)}, but also allows for forcing switch-off of screenshot logging for this
 	 * transaction (includeInEndOfTransactionshots set to false).  
 	 * 
-	 * @param transactionLabel
-	 * @param transactionTime
-	 * @param success
-	 * @param includeInEndOfTransactionshots
+	 * @param transactionLabel transaction name
+	 * @param transactionTime transaction time (ms)
+	 * @param success  pass or fail transaction
+	 * @param includeInEndOfTransactionshots boolean option to switch on/off screenshot logs for transaction ends 
 	 * @return SampleResult
 	 */
 	public SampleResult setTransaction(String transactionLabel, long transactionTime, boolean success, boolean includeInEndOfTransactionshots) {
@@ -310,12 +311,12 @@ public class JmeterFunctionsForSeleniumScripts extends JmeterFunctionsImpl {
 	 * As per {@link #setTransaction(String, long, boolean, String)}, but also allows for forcing switch-off of screenshot logging for this
 	 * transaction (includeInEndOfTransactionshots set to false).  
 	 * 
-	 * @param transactionLabel
-	 * @param transactionTime
-	 * @param success
-	 * @param responseCode
-	 * @param includeInEndOfTransactionshots
-	 * @return sampleResult
+	 * @param transactionLabel transaction name
+	 * @param transactionTime  transaction time (ms)
+	 * @param success   pass or fail transaction
+	 * @param responseCode  text response code
+	 * @param includeInEndOfTransactionshots  boolean option to switch on/off screenshot logs for transaction ends 
+	 * @return SampleResult
 	 */
 	public SampleResult setTransaction(String transactionLabel, long transactionTime, boolean success, String responseCode, boolean includeInEndOfTransactionshots) {
 		

@@ -353,6 +353,7 @@ public abstract class SeleniumAbstractJavaSamplerClient extends AbstractJavaSamp
 	 * @see #runMultiThreadedSeleniumTest(int, int)
 	 * @see #runMultiThreadedSeleniumTest(int, int, Map)
 	 * @param keepBrowserOpen  see KeepBrowserOpen
+	 * @return {@link SampleResult} 
 	 */
 	public SampleResult runSeleniumTest(KeepBrowserOpen keepBrowserOpen ) {
 		mockJmeterProperties();
@@ -374,6 +375,7 @@ public abstract class SeleniumAbstractJavaSamplerClient extends AbstractJavaSamp
 	 * @see #runSeleniumTest(KeepBrowserOpen)
 	 * @see #runMultiThreadedSeleniumTest(int, int)
 	 * @see #runMultiThreadedSeleniumTest(int, int, Map)	  
+	 * @return {@link SampleResult}
 	 */
 	protected SampleResult runSeleniumTest() {
 		return runSeleniumTest(KeepBrowserOpen.ONFAILURE);

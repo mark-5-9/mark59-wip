@@ -75,7 +75,7 @@ public class SeleniumUtils {
 	
 	/**
 	 * Directly hits the chromedriver and reads the initial message to obtain it's version (intended for internal use only). 
-	 * @param seleniumDriverPath
+	 * @param seleniumDriverPath  the path of the selenium Driver
 	 * @return chomedriver version
 	 */
 	public static String interogateChromedriverVersion (String seleniumDriverPath) {

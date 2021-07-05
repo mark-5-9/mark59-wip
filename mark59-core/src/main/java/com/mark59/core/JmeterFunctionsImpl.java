@@ -273,11 +273,10 @@ public class JmeterFunctionsImpl implements JmeterFunctions {
 	 * <p>When the transaction is added to the main result, it will be given a success state based on the Outcome passed in</p>
 	 * 
 	 * <p>The new SubResult must be given both a transactionLabel and a transactionTime, transactionTime 
-	 * is expected to be in milliseconds>
+	 * is expected to be in milliseconds.
 	 * 
 	 * @param transactionLabel label for the transaction
 	 * @param transactionTime time taken for the transaction. Expects Milliseconds.
-	 * @param boolean the success (true) or failure (false) state of the transaction
 	 * 
 	 * @throws IllegalArgumentException if the transactionLabel is null or empty
 	 * @return SampleResult
@@ -301,7 +300,7 @@ public class JmeterFunctionsImpl implements JmeterFunctions {
 	 * 
 	 * @param transactionLabel label for the transaction
 	 * @param transactionTime time taken for the transaction
-	 * @param boolean the success (true) or failure (false) state of the transaction
+	 * @param success  the success (true) or failure (false) state of the transaction
 	 * @param responseCode response message (useful for error transactions)
 	 *   
 	 * @throws IllegalArgumentException if the transactionLabel is null or empty

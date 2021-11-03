@@ -1,0 +1,92 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>com.mark59</groupId>
+	<artifactId>mark59-selenium-sample-dsl</artifactId>
+	<version>4.0.0</version>
+	<packaging>jar</packaging>
+
+	<name>mark59-selenium-sample-dsl</name>
+
+	<properties>
+	<maven.compiler.target>1.8</maven.compiler.target>
+	<maven.compiler.source>1.8</maven.compiler.source>
+	<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>
+
+	<dependencies>
+
+		<dependency>
+			<groupId>com.mark59</groupId>
+			<artifactId>mark59-selenium-implementation</artifactId>
+			<version>4.0.0</version>
+		</dependency>
+
+		<!--if you want to pick up a later version of devtools than provided, you can add the dep here .. -->
+		
+		<!--https://mvnrepository.com/artifact/org.seleniumhq.selenium/selenium-devtools -->
+<!-- 	    <dependency> -->
+<!-- 	      <groupId>org.seleniumhq.selenium</groupId> -->
+<!-- 	      <artifactId>selenium-devtools-vXX</artifactId> -->
+<!-- 	      <version>4.x.x</version> -->
+<!-- 	    </dependency> -->
+		
+		<!-- https://mvnrepository.com/artifact/org.apache.jmeter/ApacheJMeter_core -->
+		<dependency>
+			<groupId>org.apache.jmeter</groupId>
+			<artifactId>ApacheJMeter_java</artifactId>
+			<version>5.4.1</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.13</version>
+			<scope>test</scope>
+		</dependency>
+
+	</dependencies>
+
+	<build>
+		<plugins>
+		
+			<!-- local build goals: clean package -->	
+			<!-- this plugin is for JMeter JSR223 'Groovy' scripting purposes :  mark59-selenium-sample-dsl-{version}-for-JSR223 jar 
+			     (created in the target folder) can be placed in a JMeter lib/ext directory to obtain the necessary Mark59 classes -->			
+			<plugin>
+			    <groupId>org.apache.maven.plugins</groupId>
+			    <artifactId>maven-assembly-plugin</artifactId>
+			    <version>3.3.0</version>
+				<configuration>
+					<appendAssemblyId>false</appendAssemblyId>
+					<descriptorRefs><descriptorRef>jar-with-dependencies</descriptorRef></descriptorRefs>
+					<finalName>${project.artifactId}-${version}-for-JSR223</finalName>
+				</configuration>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals><goal>single</goal></goals>
+					</execution>
+				</executions>
+			</plugin>	
+			
+			<!--local build goals: clean package install -->	
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-source-plugin</artifactId>
+				<version>3.2.1</version>				
+				<executions>
+					<execution>
+						<id>attach-sources</id>
+						<goals><goal>jar</goal></goals>
+					</execution>
+				</executions>
+
+			</plugin>
+		</plugins>
+	</build>
+
+</project>

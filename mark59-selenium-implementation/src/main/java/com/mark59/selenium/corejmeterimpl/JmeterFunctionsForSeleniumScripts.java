@@ -1,0 +1,632 @@
+/*
+ *  Copyright 2019 Insurance Australia Group Limited
+ *  
+ *  Licensed under the Apache License, Version 2.0 (the "License"); 
+ *  you may not use this file except in compliance with the License. 
+ *  You may obtain a copy of the License at
+ *  
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *      
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package com.mark59.selenium.corejmeterimpl;
+
+import java.util.Map;
+import java.util.NoSuchElementException;
+
+import org.apache.jmeter.samplers.SampleResult;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import com.mark59.core.JmeterFunctionsImpl;
+import com.mark59.core.Outcome;
+import com.mark59.core.utils.Mark59Constants.JMeterFileDatatypes;
+import com.mark59.selenium.drivers.SeleniumDriverWrapper;
+
+/**
+ * Selenium flavored extension of the Mark59 class {@link JmeterFunctionsImpl} ( whose primary purpose to to handle transaction results, implemented in mark59 by the use 
+ * of 'sub-results' within a {@link SampleResult} )    
+ * 
+ * <p>This class is designed to additionally handle Selenium related functions with the framework, in particular logging and screenshots.  
+ * 
+ * <p>At instantiation, transaction level logging usage is set, based on the log4j level.  This can be over-ridden vai Jmeter parameters and/or directly calling 
+ * the methods in this class from the script.</p>
+ * 
+ * <p>From JMeter, Selenium scripts (that extend SeleniumAbstractJavaSamplerClient) have been provisioned to have transaction-level 'logging settings' available.<br>
+ * 
+ *  <p>Current default outputs setting are :
+ *  
+ *  <p> Trace Level:
+ *  <ul>
+ *  <li> 	write Screenshots At Start and End OfTransactions
+ *  <li> 	write Page Source At Start and End OfTransactions	    
+ *	<li>	write Performance Log At End Of Transactions	
+ *  </ul>
+ *  <p> Debug Level:
+ *  <ul>
+ *  <li>	write Screenshots End Of Transactions
+ *  <li> 	write Page Source End Of Transactions	    
+ *	<li>	write PerformanceLog At End Of Transactions	
+ *  </ul>
+ *   <p>No screenshot/log transaction level at Info or above, except for exception handling, which occurs regardless of log4j level 
+ *   
+ *   <p>For debugging a troublesome script during execution, note that 'buffered' log and screenshots can be set in script (For example see logAllLogsAtEndOfTransactions )
+ * 
+ * 	 <p>Finer grained control within a script can be achieved using methods to setting the individual logging flags.  For example (also using log4j):
+ * 
+ * <p> An example of transaction-level logging in use:  
+ * <pre><code>
+ * if (LOG.isInfoEnabled()) jm.logScreenshotsAtStartOfTransactions(ScreenshotLogging.WRITE);
+ * jm.startTransaction("Some-transaction-whose-screenshot-i-want-to-see-at-the-start-when-at-log4j-INFO-level");
+ *       :
+ * //OK, now just go back to the default behavior for the current Log4j level..  	 
+ * if (LOG.isInfoEnabled()) jm.logScreenshotsAtStartOfTransactions(ScreenshotLogging.DEFAULT);
+ * </code></pre>
+ * 
+ * @see Mark59LogLevels
+ * @see JmeterFunctionsImpl
+ * 
+ * @author Philip Webb
+ * Written: Australian Winter 2019  
+ */
+public class JmeterFunctionsForSeleniumScripts extends JmeterFunctionsImpl {
+	/**	log4j class logger */
+	public  static final Logger LOG = LogManager.getLogger(JmeterFunctionsForSeleniumScripts.class);
+
+	/**	@see #logScreenshotsAtStartOfTransactions  */
+	public static final String LOG_SCREENSHOTS_AT_START_OF_TRANSACTIONS = "Log_Screenshots_At_Start_Of_Transactions";
+	/**	@see #logScreenshotsAtEndOfTransactions */
+	public static final String LOG_SCREENSHOTS_AT_END_OF_TRANSACTIONS 	= "Log_Screenshots_At_End_Of_Transactions";
+	/**	@see #logPageSourceAtStartOfTransactions   */
+	public static final String LOG_PAGE_SOURCE_AT_START_OF_TRANSACTIONS = "Log_Page_Source_At_Start_Of_Transactions";
+	/**	@see #logPageSourceAtEndOfTransactions  */
+	public static final String LOG_PAGE_SOURCE_AT_END_OF_TRANSACTIONS	= "Log_Page_Source_At_End_Of_Transactions";
+	/**	@see #logPerformanceLogAtEndOfTransactions  */
+	public static final String LOG_PERF_LOG_AT_END_OF_TRANSACTIONS 		= "Log_Perf_Log_At_End_Of_Transactions";	
+		
+	
+	private SeleniumDriverWrapper seleniumDriverWrapper;
+	
+	private boolean writeScreenshotsAtStartOfTransactions = false;
+	private boolean writeScreenshotsAtEndOfTransactions = false; 	
+	private boolean bufferScreenshotsAtStartOfTransactions = false;
+	private boolean bufferScreenshotsAtEndOfTransactions = false; 	
+	private boolean writePageSourceAtStartOfTransactions = false;
+	private boolean writePageSourceAtEndOfTransactions = false; 	
+	private boolean bufferPageSourceAtStartOfTransactions = false;
+	private boolean bufferPageSourceAtEndOfTransactions = false; 	
+	private boolean writePerformanceLogAtEndOfTransactions = false; 		
+	private boolean bufferPerformanceLogAtEndOfTransactions = false; 			
+	
+	
+	/**
+	 * @param threadName  current thread name
+	 * @param seleniumDriverWrapper  see SeleniumDriverWrapper
+	 * @param jmeterRuntimeArgumentsMap used to override default state of screenshot/log output
+	 */
+	public JmeterFunctionsForSeleniumScripts(String threadName, SeleniumDriverWrapper seleniumDriverWrapper, Map<String,String> jmeterRuntimeArgumentsMap) {
+		super(threadName);
+		this.seleniumDriverWrapper = seleniumDriverWrapper;
+		setDefaultScreenShotTxnLoggingBehaviourBasedOnLog4j();
+		overrideScreenShotTxnLoggingUsingJmeterParameters(jmeterRuntimeArgumentsMap);
+	}
+
+	
+	/**
+	 *  Sets the default state of screenshot/log output at transaction level, based of the log4j log level. 
+	 *  Please see method overrideScreenShotTxnLoggingUsingJmeterParameters for detailed settings. 
+	 */
+	private void setDefaultScreenShotTxnLoggingBehaviourBasedOnLog4j() {
+		logScreenshotsAtStartOfTransactions(Mark59LogLevels.DEFAULT);
+		logScreenshotsAtEndOfTransactions(Mark59LogLevels.DEFAULT);
+		logPageSourceAtStartOfTransactions(Mark59LogLevels.DEFAULT);
+		logPageSourceAtEndOfTransactions(Mark59LogLevels.DEFAULT);
+		logPerformanceLogAtEndOfTransactions(Mark59LogLevels.DEFAULT);
+	}
+
+	/**
+	 *  Allows parameter overriding of the  default state of screenshot/log output at transaction level, based of the log4j log level.  
+	 */
+	private void overrideScreenShotTxnLoggingUsingJmeterParameters(Map<String,String> jmeterRuntimeArgumentsMap) {
+		Mark59LogLevels logging;
+		
+		logging = Mark59LogLevels.fromString(jmeterRuntimeArgumentsMap.get(LOG_SCREENSHOTS_AT_START_OF_TRANSACTIONS));
+		if (logging != null) {
+			logScreenshotsAtStartOfTransactions(logging);
+		}
+		logging = Mark59LogLevels.fromString(jmeterRuntimeArgumentsMap.get(LOG_SCREENSHOTS_AT_END_OF_TRANSACTIONS));
+		if (logging != null) { 
+			logScreenshotsAtEndOfTransactions(logging);
+		}
+		logging = Mark59LogLevels.fromString(jmeterRuntimeArgumentsMap.get(LOG_PAGE_SOURCE_AT_START_OF_TRANSACTIONS));
+		if (logging != null) { 
+			logPageSourceAtStartOfTransactions(logging);
+		}
+		logging = Mark59LogLevels.fromString(jmeterRuntimeArgumentsMap.get(LOG_PAGE_SOURCE_AT_END_OF_TRANSACTIONS));
+		if (logging != null) {
+			logPageSourceAtEndOfTransactions(logging);
+		}
+		logging = Mark59LogLevels.fromString(jmeterRuntimeArgumentsMap.get(LOG_PERF_LOG_AT_END_OF_TRANSACTIONS));
+		if (logging != null) {
+			logPerformanceLogAtEndOfTransactions(logging);
+		}
+	}
+
+	
+	@Override
+	public void startTransaction(String transactionLabel) {
+		startTransaction(transactionLabel, JMeterFileDatatypes.TRANSACTION, true);	
+	}
+	
+	
+	/**
+	 * As per {@link #startTransaction(String)}, but will tag the transaction as a DevTools (CDP) transaction.
+	 * <p>You can end the transaction with any of the <code>endTransaction</code> methods or {@link #endCdpTransaction(String)}
+	 * (which is functionally equivalent to {@link #endTransaction(String)}).  This is because the transaction is marked 
+	 * as a DevTools (CDP) transaction when it is started by this method.   
+	 * 
+	 * @param transactionLabel ('label' in JMeter terminology) for the transaction
+	 * @throws IllegalArgumentException if the transaction name supplied is an illegal value (null or empty) or already in use.
+	 */
+	public void startCdpTransaction(String transactionLabel) {
+		startTransaction(transactionLabel, JMeterFileDatatypes.CDP, true);
+	}
+	
+
+	/**
+	 * As per  {@link #startTransaction(String)}, but with the additional options specifying what type of transaction this is, and switching
+	 * off all screenshot writing or buffering for the start of this transaction, regardless of the current {@link Mark59LogLevels} settings  
+	 * 
+	 * @param transactionLabel ('label' in JMeter terminology) for the transaction
+	 * @param jMeterFileDatatypes a {@link JMeterFileDatatypes} (it's text value will be written in the data type field of the JMeter results file)
+	 * @param includeInStartOfTransactionScreenshotLogs boolean option to switch on/off screenshot logs for transaction starts (for this txn) 
+	 */
+	public void startTransaction(String transactionLabel, JMeterFileDatatypes jMeterFileDatatypes, boolean includeInStartOfTransactionScreenshotLogs ) {
+		if (includeInStartOfTransactionScreenshotLogs) {
+			if 	(bufferScreenshotsAtStartOfTransactions) {
+				bufferScreenshot(transactionLabel + "_before" );
+			}
+			if 	(writeScreenshotsAtStartOfTransactions) {
+				writeScreenshot(transactionLabel + "_before" );
+			}
+			if 	(bufferPageSourceAtStartOfTransactions) {
+				bufferPageSource(transactionLabel + "_source_before" );
+			}
+			if 	(writePageSourceAtStartOfTransactions) {
+				writePageSource(transactionLabel + "_source_before" );
+			}
+		}
+		super.startTransaction(transactionLabel, jMeterFileDatatypes);
+	}
+	
+	
+	@Override
+	public SampleResult endTransaction(String transactionLabel) {
+		return endTransaction(transactionLabel, Outcome.PASS, null, true);
+	}
+
+	
+	/**
+	 * Identical to {@link #endTransaction(String)}.  Included as convenience to explicitly mark the end of DetTools (CDP) 
+	 * transactions if you wish to do so. 
+	 * 
+	 * @param transactionLabel ('label' in JMeter terminology) for the transaction
+	 * @throws IllegalArgumentException if the transactionLabel supplied is an illegal value (null or empty)
+	 * @throws NoSuchElementException   if the transactionLabel doesn't exist in the  transactionMap
+	 * @return the JMeter subresult for this transaction - which includes the transaction time (getTime) 
+	 */
+	public SampleResult endCdpTransaction(String transactionLabel) {
+		return endTransaction(transactionLabel, Outcome.PASS, null);
+	}
+	
+	
+	/**
+	 * As per {@link #endTransaction(String)}, but also allows for forcing switch-off of screenshot logging for this
+	 * transaction (set to false). 
+	 * 
+	 * @param transactionLabel ('label' in JMeter terminology) for the transaction
+	 * @param includeInEndOfTransactionshots boolean option to switch on/off screenshot logs for transaction ends (for this txn) 
+	 * @return the JMeter sub-result for this transaction (which includes the transaction time)
+	 */
+	public SampleResult endTransaction(String transactionLabel, boolean includeInEndOfTransactionshots) {
+		return endTransaction(transactionLabel, Outcome.PASS, null, includeInEndOfTransactionshots); 
+	}
+	
+	
+	@Override
+	public SampleResult endTransaction(String transactionLabel, Outcome result) {
+		return endTransaction(transactionLabel, result, null, true); 
+	}
+	
+	
+	/**
+	 * As per {@link #endTransaction(String, Outcome)}, but also allows for forcing switch-off of screenshot logging for this
+	 * transaction (set to false). 
+	 * 
+	 * @param transactionLabel ('label' in JMeter terminology) for the transaction
+	 * @param result transaction pass or fail as Outcome
+	 * @param includeInEndOfTransactionScreenshotLogs boolean option to switch on/off screenshot logs for transaction ends (for this txn) 
+	 * @return the JMeter sub-result for this transaction (which includes the transaction time)
+	 */
+	public SampleResult endTransaction(String transactionLabel, Outcome result, boolean includeInEndOfTransactionScreenshotLogs) {
+		return endTransaction(transactionLabel, result, null, includeInEndOfTransactionScreenshotLogs);
+	}
+	
+
+	public SampleResult endTransaction(String transactionLabel, Outcome result, String responseCode) {
+		return endTransaction(transactionLabel, result, responseCode, true);
+	}
+	
+	
+	/**
+	 * As per {@link #endTransaction(String, Outcome, String)}, but also allows for forcing switch-off of screenshot logging for this
+	 * transaction (includeInEndOfTransactionshots set to false). 
+	 * 
+	 * @param transactionLabel ('label' in JMeter terminology) for the transaction
+	 * @param result transaction pass or fail as Outcome
+	 * @param responseCode response code text
+	 * @param includeInEndOfTransactionScreenshotLogs boolean option to switch on/off screenshot logs for transaction ends (for this txn) 
+	 * 
+	 * @return SampleResult the JMeter sub-result for this transaction (which includes the transaction time)
+	 */
+	public SampleResult endTransaction(String transactionLabel, Outcome result, String responseCode, boolean includeInEndOfTransactionScreenshotLogs) {
+		
+		SampleResult sampleResult = super.endTransaction(transactionLabel, result, responseCode);
+
+		String markIfailedTxn = "";
+		if (result.getOutcomeText().equals(Outcome.FAIL.getOutcomeText())){
+			markIfailedTxn = "_FAILED";
+		}
+		
+		if (includeInEndOfTransactionScreenshotLogs) {
+			if 	(bufferScreenshotsAtEndOfTransactions) {
+				bufferScreenshot(transactionLabel + markIfailedTxn + "_ends" );
+			}
+			if 	(writeScreenshotsAtEndOfTransactions) {
+				writeScreenshot(transactionLabel + markIfailedTxn + "_ends" );
+			}
+			
+			if 	(bufferPageSourceAtEndOfTransactions) {
+				bufferPageSource(transactionLabel + markIfailedTxn + "_source_at_end" );
+			}
+			if 	(writePageSourceAtEndOfTransactions) {
+				writePageSource(transactionLabel + markIfailedTxn + "_source_at_end" );
+			}
+					
+			if 	(bufferPerformanceLogAtEndOfTransactions) {
+				seleniumDriverWrapper.bufferDriverLogs(transactionLabel + markIfailedTxn + "_perflog" );
+			}
+			if 	(writePerformanceLogAtEndOfTransactions) {
+				seleniumDriverWrapper.writeDriverLogs(transactionLabel + markIfailedTxn + "_perflog" );
+			}			
+		}
+		return sampleResult;
+	}
+
+
+	@Override
+	public SampleResult setTransaction(String transactionLabel, long transactionTime){
+		return setTransaction(transactionLabel, transactionTime, true);
+	}
+	
+	/**
+	 * As per {@link #setTransaction(String, long)} but will tag the transaction as a DevTools (CDP) transaction 
+	 * 
+	 * @param transactionLabel ('label' in JMeter terminology) for the transaction
+	 * @param transactionTime time taken for the transaction. Expects Milliseconds.
+	 * 
+	 * @throws IllegalArgumentException if the transactionLabel is null or empty
+	 * @return SampleResult
+	 */
+	public SampleResult setCdpTransaction(String transactionLabel, long transactionTime){
+		return setCdpTransaction(transactionLabel, transactionTime, true);
+	}
+	
+	
+	
+	@Override
+	public SampleResult setTransaction(String transactionLabel, long transactionTime, boolean success) {
+		return setTransaction(transactionLabel, JMeterFileDatatypes.TRANSACTION, transactionTime, success, null, true);
+	}
+
+	/**
+	 * As per {@link #setTransaction(String, long, boolean)} but will tag the transaction as a DevTools (CDP) transaction 
+	 * 
+	 * @param transactionLabel ('label' in JMeter terminology) for the transaction
+	 * @param transactionTime time taken for the transaction. Expects Milliseconds.
+	 * @param success pass or fail transaction
+	 * 
+	 * @throws IllegalArgumentException if the transactionLabel is null or empty
+	 * @return SampleResult
+	 */
+	public SampleResult setCdpTransaction(String transactionLabel, long transactionTime, boolean success) {
+		return setTransaction(transactionLabel, JMeterFileDatatypes.CDP, transactionTime, success, null, true );		
+	}
+	
+	
+	
+	/**
+	 * As per {@link #setTransaction(String, long, boolean)}, but also allows for forcing switch-off of screenshot logging for this
+	 * transaction (includeInEndOfTransactionshots set to false).  
+	 * 
+	 * @param transactionLabel ('label' in JMeter terminology) for the transaction
+	 * @param transactionTime transaction time (ms)
+	 * @param success  pass or fail transaction
+	 * @param includeInEndOfTransactionshots boolean option to switch on/off screenshot logs for transaction ends (for this txn) 
+	 * @return SampleResult
+	 */
+	public SampleResult setTransaction(String transactionLabel, long transactionTime, boolean success, boolean includeInEndOfTransactionshots) {
+		return setTransaction(transactionLabel, JMeterFileDatatypes.TRANSACTION, transactionTime, success, null, includeInEndOfTransactionshots);
+	}
+	
+	/**
+	 * As per {@link #setTransaction(String, long, boolean, boolean)  }, but will tag the transaction as a DevTools (CDP) transaction
+	 * 
+	 * @param transactionLabel ('label' in JMeter terminology) for the transaction
+	 * @param transactionTime transaction time (ms)
+	 * @param success  pass or fail transaction
+	 * @param includeInEndOfTransactionshots boolean option to switch on/off screenshot logs for transaction ends (for this txn)  
+	 * @return SampleResult
+	 */
+	public SampleResult setCdpTransaction(String transactionLabel, long transactionTime, boolean success, boolean includeInEndOfTransactionshots) {
+		return setTransaction(transactionLabel, JMeterFileDatatypes.CDP, transactionTime, success, null, includeInEndOfTransactionshots);
+	}
+	
+		
+	@Override
+	public SampleResult setTransaction(String transactionLabel, long transactionTime, boolean success, String responseCode) {
+		return setTransaction(transactionLabel, JMeterFileDatatypes.TRANSACTION, transactionTime, success, responseCode, true);
+	}
+
+	/**
+	 * As per {@link #setTransaction(String, long, boolean, String)}, but will tag the transaction as a DevTools (CDP) transaction
+	 * 
+	 * @param transactionLabel ('label' in JMeter terminology) for the transaction
+	 * @param transactionTime time taken for the transaction
+	 * @param success  the success (true) or failure (false) state of the transaction
+	 * @param responseCode response message (useful for error transactions)
+	 *   
+	 * @throws IllegalArgumentException if the transactionLabel is null or empty
+	 * @return SampleResult
+	 */
+	public SampleResult setCdpTransaction(String transactionLabel, long transactionTime, boolean success, String responseCode) {
+		return setTransaction(transactionLabel, JMeterFileDatatypes.CDP , transactionTime, success, responseCode, true);
+	}
+
+	
+	/**
+	 * As per {@link #setTransaction(String, long, boolean, String)}, but also allows for forcing switch-off of screenshot logging for this
+	 * transaction (includeInEndOfTransactionshots set to false), and also  additional option of setting the data type
+	 * field of the JMeter results file
+	 * 
+	 * @param transactionLabel ('label' in JMeter terminology) for the transaction
+	 * @param jMeterFileDatatypes  a {@link JMeterFileDatatypes} (it's text value will be written in the data type field of the JMeter results file)	 * 
+	 * @param transactionTime  transaction time (ms)
+	 * @param success   pass or fail transaction
+	 * @param responseCode  text response code
+	 * @param includeInEndOfTransactionshots boolean option to switch on/off screenshot logs for transaction ends (for this txn) 
+	 * @return SampleResult
+	 */
+	public SampleResult setTransaction(String transactionLabel, JMeterFileDatatypes jMeterFileDatatypes,
+			long transactionTime, boolean success, String responseCode, boolean includeInEndOfTransactionshots) {
+		
+		SampleResult sampleResult = super.setTransaction(transactionLabel, jMeterFileDatatypes, transactionTime, success, responseCode);
+		
+		if (includeInEndOfTransactionshots) {
+			if 	(bufferScreenshotsAtEndOfTransactions) {
+				bufferScreenshot(transactionLabel + "_set" );
+			}
+			if 	(writeScreenshotsAtEndOfTransactions) {
+				writeScreenshot(transactionLabel + "_set" );
+			}
+			if 	(bufferPerformanceLogAtEndOfTransactions) {
+				seleniumDriverWrapper.bufferDriverLogs(transactionLabel + "_perflog" );
+			}
+			if 	(writePerformanceLogAtEndOfTransactions) {
+				seleniumDriverWrapper.writeDriverLogs(transactionLabel + "_perflog" );
+			}				
+		}
+		return sampleResult;
+	}
+	
+	
+	
+	/**
+	 * Capture and immediately save screenshot. Use with caution! in a Performance and Volume context, misuse of this method may produce many more screenshots
+	 * than intended. Instead, we recommend using bufferScreenshot(String) and writeBufferedScreenshots() for any threads with interesting behavior, such
+	 * as an exception.
+	 * 
+	 * @param imageName filename to use for the screenshot
+	 */
+	public void writeScreenshot(String imageName) {
+		seleniumDriverWrapper.takeScreenshot(imageName);
+	}	
+
+	
+	/**
+	 * Stores screenshot in memory, ready to be written to file later.  
+	 * If you want to immediately write a screenshot to file, use takeScreenshot instead.
+	 * @param imageName filename to use for the screenshot
+	 */
+	public void bufferScreenshot(String imageName) {
+		seleniumDriverWrapper.bufferScreenshot(imageName);
+	}
+
+	
+	/**
+	 * Writes the html page source
+	 * @param imageName filename to use for the screenshot
+	 */
+	public void writePageSource(String imageName) {
+		seleniumDriverWrapper.writePageSource(imageName);
+	}	
+	
+	/**
+	 * Buffers the html page source
+	 * @param imageName filename to use for the screenshot
+	 */	
+	public void bufferPageSource(String imageName) {
+		seleniumDriverWrapper.bufferPageSource(imageName);
+	}
+
+		
+	/**
+	 * Writes all buffered screenshots/logs to disk (ie, all transaction-level logging performed using a Mark59LogLevels of "BUFFER")
+	 * @see Mark59LogLevels
+	 */
+	public void writeBufferedArtifacts() {
+		seleniumDriverWrapper.writeBufferedArtifacts();
+	}
+
+
+	/**
+	 * Screenshots to be written or buffered at the start transactions
+	 * @param screenshotLoggingValue  Used to set actions when writing screenshots/logs 
+	 */
+	public void logScreenshotsAtStartOfTransactions(Mark59LogLevels screenshotLoggingValue) {
+		bufferScreenshotsAtStartOfTransactions = false;
+		writeScreenshotsAtStartOfTransactions = false;
+		
+		if ( Mark59LogLevels.BUFFER.equals(screenshotLoggingValue)) {
+			bufferScreenshotsAtStartOfTransactions = true; 
+		} else if ( Mark59LogLevels.WRITE.equals(screenshotLoggingValue) ) {
+			writeScreenshotsAtStartOfTransactions = true;
+		} else if ( Mark59LogLevels.DEFAULT.equals(screenshotLoggingValue) ) {
+			
+			if (LOG.isTraceEnabled() ) {
+				writeScreenshotsAtStartOfTransactions = true;
+			} 
+		}
+	}
+
+	/**
+	 * Screenshots to be written or buffered at the end of transactions
+	 * @param screenshotLoggingValue Used to set actions when writing screenshots/logs  
+	 */
+	public void logScreenshotsAtEndOfTransactions(Mark59LogLevels screenshotLoggingValue) {
+		bufferScreenshotsAtEndOfTransactions = false; 
+		writeScreenshotsAtEndOfTransactions = false;
+		
+		if ( Mark59LogLevels.BUFFER.equals(screenshotLoggingValue) ) {
+			bufferScreenshotsAtEndOfTransactions = true; 
+		} else if ( Mark59LogLevels.WRITE.equals(screenshotLoggingValue) ) {
+			writeScreenshotsAtEndOfTransactions = true;
+		} else if ( Mark59LogLevels.DEFAULT.equals(screenshotLoggingValue) ) {
+
+			if (LOG.isTraceEnabled() ) {
+				writeScreenshotsAtEndOfTransactions = true;
+			} else if (LOG.isDebugEnabled()  ) {
+				writeScreenshotsAtEndOfTransactions = true;	
+			}  
+		}
+	}
+	
+	/**
+	 * PageSource to be written or buffered at the start of transactions
+	 * @param screenshotLoggingValue Used to set actions when writing screenshots/logs  
+	 */
+	public void logPageSourceAtStartOfTransactions(Mark59LogLevels screenshotLoggingValue) {
+		bufferPageSourceAtStartOfTransactions = false; 
+		writePageSourceAtStartOfTransactions = false;	
+		
+		if ( Mark59LogLevels.BUFFER.equals(screenshotLoggingValue) ) {
+			bufferPageSourceAtStartOfTransactions = true; 
+		} else if ( Mark59LogLevels.WRITE.equals(screenshotLoggingValue) ) {
+			writePageSourceAtStartOfTransactions = true;
+		} else if ( Mark59LogLevels.DEFAULT.equals(screenshotLoggingValue) ) {
+			
+			if (LOG.isTraceEnabled() ) {
+				writePageSourceAtStartOfTransactions = true;
+			} 
+		}
+	}
+
+	/**
+	 * PageSource to be written or buffered at the end of transactions
+	 * @param screenshotLoggingValue Used to set actions when writing screenshots/logs  
+	 */
+	public void logPageSourceAtEndOfTransactions(Mark59LogLevels screenshotLoggingValue) {
+		bufferPageSourceAtEndOfTransactions = false; 
+		writePageSourceAtEndOfTransactions = false;
+		
+		if ( Mark59LogLevels.BUFFER.equals(screenshotLoggingValue) ) {
+			bufferPageSourceAtEndOfTransactions = true; 
+		} else if ( Mark59LogLevels.WRITE.equals(screenshotLoggingValue) ) {
+			writePageSourceAtEndOfTransactions = true;
+		} else if ( Mark59LogLevels.DEFAULT.equals(screenshotLoggingValue) ) {
+
+			if (LOG.isTraceEnabled() ) {
+				writePageSourceAtEndOfTransactions = true;
+			} else if (LOG.isDebugEnabled()  ) {
+				writePageSourceAtEndOfTransactions = true;	
+			} 
+		}
+	}
+	
+	/**
+	 * PerformanceLog to be written or buffered at the end of transactions (chrome)
+	 * @param screenshotLoggingValue Used to set actions when writing screenshots/logs  
+	 */
+	public void logPerformanceLogAtEndOfTransactions(Mark59LogLevels screenshotLoggingValue) {
+		bufferPerformanceLogAtEndOfTransactions = false; 
+		writePerformanceLogAtEndOfTransactions = false;
+		
+		if ( Mark59LogLevels.BUFFER.equals(screenshotLoggingValue) ) {
+			bufferPerformanceLogAtEndOfTransactions = true; 
+		} else if ( Mark59LogLevels.WRITE.equals(screenshotLoggingValue) ) {
+			writePerformanceLogAtEndOfTransactions = true;
+		} else if ( Mark59LogLevels.DEFAULT.equals(screenshotLoggingValue) ) {
+
+			if (LOG.isTraceEnabled() ) {
+				writePerformanceLogAtEndOfTransactions = true;
+			} else if (LOG.isDebugEnabled()  ) {
+				writePerformanceLogAtEndOfTransactions = true;	
+			} 
+		}
+
+	}
+	
+	
+	/**
+	 * A convenience method which can be used to control all transaction-level logging which occurs when a transaction ends.
+	 * <p>For example, in a script
+	 * <br><pre><code> jm.logAllLogsAtEndOfTransactions(ScreenshotLogging.BUFFER); </code></pre>
+	 * <p>will switch all end of transaction logging output to be 'buffered'.  This would generally be considered the most common method for 
+	 * debugging a troublesome script in the first instance.   Output will only occur if the transaction fails. The above code fragment sets the debug flags to :
+	 * <ul>  	
+	 * <li>  	buffer Screenshots End Of Transactions
+	 * <li>  	buffer Page Source End Of Transactions	    
+	 * <li>		buffer PerformanceLog At End Of Transactions
+	 * </ul> 
+	 * 
+	 * @param screenshotLoggingValue see explanation above	
+	 */
+	public void logAllLogsAtEndOfTransactions(Mark59LogLevels screenshotLoggingValue) {
+		logScreenshotsAtEndOfTransactions(screenshotLoggingValue);
+		logPageSourceAtEndOfTransactions(screenshotLoggingValue);
+		logPerformanceLogAtEndOfTransactions(screenshotLoggingValue);
+		
+	}	
+
+	
+	/**
+	 * A convenience method which can be used to control transaction-level logging which occurs when a transaction starts.
+ 	 * That is, this method sets the debug flags to control logging at :
+	 * <ul>  	
+	 * <li>  	Screenshots at start of transactions
+	 * <li>  	Page Source at start of transactions	    
+	 * </ul>  
+	 * 
+	 * 	@param screenshotLoggingValue see explanations above		
+	 */
+	public void logAllLogsAtStartOfTransactions(Mark59LogLevels screenshotLoggingValue) {
+		logScreenshotsAtStartOfTransactions(screenshotLoggingValue);
+		logPageSourceAtStartOfTransactions(screenshotLoggingValue);
+	}	
+		
+}

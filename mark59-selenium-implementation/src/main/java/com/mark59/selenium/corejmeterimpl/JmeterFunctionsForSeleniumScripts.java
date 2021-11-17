@@ -257,7 +257,8 @@ public class JmeterFunctionsForSeleniumScripts extends JmeterFunctionsImpl {
 		return endTransaction(transactionLabel, result, null, includeInEndOfTransactionScreenshotLogs);
 	}
 	
-
+	
+	@Override
 	public SampleResult endTransaction(String transactionLabel, Outcome result, String responseCode) {
 		return endTransaction(transactionLabel, result, responseCode, true);
 	}

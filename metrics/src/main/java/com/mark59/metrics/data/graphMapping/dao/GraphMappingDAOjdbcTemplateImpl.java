@@ -55,7 +55,6 @@ public class GraphMappingDAOjdbcTemplateImpl implements GraphMappingDAO
 		MapSqlParameterSource sqlparameters = new MapSqlParameterSource()
 				.addValue("graph", graph);
 		
-		List<GraphMapping> graphMappingList = new ArrayList<GraphMapping>();
 //		System.out.println(" findGraphMapping : " + selectGraphsSQL + UtilsMetrics.prettyPrintParms(sqlparameters));
 		NamedParameterJdbcTemplate jdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
 		List<Map<String, Object>> rows = jdbcTemplate.queryForList(selectGraphsSQL, sqlparameters);	
@@ -63,7 +62,6 @@ public class GraphMappingDAOjdbcTemplateImpl implements GraphMappingDAO
 		if (rows.size() == 0 ){
 			return null;
 		}
-		
 		Map row = rows.get(0);
 		
 		GraphMapping graphMapping = new GraphMapping();
@@ -75,13 +73,11 @@ public class GraphMappingDAOjdbcTemplateImpl implements GraphMappingDAO
 		graphMapping.setBarRangeSql((String)row.get("BAR_RANGE_SQL"));
 		graphMapping.setBarRangeLegend((String)row.get("BAR_RANGE_LEGEND"));		
 		graphMapping.setComment((String)row.get("COMMENT")); 
-
-		graphMappingList.add(graphMapping);
 //		System.out.println("GraphMappingDAOjdbcTemplateImpl.findGraphMapping  : " + graphMapping.toString()  ) ;		
-		
 		return  graphMapping;
 	}
 
+	
 	@Override
 	@SuppressWarnings("rawtypes")
 	public List<GraphMapping> getGraphMappings(){

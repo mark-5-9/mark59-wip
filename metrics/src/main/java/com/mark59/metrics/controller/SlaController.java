@@ -187,10 +187,8 @@ public class SlaController {
 
 		if ( StringUtils.isNotEmpty( copyApplicationForm.getReqToApp())) { 
 			copyApplicationForm.setValidForm("Y");
-			
 			//do the copy
-			List<Sla> slaList = new ArrayList<Sla>();
-			slaList = slaDao.getSlaList(reqApp);
+			List<Sla> slaList = slaDao.getSlaList(reqApp);
 			for (Sla origSla : slaList) {
 				Sla copySla = new Sla(origSla);
 				copySla.setApplication(copyApplicationForm.getReqToApp());
@@ -297,8 +295,7 @@ public class SlaController {
 	
 	
 	private List<String> populateSlaApplicationDropdown() {
-		List<String> applicationList = new ArrayList<String>();
-		applicationList = slaDao.findApplications();
+		List<String> applicationList = slaDao.findApplications();
 		applicationList.add(0, "");
 		return applicationList;
 	}		

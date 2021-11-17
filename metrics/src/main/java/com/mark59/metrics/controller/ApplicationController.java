@@ -76,10 +76,9 @@ public class ApplicationController {
 	@RequestMapping("/dashboard")
 	public ModelAndView dashboard(@RequestParam(required=false) String reqAppListSelector) {
 
-		List<Application> applicationList = new ArrayList<Application>(); 
-		applicationList =  applicationDAO.findApplications(reqAppListSelector) ;
-
+		List<Application> applicationList =  applicationDAO.findApplications(reqAppListSelector) ;
 		List<ApplicationDashboardEntry> dashboardList = new ArrayList<ApplicationDashboardEntry>();
+
 		for (Application app : applicationList) {
 			ApplicationDashboardEntry dashboardEntry = new ApplicationDashboardEntry();
 			String lastRunDateStr = runDAO.findLastRunDate(app.getApplication());
@@ -201,10 +200,10 @@ public class ApplicationController {
 	
 	private String computeSlaSummaryIconColour(String slaTransactionIcon, String slaMetricsIcon) {
 		String iconColour = "green";
-		if ( slaTransactionIcon == "red"    ||  slaMetricsIcon == "red" ) {
+		if (  "red".equalsIgnoreCase(slaTransactionIcon)  ||  "red".equalsIgnoreCase(slaMetricsIcon) ) {
 			return "red";			
 		}
-		if ( slaTransactionIcon == "yellow" ||  slaMetricsIcon == "yellow" ) {
+		if (  "yellow".equalsIgnoreCase(slaTransactionIcon)  ||  "yellow".equalsIgnoreCase(slaMetricsIcon) ) {		
 			return "yellow";			
 		}
 		return iconColour;

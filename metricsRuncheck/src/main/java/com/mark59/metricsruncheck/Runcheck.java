@@ -196,14 +196,14 @@ public class Runcheck  implements CommandLineRunner
 		if (!StringUtils.isNumeric(argCaptureperiod) && !argCaptureperiod.equalsIgnoreCase(AppConstantsMetrics.ALL) ) {
 			formatter.printHelp( "Runcheck", options );
 			printSampleUsage();
-			throw new RuntimeException("The captureperiod (c) parameter must be numeric or " +  (AppConstantsMetrics.ALL) );  
+			throw new RuntimeException("The captureperiod (c) parameter must be numeric or '" + AppConstantsMetrics.ALL + "'" );  
 		}
 		if (StringUtils.isNotBlank(argSimlogCustom)){
 				List<String> mPos = Mark59Utils.commaDelimStringToStringList(argSimlogCustom); 
-				if (mPos.size() != 5  ||
-					mPos.size() == 5 && ( !StringUtils.isNumeric(mPos.get(0)) || !StringUtils.isNumeric(mPos.get(1)) ||
-							              !StringUtils.isNumeric(mPos.get(2)) || !StringUtils.isNumeric(mPos.get(3)) ||
-							              !StringUtils.isNumeric(mPos.get(4)) )) {
+				if ((mPos.size() != 5) ||
+					(mPos.size() == 5  &&  (!StringUtils.isNumeric(mPos.get(0)) || !StringUtils.isNumeric(mPos.get(1)) ||
+											!StringUtils.isNumeric(mPos.get(2)) || !StringUtils.isNumeric(mPos.get(3)) ||
+											!StringUtils.isNumeric(mPos.get(4)) ))){
 				formatter.printHelp( "Runcheck", options );
 				printSampleUsage();
 				throw new RuntimeException("The simlogcustoM (m) parameter must blank or 5 comma-delimited integers") ;  

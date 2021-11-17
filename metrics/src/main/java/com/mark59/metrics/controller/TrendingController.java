@@ -251,7 +251,6 @@ public class TrendingController {
 									
 			String txnsToGraphId = UtilsMetrics.stringListToCommaDelimString(listOfTransactionNamesToGraphTagged);
 			model.addAttribute("txnsToGraphId", txnsToGraphId);
-
 			trendingForm.setChosenTxns(txnsToGraphId);			
 			
 			if ( Mark59Constants.DatabaseTxnTypes.TRANSACTION.name().equals( graphMapping.getTxnType() )){
@@ -260,7 +259,7 @@ public class TrendingController {
 				long cdpTxnsCount = transactionDAO.countRunsWithCdpTransactions(trendingForm.getApplication());
 				model.addAttribute("cdpTxnsCount", String.valueOf(cdpTxnsCount));
 			} else {
-				populateFailedMetricSlaLists(trendingForm.getApplication(), latestRunTime, txnsToGraphId, model, graphMapping);
+				populateFailedMetricSlaLists(trendingForm.getApplication(), latestRunTime, model, graphMapping);
 				model.addAttribute("cdpTxnsCount", "0");
 			}
 		
@@ -465,7 +464,7 @@ public class TrendingController {
 	}
 	
 	
-	private void populateFailedMetricSlaLists(String application, String latestRunTime, String txnsToGraphId,  Model model, GraphMapping graphMapping){
+	private void populateFailedMetricSlaLists(String application, String latestRunTime, Model model, GraphMapping graphMapping){
 	
 		String metricTxnType = graphMapping.getTxnType(); 
 				

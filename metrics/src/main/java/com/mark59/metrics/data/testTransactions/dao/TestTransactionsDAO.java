@@ -49,7 +49,7 @@ public interface TestTransactionsDAO
 	
 	public List<Transaction> extractTransactionResponsesSummary(String application, String txnType);
 
-	public Transaction extractEventSummaryStats(String application, String metricTxnType, String txnId, EventMapping EventMapping);
+	public Transaction extractEventSummaryStats(String application, String metricTxnType, String txnId, EventMapping eventMapping);
 
 	public int filterByTime(Run run, DateRangeBean filteredDateRangeBean);
 

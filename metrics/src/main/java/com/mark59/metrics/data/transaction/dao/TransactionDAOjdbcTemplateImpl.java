@@ -134,7 +134,9 @@ public class TransactionDAOjdbcTemplateImpl implements TransactionDAO
 			transactionKey.setTxnPass((Long)row.get("TXN_COUNT"));   // hack 
 			try {
 				transactionKey.setTxnIdURLencoded(URLEncoder.encode(transactionKey.getTxnId(), "UTF-8")) ;
-			} catch (UnsupportedEncodingException e) {	e.printStackTrace();	}	  
+			} catch (UnsupportedEncodingException e) {
+				System.out.println("Transaction Dao UnsupportedEncodingException (" + transactionKey.getTxnId() + ") " + e.getMessage());
+			}	  
 			transactionKeyList.add(transactionKey);
 		}	
 		return transactionKeyList;		
@@ -393,10 +395,10 @@ public class TransactionDAOjdbcTemplateImpl implements TransactionDAO
 			
 			if (! manuallySelectTxns ){
 
-				if (sqlSelectLike != "%" ){
+				if (!"%".equals(sqlSelectLike) ){					
 					sql = sql + " AND TXN_ID LIKE :sqlSelectLike ";  
 				}
-				if (sqlSelectNotLike != "" ){
+				if (StringUtils.isNotBlank(sqlSelectNotLike)){
 					sql = sql + " AND NOT (TXN_ID LIKE :sqlSelectNotLike ) ";  
 				}
 				if (Mark59Constants.DatabaseTxnTypes.TRANSACTION.name().equals( graphMapping.getTxnType() )){ 
@@ -435,7 +437,7 @@ public class TransactionDAOjdbcTemplateImpl implements TransactionDAO
 				nthRankedValue = orderedEntry.getValue();
 			}
 			if (listPosition > nthRankedTxnInt ) {
-				if (orderedEntry.getValue().equals(nthRankedValue) ) {  // equal values at Nth included
+				if (orderedEntry.getValue().compareTo(nthRankedValue) == 0 ) {   // equal values at Nth included
 					selectedTransactions.add(orderedEntry.getKey());
 				} else {
 					nthRankedTxnNotReached = false;
@@ -503,7 +505,7 @@ public class TransactionDAOjdbcTemplateImpl implements TransactionDAO
 		List<Map<String, Object>> rows = jdbcTemplate.queryForList(sql, sqlparameters);
 		
 		int numRunsBeingGraphed = 0;   // eg, for initial request..
-		if (chosenRuns != ""  ){
+		if (StringUtils.isNotBlank(chosenRuns)){
 			numRunsBeingGraphed = StringUtils.countMatches(chosenRuns, ",") + 1;  
 		} else {
 			System.out.println(" ****** no chosen runs passed to findDatapointsToGraph!!!!!   Application was " + application);

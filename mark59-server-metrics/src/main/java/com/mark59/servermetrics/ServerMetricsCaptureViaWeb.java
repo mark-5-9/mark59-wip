@@ -154,7 +154,7 @@ public class ServerMetricsCaptureViaWeb  extends AbstractJavaSamplerClient {
 			
 			in = new BufferedReader( new InputStreamReader(con.getInputStream()));
 			String respLine;
-			StringBuffer jsonResponseStr = new StringBuffer();
+			StringBuilder jsonResponseStr = new StringBuilder();
 			while ((respLine = in.readLine()) != null) {
 				jsonResponseStr.append(respLine);
 			}

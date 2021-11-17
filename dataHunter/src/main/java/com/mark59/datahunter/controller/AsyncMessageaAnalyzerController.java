@@ -69,8 +69,7 @@ public class AsyncMessageaAnalyzerController {
 	public ModelAndView asyncMessageaAnalyzerUrlAction(@ModelAttribute AsyncMessageaAnalyzerRequest asyncMessageaAnalyzerRequest, Model model, HttpServletRequest httpServletRequest) {
 		
 		SqlWithParms analyzerSqlWithParms = policiesDAO.constructAsyncMessageaAnalyzerSql(asyncMessageaAnalyzerRequest);
-		List<AsyncMessageaAnalyzerResult> asyncMessageaAnalyzerResultList = new ArrayList<AsyncMessageaAnalyzerResult>();
-		asyncMessageaAnalyzerResultList = policiesDAO.runAsyncMessageaAnalyzerSql(analyzerSqlWithParms);
+		List<AsyncMessageaAnalyzerResult> asyncMessageaAnalyzerResultList = policiesDAO.runAsyncMessageaAnalyzerSql(analyzerSqlWithParms);
 
 		if ( ! DataHunterUtils.isEmpty(asyncMessageaAnalyzerRequest.getToUseability())){
 			

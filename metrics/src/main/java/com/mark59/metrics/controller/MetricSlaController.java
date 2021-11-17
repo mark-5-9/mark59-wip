@@ -172,10 +172,8 @@ public class MetricSlaController {
 
 		if ( StringUtils.isNotEmpty( copyApplicationForm.getReqToApp())) { 
 			copyApplicationForm.setValidForm("Y");
-			
 			//do the copy
-			List<MetricSla> slaList = new ArrayList<MetricSla>();
-			slaList = metricSlaDAO.getMetricSlaList(reqApp);
+			List<MetricSla> slaList = metricSlaDAO.getMetricSlaList(reqApp);
 			for (MetricSla origMetricSla : slaList) {
 				MetricSla copyMetricSla = new MetricSla(origMetricSla);
 				copyMetricSla.setApplication(copyApplicationForm.getReqToApp());
@@ -219,8 +217,7 @@ public class MetricSlaController {
 
 	
 	private List<String> populateApplicationDropdown() {
-		List<String> applicationList = new ArrayList<String>();
-		applicationList = metricSlaDAO.findApplications();
+		List<String> applicationList = metricSlaDAO.findApplications();
 		applicationList.add(0, "");
 		return applicationList;
 	}		

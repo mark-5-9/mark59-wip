@@ -326,7 +326,7 @@ function drawSummaryTable(data, sortby){
 		for (var k = 2; k < runDatesToGraphArray.length && k < 7; k ++) { 
 			comparetabContent += "<th>" + runDatesToGraphArray[k].substring(0,4)  + "." + runDatesToGraphArray[k].substring(4,6)+ "." + runDatesToGraphArray[k].substring(6,8);
 			comparetabContent += "<br>" + runDatesToGraphArray[k].substring(8,10) + ":" + runDatesToGraphArray[k].substring(10,12);
-			comparetabContent += "<br><br>" + labelRunDescriptionsArray[k] + "</th>";	;	
+			comparetabContent += "<br><br>" + labelRunDescriptionsArray[k] + "</th>";	
 	  	}
 	}
 	
@@ -354,8 +354,8 @@ function drawSummaryTable(data, sortby){
 		
 		if (run0value < 0  || run1value < 0 ){ 
 			
-			if (run0value < 0) { run0value  = "n/a"; } ;
-			if (run1value < 0) { run1value  = "n/a"; } ;
+			if (run0value < 0) { run0value  = "n/a" }
+			if (run1value < 0) { run1value  = "n/a" }
 			
 			diffSecs = "n/a";
 			diffPcnt = "n/a";
@@ -436,7 +436,7 @@ function drawSummaryTable(data, sortby){
 			comparetabContent += "<tr><td class=textred style='white-space:nowrap;'>" + transactionName + "</td>";
 		} else {
 			comparetabContent += "<tr><td style='white-space:nowrap;'>" + transactionName + "</td>"; 			
-		};
+		}
 
 		if (isInArray( transactionName, trxnIdsForFailedSlaRelatingToThisGraphArray)){
 			comparetabContent += "<td class=textred>" + sortedMetriscArray[i].run0value + "</td>";
@@ -450,11 +450,11 @@ function drawSummaryTable(data, sortby){
 		
 		if ( document.getElementById("showHistoricData").value == 'yes' ) {	 	
 			comparetabContent += "<td bgcolor = 'grey' ></td>"
-	 		if (runDatesToGraphArray.length > 2){ comparetabContent += "<td>" + sortedMetriscArray[i].run2value + "</td>";};		
-	 		if (runDatesToGraphArray.length > 3){ comparetabContent += "<td>" + sortedMetriscArray[i].run3value + "</td>";};		
-	 		if (runDatesToGraphArray.length > 4){ comparetabContent += "<td>" + sortedMetriscArray[i].run4value + "</td>";};		
-	 		if (runDatesToGraphArray.length > 5){ comparetabContent += "<td>" + sortedMetriscArray[i].run5value + "</td>";};		
-	 		if (runDatesToGraphArray.length > 6){ comparetabContent += "<td>" + sortedMetriscArray[i].run6value + "</td>";};		
+	 		if (runDatesToGraphArray.length > 2){ comparetabContent += "<td>" + sortedMetriscArray[i].run2value + "</td>"; }		
+	 		if (runDatesToGraphArray.length > 3){ comparetabContent += "<td>" + sortedMetriscArray[i].run3value + "</td>"; }		
+	 		if (runDatesToGraphArray.length > 4){ comparetabContent += "<td>" + sortedMetriscArray[i].run4value + "</td>"; }		
+	 		if (runDatesToGraphArray.length > 5){ comparetabContent += "<td>" + sortedMetriscArray[i].run5value + "</td>"; }		
+	 		if (runDatesToGraphArray.length > 6){ comparetabContent += "<td>" + sortedMetriscArray[i].run6value + "</td>"; }		
 		}
 		
 		comparetabContent += "</tr>";

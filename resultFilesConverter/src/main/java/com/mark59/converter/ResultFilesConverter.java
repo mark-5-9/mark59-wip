@@ -52,7 +52,8 @@ import com.opencsv.exceptions.CsvValidationException;
 
 
 /**
- * Parses a Jmeter results file(s) in XML or CSVformat, and converts the data to CSV formatted file(s) suitable to produce Jmeter Reports. See program arguments descriptions for more detail on file output options.
+ * Parses a Jmeter results file(s) in XML or CSVformat, and converts the data to CSV formatted file(s) suitable to produce Jmeter Reports. See program arguments
+ *  descriptions for more detail on file output options.
  * 
  * <p>For XML, the general format of the file we want to parse:
  * <pre>{@code
@@ -239,12 +240,16 @@ public class ResultFilesConverter {
 
 	
 	public void clearOutputDirectory() {
-		for (File file : new File(argOutputdirectoy).listFiles()) {
-			if (!file.isDirectory()) {
-				file.delete();
+		File outputDirectory = new File(argOutputdirectoy);
+		if (outputDirectory != null && outputDirectory.listFiles() != null ) {
+			for (File file : outputDirectory.listFiles()) {
+				if (!file.isDirectory()) {
+					file.delete();
+				}
 			}
 		}
 	}	
+	
 	
 	public int convert() throws FileNotFoundException, IOException,  ParserConfigurationException, SAXException {
 
@@ -254,34 +259,43 @@ public class ResultFilesConverter {
 		boolean metricsOutputCsvFilesInitialized = false;
 		int sampleCount = 0;
 		
-		for (File jmeterResultsFile : new File(argInputdirectory).listFiles()){  
+		File jmeterResultsDirectory = new File(argInputdirectory);
 		
-			if ( jmeterResultsFile.isFile() && (
-					jmeterResultsFile.getName().toUpperCase().endsWith(".JTL") || 
-					jmeterResultsFile.getName().toUpperCase().endsWith(".XML") || 
-					jmeterResultsFile.getName().toUpperCase().endsWith(".CSV"))){
-				
-				if (!metricsOutputCsvFilesInitialized) {
-					metricsOutputCsvFilesInitialized = true;
-					initializeCsvMetricWriters(outputBaseCsvFileName);
-				}				
-				
-				try {
-					sampleCount = sampleCount + convertaJmeterFile(jmeterResultsFile);
-				} catch (IOException e) {
-					System.out.println( "Error: problem with processing Jmeter results file transactions " + jmeterResultsFile.getName() );
-					e.printStackTrace();
+		if (jmeterResultsDirectory != null && jmeterResultsDirectory.listFiles() != null ) {
+		
+			for (File jmeterResultsFile : jmeterResultsDirectory.listFiles()){  
+			
+				if ( jmeterResultsFile.isFile() && (
+						jmeterResultsFile.getName().toUpperCase().endsWith(".JTL") || 
+						jmeterResultsFile.getName().toUpperCase().endsWith(".XML") || 
+						jmeterResultsFile.getName().toUpperCase().endsWith(".CSV"))){
+					
+					if (!metricsOutputCsvFilesInitialized) {
+						metricsOutputCsvFilesInitialized = true;
+						initializeCsvMetricWriters(outputBaseCsvFileName);
+					}				
+					
+					try {
+						sampleCount = sampleCount + convertaJmeterFile(jmeterResultsFile);
+					} catch (IOException e) {
+						System.out.println( "Error: problem with processing Jmeter results file transactions " + jmeterResultsFile.getName() );
+						e.printStackTrace();
+					}
+					
+				} else {
+					System.out.println( "\n   " + jmeterResultsFile.getName() + " bypassed"  ); 
 				}
-				
-			} else {
-				System.out.println( "\n   " + jmeterResultsFile.getName() + " bypassed"  ); 
 			}
+			
+		} else {
+			throw new RuntimeException("Was unable to list file(s) from the input directory : " + argInputdirectory);
 		}
-
+		
 		baseCsvFileNameWriter.close();
 	    if (metricsOutputCsvFilesInitialized) {
 	    	closeCsvMetricWriters();
 	    }
+	    
 	    System.out.println("____________________________________" );
 	    System.out.println(sampleCount + " Total samples written" );
 	    System.out.println(" " );	    
@@ -299,7 +313,8 @@ public class ResultFilesConverter {
 	 */
 	private int convertaJmeterFile(File jmeterResultsFile) throws IOException, ParserConfigurationException, SAXException {
 		
-		BufferedReader brOneLine = new BufferedReader(new FileReader(jmeterResultsFile));
+		FileReader fileReader = new FileReader(jmeterResultsFile);
+		BufferedReader brOneLine = new BufferedReader(fileReader);
 		String firstLineOfFile = brOneLine.readLine();
 		brOneLine.close();
 		
@@ -564,7 +579,8 @@ public class ResultFilesConverter {
 	private int reformatCSVFile(File inputCsvFileName, boolean hasHeader) throws IOException {
 		
 		int samplesCreated=0; 
-		CSVReader csvReader = new CSVReader(new BufferedReader(new FileReader(inputCsvFileName)));
+		FileReader fileReader = new FileReader(inputCsvFileName);
+		CSVReader csvReader = new CSVReader(new BufferedReader(fileReader));
 		int lineCount = 0; 
 		long startLoadms = System.currentTimeMillis(); 
 		System.out.println("\n\nProcessing CSV formatted Jmeter Results File " + inputCsvFileName.getName() + " at " + new Date(startLoadms));					
@@ -609,7 +625,6 @@ public class ResultFilesConverter {
 			setFieldPositionsAssumingTheDefaultCsvLayout();
 		}
 
-		
 		String[] csvDataLineFields = csvReadNextLine(csvReader, inputCsvFileName);
 		
 	   	while ( csvDataLineFields != null ) {
@@ -623,8 +638,9 @@ public class ResultFilesConverter {
 	    		String inputFileDatatype    = csvDataLineFields[fieldPosdataType];
 	    		String success 				= csvDataLineFields[fieldPossuccess];
 
-	    		if ( ! (transactionNameLabel.startsWith(IGNORE) || 
-	    			    inputFileDatatype.equals(JMeterFileDatatypes.PARENT.getDatatypeText()) && argeXcludeResultsWithSub.equalsIgnoreCase("TRUE")) ){
+				if (!( transactionNameLabel.startsWith(IGNORE)
+						|| (inputFileDatatype.equals(JMeterFileDatatypes.PARENT.getDatatypeText())
+								&& argeXcludeResultsWithSub.equalsIgnoreCase("TRUE")) )){
     			
 	    			System.arraycopy(blankLine, 0, nextLine, 0, blankLine.length);
     			
@@ -767,7 +783,7 @@ public class ResultFilesConverter {
 			return;
 		}
 		
-		throw new RuntimeException("Logic error in writeCsvOuptput : " + inputFileDatatype + ", argMetricsfile=" + argMetricsfile + ", csvDataLine=" + csvDataLine); 
+		throw new RuntimeException("Logic error in writeCsvOuptput : " + inputFileDatatype + ", argMetricsfile=" + argMetricsfile); 
 	}	
 
 	
@@ -815,7 +831,7 @@ public class ResultFilesConverter {
 	
     public static void main( String[] args ) throws IOException, SAXException, ParserConfigurationException
     {
-        System.out.println( "Result Files Converter starting .. (v4.0.0)" );
+        System.out.println( "Result Files Converter starting .. (v4.1.0)" );
 
 //        for a quick and dirty test ...
 //        args = new String[]{"-i", "C:/Jmeter_Results/myapp", "-f", "myapp_TestResults_converted.csv", "-m", "SplitByDataType", "-e", "No", "-x", "True" };

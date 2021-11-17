@@ -66,6 +66,7 @@ public class UploadFileController implements HandlerExceptionResolver  {
 
 //		System.out.println("upload_action uploadFile: " + uploadFile  );
 		DataHunterUtils.expireSession(httpServletRequest, 1200); 
+		BufferedReader br = null;
 
 		if (file.isEmpty()) {
 			createDropdownAttributes(model);
@@ -90,7 +91,7 @@ public class UploadFileController implements HandlerExceptionResolver  {
 		try {
 			String line;
 			InputStream is = file.getInputStream();
-			BufferedReader br = new BufferedReader(new InputStreamReader(is));
+			br = new BufferedReader(new InputStreamReader(is));
 			
 			while ((line = br.readLine()) != null) {
 
@@ -115,6 +116,7 @@ public class UploadFileController implements HandlerExceptionResolver  {
 					}
 				}
 			}
+			br.close();
 
 		} catch (Exception e) {
 			System.err.println(e.getMessage());
@@ -122,6 +124,7 @@ public class UploadFileController implements HandlerExceptionResolver  {
 			model.addAttribute("sql", "n/a");
 			model.addAttribute("sqlResult", e.getMessage());
 			model.addAttribute("rowsAffected", "error occured around line " + lineCount);
+			try {br.close();} catch (Exception e1){}
 			return new ModelAndView("/upload_action", "model", model);
 		}
 

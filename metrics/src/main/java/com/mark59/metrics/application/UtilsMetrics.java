@@ -194,7 +194,7 @@ public class UtilsMetrics  {
 		} 
 
 		// sort the transaction list using the transaction names to be graphed 
-		Collections.sort(listOfTransactionsToGraphTagged, (o1, o2) -> (o1.getTxnId().compareTo(o2.getTxnId())));
+		Collections.sort(listOfTransactionsToGraphTagged, (o1, o2) -> o1.getTxnId().compareTo(o2.getTxnId()));
 		return listOfTransactionsToGraphTagged;
 	}
 

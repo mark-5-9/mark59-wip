@@ -125,7 +125,7 @@ public class DslPageFunctions  implements Serializable {
 		}
 		if (anExpectedRow != null && itsExpectedCount != null) {
 			confirmCountPoliciesActionPageOk(anExpectedRow, itsExpectedCount, countPoliciesBreakdownActionPage);
-			assertEquals(new Long(count), itsExpectedCount);
+			assertEquals(Long.valueOf(count), itsExpectedCount);
 		}
 		return count;
 	}
@@ -338,8 +338,10 @@ public class DslPageFunctions  implements Serializable {
 		for (Policy expectedPolicy : expectedPolicies) {
 			Policy actualPolicyRow =  policiesMap.get(expectedPolicy.getApplication()+":"+expectedPolicy.getIdentifier()+":"+expectedPolicy.getLifecycle());
 			assertTrue( expectedPolicy + " - not found",   actualPolicyRow != null);
-			assertEquals(expectedPolicy.getUseability(), actualPolicyRow.getUseability()); 
-			assertEquals(expectedPolicy.getOtherdata(), actualPolicyRow.getOtherdata()); 
+			if (actualPolicyRow != null) {
+				assertEquals(expectedPolicy.getUseability(), actualPolicyRow.getUseability()); 
+				assertEquals(expectedPolicy.getOtherdata(), actualPolicyRow.getOtherdata()); 
+			}
 		} 
 	}
 	

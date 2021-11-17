@@ -305,7 +305,7 @@ class ThisScript extends SeleniumAbstractJavaSamplerClient {
 };
 
 
-// >> --------- COMMENT OUT THE NEXT THREE LINES ---------  
+// >> --------- COMMENT OUT THE NEXT THREE LINES ---------     (capitalization of the SampleResult variable in the next line is deliberate) 
 org.apache.jmeter.samplers.SampleResult SampleResult = new org.apache.jmeter.samplers.SampleResult();
 SampleResult.sampleStart();
 Log4jConfigurationHelper.init(Level.INFO) ;

@@ -211,7 +211,7 @@ public class RunDAOjdbcTemplateImpl implements RunDAO
 	public List<String> findRunDates(String application){
 		List<String> runDates = new ArrayList<String>();
 
-		String sql = runsSqlNamedParms(application, "%","", false, "" );  
+		String sql = runsSqlNamedParms("%","", false, "" );  
 		
 		MapSqlParameterSource sqlparameters = new MapSqlParameterSource()
 				.addValue("application", application);	
@@ -390,7 +390,7 @@ public class RunDAOjdbcTemplateImpl implements RunDAO
 		
 		List<String> runTimes = new ArrayList<String>();
 
-		String sql = runsSqlNamedParms(application, sqlSelectRunLike, reqSqlSelectRunNotLike, useRawRunSQL, rawRunTimeSelectionSQL);
+		String sql = runsSqlNamedParms(sqlSelectRunLike, reqSqlSelectRunNotLike, useRawRunSQL, rawRunTimeSelectionSQL);
 		
 		MapSqlParameterSource sqlparameters = new MapSqlParameterSource()
 				.addValue("application", application)
@@ -451,7 +451,7 @@ public class RunDAOjdbcTemplateImpl implements RunDAO
 	public String runsSQL(String application, String sqlSelectRunLike, String reqSqlSelectRunNotLike, 
 			boolean useRawRunSQL, String rawRunTimeSelectionSQL){	
 	
-		String sql = runsSqlNamedParms(application, sqlSelectRunLike, reqSqlSelectRunNotLike, useRawRunSQL, rawRunTimeSelectionSQL);
+		String sql = runsSqlNamedParms(sqlSelectRunLike, reqSqlSelectRunNotLike, useRawRunSQL, rawRunTimeSelectionSQL);
 
 		sql = sql.replace(":application", "'" + application + "' ")
 				 .replace(":sqlSelectRunLike", "'%" +  sqlSelectRunLike.replace(".","").replace("T","").replace(":","").trim() + "%'" )
@@ -462,9 +462,7 @@ public class RunDAOjdbcTemplateImpl implements RunDAO
 	}
 	
 	
-	private String runsSqlNamedParms(String application, String sqlSelectRunLike, String reqSqlSelectRunNotLike,  
-			boolean useRawRunSQL, String rawRunTimeSelectionSQL){	
-		
+	private String runsSqlNamedParms(String sqlSelectRunLike, String reqSqlSelectRunNotLike, boolean useRawRunSQL, String rawRunTimeSelectionSQL){	
 		String sql;
 		if (useRawRunSQL){
 			sql = rawRunTimeSelectionSQL; 
@@ -477,10 +475,10 @@ public class RunDAOjdbcTemplateImpl implements RunDAO
 				 + "     and r.APPLICATION = t.APPLICATION "
 				 + "     and r.RUN_TIME    = t.RUN_TIME ";
 			
-			if (sqlSelectRunLike != "%" ){
+			if (!"%".equals(sqlSelectRunLike) ){
 				sql = sql + " AND r.RUN_TIME LIKE :sqlSelectRunLike ";  
 			}
-			if (reqSqlSelectRunNotLike != "" ){
+			if (StringUtils.isNotBlank(reqSqlSelectRunNotLike)){
 				sql = sql  + " AND NOT ( r.RUN_TIME LIKE :reqSqlSelectRunNotLike ) ";  
 			}		
 			sql = sql  + "   order by r.RUN_TIME DESC "; 

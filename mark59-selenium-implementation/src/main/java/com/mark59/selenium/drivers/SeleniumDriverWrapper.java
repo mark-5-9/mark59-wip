@@ -19,8 +19,9 @@ package com.mark59.selenium.drivers;
 import java.io.File;
 
 import org.apache.commons.codec.binary.Base64;
-import org.apache.logging.log4j.Logger;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.UnhandledAlertException;
@@ -56,7 +57,7 @@ public abstract class SeleniumDriverWrapper extends ScreenshotEnabledDriverWrapp
 			screenshot = Base64.decodeBase64(((TakesScreenshot) this.getDriverPackage()).getScreenshotAs(OutputType.BASE64));
 		} catch (Exception e) {
 			LOG.debug("Screenshot failure ("  + e.getClass().getName() + ")  Message : " + e.getMessage()); 
-			LOG.warn("Screenshot failure ("  + e.getClass().getName() + ")  Message line 1 : " + e.getMessage().split("\\r?\\n")[0]); 
+			LOG.warn("Screenshot failure ("  + e.getClass().getName() + ")  Message  Message starts: " + StringUtils.abbreviate(e.getMessage(), 100)); 
 			screenshot = ("Screenshot failure ("  + e.getClass().getName() + ")  Message : " + e.getMessage()).getBytes();
 		} 
 		return screenshot;
@@ -112,7 +113,7 @@ public abstract class SeleniumDriverWrapper extends ScreenshotEnabledDriverWrapp
 			currentURL = driver.getCurrentUrl();
 		} catch (UnhandledAlertException e) {
 			LOG.debug("UnhandledAlertException.  Message : " + e.getMessage() );
-			LOG.warn("UnhandledAlertException thrown.  Message line 1 : " + e.getMessage().split("\\r?\\n")[0]); 
+			LOG.warn("UnhandledAlertException thrown!  Message starts: " +  StringUtils.abbreviate(e.getMessage(), 100)); 
 			currentURL = "URL is not availale.  An UnhandledAlertException Exception has been thrown : " + e.getMessage();
 		}
 		
@@ -121,7 +122,7 @@ public abstract class SeleniumDriverWrapper extends ScreenshotEnabledDriverWrapp
 			pageSource = driver.getPageSource();
 		} catch (Exception e ) {
 			LOG.debug("Page Source Not Available  ("  + e.getClass().getName() + ")  .  Message : " + e.getMessage()); 
-			LOG.warn("Page Source Not Available  ("  + e.getClass().getName() + ")  .  Message line 1 : " + e.getMessage().split("\\r?\\n")[0]); 
+			LOG.warn("Page Source Not Available  ("  + e.getClass().getName() + ")  .  Message starts: " + StringUtils.abbreviate(e.getMessage(), 100)); 
 			pageSource = "Page Source Not Available.  Error message : " + e.getMessage();
 		}
 

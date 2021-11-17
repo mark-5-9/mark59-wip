@@ -58,7 +58,6 @@ public class ServerProfilesDAOjdbcTemplateImpl implements ServerProfilesDAO
 				.addValue("serverProfileName", serverProfileName);
 
 //		System.out.println(" findServerProfile : " + selectServerSQL + " : " + serverProfileName);
-		List<ServerProfile> serversList = new ArrayList<ServerProfile>();
 		NamedParameterJdbcTemplate jdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
 		List<Map<String, Object>> rows = jdbcTemplate.queryForList(selectServerSQL, sqlparameters);
 		
@@ -78,7 +77,6 @@ public class ServerProfilesDAOjdbcTemplateImpl implements ServerProfilesDAO
 		server.setConnectionTimeout((String)row.get("CONNECTION_TIMEOUT")); 		
 		server.setComment((String)row.get("COMMENT")); 		
 		server.setParameters(deserializeJsonToMap((String)row.get("PARAMETERS"))); 		
-		serversList.add(server);
 //		System.out.println("ServerProfilesDAOjdbcTemplateImpl.findServerProfile  : " + serverProfileName.toString()  ) ;		
 		return  server;
 	}
@@ -125,18 +123,6 @@ public class ServerProfilesDAOjdbcTemplateImpl implements ServerProfilesDAO
 		}	
 		return  serversList;
 	}
-	
-//	private String getServersListSelectionSQL(String selectionCol, String selectionValue){	
-//		String serversListSelectionSQL = "select SERVER_PROFILE_NAME, EXECUTOR, SERVER, ALTERNATE_SERVER_ID, USERNAME, "
-//				+ "PASSWORD, PASSWORD_CIPHER, CONNECTION_PORT, CONNECTION_TIMEOUT, COMMENT, PARAMETERS from SERVERPROFILES ";
-//		
-//		if (!selectionValue.isEmpty()  ) {			
-//			serversListSelectionSQL += "  where " + selectionCol + " like '" + selectionValue + "' ";
-//		} 
-//		serversListSelectionSQL += " order by SERVER_PROFILE_NAME ";
-//		return  serversListSelectionSQL;
-//	}
-	
 	
 	
 	@Override

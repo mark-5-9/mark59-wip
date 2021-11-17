@@ -51,7 +51,6 @@ public class CommandResponseParsersDAOjdbcTemplateImpl implements CommandRespons
 				.addValue("scriptName", scriptName);
 
 //		System.out.println(" findCommandResponseParser : " + sql + " : " + scriptName);
-		List<CommandResponseParser> commandResponseParsersList = new ArrayList<CommandResponseParser>();
 		NamedParameterJdbcTemplate jdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
 		List<Map<String, Object>> rows = jdbcTemplate.queryForList(sql, sqlparameters);
 		
@@ -68,7 +67,6 @@ public class CommandResponseParsersDAOjdbcTemplateImpl implements CommandRespons
 		commandResponseParser.setComment((String)row.get("COMMENT"));
 		commandResponseParser.setSampleCommandResponse((String)row.get("SAMPLE_COMMAND_RESPONSE"));
 		commandResponseParser.setScriptName((String)row.get("SCRIPT_NAME"));
-		commandResponseParsersList.add(commandResponseParser);
 //		System.out.println("ServerCommandLinksDAO..findCommandResponseParser : " + commandResponseParser.toString());		
 		return  commandResponseParser;
 	}

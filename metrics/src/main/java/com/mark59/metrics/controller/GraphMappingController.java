@@ -17,6 +17,7 @@
 package com.mark59.metrics.controller;
 
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -46,7 +47,8 @@ public class GraphMappingController {
 
 	@RequestMapping("/graphMappingList")
 	public ModelAndView runsList(@RequestParam(required=false) String graph) {
-		List<GraphMapping> graphMappingList = graphMappingDAO.getGraphMappings() ;				
+		List<GraphMapping> graphMappingList = new ArrayList<GraphMapping>(); 
+		graphMappingList = graphMappingDAO.getGraphMappings() ;				
 		return new ModelAndView("graphMappingList", "graphMappingList", graphMappingList);
 	}	
 	
@@ -59,7 +61,6 @@ public class GraphMappingController {
 		return new ModelAndView("registerGraphMapping",  "map", map);  	
 	}	
 		
-	
 	@RequestMapping("/insertGraphMapping")
 	public String insertData(@RequestParam(required=false) String reqErr,  @ModelAttribute GraphMapping graphMapping) {
 		GraphMapping existingGraphMapping = new GraphMapping();
@@ -86,14 +87,12 @@ public class GraphMappingController {
 		return new ModelAndView("editGraphMapping", "map", map);
 	}
 
-	
 	@RequestMapping("/updateGraphMapping")
 	public String updateGraphMapping( @ModelAttribute GraphMapping graphMapping) {
 		graphMappingDAO.updateGraphMapping(graphMapping);
 		return "redirect:/graphMappingList";
 	}
 
-	
 	@RequestMapping("/deleteGraphMapping")
 	public String deleteGraphMapping(@RequestParam String graph) {
 		System.out.println("GraphMappingController:deleteGraphMapping : graph=" + graph  );	

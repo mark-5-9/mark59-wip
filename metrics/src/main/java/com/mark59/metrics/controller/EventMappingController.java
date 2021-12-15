@@ -41,6 +41,7 @@ import com.mark59.metrics.data.eventMapping.dao.EventMappingDAO;
  * @author Philip Webb
  * Written: Australian Winter 2019  
  */
+
 @Controller
 public class EventMappingController {
 	
@@ -107,8 +108,9 @@ public class EventMappingController {
 			eventMappingDAO.insertData(eventMapping);
 
 			Map<String, Object> parmsMap = new HashMap<String, Object>(); 
-
-			List<EventMapping> eventMappingList = eventMappingDAO.findEventMappings("METRIC_SOURCE", eventMapping.getMetricSource());	
+			
+			List<EventMapping> eventMappingList = new ArrayList<EventMapping>(); 
+			eventMappingList = eventMappingDAO.findEventMappings("METRIC_SOURCE", eventMapping.getMetricSource());	
 			List<String>metricSources    = populateMetricSourceDropdown();
 			metricSources.add(0, "");			
 			List<String>performanceTools = populatePerformanceToolsDropdown();		

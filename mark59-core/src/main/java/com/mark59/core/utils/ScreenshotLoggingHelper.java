@@ -52,7 +52,7 @@ public class ScreenshotLoggingHelper {
 	/**
 	 * private constructor to ensure deleteDirectory can only be executed in this class (to prevent multiple calls to deleteDirectory)
 	 */
-	private  ScreenshotLoggingHelper() throws IOException {
+	private  ScreenshotLoggingHelper(PropertiesReader pr) throws IOException {
 		String directory = null;
 		try {
 			directory = PropertiesReader.getInstance().getProperty(PropertiesKeys.MARK59_PROP_SCREENSHOT_DIRECTORY);
@@ -152,12 +152,13 @@ public class ScreenshotLoggingHelper {
 
 			
 	/**
+	 * @param pr PropertiesReader
 	 * @return an existing or otherwise new ScreenshotLoggingHelper
 	 * @throws IOException when trying to read the properties file
 	 */
-	public static synchronized ScreenshotLoggingHelper initialiseDirectory() throws IOException {
+	public static synchronized ScreenshotLoggingHelper initialiseDirectory(PropertiesReader pr) throws IOException {
 		if(instance == null) {
-			instance = new ScreenshotLoggingHelper();
+			instance = new ScreenshotLoggingHelper(pr);
 		}
 		return instance;
 	}

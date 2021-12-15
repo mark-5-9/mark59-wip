@@ -65,7 +65,8 @@ public class CountPoliciesBreakdownController {
 //		System.out.println("countPoliciesBreakdownAction PolicySelectionCriteria="  + policySelectionCriteria );
 		
 		SqlWithParms sqlWithParms = policiesDAO.constructCountPoliciesBreakdownSql(policySelectionCriteria);
-		List<CountPoliciesBreakdown> countPoliciesBreakdownList = policiesDAO.runCountPoliciesBreakdownSql(sqlWithParms);
+		List<CountPoliciesBreakdown> countPoliciesBreakdownList = new ArrayList<CountPoliciesBreakdown>();
+		countPoliciesBreakdownList = policiesDAO.runCountPoliciesBreakdownSql(sqlWithParms);
 
 		model.addAttribute("countPoliciesBreakdownList", countPoliciesBreakdownList);		
 		int rowsAffected = countPoliciesBreakdownList.size();

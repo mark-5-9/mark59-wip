@@ -167,7 +167,7 @@ public class SeleniumDriverFactory implements DriverWrapperFactory {
 		}
 		
 		try {
-			ScreenshotLoggingHelper.initialiseDirectory();
+			ScreenshotLoggingHelper.initialiseDirectory(pr);
 		} catch (IOException e) {
 			LOG.fatal("Failed on invoke of ScreenshotLoggingHelper.initialiseDirectory");
 			e.printStackTrace();			
@@ -235,7 +235,7 @@ public class SeleniumDriverFactory implements DriverWrapperFactory {
 		
 		// Set browser dimensions
 		if (arguments.containsKey(BROWSER_DIMENSIONS) && StringUtils.isNotBlank(arguments.get(BROWSER_DIMENSIONS))) {	
-			String browserDimArray[] = StringUtils.split(arguments.get(BROWSER_DIMENSIONS), ",");
+			String browserDimArray[] = arguments.get(BROWSER_DIMENSIONS).trim().split("\\s*,\\s*");
 			
 			if ( browserDimArray.length == 2  && StringUtils.isNumeric(browserDimArray[0]) && StringUtils.isNumeric(browserDimArray[1])){
 				int width  = Integer.parseInt(browserDimArray[0]);
@@ -261,7 +261,8 @@ public class SeleniumDriverFactory implements DriverWrapperFactory {
 		// Set additional option arguments
 		if (arguments.containsKey(ADDITIONAL_OPTIONS ) 
 				&& StringUtils.isNotBlank(arguments.get(ADDITIONAL_OPTIONS))){
-			java.util.List<java.lang.String> argumentsList =  Arrays.asList(StringUtils.split(arguments.get(ADDITIONAL_OPTIONS), ","));
+			//convert the comma delimited input string to a list of strings .. 
+			java.util.List<java.lang.String> argumentsList = Arrays.asList(arguments.get(ADDITIONAL_OPTIONS).split("\\s*,\\s*"));
 			builder.setAdditionalOptions(argumentsList);
 		}
 
@@ -283,12 +284,12 @@ public class SeleniumDriverFactory implements DriverWrapperFactory {
 	
 	
 	private void setProxy(Map<String, String> arguments, SeleniumDriverBuilder<?> builder) {
-
-		java.util.List<java.lang.String> proxyArgumentsList = Arrays.asList(StringUtils.split(arguments.get(PROXY), ","));
+		java.util.List<java.lang.String> proxyArgumentsList = Arrays.asList(arguments.get(PROXY).split("\\s*,\\s*"));
+		
 		Map<String, Object> rawMap = new TreeMap<String, Object>();
 		
 		for (String proxyArgumentString : proxyArgumentsList) {
-			String[] proxyArgumentArray =  StringUtils.split(proxyArgumentString, "=");
+			String[] proxyArgumentArray = proxyArgumentString.split("=");
 			if (proxyArgumentArray.length != 2) { 
 			     throw new IllegalArgumentException("Unexpected PROXY argument - expected a key-value pair delimited by '=' symbol but got : [" + proxyArgumentString + "]."   );
 			}

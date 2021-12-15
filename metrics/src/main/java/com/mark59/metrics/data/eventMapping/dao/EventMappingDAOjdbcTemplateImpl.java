@@ -169,7 +169,8 @@ public class EventMappingDAOjdbcTemplateImpl implements EventMappingDAO
 	@Override
 	public boolean doesLrEventMapEntryMatchThisEventMapping(String mdbEventType, String mdbEventName, EventMapping eventMapping) {
 //		System.out.println("doesLrEventMapEntryMatchThisEventMapping : " + mdbEventType + " : " + mdbEventName + " : " + eventMapping.getMetricSource() + ":" + eventMapping.getMatchWhenLike() ); 	
-	
+		Integer matchCount  = 0;
+		
 		String[] matchWhenLikeSplit = eventMapping.getMetricSource().split("_", 2);
 		
 		if (matchWhenLikeSplit.length != 2) {
@@ -186,7 +187,7 @@ public class EventMappingDAOjdbcTemplateImpl implements EventMappingDAO
 				.addValue("mdbEventName", eventMapping.getMatchWhenLike());
 		
 		NamedParameterJdbcTemplate jdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
-		Integer matchCount = Integer.valueOf(jdbcTemplate.queryForObject(sql, sqlparameters, String.class));		
+		matchCount = Integer.valueOf(jdbcTemplate.queryForObject(sql, sqlparameters, String.class));		
 		
 		if ( matchCount > 0 ){
 //			System.out.println("     Event matched using sql: " + sql  + "     RESULT = " +  matchCount  );	
@@ -233,9 +234,8 @@ public class EventMappingDAOjdbcTemplateImpl implements EventMappingDAO
 		eventMapping.setMatchWhenLike((String)row.get("MATCH_WHEN_LIKE"));
 		try {
 			eventMapping.setMatchWhenLikeURLencoded(URLEncoder.encode((String)row.get("MATCH_WHEN_LIKE"), "UTF-8") ) ;
-		} catch (UnsupportedEncodingException e) {	
-			System.out.println("EventMapping Dao UnsupportedEncodingException (" + eventMapping.getMatchWhenLike() + ") " + e.getMessage());
-		}	  
+		} catch (UnsupportedEncodingException e) {	e.printStackTrace();	}	  
+		
 		eventMapping.setTargetNameLB((String)row.get("TARGET_NAME_LB"));
 		eventMapping.setTargetNameRB((String)row.get("TARGET_NAME_RB"));
 		eventMapping.setIsPercentage((String)row.get("IS_PERCENTAGE"));

@@ -5,7 +5,7 @@
 
 	<groupId>com.mark59</groupId>
 	<artifactId>mark59-selenium-sample-dsl</artifactId>
-	<version>4.1.0</version>
+	<version>4.0.1</version>
 	<packaging>jar</packaging>
 
 	<name>mark59-selenium-sample-dsl</name>
@@ -21,7 +21,7 @@
 		<dependency>
 			<groupId>com.mark59</groupId>
 			<artifactId>mark59-selenium-implementation</artifactId>
-			<version>4.1</version>
+			<version>4.0.0</version>
 		</dependency>
 
 		<!--if you want to pick up a later version of devtools than provided, you can add the dep here .. -->
@@ -44,7 +44,7 @@
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
-			<version>4.13.2</version>
+			<version>4.13</version>
 			<scope>test</scope>
 		</dependency>
 

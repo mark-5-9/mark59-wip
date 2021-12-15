@@ -225,8 +225,9 @@ public class PoliciesDAOjdbcTemplateImpl implements PoliciesDAO
 	
 	@Override	
 	public int runCountSql(SqlWithParms sqlWithParms){
+		Integer rowCount  = 0;
 		NamedParameterJdbcTemplate jdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
-		Integer rowCount = Integer.valueOf(jdbcTemplate.queryForObject(sqlWithParms.getSql(), sqlWithParms.getSqlparameters(), String.class));
+		rowCount = Integer.valueOf(jdbcTemplate.queryForObject(sqlWithParms.getSql(), sqlWithParms.getSqlparameters(), String.class));
 		return rowCount;
 	};	
 	
@@ -396,10 +397,8 @@ public class PoliciesDAOjdbcTemplateImpl implements PoliciesDAO
 		if (1 != lockWasReleased ){
 			throw new RuntimeException("Failed to set release lock for query " + sql + " [" + lockWasReleased + "]");
 		}
-		if (singleConnectionJdbcTemplate.getDataSource() != null
-				&& singleConnectionJdbcTemplate.getDataSource().getConnection() != null) {
-			singleConnectionJdbcTemplate.getDataSource().getConnection().close();
-		}
+		singleConnectionJdbcTemplate.getDataSource().getConnection().close();
+		
 //		System.out.println("sql lock : " + sql + "(" + lockResult + ")"  );
 	}
 
@@ -424,9 +423,8 @@ public class PoliciesDAOjdbcTemplateImpl implements PoliciesDAO
 		if (1 != lockWasReleased ){
 			throw new RuntimeException("Failed to set release lock for query " + sql + " [" + lockWasReleased + "]");
 		}
-		if (jdbcTemplate.getDataSource() != null && jdbcTemplate.getDataSource().getConnection() != null) {
-			jdbcTemplate.getDataSource().getConnection().close();
-		}		
+		jdbcTemplate.getDataSource().getConnection().close();
+		
 //		System.out.println("sql lock : " + sql + "(" + lockResult + ")"  );
 	}
 	

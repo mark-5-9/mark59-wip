@@ -17,7 +17,6 @@ public class SubmitBtn extends Elemental {
 		super(driver, by, FluentWaitFactory.DEFAULT_TIMEOUT, FluentWaitFactory.DEFAULT_POLLING);
 	}
 
-	@Override
 	public SubmitBtn waitUntilClickable() {
 		return (SubmitBtn) super.waitUntilClickable();
 	}

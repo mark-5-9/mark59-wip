@@ -51,7 +51,8 @@ public class RunsController {
 			// when no application request parameter has been sent, take the first application 
 			reqApp = (String)applicationList.get(1);
 		}
-		List<Run> runsList = runDAO.findRuns(reqApp) ;
+		List<Run> runsList = new ArrayList<Run>(); 
+		runsList = runDAO.findRuns(reqApp) ;
 		
 		Map<String, Object> map = new HashMap<String, Object>(); 
 		map.put("runsList",runsList);
@@ -95,7 +96,8 @@ public class RunsController {
 	}
 
 	private List<String> populateApplicationDropdown() {
-		List<String> applicationList = runDAO.findApplications();
+		List<String> applicationList = new ArrayList<String>();
+		applicationList = runDAO.findApplications();
 		applicationList.add(0, "");
 		return applicationList;
 	}		

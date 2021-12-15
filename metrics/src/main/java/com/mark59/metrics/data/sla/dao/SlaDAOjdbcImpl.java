@@ -44,7 +44,6 @@ public class SlaDAOjdbcImpl implements SlaDAO {
 	private DataSource dataSource;
 
 	
-	@Override
 	public void insertData(Sla sla) {
 
 		String sql = "INSERT INTO SLA "
@@ -135,7 +134,7 @@ public class SlaDAOjdbcImpl implements SlaDAO {
 					existingSla.setSlaRefUrl(passedSlaRefUrl);
 				}
 				if (existingSla.getSlaPassCount() == null){
-					existingSla.setSlaPassCount(-1L);
+					existingSla.setSlaPassCount(new Long(-1));
 				}				
 				sql = "UPDATE SLA set SLA_PASS_COUNT = ?, SLA_REF_URL = ? where APPLICATION=? and TXN_ID = ? and IS_CDP_TXN = ?";
 				JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
@@ -247,7 +246,6 @@ public class SlaDAOjdbcImpl implements SlaDAO {
 	}
 	
 	
-	@Override
 	public List<Sla> getSlaList() {
 		String sql = "select * from SLA order by APPLICATION, TXN_ID";
 		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
@@ -357,11 +355,11 @@ public class SlaDAOjdbcImpl implements SlaDAO {
 		if (sla.getSla99thResponse() == null)
 			sla.setSla99thResponse(new BigDecimal(-1.0));
 		if (sla.getSlaPassCount() == null)
-			sla.setSlaPassCount(-1L);
+			sla.setSlaPassCount(new Long(-1));
 		if (sla.getSlaPassCountVariancePercent() == null)
 			sla.setSlaPassCountVariancePercent(new BigDecimal(10.0));
 		if (sla.getSlaFailCount() == null)
-			sla.setSlaFailCount(-1L);
+			sla.setSlaFailCount(new Long(-1));
 		if (sla.getSlaFailPercent() == null)
 			sla.setSlaFailPercent(new BigDecimal(2.0));
 		if (sla.getTxnDelay() == null)
@@ -369,7 +367,7 @@ public class SlaDAOjdbcImpl implements SlaDAO {
 		if (sla.getXtraNum() == null)
 			sla.setXtraNum(new BigDecimal(0.0));
 		if (sla.getXtraInt() == null)
-			sla.setXtraInt(0L);		
+			sla.setXtraInt(new Long(0));		
 		return sla;
 	}
 	

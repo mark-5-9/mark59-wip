@@ -99,9 +99,6 @@ public interface CommandDriver {
 		String line = "";
 				
 		Process p = null;
-		BufferedReader errors = null;
-		BufferedReader reader = null;
-		
 		try {
 			if (CommandExecutorDatatypes.WMIC_WINDOWS.equals(executorType)){
 				p = Runtime.getRuntime().exec(runtimeCommand);
@@ -111,24 +108,24 @@ public interface CommandDriver {
 			p.waitFor();
 			
 			if ( ! Mark59Utils.resovesToTrue(ingoreStderr)){
-				errors = new BufferedReader(new InputStreamReader(p.getErrorStream()));
+			
+				BufferedReader errors = new BufferedReader(new InputStreamReader(p.getErrorStream()));
+				
 				while ((line = errors.readLine()) != null) {
 					if (line.length() > 0) {
 						commandDriverResponse.setCommandFailure(true);
 						rawCommandResponseLines.add(line.trim());
 					}
 				}
-				errors.close();
 			} 			
 
-			reader = new BufferedReader(new InputStreamReader(p.getInputStream()));
+			BufferedReader reader = new BufferedReader(new InputStreamReader(p.getInputStream()));
+			
 			while ((line = reader.readLine()) != null) {
 				if (line.length() > 0) {
 					rawCommandResponseLines.add(line.trim());
 				}
 			}
-			reader.close();
-			p.destroy();
 			
 		} catch (Exception e) {
 			commandDriverResponse.setCommandFailure(true);			
@@ -136,12 +133,9 @@ public interface CommandDriver {
 			e.printStackTrace(new PrintWriter(stackTrace));
 			commandLog+= "<br>A faiure has occured attempting to execute the command : " + e.getMessage() + "<br>" + stackTrace.toString() + "<br>";
 			LOG.warn("Command failure : " + runtimeCommand + ":\n" + e.getMessage() + stackTrace.toString());
-			try {errors.close();} catch (Exception e1){}
-			try {reader.close();} catch (Exception e1){}
-			try {p.destroy();} catch (Exception e1){}			
 		}
-		
 		rawCommandResponseLines.forEach(LOG::debug);
+
 		commandDriverResponse.setRawCommandResponseLines(rawCommandResponseLines);
 		commandDriverResponse.setCommandLog(commandLog);
 		return commandDriverResponse;

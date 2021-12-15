@@ -46,7 +46,7 @@ public class SimpleAES {
 			key = myKey.getBytes("UTF-8");
 			sha = MessageDigest.getInstance("SHA-1");
 		} catch (Exception e) {
-			System.out.println("Error while setting key (" + myKey + ") : " + e.toString());
+			e.printStackTrace();
 		}
 		key = sha.digest(key);
 		key = Arrays.copyOf(key, 16);

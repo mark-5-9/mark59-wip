@@ -39,7 +39,7 @@ public class MetricSlaDAOjdbcImpl implements MetricSlaDAO {
 	@Autowired
 	private DataSource dataSource;
 
-	@Override
+	
 	public void insertData(MetricSla metricSla) {
 		String sql = "INSERT INTO METRICSLA "
 				+ "(APPLICATION, METRIC_NAME, METRIC_TXN_TYPE, VALUE_DERIVATION, SLA_MIN, SLA_MAX, IS_ACTIVE, COMMENT) VALUES (?,?,?,?,?,?,?,?)";
@@ -174,11 +174,12 @@ public class MetricSlaDAOjdbcImpl implements MetricSlaDAO {
 	}
 	
 	
-	@Override	
 	public List<MetricSla> getMetricSlaList() {
+		List<MetricSla> metricSlaList = new ArrayList<MetricSla>();
 		String sql = "select * from METRICSLA order by APPLICATION, METRIC_NAME, METRIC_TXN_TYPE, VALUE_DERIVATION ";
+//		System.out.println("getSla sql = " + sql);
 		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
-		List<MetricSla> metricSlaList = jdbcTemplate.query(sql, new MetricSlaRowMapper());
+		metricSlaList = jdbcTemplate.query(sql, new MetricSlaRowMapper());
 		return metricSlaList;
 	}
 	

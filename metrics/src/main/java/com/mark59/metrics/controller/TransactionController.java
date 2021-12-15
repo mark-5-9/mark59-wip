@@ -247,7 +247,8 @@ public class TransactionController {
 	
 	
 	private List<String> populateApplicationDropdown() {
-		List<String> applicationList = runDAO.findApplications();
+		List<String> applicationList = new ArrayList<String>();
+		applicationList = runDAO.findApplications();
 		return applicationList;
 	}		
 	

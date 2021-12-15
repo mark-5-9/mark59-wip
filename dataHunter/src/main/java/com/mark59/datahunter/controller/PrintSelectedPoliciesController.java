@@ -64,7 +64,8 @@ public class PrintSelectedPoliciesController {
 		policySelectionCriteria.setSelectClause(" application, identifier, lifecycle, useability,otherdata, created, updated, epochtime ");
 		SqlWithParms sqlWithParms = policiesDAO.constructSelectPoliciesSql(policySelectionCriteria);
 		
-		List<Policies> policiesList = policiesDAO.runSelectPolicieSql(sqlWithParms);
+		List<Policies> policiesList = new ArrayList<Policies>();
+		policiesList = policiesDAO.runSelectPolicieSql(sqlWithParms);
 
 		model.addAttribute("policiesList", policiesList);
 		model.addAttribute("sql", sqlWithParms);

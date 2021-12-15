@@ -16,6 +16,7 @@
 
 package com.mark59.servermetricsweb.controller;
 
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -67,6 +68,8 @@ import com.mark59.servermetricsweb.utils.AppConstantsServerMetricsWeb;
 import com.mark59.servermetricsweb.utils.AppConstantsServerMetricsWeb.CommandExecutorDatatypes;
 import com.mark59.servermetricsweb.utils.ServerMetricsWebUtils;
 
+
+
 /**
  * @author Philip Webb
  * Written: Australian Summer 2020  
@@ -94,6 +97,8 @@ public class ServerProfileController {
 	BaseDAO baseDAO; 
 	
 	
+	
+	
 	@GetMapping("/downloadServerProfiles")
 	public ResponseEntity<ByteArrayResource> downloadServerProfiles() {
 		try {
@@ -112,6 +117,8 @@ public class ServerProfileController {
 	
 	
 	public ByteArrayOutputStream serverProfilesToExcelFile() throws IOException {
+		int columnCount = 0;
+		int rowIndex = 0;
 		
 		Workbook workbook = new XSSFWorkbook();
 		CellStyle headerCellStyle = workbook.createCellStyle();
@@ -122,6 +129,7 @@ public class ServerProfileController {
 		headerCellStyle.setFont(headerFont);
 		headerCellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
 		
+		
 		Sheet sheet = workbook.createSheet("SERVERPROFILES");
 
 		DataFormat fmt = workbook.createDataFormat();
@@ -129,12 +137,13 @@ public class ServerProfileController {
 		textStyle.setDataFormat(fmt.getFormat("@"));
 		sheet.setDefaultColumnStyle(0, textStyle);
 		
-		int columnCount = createHeaderRow(sheet, headerCellStyle, "SERVERPROFILES");
-		int rowIndex = 1;
+		columnCount = createHeaderRow(sheet, headerCellStyle, "SERVERPROFILES");
+		rowIndex = 1;
 		List<ServerProfile> serverProfiles = serverProfilesDAO.findServerProfiles();
-		
 		for (ServerProfile serverProfile : serverProfiles) {
 			Row dataRow = sheet.createRow(rowIndex);
+			
+			// System.out.println("serverProfile [" + serverProfile + "]" ); 
 			dataRow.createCell(0).setCellValue(serverProfile.getServerProfileName());			
 			dataRow.createCell(1).setCellValue(serverProfile.getExecutor());
 			dataRow.createCell(2).setCellValue(serverProfile.getServer());
@@ -149,6 +158,7 @@ public class ServerProfileController {
 			rowIndex++;
 		}
 		autoSizeColumns(sheet, columnCount);
+
 		
 		sheet = workbook.createSheet("SERVERCOMMANDLINKS");
 		columnCount = createHeaderRow(sheet, headerCellStyle, "SERVERCOMMANDLINKS");
@@ -161,6 +171,7 @@ public class ServerProfileController {
 			rowIndex++;
 		}
 		autoSizeColumns(sheet, columnCount);
+
 		
 		sheet = workbook.createSheet("COMMANDS");
 		columnCount = createHeaderRow(sheet, headerCellStyle, "COMMANDS");
@@ -178,6 +189,7 @@ public class ServerProfileController {
 		}
 		autoSizeColumns(sheet, columnCount);
 	
+		
 		sheet = workbook.createSheet("COMMANDPARSERLINKS");
 		columnCount = createHeaderRow(sheet, headerCellStyle, "COMMANDPARSERLINKS");
 		rowIndex = 1;
@@ -190,6 +202,7 @@ public class ServerProfileController {
 		}
 		autoSizeColumns(sheet, columnCount);
 	
+		
 		sheet = workbook.createSheet("COMMANDRESPONSEPARSERS");
 		columnCount = createHeaderRow(sheet, headerCellStyle, "COMMANDRESPONSEPARSERS");
 		rowIndex = 1;
@@ -229,6 +242,7 @@ public class ServerProfileController {
 			sheet.autoSizeColumn(i);
 		}
 	}
+	
 	
 
 	@RequestMapping("/registerServerProfile")
@@ -351,6 +365,7 @@ public class ServerProfileController {
 			return new ModelAndView("registerServerProfile", "map", map);
 		}
 		
+		
 		ServerProfile existingServerProfile = serverProfilesDAO.findServerProfile(serverProfile.getServerProfileName());
 		
 		if (existingServerProfile == null ){  //not trying to add something already there, so go ahead..
@@ -439,6 +454,7 @@ public class ServerProfileController {
 	}
 	
 	
+	
 	@RequestMapping("/copyServerProfile")
 	public String copyServerProfile(@RequestParam String reqServerProfileName, @RequestParam(required=false) String reqExecutor,  
 			@ModelAttribute ServerProfileEditingForm serverProfileEditingForm, Model model) {
@@ -490,51 +506,51 @@ public class ServerProfileController {
 		return "editServerProfile";
 	}
 
-	@RequestMapping("/updateServerProfile")
-	public ModelAndView updateServerProfile(@RequestParam(required = false) String reqExecutor,
-			@ModelAttribute ServerProfileEditingForm serverProfileEditingForm) {
 
+
+	@RequestMapping("/updateServerProfile")
+  public ModelAndView updateServerProfile(@RequestParam(required=false) String reqExecutor, @ModelAttribute ServerProfileEditingForm serverProfileEditingForm) {
+	
 //		System.out.println("updateServerProfile cmd change : " + serverProfileEditingForm.getSelectedScriptCommandNameChanged() );
 //		System.out.println("updateServerProfile cmd        : " + serverProfileEditingForm.getSelectedScriptCommandName());
-
-		if ("true".equalsIgnoreCase(serverProfileEditingForm.getSelectedScriptCommandNameChanged())) {
-			// rebuild form with the newly selected cmd params
+		
+		if ("true".equalsIgnoreCase(serverProfileEditingForm.getSelectedScriptCommandNameChanged())){
+			//rebuild form with the newly selected cmd params
 			serverProfileEditingForm.setCommandNames(createListOfAllGroovyScriptCommands());
-
+			
 			Command command = commandsDAO.findCommand(serverProfileEditingForm.getSelectedScriptCommandName());
 			List<CommandParameter> commandParameters = new ArrayList<CommandParameter>();
-			if (command != null) {
+			if (command != null ) {
 				for (String paramName : command.getParamNames()) {
-					commandParameters.add(new CommandParameter(paramName, ""));
-				}
+					commandParameters.add(new CommandParameter(paramName, "") );
+				} 
 			}
 			serverProfileEditingForm.setCommandParameters(commandParameters);
-			serverProfileEditingForm.setSelectedScriptCommandNameChanged("false");
-
-			Map<String, Object> map = new HashMap<String, Object>();
+			serverProfileEditingForm.setSelectedScriptCommandNameChanged("false"); ;
+			Map<String, Object> map = new HashMap<String, Object>(); 		
 			map.put("reqExecutor", reqExecutor);
-			map.put("serverProfileEditingForm", serverProfileEditingForm);
+			map.put("serverProfileEditingForm", serverProfileEditingForm);		
 			return new ModelAndView("editServerProfile", "map", map);
 		}
-
+		
 		ServerProfile serverProfile = serverProfileEditingForm.getServerProfile();
 		List<String> commandNames = new ArrayList<String>();
-
-		if (CommandExecutorDatatypes.GROOVY_SCRIPT.getExecutorText().equals(serverProfile.getExecutor())) {
-			commandNames.add(serverProfileEditingForm.getSelectedScriptCommandName());
-			serverProfile.setParameters(
-					ServerMetricsWebUtils.createParmsMap(serverProfileEditingForm.getCommandParameters()));
+		
+		if (CommandExecutorDatatypes.GROOVY_SCRIPT.getExecutorText().equals(serverProfile.getExecutor())){
+			commandNames.add(serverProfileEditingForm.getSelectedScriptCommandName()); 
+			serverProfile.setParameters(ServerMetricsWebUtils.createParmsMap(serverProfileEditingForm.getCommandParameters()));
 		} else {
 			commandNames = createListOfSelectedCommands(serverProfileEditingForm.getCommandSelectors());
 		}
 		serverProfilesDAO.updateServerProfile(serverProfile);
 		serverCommandLinksDAO.updateServerCommandLinksForServerProfileName(serverProfile.getServerProfileName(), commandNames);
-
-		Map<String, Object> map = createMapOfDropdowns();
+		
+		Map<String, Object> map = createMapOfDropdowns();			
 		map.put("reqExecutor", reqExecutor);
-		map.put("serverProfileEditingForm", serverProfileEditingForm);
+		map.put("serverProfileEditingForm", serverProfileEditingForm);		
 		return new ModelAndView("viewServerProfile", "map", map);
 	}
+
 
 	@RequestMapping("/deleteServerProfile")
 	public String deleteServerProfile(@RequestParam String reqServerProfileName, @RequestParam String reqExecutor) {
@@ -542,6 +558,7 @@ public class ServerProfileController {
 		serverProfilesDAO.deleteServerProfile(reqServerProfileName);
 		return "redirect:/serverProfileList?reqExecutor=" + reqExecutor;
 	}
+	
 	
 
 	private String selectedScriptCommandName(ServerProfileWithCommandLinks serverProfileWithCommandLinks) {

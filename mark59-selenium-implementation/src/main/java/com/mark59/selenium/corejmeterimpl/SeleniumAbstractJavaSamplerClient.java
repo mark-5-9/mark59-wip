@@ -682,9 +682,8 @@ public abstract class SeleniumAbstractJavaSamplerClient extends AbstractJavaSamp
 		}
 
 		/**
-		 *  run a SeleniumTestThread
+		 * run a SeleniumTestThread
 		 */
-		@Override
 		public void run() {
 
 			SeleniumAbstractJavaSamplerClient testInstance = null;

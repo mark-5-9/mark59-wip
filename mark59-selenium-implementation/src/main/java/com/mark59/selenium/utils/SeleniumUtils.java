@@ -39,17 +39,13 @@ public class SeleniumUtils {
 		String version = "NotFound";
 		String chromeDriverMsg = "";
 		Process p = null;
-		BufferedReader reader = null;
 		try {
 			p = Runtime.getRuntime().exec(seleniumDriverPath);
-			reader = new BufferedReader(new InputStreamReader(p.getInputStream()));
+			BufferedReader reader = new BufferedReader(new InputStreamReader(p.getInputStream()));
 			chromeDriverMsg = reader.readLine();
-			reader.close();
-			p.destroy();
+			p.destroy();	
 			version =  StringUtils.substringBetween(chromeDriverMsg, "ChromeDriver" , "(");
 		} catch (Exception e) {
-			try {reader.close();} catch (Exception e1){}
-			try {p.destroy();} catch (Exception e1){}
 			return version + " (" + e.getMessage() + ")";
 		}
 		if (version == null) { 

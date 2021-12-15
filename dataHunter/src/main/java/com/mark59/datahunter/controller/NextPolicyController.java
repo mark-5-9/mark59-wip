@@ -67,11 +67,10 @@ public class NextPolicyController {
 			 HttpServletRequest httpServletRequest) throws SQLException {
 //		System.out.println( "lookupOrUsePathVariable :" + lookupOrUsePathVariable ); //System.out.println( "mapping :" + httpServletRequest.getServletPath() ); 
 
-		policySelectionCriteria.setSelectClause(" application, identifier, lifecycle, useability, otherdata, created, updated, epochtime ");
-
 		DataHunterUtils.expireSession(httpServletRequest);
-
 		List<Policies> policiesList = new ArrayList<Policies>();
+		
+		policySelectionCriteria.setSelectClause(" application, identifier, lifecycle, useability, otherdata, created, updated, epochtime ");
 		SqlWithParms sqlWithParms = policiesDAO.constructSelectPoliciesSql(policySelectionCriteria);
 		model.addAttribute("sql", sqlWithParms);
 		

@@ -18,35 +18,33 @@
 
 	<dependencies>
 
-		<!-- these log4J dependency entries are required to bypass the CVE-2021-44228 security exposure -->
+		<!-- these log4J dependency entries are required to bypass CVE-2021-44228 security exposure -->
 
-		<!-- https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-slf4j-impl -->
 		<dependency>
 		    <groupId>org.apache.logging.log4j</groupId>
 		    <artifactId>log4j-slf4j-impl</artifactId>
-		    <version>${log4j.version}</version><!--$NO-MVN-MAN-VER$-->
+		    <version>${log4j.version}</version>
 		</dependency>
 
-		<!-- https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-core -->
 		<dependency>
 		    <groupId>org.apache.logging.log4j</groupId>
 		    <artifactId>log4j-core</artifactId>
-		    <version>${log4j.version}</version><!--$NO-MVN-MAN-VER$-->
+		    <version>${log4j.version}</version>
 		</dependency>
 			
-		<!-- https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-1.2-api -->
 		<dependency>
 		    <groupId>org.apache.logging.log4j</groupId>
 		    <artifactId>log4j-1.2-api</artifactId>
-		    <version>${log4j.version}</version><!--$NO-MVN-MAN-VER$-->
+		    <version>${log4j.version}</version>
 		</dependency>
 
-		<!-- https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-api -->
 		<dependency>
 			<groupId>org.apache.logging.log4j</groupId>
 			<artifactId>log4j-api</artifactId>
 			<version>${log4j.version}</version>
 		</dependency>
+
+		<!-- end of log4J dependency entries are required to bypass CVE-2021-44228 security exposure -->
 
 
 		<!-- Not required for this project as it is already included as a dependency of mark59-selenium-sample-dsl (above). 

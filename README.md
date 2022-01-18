@@ -7,10 +7,17 @@ This is the <b>WORK-IN-PROGRESS</b> repository for Mark59 - be aware it may NOT 
 
 ## Releases 
 
+<p>Release 4.1<br>
+  <ul>
+    <li>Fix for log4j exposure (JMeter to 5.4.3)</li>
+    <li>Also SpringBoot to 2.6.2, H2 to 2.0.206</li>
+    <li>Selenium to 4.1.1</li>
+  </ul>  	
+
 <p>Release 4.0.1<br>
   <ul>
-    <li>Interim workaround for the log4j expsure (CVE-2021-44228 and CVE 2021-45046) <br>
-	    - Details at the mark59.com website and in the  User Guide (ch 4.)</li>	  
+    <li>Interim workaround for the log4j exposure (CVE-2021-44228 and CVE 2021-45046) <br>
+	    - Details at the mark59.com website and in the User Guide (ch 4.)</li>	  
   </ul>  	
 
 <p>Release 4.0.0<br>

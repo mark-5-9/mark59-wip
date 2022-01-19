@@ -58,6 +58,14 @@
 		    <version>3.0.7</version>
 		    <type>pom</type>
 		</dependency>
+		
+		<!-- https://mvnrepository.com/artifact/org.json/json -->
+		<!-- added for the New Relic sample (org.json.* classes)-->
+		<dependency>
+		    <groupId>org.json</groupId>
+		    <artifactId>json</artifactId>
+		    <version>20211205</version>
+		</dependency>
 
 		<dependency>
 			<groupId>org.springframework.boot</groupId>

@@ -7,6 +7,22 @@ This is the <b>WORK-IN-PROGRESS</b> repository for Mark59 - be aware it may NOT 
 
 ## Releases 
 
+<p>Release 5.1<br>
+
+  <ul>  
+	<li>Metrics UI - Same-named Groovy parameters preserved on a Command change</li> 
+	<li>Metrics UI - Limit on characters shown for a command on Command List change</li> 	
+	<li>LOG_RESULTS_SUMMARY JMeter parameter added to metrics api (for consistency with other logging options)</li>
+	<li>Metrics - default bypass of Kerberos for Nix (prevents JSch session stalling for an unconfigured implementations). 
+	    See User Guide for details</li>
+	<li>Metrics API was producing a 'no mark59.properties' warning if run in a JMeter test with no Mark59 Selenium implementations</li>
+	<li>New mark59 property mark59.print.startup.console.messages.  'true' will output some basic config messages to console</li>
+	<li>Metrics - Improved New Relic sample (now uses okhttp).  SQL 5.0 to 5.1 conversions included in Release</li>	
+	<li>spring-boot to 2.7.3</li>
+	<li>Bug: Metrics discontinues Nix commands immediately on connection failure (was attempting to run a command after the failure)</li>
+	<li>Bug: An Encryption class in Metrics was not thread-safe (caused occasional dropout of Nix/Win connections during tests</li>
+  </ul>
+
 <p>Release 5.0<br>
 
   <ul>  

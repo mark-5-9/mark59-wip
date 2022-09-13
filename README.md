@@ -21,6 +21,7 @@ This is the <b>WORK-IN-PROGRESS</b> repository for Mark59 - be aware it may NOT 
 	<li>spring-boot to 2.7.3</li>
 	<li>Bug: Metrics discontinues Nix commands immediately on connection failure (was attempting to run a command after the failure)</li>
 	<li>Bug: An Encryption class in Metrics was not thread-safe (caused occasional dropout of Nix/Win connections during tests</li>
+	<li>Bug: Trends Load - invalid use of DUAL in PG database when loading Loadrunner mdb Session files</li>	
   </ul>
 
 <p>Release 5.0<br>

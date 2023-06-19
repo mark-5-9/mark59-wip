@@ -1,7 +1,7 @@
 This is the <b>WORK-IN-PROGRESS</b> repository for Mark59 - be aware it may NOT always be in a completely consistent state.<br><br>
 
 
-## Mark59 Documention, Guides, Downloads and More ...
+## Mark59 Documention, Guides, Downloads and More ..
 
 <p>Available at the https://www.mark59.com website
 

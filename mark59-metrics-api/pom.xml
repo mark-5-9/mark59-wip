@@ -5,7 +5,7 @@
 
 	<groupId>com.mark59</groupId>
 	<artifactId>mark59-metrics-api</artifactId>
-	<version>5.3</version>
+	<version>5.4</version>
 	<packaging>jar</packaging>
 
 	<name>mark59-metrics-api</name>
@@ -19,38 +19,18 @@
 
 
 	<dependencies>
-	
-		<!-- The logging exclusion is because mark59's core class Log4jConfigurationHelper expects
-		     a log4j binding as used in server-metrics-web, not SpringBoot's Logback binding.  
-		     Also, groovy-all version between web application and JMeter may differ, so excluded 
-		     (was changed to 3.0.11 for JMeter 5.5) -->
+		
 		<dependency>
 			<groupId>com.mark59</groupId>
-			<artifactId>mark59-metrics</artifactId>
-			<exclusions>
-				<exclusion>
-					<groupId>org.springframework.boot</groupId>
-					<artifactId>spring-boot-starter-logging</artifactId>
-				</exclusion>
-				<exclusion>
-				    <groupId>org.codehaus.groovy</groupId>
-				    <artifactId>groovy-all</artifactId>
-				</exclusion>				
-			</exclusions>				
-			<version>5.3</version>
+			<artifactId>mark59-metrics-common</artifactId>
+			<version>5.4</version>
 		</dependency>
-	
+		
 		<dependency>
 			<groupId>org.apache.jmeter</groupId>
 			<artifactId>ApacheJMeter_java</artifactId>
 			<version>5.5</version>
 			<scope>provided</scope>
-		</dependency>
-		
-		<dependency>
-			<groupId>com.jcraft</groupId>
-			<artifactId>jsch</artifactId>
-			<version>0.1.55</version>
 		</dependency>
 		
 		<dependency>

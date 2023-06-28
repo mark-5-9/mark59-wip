@@ -52,7 +52,7 @@ public class ServerProfileRunnerViaExcelTest  {
     public final void testServerProfileRunnerUsingSimpleScriptSampleRunnerViaExcel() throws EncryptedDocumentException, IOException
     {
 		String testModeNo = "Y";  // a hack to get the test summary
-		File excelFile = new File("./src/test/resources/simpleSheetWithLocalhostProfileForEachOs/mark59serverprofiles.xlsx");
+		File excelFile = new File("./src/test/resources/simpleXlsx/mark59serverprofiles.xlsx");
 		String reqServerProfileName = "SimpleScriptSampleRunner";
     	 
     	Workbook workbook = WorkbookFactory.create(excelFile, null, true);  // Factory class necessary to avoid excel file being 'touched' 
@@ -103,7 +103,7 @@ public class ServerProfileRunnerViaExcelTest  {
     public final void testServerProfileRunnerUsingDuffSimpleScriptSampleRunnerExcelSheet() throws EncryptedDocumentException, IOException
     {
 		String testModeNo = "Y"; // a hack to get the test summary
-		File excelFile = new File("./src/test/resources/duffSimpleSheetWithLocalhostProfileForEachOs/mark59serverprofiles.xlsx");
+		File excelFile = new File("./src/test/resources/duffSimple/mark59serverprofiles.xlsx");
 		String reqServerProfileName = "SimpleScriptSampleRunner";
     	 
     	Workbook workbook = WorkbookFactory.create(excelFile, null, true);  // Factory class necessary to avoid excel file being 'touched' 

@@ -19,10 +19,44 @@
 
 	<dependencies>
 		
+   		<!-- mark59 classes only from mark59 projects, so we can use JMeter versions of deps  -->
+
+		<dependency>
+			<groupId>com.mark59</groupId>
+			<artifactId>mark59-core</artifactId>
+			<version>5.4</version>
+			<exclusions>
+				<exclusion>
+				    <groupId>*</groupId>
+				    <artifactId>*</artifactId>
+				</exclusion>
+			</exclusions>	
+		</dependency>
+		
 		<dependency>
 			<groupId>com.mark59</groupId>
 			<artifactId>mark59-metrics-common</artifactId>
 			<version>5.4</version>
+			<exclusions>
+				<exclusion>
+				    <groupId>*</groupId>
+				    <artifactId>*</artifactId>
+				</exclusion>
+<!--				<exclusion>-->
+<!--					<groupId>org.apache.jmeter</groupId>-->
+<!--					<artifactId>ApacheJMeter_java</artifactId>-->
+<!--				</exclusion>-->
+<!--				<exclusion>-->
+<!--				    <groupId>org.codehaus.groovy</groupId>-->
+<!--				    <artifactId>groovy-all</artifactId>-->
+<!--				</exclusion>-->
+<!--				<exclusion>				-->
+<!--				  	<groupId>org.codehaus.groovy</groupId>-->
+<!--  					<artifactId>groovy</artifactId>-->
+<!--				</exclusion>					-->
+				
+			</exclusions>
+
 		</dependency>
 		
 		<dependency>
@@ -31,6 +65,34 @@
 			<version>5.5</version>
 			<scope>provided</scope>
 		</dependency>
+	
+		
+		<!-- https://mvnrepository.com/artifact/org.codehaus.groovy/groovy-all -->
+<!--		<dependency>-->
+<!--		    <groupId>org.codehaus.groovy</groupId>-->
+<!--		    <artifactId>groovy-all</artifactId>-->
+<!--		    <version>3.0.11</version>-->
+<!--		    <type>pom</type>-->
+<!--		    <scope>provided</scope>-->
+<!--		</dependency>-->
+		
+		
+		
+   		<!-- add back jars from metrics-commons not included in ApacheJmeter
+   		     but used by this this project -->
+   		     
+		<dependency>
+		    <groupId>org.apache.poi</groupId>
+		    <artifactId>poi</artifactId>
+		    <version>4.1.2</version>
+		</dependency>
+      
+		<dependency>
+		    <groupId>org.apache.poi</groupId>
+		    <artifactId>poi-ooxml</artifactId>
+		    <version>4.1.2</version>
+		</dependency>
+		
 		
 		<dependency>
 			<groupId>junit</groupId>
@@ -51,7 +113,53 @@
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>3.10.1</version>
 			</plugin>
+			
+			
+			<!-- maven jar plugin and install plugins -->
+			<!-- In conjunction, these two plugins compile the classes into a jar file, and then 'install' the jar
+			     into the local repository. The jar can then be referenced (via a pom entry) to resolve dependencies
+			     in projects requiring classes from this project.  Note the 'prepare-package' phase is used in the 
+			     maven jar plugin (rather than 'compile' or 'package') to bypass an annoying eclipse error -->
 
+<!--			<plugin>-->
+<!--				<groupId>org.apache.maven.plugins</groupId>-->
+<!--				<artifactId>maven-jar-plugin</artifactId>-->
+<!--				<version>3.3.0</version>-->
+<!--				<executions>-->
+<!--					<execution>-->
+<!--						<id>create-a-jar</id>-->
+<!--						<phase>prepare-package</phase>-->
+<!--						<configuration>-->
+<!--							<classifier>client</classifier>-->
+<!--							<includes>*</includes>-->
+<!--						</configuration>-->
+<!--						<goals>-->
+<!--							<goal>jar</goal>-->
+<!--						</goals>-->
+<!--					</execution>-->
+<!--				</executions>-->
+<!--			</plugin>-->
+
+<!--			<plugin>-->
+<!--				<groupId>org.apache.maven.plugins</groupId>-->
+<!--				<artifactId>maven-install-plugin</artifactId>-->
+<!--				<version>3.1.1</version>-->
+<!--				<executions>-->
+<!--					<execution>-->
+<!--						<id>Add-to-local-repository</id>-->
+<!--						<phase>package</phase>-->
+<!--						<configuration>-->
+<!--							<packaging>jar</packaging>-->
+<!--							<file>${project.build.directory}\${project.artifactId}.jar</file>-->
+<!--						</configuration>-->
+<!--						<goals>-->
+<!--							<goal>install-file</goal>-->
+<!--						</goals>-->
+<!--					</execution>-->
+<!--				</executions>-->
+<!--			</plugin>-->
+			
+			
 			<!-- Maven Assembly Plugin -->
 			<!-- phase/goals: clean package -->
 			<!-- Wraps all the project classes and their dependencies into a single Jar 
@@ -63,7 +171,12 @@
 				<version>3.3.0</version>
 				<configuration>
 					<appendAssemblyId>false</appendAssemblyId>
-					<descriptorRefs><descriptorRef>jar-with-dependencies</descriptorRef></descriptorRefs>
+					<descriptorRefs>
+						<descriptorRef>jar-with-dependencies</descriptorRef>
+					</descriptorRefs>
+<!--					<descriptors>-->
+<!--						<descriptor>${basedir}/apiAssembly.xml</descriptor>-->
+<!--					</descriptors>-->
 				</configuration>
 				<executions>
 					<execution>

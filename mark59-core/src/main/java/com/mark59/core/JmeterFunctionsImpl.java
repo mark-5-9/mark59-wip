@@ -899,7 +899,7 @@ public class JmeterFunctionsImpl implements JmeterFunctions {
 	 * <p>Note the parent directory is created if missing (ie initial log file in the directory).
 	 * 
 	 * <p>Generally meant to be used within Mark59 to write pre-defined log types 
-	 * (eg Selenium screenshots, Chromium performance Logs, Exception stack traces), but can be invoked from 
+	 * (eg UI screenshots, Chromium performance Logs, Exception stack traces), but can be invoked from 
 	 * a user-written script to immediately write data to a Mark59 log. 
 	 * 
 	 * <p>Sample usage from a script:
@@ -966,8 +966,8 @@ public class JmeterFunctionsImpl implements JmeterFunctions {
 	
 	/**
 	 * Puts everything together to form a full mark59 log name.  Calling this method directly will result 
-	 * in a log filename being 'reserved', so the file can be created during script execution.
-	 * <p>An example of this is .HAR files creation (needs to be set during Playwright page creation, but is not 
+	 * in a log filename being 'reserved', so the file can be created later during script execution.
+	 * <p>An example of this is .HAR files creation (filename needs to be set during Playwright page creation, but is not 
 	 * created until the BrowserContext.close() is invoked at the end of the script).
 	 * <p>Note: programmatically it's just calling the private method {@link #buildFullyQualifiedLogName(String, String)}.
 	 * this public method has been created more to help show the intent of the call (to get and reserve a 

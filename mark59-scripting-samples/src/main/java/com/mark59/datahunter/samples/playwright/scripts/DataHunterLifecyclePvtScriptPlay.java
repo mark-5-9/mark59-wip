@@ -47,7 +47,7 @@ import com.microsoft.playwright.Page;
 /**
  * <p>This sample is meant to demonstrate how to structure a Mark59 playwright script (not how to use use DataHunter in a performance test -
  * see below). It uses a basic type of DSL (domain-specific language) which we suggest would be sufficient for most performance tests 
- * written using Playwright.
+ * written using Playwright.  In fact you may find any DSL classes will often be overkill for Playwright scripting.
  *        
  * <p>The reason for a simple DSL structure in Playwright, compared to that provided in the Selenium examples, basically comes down to 
  * the fact Playwright implicitly provides <code>waitUntilClickable(..)</code> on retrieval of html elements, so there's not the need 
@@ -199,11 +199,12 @@ public class DataHunterLifecyclePvtScriptPlay  extends PlaywrightAbstractJavaSam
 			jm.startTransaction("DH_lifecycle_0200_addPolicy");
 			SafeSleep.sleep(200);  // Mocking a 200 ms txn delay
 			dhpage.submitBtn().click();
-			dhpage.backLink();
+			dhpage.backLink().click(dhpage.waitUntilClickable);
 			waitForSqlResultsTextOnActionPageAndCheckOk(dhpage);						 
 			jm.endTransaction("DH_lifecycle_0200_addPolicy");
 			
 			dhpage.backLink().click(dhpage.andsleep);
+			dhpage.submitBtn().click(dhpage.waitUntilClickable);
 		} 
 		// jm.stopPlayWrightTrace("trace.zip");
 		

@@ -94,7 +94,6 @@ public class JmeterFunctionsForPlaywrightScripts extends AbstractJmeterFunctions
 
 	/**
 	 * @param context the JMeter JavaSamplerContext 
-	 * @param page  the Playwright page (intended to be the Page object used by within a script)  
 	 * @param jmeterRuntimeArgumentsMap used to override default state of Mark59 log output
 	 */
 	public JmeterFunctionsForPlaywrightScripts(JavaSamplerContext context,

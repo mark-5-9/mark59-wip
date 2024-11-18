@@ -18,7 +18,6 @@ package com.mark59.scripting;
 
 import com.mark59.core.utils.PropertiesKeys;
 import com.microsoft.playwright.Browser;
-import com.microsoft.playwright.BrowserContext;
 import com.microsoft.playwright.BrowserType;
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.options.Proxy;

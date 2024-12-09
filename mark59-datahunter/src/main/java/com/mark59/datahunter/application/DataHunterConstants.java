@@ -82,17 +82,20 @@ public class DataHunterConstants {
 	public static final String STARTS_WITH	= "STARTS_WITH";  	
 	public static final List<String>  APPLICATION_OPERATORS = Arrays.asList( EQUALS, STARTS_WITH);
 
-	public static final String UPDATE_USEABILITY_ON_EXISTING_ENTRIES 			= "UPDATE_USEABILITY_ON_EXISTING_ENTRIES";  
-	public static final String LEAVE_USEABILITY_ON_EXISTING_ENTRIES_UNCHANGED	= "LEAVE_USEABILITY_ON_EXISTING_ENTRIES_UNCHANGED";  
-	
-	public static final List<String>  UPDATE_OR_BYPASS      =  
-			Arrays.asList( UPDATE_USEABILITY_ON_EXISTING_ENTRIES, LEAVE_USEABILITY_ON_EXISTING_ENTRIES_UNCHANGED);
 	
 	public static final String UPDATE_EXISTING_ITEMS 			= "UPDATE_EXISTING_ITEMS";  
 	public static final String LEAVE_EXISTING_ITEMS_UNCHANGED	= "LEAVE_EXISTING_ITEMS_UNCHANGED";  
 	
-	public static final List<String>  UPDATE_OR_BYPASS_POLICIES      =  
+	public static final List<String>  UPDATE_OR_BYPASS_POLICIES =  
 			Arrays.asList( UPDATE_EXISTING_ITEMS, LEAVE_EXISTING_ITEMS_UNCHANGED);
+	
+	public static final String UPDATE_USEABILITY_ON_EXISTING_ENTRIES = "UPDATE_USEABILITY_ON_EXISTING_ENTRIES";  
+	public static final String CREATE_INDEXED_ENTRIES 				 = "CREATE_INDEXED_ENTRIES";
+	
+	public static final List<String>  UPDATE_OR_BYPASS_OR_INDEX_POLICIES =  
+			Arrays.asList( UPDATE_USEABILITY_ON_EXISTING_ENTRIES, LEAVE_EXISTING_ITEMS_UNCHANGED, CREATE_INDEXED_ENTRIES);
+
+	public static final String INDEXED_ROW_COUNT = "0000000000-IX";
 	
 	
 	public static final String USE	  = "USE";  
@@ -107,4 +110,6 @@ public class DataHunterConstants {
     public static final String CSV_DOWNLOAD_HEADER_TEXT = "APPLICATION,IDENTIFIER,LIFECYCLE,USEABILITY,OTHERDATA,EPOCHTIME";
 	public static final String CSV_DOWNLOAD_HEADER_QUOTES = "\"APPLICATION\",\"IDENTIFIER\",\"LIFECYCLE\",\"USEABILITY\",\"OTHERDATA\",\"EPOCHTIME\"";
 	public static final String CSV_DOWNLOAD_BLANK_LINE = ",,,,,";
+
+
 }

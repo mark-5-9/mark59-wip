@@ -88,9 +88,9 @@ function buildHomeLink() {
     </tr>      
    
     <tr>
-     <td>For existing entries</td>
+     <td>Update/Bypass existing entries<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i>or</i><br>(Re)Load as a 'Numeric Index' Set</td>
      <td>:</td>
-     <td><form:select path="updateOrBypassExisting" items="${updateOrBypass}" /></td>
+     <td><form:select path="updateOrBypassOrIndex" items="${updateOrBypassOrIndex}" /></td>
     </tr>
 
     <tr>

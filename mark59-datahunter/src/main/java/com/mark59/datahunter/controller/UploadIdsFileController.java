@@ -70,7 +70,7 @@ public class UploadIdsFileController {
 				line = line.trim();
 				lineCount++;
 				if (!DataHunterUtils.isEmpty(line)){
-					System.out.println("  <"+lineCount+"> ["+line+"]" );
+					// System.out.println("  <"+lineCount+"> ["+line+"]" );
 					
 					policies.setIdentifier(line);
 					policies.setOtherdata("");
@@ -200,7 +200,6 @@ public class UploadIdsFileController {
 		SqlWithParms sqlWithParms = policiesDAO.constructDeleteMultiplePoliciesSql(psf);
 		return policiesDAO.runDatabaseUpdateSql(sqlWithParms);
 	}
-	
 
 	private void createDropdownAttributes(Model model) {
 		List<String> usabilityList = new ArrayList<>(DataHunterConstants.USEABILITY_LIST);
@@ -210,4 +209,3 @@ public class UploadIdsFileController {
 	}
 
 }
-

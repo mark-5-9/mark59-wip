@@ -17,13 +17,19 @@
 package com.mark59.datahunter.controller;
 
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Stream;
+
+import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -37,6 +43,7 @@ import com.mark59.datahunter.application.DataHunterUtils;
 import com.mark59.datahunter.application.SqlWithParms;
 import com.mark59.datahunter.data.beans.Policies;
 import com.mark59.datahunter.data.policies.dao.PoliciesDAO;
+import com.mark59.datahunter.data.policies.dao.PoliciesRowMapper;
 import com.mark59.datahunter.model.PoliciesForm;
 import com.mark59.datahunter.model.PolicySelectionFilter;
 import com.opencsv.CSVParser;
@@ -55,22 +62,28 @@ import jakarta.servlet.http.HttpServletRequest;
 public class ManageMultiplePoliciesController {
 	
 	@Autowired
-	PoliciesDAO policiesDAO;	
+	PoliciesDAO policiesDAO;
+	
+	@Autowired  
+	private DataSource dataSource;
 		
 	
 	@RequestMapping (value = "/download_selected_policies")
 	public ResponseEntity<StreamingResponseBody> streamSelectedDataAsFile(@ModelAttribute PolicySelectionFilter policySelectionFilter, Model model) {
 
 		SqlWithParms sqlWithParms = policiesDAO.constructSelectPoliciesFilterSql(policySelectionFilter, false);
-		List<Policies> policiesList = policiesDAO.runSelectPolicieSql(sqlWithParms);
+		NamedParameterJdbcTemplate jdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
 		CSVParser csvParser = new CSVParser();
-		
+				
 		StreamingResponseBody responseBody = response -> {
 			response.write((csvParser.parseToLine(DataHunterConstants.CSV_DOWNLOAD_HEADER, true)+"\n").getBytes());
 			response.flush();
 			String csvItemLine;
 			
-			for (Policies policy : policiesList) {
+			Stream<Policies> policiesStream = jdbcTemplate.queryForStream(sqlWithParms.getSql(), sqlWithParms.getSqlparameters(), new PoliciesRowMapper());
+//			for (Policies policy : policiesList) {
+			for (Policies policy : (Iterable<Policies>) () -> policiesStream.iterator()) {
+				// System.out.println("Stream :" + policy);
 				csvItemLine = csvParser.parseToLine(
 						new String[]{policy.getApplication(), policy.getIdentifier(), policy.getLifecycle(),
 								policy.getUseability(), policy.getOtherdata(), Long.toString(policy.getEpochtime())}, true);
@@ -78,6 +91,8 @@ public class ManageMultiplePoliciesController {
 				response.flush();
 			}
 		};
+		
+	
 		return ResponseEntity.ok()
 				.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=DataHunterItems.csv")
 				.contentType(MediaType.APPLICATION_OCTET_STREAM)
@@ -195,5 +210,26 @@ public class ManageMultiplePoliciesController {
 		DataHunterUtils.expireSession(httpServletRequest);
 		return new ModelAndView("/select_multiple_policies_action", "model", model);
 	}
+
+	
+	/**
+	 * Copied from PoliciesDAOjdbcTemplateImpl
+	 * @param row
+	 * @return a policies 
+	 */
+	private Policies populatePoliciesFromResultSet(Map<String, Object> row) {
+		Policies policies = new Policies();
+		policies.setApplication((String)row.get("APPLICATION"));
+		policies.setIdentifier((String)row.get("IDENTIFIER"));
+		policies.setLifecycle((String)row.get("LIFECYCLE"));
+		policies.setUseability((String)row.get("USEABILITY"));
+		policies.setOtherdata((String)row.get("OTHERDATA"));
+		policies.setCreated((Timestamp)row.get("CREATED"));		
+		policies.setUpdated((Timestamp)row.get("UPDATED"));			
+		policies.setEpochtime((Long)row.get("EPOCHTIME"));		
+		return policies;
+	}
+	
+	
 	
 }

@@ -96,12 +96,27 @@ public class UploadIdsFileController {
 							rowsInserted++;
 						}
 					
+					} else if (DataHunterConstants.BULK_LOAD.equals(uploadIdsFile.getTypeOfUpload())) {
+						
+						if (firstTimeThru) {  	// can only get here if at least one entry exists on the upload file 
+							rowsDeleted = deleteExistingItems(policies);
+							firstTimeThru = false;
+						}
+						
+						policies.setIdentifier(line);
+						policies.setOtherdata("");
+						policiesList.add(new Policies(policies));
+						rowsInserted++; 													// only get actually inserted every 100:
+						
+				    	if ( (rowsInserted % 100) == 0 ){
+				    		policiesDAO.insertMultiple(policiesList);
+				    		policiesList.clear();
+				    	}
+
 					} else if (DataHunterConstants.BULK_LOAD_AND_INDEX_ITEMS.equals(uploadIdsFile.getTypeOfUpload())) {
 						
-						if (firstTimeThru) {  
-							// so at least one entry must exist on the upload file for the existing entries to be removed
+						if (firstTimeThru) { 	// can only get here if at least one entry must exist on the upload file
 							rowsDeleted = deleteExistingItems(policies);
-							System.out.println("deleted " + rowsDeleted);
 							policies.setIdentifier(DataHunterConstants.INDEXED_ROW_COUNT); // special "indexed" count row
 							policies.setOtherdata("Error occurred during Ids data load");  // replaced by row count on completion
 							addNewPolicy(policies);
@@ -115,11 +130,11 @@ public class UploadIdsFileController {
 						policiesList.add(new Policies(policies));
 						rowsInserted++;
 						
-				    	if ( (indexedId % 100 ) == 0 ){
+				    	if ( (indexedId % 100) == 0 ){
 				    		policiesDAO.insertMultiple(policiesList);
 				    		policiesList.clear();
 				    	}
-						
+				    	
 					} else {
 						throw new Exception("logic error - invalid action for load : " + uploadIdsFile.getTypeOfUpload());
 					}
@@ -127,7 +142,9 @@ public class UploadIdsFileController {
 				}  // end-if (bypass empty line)	
 			} //end-while
 			
-			if (DataHunterConstants.BULK_LOAD_AND_INDEX_ITEMS.equals(uploadIdsFile.getTypeOfUpload()) && rowsInserted > 0){
+			if ( (DataHunterConstants.BULK_LOAD.equals(uploadIdsFile.getTypeOfUpload()) || 
+				  DataHunterConstants.BULK_LOAD_AND_INDEX_ITEMS.equals(uploadIdsFile.getTypeOfUpload()))
+					&& rowsInserted > 0){
 	    		policiesDAO.insertMultiple(policiesList);
 	    		policiesList.clear();
 				updateIndexedRowCountPolicy(policies, indexedId);		

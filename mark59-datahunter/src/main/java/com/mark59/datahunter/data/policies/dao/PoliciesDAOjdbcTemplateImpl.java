@@ -367,12 +367,14 @@ public class PoliciesDAOjdbcTemplateImpl implements PoliciesDAO
 				jdbcTemplate.update(sqlSb.toString() , sqlBindParms.toArray());			
 			} catch (Exception e) {
 				e.printStackTrace();
-				System.out.println("   Policy (Items) used in SQL Bind Parameter Array : ");
-		        for(int i = 0; i < policiesList.size(); i++) {
-		            System.out.println("  " + (i+1)  + " : " + policiesList.get(i));
+				String sqlBindParmsToArray="";
+		        for(int i = 0; i < sqlBindParms.size(); i++) {
+		        	sqlBindParmsToArray += (" - " + (i+1)  + " : " + sqlBindParms.get(i));
 		        }
-				System.out.println("   ------------------------");
-				throw new RuntimeException();
+				throw new RuntimeException("RuntimeException at PoliciesDAOjdbcTemplateImpl.insertMultiple"
+						+ "<br><br> message=" + e.getMessage()
+						+ "<br><br> sql=" + sqlSb.toString() 
+						+ "<br><br> sqlBindParms=" + sqlBindParmsToArray);
 			}
 		}
 	}

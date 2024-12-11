@@ -56,9 +56,9 @@ function buildHomeLink() {
     </tr>     
 
     <tr>
-     <td>For existing entries</td>
+     <td>Type of Upload</td>
      <td>:</td>
-     <td><form:select path="updateOrBypassExisting" items="${updateOrBypass}"   /></td>
+     <td><form:select path="typeOfUpload" items="${TypeOfUploads}" /></td>
     </tr>         
     <tr>
      <td class="tip" colspan=3><br></td> 

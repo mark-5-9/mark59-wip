@@ -22,21 +22,21 @@ package com.mark59.datahunter.model;
  */
 public class UploadPoliciesFile {
 
-	String	updateOrBypassExisting;	
+	String	typeOfUpload;	
 	
 	public UploadPoliciesFile() {
 	}
 
-	public String getUpdateOrBypassExisting() {
-		return updateOrBypassExisting;
+	public String getTypeOfUpload() {
+		return typeOfUpload;
 	}
-	public void setUpdateOrBypassExisting(String updateOrBypassExisting) {
-		this.updateOrBypassExisting = updateOrBypassExisting;
+	public void setTypeOfUpload(String typeOfUpload) {
+		this.typeOfUpload = typeOfUpload;
 	}
 
 	@Override
     public String toString() {
-        return   "[updateOrBypassExisting="+ updateOrBypassExisting + 
+        return   "[typeOfUpload="+ typeOfUpload + 
         		"]";
 	}
 		

@@ -25,7 +25,7 @@ import com.mark59.datahunter.data.beans.Policies;
 
 /**
  * @author Philip Webb
- * Written: Australian Winter 2019  
+ * Written: Australian Summer 2024/25  
  */
 public class PoliciesRowMapper implements RowMapper<Policies> {
 

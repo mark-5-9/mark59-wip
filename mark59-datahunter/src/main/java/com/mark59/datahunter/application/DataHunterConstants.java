@@ -83,18 +83,17 @@ public class DataHunterConstants {
 	public static final List<String>  APPLICATION_OPERATORS = Arrays.asList( EQUALS, STARTS_WITH);
 
 	
-	public static final String UPDATE_EXISTING_ITEMS 			= "UPDATE_EXISTING_ITEMS";  
-	public static final String LEAVE_EXISTING_ITEMS_UNCHANGED	= "LEAVE_EXISTING_ITEMS_UNCHANGED";  
-	
-	public static final List<String>  UPDATE_OR_BYPASS_POLICIES =  
-			Arrays.asList( UPDATE_EXISTING_ITEMS, LEAVE_EXISTING_ITEMS_UNCHANGED);
-	
+	public static final String UPDATE_EXISTING_ITEMS 				= "UPDATE_EXISTING_ITEMS";  
+	public static final String LEAVE_EXISTING_ITEMS_UNCHANGED		= "LEAVE_EXISTING_ITEMS_UNCHANGED";  
 	public static final String UPDATE_USEABILITY_ON_EXISTING_ITEMS	= "UPDATE_USEABILITY_ON_EXISTING_ITEMS";  
 	public static final String BULK_LOAD							= "BULK_LOAD";
 	public static final String BULK_LOAD_AND_INDEX_ITEMS			= "BULK_LOAD_AND_INDEX_ITEMS";
 	
-	public static final List<String>  TYPE_OF_IDS_FILE_UPLOAD =  
-			Arrays.asList( UPDATE_USEABILITY_ON_EXISTING_ITEMS, LEAVE_EXISTING_ITEMS_UNCHANGED, BULK_LOAD_AND_INDEX_ITEMS);
+	public static final List<String> TYPE_OF_ITEMS_FILE_UPLOAD =  
+			Arrays.asList( UPDATE_EXISTING_ITEMS, LEAVE_EXISTING_ITEMS_UNCHANGED, BULK_LOAD );
+
+	public static final List<String> TYPE_OF_IDS_FILE_UPLOAD =  
+			Arrays.asList( UPDATE_USEABILITY_ON_EXISTING_ITEMS, LEAVE_EXISTING_ITEMS_UNCHANGED, BULK_LOAD, BULK_LOAD_AND_INDEX_ITEMS);
 
 	public static final String INDEXED_ROW_COUNT = "0000000000-IX";
 	

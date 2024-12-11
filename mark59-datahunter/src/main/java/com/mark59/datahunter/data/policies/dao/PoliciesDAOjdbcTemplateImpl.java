@@ -329,6 +329,54 @@ public class PoliciesDAOjdbcTemplateImpl implements PoliciesDAO
 		return new SqlWithParms(sql,sqlparameters);
 	}
 
+
+	@Override
+	public void insertMultiple(List<Policies> policiesList) {
+		
+		boolean yetToAddFirstRowToSqlStatement = true;
+		StringBuilder sqlSb = new StringBuilder();
+		
+		sqlSb.append("INSERT INTO POLICIES "
+				+ "(APPLICATION,IDENTIFIER,LIFECYCLE,USEABILITY,OTHERDATA,CREATED,UPDATED,EPOCHTIME)"
+				+ " VALUES (?,?,?,?,?,CURRENT_TIMESTAMP(6),CURRENT_TIMESTAMP(6),?)");
+		
+		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
+		ArrayList<Object> sqlBindParms = new ArrayList<>();
+		
+		for (Policies policies : policiesList) {
+			trimKeys(policies);
+			policies.setEpochtime(System.currentTimeMillis());
+			
+			sqlBindParms.add(policies.getApplication());
+			sqlBindParms.add(policies.getIdentifier());
+			sqlBindParms.add(policies.getLifecycle());
+			sqlBindParms.add(policies.getUseability());
+			sqlBindParms.add(policies.getOtherdata());
+			sqlBindParms.add(policies.getEpochtime());
+			
+			if (yetToAddFirstRowToSqlStatement) {
+				yetToAddFirstRowToSqlStatement = false;
+			} else {
+				sqlSb.append( ",(?,?,?,?,?,CURRENT_TIMESTAMP(6),CURRENT_TIMESTAMP(6),?)" );
+			}
+
+		} //end for
+				
+		if (!yetToAddFirstRowToSqlStatement) {
+			try {
+				jdbcTemplate.update(sqlSb.toString() , sqlBindParms.toArray());			
+			} catch (Exception e) {
+				e.printStackTrace();
+				System.out.println("   Policy (Items) used in SQL Bind Parameter Array : ");
+		        for(int i = 0; i < policiesList.size(); i++) {
+		            System.out.println("  " + (i+1)  + " : " + policiesList.get(i));
+		        }
+				System.out.println("   ------------------------");
+				throw new RuntimeException();
+			}
+		}
+	}
+	
 	
 	@Override
 	public SqlWithParms constructDeletePoliciesSql(PolicySelectionCriteria policySelectionCriteria) {

@@ -25,7 +25,7 @@ public class UploadIdsFile {
 	String	application;
 	String  lifecycle;	
 	String  useability;
-	String	updateOrBypassOrIndex;	
+	String	typeOfUpload;	
 
 	public UploadIdsFile() {
 	}
@@ -48,11 +48,11 @@ public class UploadIdsFile {
 	public void setUseability(String useability) {
 		this.useability = useability;
 	}
-	public String getUpdateOrBypassOrIndex() {
-		return updateOrBypassOrIndex;
+	public String getTypeOfUpload() {
+		return typeOfUpload;
 	}
-	public void setUpdateOrBypassOrIndex(String updateOrBypassOrIndex) {
-		this.updateOrBypassOrIndex = updateOrBypassOrIndex;
+	public void setTypeOfUpload(String typeOfUpload) {
+		this.typeOfUpload = typeOfUpload;
 	}
 	
 	@Override
@@ -60,7 +60,7 @@ public class UploadIdsFile {
         return   "[application="+ application + 
         		", lifecycle=" + lifecycle + 
         		", useability="+ useability + 
-        		", updateOrBypassOrIndex="+ updateOrBypassOrIndex + 
+        		", typeOfUpload="+ typeOfUpload + 
         		"]";
 	}
 		

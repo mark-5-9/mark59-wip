@@ -49,8 +49,8 @@
     <td>${uploadIdsFile.useability}</td>
    </tr> 
    <tr>
-    <td>updateOrBypassOrIndex</td><td>:</td>
-    <td>${uploadIdsFile.updateOrBypassOrIndex}</td>
+    <td>TypeOfUpload</td><td>:</td>
+    <td>${uploadIdsFile.typeOfUpload}</td>
    </tr>     
  </table>
  

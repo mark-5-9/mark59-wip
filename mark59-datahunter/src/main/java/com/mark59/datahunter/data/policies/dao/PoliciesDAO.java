@@ -53,6 +53,7 @@ public interface PoliciesDAO
 	List<AsyncMessageaAnalyzerResult> runAsyncMessageaAnalyzerSql(SqlWithParms sqlWithParms);
 	
 	SqlWithParms constructInsertDataSql(Policies policies);
+	void insertMultiple(List<Policies> policiesList);
 	SqlWithParms constructDeletePoliciesSql(PolicySelectionCriteria policySelectionCriteria);
 	SqlWithParms constructDeleteMultiplePoliciesSql(PolicySelectionFilter policySelectionFilter);
 
@@ -72,5 +73,6 @@ public interface PoliciesDAO
 
 	void getLock(String lockResouceString, int timeout);
 	void releaseLock(String lockResouceString) throws SQLException;
+
 
 }

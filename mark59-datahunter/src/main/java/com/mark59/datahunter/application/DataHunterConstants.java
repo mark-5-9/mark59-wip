@@ -26,7 +26,7 @@ public class DataHunterConstants {
 	public static final String UNSELECTED = "";  
 	public static final String OK		  = "OK";  
 	
-    public static final String PG     		= "pg";
+    public static final String PG     	  = "pg";
 
 	
 	public static final String REUSABLE	= "REUSABLE";  
@@ -89,11 +89,12 @@ public class DataHunterConstants {
 	public static final List<String>  UPDATE_OR_BYPASS_POLICIES =  
 			Arrays.asList( UPDATE_EXISTING_ITEMS, LEAVE_EXISTING_ITEMS_UNCHANGED);
 	
-	public static final String UPDATE_USEABILITY_ON_EXISTING_ENTRIES = "UPDATE_USEABILITY_ON_EXISTING_ENTRIES";  
-	public static final String CREATE_INDEXED_ENTRIES 				 = "CREATE_INDEXED_ENTRIES";
+	public static final String UPDATE_USEABILITY_ON_EXISTING_ITEMS	= "UPDATE_USEABILITY_ON_EXISTING_ITEMS";  
+	public static final String BULK_LOAD							= "BULK_LOAD";
+	public static final String BULK_LOAD_AND_INDEX_ITEMS			= "BULK_LOAD_AND_INDEX_ITEMS";
 	
-	public static final List<String>  UPDATE_OR_BYPASS_OR_INDEX_POLICIES =  
-			Arrays.asList( UPDATE_USEABILITY_ON_EXISTING_ENTRIES, LEAVE_EXISTING_ITEMS_UNCHANGED, CREATE_INDEXED_ENTRIES);
+	public static final List<String>  TYPE_OF_IDS_FILE_UPLOAD =  
+			Arrays.asList( UPDATE_USEABILITY_ON_EXISTING_ITEMS, LEAVE_EXISTING_ITEMS_UNCHANGED, BULK_LOAD_AND_INDEX_ITEMS);
 
 	public static final String INDEXED_ROW_COUNT = "0000000000-IX";
 	

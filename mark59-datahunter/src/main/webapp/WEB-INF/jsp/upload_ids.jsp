@@ -53,7 +53,8 @@ function buildHomeLink() {
    
    <table>
     <tr>
-     <td class="tip" colspan=3>Note that files with a large number of lines (over 100K) may take several minutes to load <br>
+     <td class="tip" colspan=3>Note that files with a large number of lines (over 100K) may take several minutes to load
+      (the Bulk load types are faster).<br>
       Application MaxFileSize = 5GB, but you may hit other application or network capacity limits below this size<br><br></td> 
     </tr>     
 
@@ -74,7 +75,9 @@ function buildHomeLink() {
     </tr>
     <tr>
      <td></td><td></td>
-     <td class="tip">optional (leaving empty creates items with a blank lifecycle)</td>
+     <td class="tip">optional.  Leaving empty creates items with a blank lifecycle 
+     (Not recommended unless lifecycle is not going to be used at all within this Application)</td>
+     
     </tr>
 
     <tr>
@@ -88,9 +91,9 @@ function buildHomeLink() {
     </tr>      
    
     <tr>
-     <td>Update/Bypass existing entries<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i>or</i><br>(Re)Load as a 'Numeric Index' Set</td>
+     <td>Type of Upload</td>
      <td>:</td>
-     <td><form:select path="updateOrBypassOrIndex" items="${updateOrBypassOrIndex}" /></td>
+     <td><form:select path="typeOfUpload" items="${TypeOfUploads}" /></td>
     </tr>
 
     <tr>

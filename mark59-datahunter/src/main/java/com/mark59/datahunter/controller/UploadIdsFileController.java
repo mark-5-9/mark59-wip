@@ -54,13 +54,14 @@ public class UploadIdsFileController {
 		String navUrParms = "application=" + DataHunterUtils.encode(uploadIdsFile.getApplication().trim())
 			+ "&lifecycle="    + DataHunterUtils.encode(uploadIdsFile.getLifecycle().trim()) 
 			+ "&useability="   + DataHunterUtils.encode(uploadIdsFile.getUseability())
-			+ "&updateOrBypassOrIndex=" + DataHunterUtils.encode(uploadIdsFile.getUpdateOrBypassOrIndex());
+			+ "&typeOfUpload=" + DataHunterUtils.encode(uploadIdsFile.getTypeOfUpload());
 		
 		model.addAttribute("navUrParms", navUrParms);			
 		
 		String line = "?";
 		int lineCount=0; int rowsInserted=0; int rowsUpdated=0; 
 		int rowsDeleted=0; int indexedId=0; boolean firstTimeThru=true;
+		List<Policies> policiesList = new ArrayList<Policies>();
 		BufferedReader br = null; 
 
 		try {
@@ -72,11 +73,12 @@ public class UploadIdsFileController {
 				if (!DataHunterUtils.isEmpty(line)){
 					// System.out.println("  <"+lineCount+"> ["+line+"]" );
 					
-					policies.setIdentifier(line);
-					policies.setOtherdata("");
 		
-					if (DataHunterConstants.UPDATE_USEABILITY_ON_EXISTING_ENTRIES.equals(uploadIdsFile.getUpdateOrBypassOrIndex())){
+					if (DataHunterConstants.UPDATE_USEABILITY_ON_EXISTING_ITEMS.equals(uploadIdsFile.getTypeOfUpload())){
 						
+						policies.setIdentifier(line);
+						policies.setOtherdata("");
+
 						if (policyAlreadyExists(policies)) {
 							rowsUpdated = rowsUpdated + updatePolicyUseState(policies);
 						} else {
@@ -84,18 +86,20 @@ public class UploadIdsFileController {
 							rowsInserted++;
 						}
 						
-					} else if (DataHunterConstants.LEAVE_EXISTING_ITEMS_UNCHANGED.equals(uploadIdsFile.getUpdateOrBypassOrIndex())){
+					} else if (DataHunterConstants.LEAVE_EXISTING_ITEMS_UNCHANGED.equals(uploadIdsFile.getTypeOfUpload())){
+
+						policies.setIdentifier(line);
 						
 						if ( ! policyAlreadyExists(policies)) {
+							policies.setOtherdata("");
 							addNewPolicy(policies);
 							rowsInserted++;
 						}
 					
-					} else if (DataHunterConstants.CREATE_INDEXED_ENTRIES.equals(uploadIdsFile.getUpdateOrBypassOrIndex())) {
+					} else if (DataHunterConstants.BULK_LOAD_AND_INDEX_ITEMS.equals(uploadIdsFile.getTypeOfUpload())) {
 						
 						if (firstTimeThru) {  
 							// so at least one entry must exist on the upload file for the existing entries to be removed
-							System.out.println("delete " + policies);
 							rowsDeleted = deleteExistingItems(policies);
 							System.out.println("deleted " + rowsDeleted);
 							policies.setIdentifier(DataHunterConstants.INDEXED_ROW_COUNT); // special "indexed" count row
@@ -108,25 +112,31 @@ public class UploadIdsFileController {
 						indexedId++;
 						policies.setIdentifier(StringUtils.leftPad(String.valueOf(indexedId), 10, "0"));  // "indexed" id 
 						policies.setOtherdata(line); // placing actual file data into Otherdata
-						addNewPolicy(policies);
+						policiesList.add(new Policies(policies));
 						rowsInserted++;
 						
+				    	if ( (indexedId % 100 ) == 0 ){
+				    		policiesDAO.insertMultiple(policiesList);
+				    		policiesList.clear();
+				    	}
+						
 					} else {
-						throw new Exception("logic error - invalid action for load : " + uploadIdsFile.getUpdateOrBypassOrIndex());
+						throw new Exception("logic error - invalid action for load : " + uploadIdsFile.getTypeOfUpload());
 					}
 					
 				}  // end-if (bypass empty line)	
 			} //end-while
 			
-			if (DataHunterConstants.CREATE_INDEXED_ENTRIES.equals(uploadIdsFile.getUpdateOrBypassOrIndex()) && rowsInserted > 0){
+			if (DataHunterConstants.BULK_LOAD_AND_INDEX_ITEMS.equals(uploadIdsFile.getTypeOfUpload()) && rowsInserted > 0){
+	    		policiesDAO.insertMultiple(policiesList);
+	    		policiesList.clear();
 				updateIndexedRowCountPolicy(policies, indexedId);		
 			}
-			
-			
 			br.close();
 		
 		} catch (Exception e) {
 			System.err.println(e.getMessage());
+			e.printStackTrace();
 			model.addAttribute("filename", file.getOriginalFilename());
 			model.addAttribute("sql", "n/a");
 			model.addAttribute("sqlResult", e.getMessage());
@@ -159,6 +169,7 @@ public class UploadIdsFileController {
 
 	private boolean policyAlreadyExists(Policies policies) {
 		PolicySelectionCriteria psc = new PolicySelectionCriteria();
+		psc.setSelectClause(PoliciesDAO.SELECT_POLICY_COUNTS);
 		psc.setApplication(policies.getApplication());
 		psc.setIdentifier(policies.getIdentifier());	
 		psc.setLifecycle(policies.getLifecycle());		
@@ -204,8 +215,8 @@ public class UploadIdsFileController {
 	private void createDropdownAttributes(Model model) {
 		List<String> usabilityList = new ArrayList<>(DataHunterConstants.USEABILITY_LIST);
 		model.addAttribute("Useabilities",usabilityList);	
-		List<String> updateOrBypassOrIndex = new ArrayList<>(DataHunterConstants.UPDATE_OR_BYPASS_OR_INDEX_POLICIES);
-		model.addAttribute("updateOrBypassOrIndex",updateOrBypassOrIndex);
+		List<String> typeOfUploadList = new ArrayList<>(DataHunterConstants.TYPE_OF_IDS_FILE_UPLOAD);
+		model.addAttribute("TypeOfUploads",typeOfUploadList);
 	}
 
 }

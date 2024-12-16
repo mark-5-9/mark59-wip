@@ -118,35 +118,51 @@ public class PoliciesDAOjdbcTemplateImpl implements PoliciesDAO
 		MapSqlParameterSource sqlparameters = sqlWithParms.getSqlparameters()
 				.addValue("application", policySelect.getApplication());
 
-		String sql = "SELECT " + PoliciesDAO.SELECT_POLICY_COLUMNS + " FROM POLICIES WHERE APPLICATION = :application " + sqlWithParms.getSql();		
+		String sql = "SELECT " + PoliciesDAO.SELECT_POLICY_COLUMNS + " FROM POLICIES WHERE APPLICATION = :application " + sqlWithParms.getSql();
 		
-		if (DataHunterConstants.SELECT_MOST_RECENTLY_ADDED.equals(policySelect.getSelectOrder())){
-			sql += " ORDER BY CREATED DESC, EPOCHTIME DESC, IDENTIFIER DESC LIMIT 1 ";		// Epoch time and Id are just tie-breakers
-		} else if (DataHunterConstants.SELECT_OLDEST_ENTRY.equals(policySelect.getSelectOrder())){
-			sql += " ORDER BY CREATED ASC, EPOCHTIME ASC, IDENTIFIER ASC LIMIT 1 ";			// Epoch time and Id are just tie-breakers
-			
-		} else if (DataHunterConstants.SELECT_RANDOM_ENTRY.equals(policySelect.getSelectOrder())){
-			
+		
+		// check if this application-lifecycle is the special 'Reusable Indexed' case
+		boolean reusableIndexed = false;
+		int reusableIndexedCount = -1;
+		if (DataHunterConstants.REUSABLE.equals(policySelect.getUseability())){
 			PolicySelectionCriteria policySelectIxRow = new PolicySelectionCriteria();
 			policySelectIxRow.setApplication(policySelect.getApplication());
 			policySelectIxRow.setLifecycle(policySelect.getLifecycle());
 			policySelectIxRow.setIdentifier(DataHunterConstants.INDEXED_ROW_COUNT);
 			SqlWithParms sqlWithParmsIx = constructSelectPolicySql(policySelectIxRow);
-			List<Policies> policiesIx = runSelectPolicieSql(sqlWithParmsIx);
+			List<Policies> policiesIxs = runSelectPolicieSql(sqlWithParmsIx);
 			
-			if (policiesIx.isEmpty() || !StringUtils.isNumeric(policiesIx.get(0).getOtherdata().trim())){
-				// Random selection (but not the special 'Reusable Indexed' case).
-				sql += " ORDER BY RAND() LIMIT 1 ";	
-			} else {
-				// it's the special case of Random selection on 'INDEXED REUSABLE' data
-				int randInRange = ThreadLocalRandom.current().nextInt(1, Integer.valueOf(policiesIx.get(0).getOtherdata().trim())+1);
+			if (!policiesIxs.isEmpty() && StringUtils.isNumeric(policiesIxs.get(0).getOtherdata().trim())){
+				reusableIndexed = true;
+				reusableIndexedCount = Integer.valueOf(policiesIxs.get(0).getOtherdata().trim());
+			}
+		}
+		
+		if (reusableIndexed){
+			if (DataHunterConstants.SELECT_MOST_RECENTLY_ADDED.equals(policySelect.getSelectOrder())){
+				sql += " AND IDENTIFIER <> '" + DataHunterConstants.INDEXED_ROW_COUNT + "' ORDER BY IDENTIFIER DESC LIMIT 1 ";
+			} else if (DataHunterConstants.SELECT_OLDEST_ENTRY.equals(policySelect.getSelectOrder())){
+				sql += " AND IDENTIFIER <> '" + DataHunterConstants.INDEXED_ROW_COUNT + "' ORDER BY IDENTIFIER ASC LIMIT 1 ";
+			} else if (DataHunterConstants.SELECT_RANDOM_ENTRY.equals(policySelect.getSelectOrder())){
+				int randInRange = ThreadLocalRandom.current().nextInt(1, reusableIndexedCount+1);
 				String randIdentifer = StringUtils.leftPad(String.valueOf(randInRange), 10, "0");
 				sqlparameters = sqlWithParms.getSqlparameters().addValue("identifier", randIdentifer);
 				sql += " AND IDENTIFIER = :identifier ";
+			} else {
+				throw new RuntimeException("error - invalid Select Order (Reusable Indexed data) : " + policySelect.getSelectOrder());
 			}
 			
-		} else {
-			throw new RuntimeException("error - invalid Select Order : " + policySelect.getSelectOrder());
+		} else { // not a special 'Reusable Indexed' case
+
+			if (DataHunterConstants.SELECT_MOST_RECENTLY_ADDED.equals(policySelect.getSelectOrder())){
+				sql += " ORDER BY CREATED DESC, EPOCHTIME DESC, IDENTIFIER DESC LIMIT 1 ";		// Epoch time and Id are just tie-breakers
+			} else if (DataHunterConstants.SELECT_OLDEST_ENTRY.equals(policySelect.getSelectOrder())){
+				sql += " ORDER BY CREATED ASC, EPOCHTIME ASC, IDENTIFIER ASC LIMIT 1 ";			// Epoch time and Id are just tie-breakers
+			} else if (DataHunterConstants.SELECT_RANDOM_ENTRY.equals(policySelect.getSelectOrder())){
+				sql += " ORDER BY RAND() LIMIT 1 ";	
+			} else {
+				throw new RuntimeException("error - invalid Select Order : " + policySelect.getSelectOrder());
+			}
 		}
 		return new SqlWithParms(sql,sqlparameters);
 	}

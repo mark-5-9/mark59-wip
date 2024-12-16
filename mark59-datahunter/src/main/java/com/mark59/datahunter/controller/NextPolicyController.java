@@ -95,13 +95,14 @@ public class NextPolicyController {
 				model.addAttribute("sqlResult", "FAIL");
 				model.addAttribute("sqlResultText",
 						"No rows matching the selection.  Possibly we have ran out of data for application:["
-								+ policySelectionCriteria.getApplication() + "]");
+								+ policySelectionCriteria.getApplication() + "] or for 'Reusable Indexed' "
+								+ "data you have hit a 'hole' on a random lookup");
 				return new ModelAndView("/next_policy_action", "model", model);
 	
 			} else if (policiesList.size() > 1) {
 				model.addAttribute("sqlResult", "FAIL");
 				model.addAttribute("sqlResultText",
-						"sql execution : Error.  1 row should of been selected, but sql result indicates "
+					"sql execution : Error.  1 row should of been selected, but sql result indicates "
 								+ policiesList.size() + " rows selected?");
 				return new ModelAndView("/next_policy_action", "model", model);
 			}

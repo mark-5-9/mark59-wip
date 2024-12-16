@@ -56,7 +56,6 @@ function usabilityForIndexedReuseableLoad(){
 		for (var i=0; i < useDd.options.length; i++) {
 			useDd.options[i].disabled = false;
 		}
-
 	}	
 }
 
@@ -126,7 +125,7 @@ function usabilityForIndexedReuseableLoad(){
      <td colspan="3"><input type="file" name="file" /></td>  <%-- set via @RequestParam --%>
     </tr>   
     <tr>
-     <td colspan="3"><br><br><input type="submit" value="submit" id="submit" onclick="hideSubmitBtn();"   /></td>
+     <td colspan="3"><br><br><input type="submit" value="submit" id="submit" onclick="hideSubmitBtn();" /></td>
     </tr>
     <tr>
      <td colspan="3"><span id="loading" class="loading" style="display: none;" >Loading.</span></td>     

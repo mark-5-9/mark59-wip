@@ -21,6 +21,7 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ThreadLocalRandom;
 
 import javax.sql.DataSource;
 
@@ -123,8 +124,29 @@ public class PoliciesDAOjdbcTemplateImpl implements PoliciesDAO
 			sql += " ORDER BY CREATED DESC, EPOCHTIME DESC, IDENTIFIER DESC LIMIT 1 ";		// Epoch time and Id are just tie-breakers
 		} else if (DataHunterConstants.SELECT_OLDEST_ENTRY.equals(policySelect.getSelectOrder())){
 			sql += " ORDER BY CREATED ASC, EPOCHTIME ASC, IDENTIFIER ASC LIMIT 1 ";			// Epoch time and Id are just tie-breakers
-		} else { // assume select order DataHunterConstants.SELECT_RANDOM_ENTRY.
-			sql += " ORDER BY RAND() LIMIT 1 ";				
+			
+		} else if (DataHunterConstants.SELECT_RANDOM_ENTRY.equals(policySelect.getSelectOrder())){
+			
+			PolicySelectionCriteria policySelectIxRow = new PolicySelectionCriteria();
+			policySelectIxRow.setApplication(policySelect.getApplication());
+			policySelectIxRow.setLifecycle(policySelect.getLifecycle());
+			policySelectIxRow.setIdentifier(DataHunterConstants.INDEXED_ROW_COUNT);
+			SqlWithParms sqlWithParmsIx = constructSelectPolicySql(policySelectIxRow);
+			List<Policies> policiesIx = runSelectPolicieSql(sqlWithParmsIx);
+			
+			if (policiesIx.isEmpty() || !StringUtils.isNumeric(policiesIx.get(0).getOtherdata().trim())){
+				// Random selection (but not the special 'Reusable Indexed' case).
+				sql += " ORDER BY RAND() LIMIT 1 ";	
+			} else {
+				// it's the special case of Random selection on 'INDEXED REUSABLE' data
+				int randInRange = ThreadLocalRandom.current().nextInt(1, Integer.valueOf(policiesIx.get(0).getOtherdata().trim())+1);
+				String randIdentifer = StringUtils.leftPad(String.valueOf(randInRange), 10, "0");
+				sqlparameters = sqlWithParms.getSqlparameters().addValue("identifier", randIdentifer);
+				sql += " AND IDENTIFIER = :identifier ";
+			}
+			
+		} else {
+			throw new RuntimeException("error - invalid Select Order : " + policySelect.getSelectOrder());
 		}
 		return new SqlWithParms(sql,sqlparameters);
 	}

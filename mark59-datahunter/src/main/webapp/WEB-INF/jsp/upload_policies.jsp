@@ -27,6 +27,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <link href="css/style.css" rel="stylesheet" type="text/css" />
 <style>@font-face { font-family: "Canterbury";  src: url("fonts/Canterbury.ttf"); }</style>
+<script type="text/javascript" src="javascript/sharedFunctions.js"></script>
 <script type="text/javascript">
 
 function buildHomeLink() {
@@ -51,7 +52,8 @@ function buildHomeLink() {
    
    <table>
     <tr>
-     <td class="tip" colspan=3>Note that files with a large number of lines (over 100K) may take several minutes to load <br>
+     <td class="tip" colspan=3>Note that files with a large number of lines (over 100K) may take several minutes to load
+      (the Bulk load is faster). <br>
       Application MaxFileSize = 5GB, but you may hit other application or network capacity limits below this size<br><br></td> 
     </tr>     
 
@@ -68,8 +70,12 @@ function buildHomeLink() {
      <td colspan="3"><input type="file" name="file" /></td>  <%-- set via @RequestParam --%>
     </tr>   
     <tr>
-     <td colspan="3"><br><br><input type="submit" value="submit"  id="submit"  /></td>
+     <td colspan="3"><br><br><input type="submit" value="submit" id="submit" onclick="hideSubmitBtn();" /></td>     
     </tr>
+    <tr>
+     <td colspan="3"><span id="loading" class="loading" style="display: none;" >Loading.</span></td>     
+    </tr>
+    
    </table>
   </form:form>
  

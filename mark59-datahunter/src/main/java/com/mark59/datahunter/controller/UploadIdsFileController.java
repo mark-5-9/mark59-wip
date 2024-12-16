@@ -113,7 +113,7 @@ public class UploadIdsFileController {
 				    		policiesList.clear();
 				    	}
 
-					} else if (DataHunterConstants.BULK_LOAD_AND_INDEX_ITEMS.equals(uploadIdsFile.getTypeOfUpload())) {
+					} else if (DataHunterConstants.BULK_LOAD_AS_INDEXED_REUSABLE.equals(uploadIdsFile.getTypeOfUpload())) {
 						
 						if (firstTimeThru) { 	// can only get here if at least one entry must exist on the upload file
 							rowsDeleted = deleteExistingItems(policies);
@@ -143,7 +143,7 @@ public class UploadIdsFileController {
 			} //end-while
 			
 			if ( (DataHunterConstants.BULK_LOAD.equals(uploadIdsFile.getTypeOfUpload()) || 
-				  DataHunterConstants.BULK_LOAD_AND_INDEX_ITEMS.equals(uploadIdsFile.getTypeOfUpload()))
+				  DataHunterConstants.BULK_LOAD_AS_INDEXED_REUSABLE.equals(uploadIdsFile.getTypeOfUpload()))
 					&& rowsInserted > 0){
 	    		policiesDAO.insertMultiple(policiesList);
 	    		policiesList.clear();

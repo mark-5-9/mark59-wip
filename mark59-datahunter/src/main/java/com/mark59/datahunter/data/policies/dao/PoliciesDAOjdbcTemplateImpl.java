@@ -148,6 +148,7 @@ public class PoliciesDAOjdbcTemplateImpl implements PoliciesDAO
 				String randIdentifer = StringUtils.leftPad(String.valueOf(randInRange), 10, "0");
 				sqlparameters = sqlWithParms.getSqlparameters().addValue("identifier", randIdentifer);
 				sql += " AND IDENTIFIER = :identifier ";
+//				sql += " AND IDENTIFIER >= :identifier LIMIT 1 ";
 			} else {
 				throw new RuntimeException("error - invalid Select Order (Reusable Indexed data) : " + policySelect.getSelectOrder());
 			}

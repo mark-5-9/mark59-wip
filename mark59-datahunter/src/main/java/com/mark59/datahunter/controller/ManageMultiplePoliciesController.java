@@ -17,10 +17,8 @@
 package com.mark59.datahunter.controller;
 
 
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Stream;
 
 import javax.sql.DataSource;
@@ -81,7 +79,6 @@ public class ManageMultiplePoliciesController {
 			String csvItemLine;
 			
 			Stream<Policies> policiesStream = jdbcTemplate.queryForStream(sqlWithParms.getSql(), sqlWithParms.getSqlparameters(), new PoliciesRowMapper());
-//			for (Policies policy : policiesList) {
 			for (Policies policy : (Iterable<Policies>) () -> policiesStream.iterator()) {
 				// System.out.println("Stream :" + policy);
 				csvItemLine = csvParser.parseToLine(
@@ -210,26 +207,5 @@ public class ManageMultiplePoliciesController {
 		DataHunterUtils.expireSession(httpServletRequest);
 		return new ModelAndView("/select_multiple_policies_action", "model", model);
 	}
-
-	
-	/**
-	 * Copied from PoliciesDAOjdbcTemplateImpl
-	 * @param row
-	 * @return a policies 
-	 */
-	private Policies populatePoliciesFromResultSet(Map<String, Object> row) {
-		Policies policies = new Policies();
-		policies.setApplication((String)row.get("APPLICATION"));
-		policies.setIdentifier((String)row.get("IDENTIFIER"));
-		policies.setLifecycle((String)row.get("LIFECYCLE"));
-		policies.setUseability((String)row.get("USEABILITY"));
-		policies.setOtherdata((String)row.get("OTHERDATA"));
-		policies.setCreated((Timestamp)row.get("CREATED"));		
-		policies.setUpdated((Timestamp)row.get("UPDATED"));			
-		policies.setEpochtime((Long)row.get("EPOCHTIME"));		
-		return policies;
-	}
-	
-	
 	
 }

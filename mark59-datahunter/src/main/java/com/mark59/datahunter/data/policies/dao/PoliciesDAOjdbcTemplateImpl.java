@@ -120,25 +120,9 @@ public class PoliciesDAOjdbcTemplateImpl implements PoliciesDAO
 
 		String sql = "SELECT " + PoliciesDAO.SELECT_POLICY_COLUMNS + " FROM POLICIES WHERE APPLICATION = :application " + sqlWithParms.getSql();
 		
+		int reusableIndexedCount = reusableIndexedDataCount(policySelect);
 		
-		// check if this application-lifecycle is the special 'Reusable Indexed' case
-		boolean reusableIndexed = false;
-		int reusableIndexedCount = -1;
-		if (DataHunterConstants.REUSABLE.equals(policySelect.getUseability())){
-			PolicySelectionCriteria policySelectIxRow = new PolicySelectionCriteria();
-			policySelectIxRow.setApplication(policySelect.getApplication());
-			policySelectIxRow.setLifecycle(policySelect.getLifecycle());
-			policySelectIxRow.setIdentifier(DataHunterConstants.INDEXED_ROW_COUNT);
-			SqlWithParms sqlWithParmsIx = constructSelectPolicySql(policySelectIxRow);
-			List<Policies> policiesIxs = runSelectPolicieSql(sqlWithParmsIx);
-			
-			if (!policiesIxs.isEmpty() && StringUtils.isNumeric(policiesIxs.get(0).getOtherdata().trim())){
-				reusableIndexed = true;
-				reusableIndexedCount = Integer.valueOf(policiesIxs.get(0).getOtherdata().trim());
-			}
-		}
-		
-		if (reusableIndexed){
+		if (reusableIndexedCount > 0){  // the special  'Reusable Indexed' case
 			if (DataHunterConstants.SELECT_MOST_RECENTLY_ADDED.equals(policySelect.getSelectOrder())){
 				sql += " AND IDENTIFIER <> '" + DataHunterConstants.INDEXED_ROW_COUNT + "' ORDER BY IDENTIFIER DESC LIMIT 1 ";
 			} else if (DataHunterConstants.SELECT_OLDEST_ENTRY.equals(policySelect.getSelectOrder())){
@@ -147,6 +131,8 @@ public class PoliciesDAOjdbcTemplateImpl implements PoliciesDAO
 				int randInRange = ThreadLocalRandom.current().nextInt(1, reusableIndexedCount+1);
 				String randIdentifer = StringUtils.leftPad(String.valueOf(randInRange), 10, "0");
 				sqlparameters = sqlWithParms.getSqlparameters().addValue("identifier", randIdentifer);
+				// mark this as a special case of a random lookup on 'reusable Indexed' data.
+				sqlparameters = sqlWithParms.getSqlparameters().addValue(DataHunterConstants.REUSEABLE_INDEXED_RAND, String.valueOf(true));
 				sql += " AND IDENTIFIER = :identifier ";
 //				sql += " AND IDENTIFIER >= :identifier LIMIT 1 ";
 			} else {
@@ -166,6 +152,28 @@ public class PoliciesDAOjdbcTemplateImpl implements PoliciesDAO
 			}
 		}
 		return new SqlWithParms(sql,sqlparameters);
+	}
+
+
+	/**
+	 * @param policySelect
+	 * @return reusableIndexedCount - indicates the max index for 'Reusable Indexed'data 
+	 */
+	private int reusableIndexedDataCount(PolicySelectionCriteria policySelect) {
+		int reusableIndexedCount = -1;
+		if (DataHunterConstants.REUSABLE.equals(policySelect.getUseability())){
+			PolicySelectionCriteria policySelectIxRow = new PolicySelectionCriteria();
+			policySelectIxRow.setApplication(policySelect.getApplication());
+			policySelectIxRow.setLifecycle(policySelect.getLifecycle());
+			policySelectIxRow.setIdentifier(DataHunterConstants.INDEXED_ROW_COUNT);
+			
+			SqlWithParms sqlWithParmsIx = constructSelectPolicySql(policySelectIxRow);
+			List<Policies> policiesIxs = runSelectPolicieSql(sqlWithParmsIx);
+			if (!policiesIxs.isEmpty() && StringUtils.isNumeric(policiesIxs.get(0).getOtherdata().trim())){
+					reusableIndexedCount = Integer.valueOf(policiesIxs.get(0).getOtherdata().trim());
+			}
+		}
+		return reusableIndexedCount;
 	}
 	
 	

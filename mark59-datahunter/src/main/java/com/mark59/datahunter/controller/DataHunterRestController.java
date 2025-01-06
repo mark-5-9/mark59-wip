@@ -27,6 +27,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.mark59.datahunter.application.DataHunterConstants;
 import com.mark59.datahunter.application.SqlWithParms;
@@ -625,6 +626,8 @@ public class DataHunterRestController {
 		List<Policies> policiesList;
 		SqlWithParms selectSqlWithParms = policiesDAO.constructSelectNextPolicySql(policySelectionCriteria);
 
+//		System.out.println("@ norml sc id=" + (String)selectSqlWithParms.getSqlparameters().getValue("identifier"));
+		
 		DataHunterRestApiResponsePojo response = new DataHunterRestApiResponsePojo();
 		response.setPolicies(Collections.singletonList( // just setting for debug purposes on failure 
 				new Policies(application,null, lifecycle, useability, "(lookup=" + lookupOrUse + " selectOrder="+ selectOrder +""  , null)));
@@ -644,13 +647,44 @@ public class DataHunterRestController {
 				return ResponseEntity.ok(response);		
 			}
 	
+			int rowsAffected = policiesList.size();
 			response.setRowsAffected(policiesList.size());
 	
 			if (policiesList.size() == 0) {
-				response.setSuccess(String.valueOf(false));	
-				response.setFailMsg(
-						"No rows matching the selection.  Possibly we have ran out of data for application:["
-								+ policySelectionCriteria.getApplication() + "]");
+				
+				if (selectSqlWithParms.getSqlparameters().hasValue(DataHunterConstants.REUSEABLE_INDEXED_RAND)){
+					// for the special case of a random lookup on 'Reusable Indexed' data, we will do retries 
+					int retries = 0 ;
+					while (rowsAffected==0 && retries<=10){
+						try {
+							selectSqlWithParms = policiesDAO.constructSelectNextPolicySql(policySelectionCriteria);
+							policiesList = policiesDAO.runSelectPolicieSql(selectSqlWithParms);
+							rowsAffected = policiesList.size();
+							if (rowsAffected != 0){
+								response.setSuccess(String.valueOf(true));
+								response.setPolicies(policiesList);
+								response.setRowsAffected(rowsAffected);
+								return ResponseEntity.ok(response);	
+							}
+						} catch (Exception e) {
+							response.setSuccess(String.valueOf(false));			
+							response.setFailMsg("sql exception caught: " + e.getMessage() + ", selectSqlWithParms=" + selectSqlWithParms); 
+							response.setRowsAffected(-1);
+							return ResponseEntity.ok(response);	
+						}						
+						retries++;
+					} // end retries loop
+					
+					response.setSuccess(String.valueOf(false));	
+					response.setFailMsg("Too many holes it looks like for Application:["+policySelectionCriteria.getApplication()+"]");
+				
+				} else { // empty policy list and not the  random lookup on 'Reusable Indexed' special case 
+
+					response.setSuccess(String.valueOf(false));	
+					response.setFailMsg(
+							"No rows matching the selection.  Possibly we have ran out of data for application:["
+									+ policySelectionCriteria.getApplication() + "]");
+				}	
 				return ResponseEntity.ok(response);		
 	
 			} else if (policiesList.size() > 1) {
@@ -665,9 +699,7 @@ public class DataHunterRestController {
 			Policies nextPolicy = policiesList.get(0);
 			
 			if (DataHunterConstants.USE.equalsIgnoreCase(lookupOrUse)){
-				
 				response = updateNextPolicy(response, nextPolicy);
-
 			} else { // a lookup
 				response.setSuccess(String.valueOf(true));
 				response.setFailMsg("OK (no update)");

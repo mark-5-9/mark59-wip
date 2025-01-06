@@ -47,6 +47,8 @@ public class DataHunterConstants {
 	public static final String SELECT_RANDOM_ENTRY			= "SELECT_RANDOM_ENTRY";  
 	public static final String SELECT_UNORDERED				= "SELECT_UNORDERED";  
 
+	public static final String REUSEABLE_INDEXED_RAND = "REUSEABLE_INDEXED_RAND";
+
 	/**
 	 * SELECT_MOST_RECENTLY_ADDED, SELECT_OLDEST_ENTRY, SELECT_RANDOM_ENTRY
 	 */

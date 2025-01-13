@@ -141,6 +141,8 @@ JavaDocs for the API Client from the mark59-datahunter-api project, class com.ma
 	<p><b>.../api/printSelectedPolicies?
 		application={application}&amp;lifecycle={lifecycle}&amp;useability={useability}<br>
 		&amp;selectOrder={ID_LIFECYCLE|USEABILTY_ID_LIFECYCLE|OTHERDATA|CREATED|UPDATED|EPOCHTIME}<br>
+		&amp;identifierLikeSelected={true|false}&amp;identifierLike={identifierLike}<br>
+		&amp;identifierListSelected={true|false}&amp;identifierList={identifierList}<br>
 		&amp;otherdataSelected={true|false}&amp;otherdata={otherdata}<br>
 		&amp;createdSelected={true|false}&amp;createdFrom={createdFrom}&amp;createdTo={createdTo}<br> 
 		&amp;updatedSelected={true|false}&amp;updatedFrom={updatedFrom}&amp;updatedTo={updatedTo}<br>
@@ -151,15 +153,19 @@ JavaDocs for the API Client from the mark59-datahunter-api project, class com.ma
 	
 	<p>Example: again printing UNUSED entries for an application, in 'otherdata' order, and with the additional filters except 
 	'otherdata' being set:
-	<br><i>Hint: If you Add the items in the Add Item example, you will see rows returned when you execute this example.</i>  
+	<br><i>Hint: If you Add the items in the Add Item example, you will see 2 rows returned when you execute this example.</i>  
 
-	<p><a href='api/printSelectedPolicies?application=testrest&useability=UNUSED&selectOrder=OTHERDATA&
-		otherdataSelected=false&otherdata=&
-		createdSelected=true&createdFrom=2023-01-01+15%3A59%3A59.469937&createdTo=2099-12-31+23%3A59%3A59.999999&
-		updatedSelected=true&updatedFrom=2023-01-01+15%3A59%3A59.469937&updatedTo=2099-12-31+23%3A59%3A59.999999&
-		epochtimeSelected=true&epochtimeFrom=66&epochtimeTo=4102444799999&
-		orderDirection=DESCENDING&limit=250'>
+	<p><a href='api/printSelectedPolicies?application=testrest&useability=UNUSED&selectOrder=OTHERDATA
+	&identifierLikeSelected=true&identifierLike=%25id%25
+	&identifierListSelected=true&identifierList=id1,id2
+	&otherdataSelected=false&otherdata=&createdSelected=true
+	&createdFrom=2023-01-01+15%3A59%3A59.469937&createdTo=2099-12-31+23%3A59%3A59.999999
+	&updatedSelected=true&updatedFrom=2023-01-01+15%3A59%3A59.469937&updatedTo=2099-12-31+23%3A59%3A59.999999
+	&epochtimeSelected=true&epochtimeFrom=66&epochtimeTo=4102444799999
+	&orderDirection=DESCENDING&limit=250'>
 			api/printSelectedPolicies?application=testrest&amp;useability=UNUSED&amp;selectOrder=OTHERDATA&amp;
+			identifierLikeSelected=true&amp;identifierLike=%25id%25&amp;
+			identifierListSelected=true&amp;identifierList=id1,id2&amp;	
 			otherdataSelected=false&amp;otherdata=&amp;
 			createdSelected=true&amp;createdFrom=2023-01-01+15%3A59%3A59.469937&amp;createdTo=2099-12-31+23%3A59%3A59.999999&amp;
 			updatedSelected=true&amp;updatedFrom=2023-01-01+15%3A59%3A59.469937&amp;updatedTo=2099-12-31+23%3A59%3A59.999999&amp;

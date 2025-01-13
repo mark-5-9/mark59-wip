@@ -174,7 +174,9 @@ public class DataHunterRestApiClient {
 	 * <br> lifecycle    	blank to select all lifecycles matching the other criteria
 	 * <br> useability   	{@link DataHunterConstants#USEABILITY_LIST},or blank to select all useabilities matching the other criteria
 	 * <br> identifierLikeSelected true|false to filter on identifier
-	 * <br> identifierLike  identifier filter - SQL 'LIke' format is used eg %id6%  
+	 * <br> identifierLike  identifier filter - SQL 'LIke' format is used eg %id6% 
+	 * <br> identifierListSelected true|false to filter on identifier 'IN'
+	 * <br> identifierList identifier filter - comma separated list of identifiers to be used in a SQL 'IN' format   
 	 * <br> otherdataSelected true|false to filter on otherdata
 	 * <br> otherdata     	otherdata filter - SQL 'LIke' format is used eg %5other% 
 	 * <br> createdSelected true|false to filter on a created date range
@@ -200,7 +202,9 @@ public class DataHunterRestApiClient {
 				+ "&lifecycle="  		+ encode(policySelectionFilter.getLifecycle()) 
 				+ "&useability=" 		+ encode(policySelectionFilter.getUseability())
 				+ "&identifierLikeSelected="+ Boolean.valueOf(policySelectionFilter.isIdentifierLikeSelected()) 
-				+ "&identifierLike=" 	+ encode(policySelectionFilter.getIdentifierLike())				
+				+ "&identifierLike=" 	+ encode(policySelectionFilter.getIdentifierLike())	
+				+ "&identifierListSelected="+ Boolean.valueOf(policySelectionFilter.isIdentifierListSelected()) 
+				+ "&identifierList=" 	+ encode(policySelectionFilter.getIdentifierList())	
 				+ "&otherdataSelected=" + Boolean.valueOf(policySelectionFilter.isOtherdataSelected()) 
 				+ "&otherdata="  		+ encode(policySelectionFilter.getOtherdata())
 				+ "&createdSelected=" 	+ Boolean.valueOf(policySelectionFilter.isCreatedSelected())
@@ -264,6 +268,8 @@ public class DataHunterRestApiClient {
 	 * <br> useability   	{@link DataHunterConstants#USEABILITY_LIST},or blank to select all useabilities matching the other criteria
 	 * <br> identifierLikeSelected true|false to filter on identifier
 	 * <br> identifierLike  identifier filter - SQL 'LIke' format is used eg %id6%  %  
+	 * <br> identifierListSelected true|false to filter on identifier 'IN'
+	 * <br> identifierList identifier filter - comma separated list of identifiers to be used in a SQL 'IN' format  
 	 * <br> otherdataSelected true|false to filter on otherdata
 	 * <br> otherdata     	otherdata filter - SQL 'LIke' format is used eg %5other% 
 	 * <br> createdSelected true|false to filter on a created date range
@@ -286,7 +292,9 @@ public class DataHunterRestApiClient {
 				+ "&lifecycle="  		+ encode(policySelectionFilter.getLifecycle()) 
 				+ "&useability=" 		+ encode(policySelectionFilter.getUseability())
 				+ "&identifierLikeSelected="+ Boolean.valueOf(policySelectionFilter.isIdentifierLikeSelected()) 
-				+ "&identifierLike=" 	+ encode(policySelectionFilter.getIdentifierLike())							
+				+ "&identifierLike=" 	+ encode(policySelectionFilter.getIdentifierLike())
+				+ "&identifierListSelected="+ Boolean.valueOf(policySelectionFilter.isIdentifierListSelected()) 
+				+ "&identifierList=" 	+ encode(policySelectionFilter.getIdentifierList())					
 				+ "&otherdataSelected=" + Boolean.valueOf(policySelectionFilter.isOtherdataSelected()) 
 				+ "&otherdata="  		+ encode(policySelectionFilter.getOtherdata())
 				+ "&createdSelected=" 	+ Boolean.valueOf(policySelectionFilter.isCreatedSelected())

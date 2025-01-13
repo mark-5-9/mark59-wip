@@ -312,6 +312,50 @@ public class DataHunterRestApiClientSampleUsage {
 		assertEquals(Integer.valueOf(0), response.getRowsAffected());
 		assertEquals(0, response.getPolicies().size());		
 
+		// id  selectors
+		
+		psc = new PolicySelectionFilter();
+		psc.setApplication("testapi");
+		psc.setLifecycle(null);
+		psc.setUseability("");
+		psc.setIdentifierListSelected(true);
+		psc.setIdentifierList("im2,im3");
+		psc.setOtherdataSelected(false);
+		psc.setOtherdataSelected(false);
+		psc.setOtherdata("nothing!");
+		psc.setCreatedSelected(false);
+		psc.setEpochtimeSelected(false);
+		psc.setSelectOrder("OTHERDATA");
+		psc.setOrderDirection("DESCENDING");
+		psc.setLimit("25");
+		response = dhApiClient.printSelectedPolicies(psc);
+		assertEquals("response="+response, Integer.valueOf(3), response.getRowsAffected());
+		assertEquals("response="+response, 3, response.getPolicies().size());
+		assertTrue(response.getPolicies().get(0).toString().startsWith("[application=testapi, identifier=im2, lifecycle=, useability=USED, otherdata=pi,"));
+		assertTrue(response.getPolicies().get(1).toString().startsWith("[application=testapi, identifier=im3, lifecycle=nonblanklc, useability=USED, otherdata=otherdata3,"));
+		assertTrue(response.getPolicies().get(2).toString().startsWith("[application=testapi, identifier=im3, lifecycle=duplicatedid, useability=REUSABLE, otherdata=duplicated id,"));
+		
+		psc.setIdentifierLikeSelected(true);
+		psc.setIdentifierLike("%im3%");		
+		psc.setIdentifierListSelected(false);
+		//psc.setIdentifierList("nothing");
+		response = dhApiClient.printSelectedPolicies(psc);
+		assertEquals("response="+response, Integer.valueOf(2), response.getRowsAffected());
+		assertEquals("response="+response, 2, response.getPolicies().size());
+		assertTrue(response.getPolicies().get(0).toString().startsWith("[application=testapi, identifier=im3, lifecycle=nonblanklc, useability=USED, otherdata=otherdata3,"));
+		assertTrue(response.getPolicies().get(1).toString().startsWith("[application=testapi, identifier=im3, lifecycle=duplicatedid, useability=REUSABLE, otherdata=duplicated id,"));
+		
+		psc.setIdentifierLikeSelected(true);
+		psc.setIdentifierLike("%im%");		
+		psc.setIdentifierListSelected(true);
+		psc.setIdentifierList("im2");
+		response = dhApiClient.printSelectedPolicies(psc);
+		assertEquals("response="+response, Integer.valueOf(1), response.getRowsAffected());
+		assertEquals("response="+response, 1, response.getPolicies().size());
+		assertTrue(response.getPolicies().get(0).toString().startsWith("[application=testapi, identifier=im2, lifecycle=, useability=USED, otherdata=pi,"));	
+		
+		
+		// deletes
 		response = dhApiClient.deleteMultiplePolicies(" testapi ", "nonblanklc ", null);
 		assertEquals(Integer.valueOf(2), response.getRowsAffected());
 		
@@ -350,6 +394,21 @@ public class DataHunterRestApiClientSampleUsage {
 		response = dhApiClient.printSelectedPolicies("testapi", null, null);
 		assertEquals(Integer.valueOf(1), response.getRowsAffected());
 		assertTrue(response.getPolicies().get(0).toString().startsWith("[application=testapi, identifier=im3, lifecycle=duplicatedid, useability=REUSABLE, otherdata=duplicated id,"));
+		
+		//only im3 left
+		psfd = new PolicySelectionFilter();
+		psfd.setApplication("testapi");
+		psfd.setLifecycle(null);
+		psfd.setUseability("");
+		psfd.setIdentifierLikeSelected(true);
+		psfd.setIdentifierLike("%im3%");
+		psfd.setIdentifierListSelected(true);
+		psfd.setIdentifierList("im3");
+		response = dhApiClient.deleteMultiplePolicies("testapi", null, null);
+		assertEquals(Integer.valueOf(1), response.getRowsAffected());
+		response = dhApiClient.printSelectedPolicies("testapi", null, null);
+		assertEquals(Integer.valueOf(0), Integer.valueOf(response.getPolicies().size()));
+
 		System.out.println("	<< workingWithMultiplePolicies");
 	}
 

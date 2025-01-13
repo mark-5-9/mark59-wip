@@ -32,6 +32,7 @@ import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 
 import com.mark59.datahunter.application.DataHunterConstants;
+import com.mark59.datahunter.application.DataHunterUtils;
 import com.mark59.datahunter.application.SqlWithParms;
 import com.mark59.datahunter.data.beans.Policies;
 import com.mark59.datahunter.model.AsyncMessageaAnalyzerResult;
@@ -682,40 +683,50 @@ public class PoliciesDAOjdbcTemplateImpl implements PoliciesDAO
 //		System.out.println("sql lock : " + sql + "(" + lockResult + ")"  );
 	}
 
-
+	
 	private String otherDataAndDatesSelector(PolicySelectionFilter policySelectionFilter,
 			MapSqlParameterSource sqlparameters, String sql) {
 		
+		if (policySelectionFilter.isIdentifierLikeSelected()   ){
+			sqlparameters.addValue("identifierLike", policySelectionFilter.getIdentifierLike());
+			sql += " AND IDENTIFIER LIKE :identifierLike ";			
+		}
+		
+		if (policySelectionFilter.isIdentifierListSelected()){
+			sqlparameters.addValue("identifierList", DataHunterUtils.commaDelimStringToStringSet(policySelectionFilter.getIdentifierList()));
+			sql += " AND IDENTIFIER in ( :identifierList ) ";			
+		}
+
 		if (policySelectionFilter.isOtherdataSelected()){
 			sqlparameters.addValue("otherdata", policySelectionFilter.getOtherdata() );
-			sql += " AND otherdata LIKE :otherdata ";			
+			sql += " AND OTHERDATA LIKE :otherdata ";			
 		}
 		if (policySelectionFilter.isCreatedSelected()){
 			sqlparameters.addValue("createdFrom", policySelectionFilter.getCreatedFrom());
 			sqlparameters.addValue("createdTo"  , policySelectionFilter.getCreatedTo());
 			
 			if (DataHunterConstants.PG.equalsIgnoreCase(currentDatabaseProfile)){
-				sql += " AND created BETWEEN TO_TIMESTAMP( :createdFrom, 'YYYY-MM-DD HH24:MI:SS.US') AND TO_TIMESTAMP( :createdTo , 'YYYY-MM-DD HH24:MI:SS.US')";
+				sql += " AND CREATED BETWEEN TO_TIMESTAMP( :createdFrom, 'YYYY-MM-DD HH24:MI:SS.US') AND TO_TIMESTAMP( :createdTo , 'YYYY-MM-DD HH24:MI:SS.US')";
 			} else {
-				sql += " AND created BETWEEN :createdFrom AND :createdTo ";			
+				sql += " AND CREATED BETWEEN :createdFrom AND :createdTo ";			
 			}
 		}
 		if (policySelectionFilter.isUpdatedSelected()){
 			sqlparameters.addValue("updatedFrom", policySelectionFilter.getUpdatedFrom());
 			sqlparameters.addValue("updatedTo"  , policySelectionFilter.getUpdatedTo());
 			if (DataHunterConstants.PG.equalsIgnoreCase(currentDatabaseProfile)){
-				sql += " AND updated BETWEEN TO_TIMESTAMP( :updatedFrom, 'YYYY-MM-DD HH24:MI:SS.US') AND TO_TIMESTAMP( :updatedTo , 'YYYY-MM-DD HH24:MI:SS.US')";			
+				sql += " AND UPDATED BETWEEN TO_TIMESTAMP( :updatedFrom, 'YYYY-MM-DD HH24:MI:SS.US') AND TO_TIMESTAMP( :updatedTo , 'YYYY-MM-DD HH24:MI:SS.US')";			
 			} else {
-				sql += " AND updated BETWEEN :updatedFrom AND :updatedTo ";			
+				sql += " AND UPDATED BETWEEN :updatedFrom AND :updatedTo ";			
 			}
 		}
 		if (policySelectionFilter.isEpochtimeSelected()){
 			sqlparameters.addValue("epochtimeFrom", policySelectionFilter.getEpochtimeFrom());
 			sqlparameters.addValue("epochtimeTo"  , policySelectionFilter.getEpochtimeTo());
 			if (DataHunterConstants.PG.equalsIgnoreCase(currentDatabaseProfile)){
-				sql += " AND epochtime BETWEEN cast( :epochtimeFrom as bigint) AND cast( :epochtimeTo as bigint) ";			
+				sql += " AND EPOCHTIME BETWEEN cast( :epochtimeFrom as bigint) AND cast( :epochtimeTo as bigint) ";			
 			} else {
-				sql += " AND epochtime BETWEEN :epochtimeFrom AND :epochtimeTo ";			
+				sql += " AND EPOCHTIME BETWEEN :epochtimeFrom AND :epochtimeTo ";			
 			}
 		}
 		return sql;

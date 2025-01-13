@@ -173,7 +173,8 @@ public class DataHunterRestApiClient {
 	 * <br> application  	application (required)
 	 * <br> lifecycle    	blank to select all lifecycles matching the other criteria
 	 * <br> useability   	{@link DataHunterConstants#USEABILITY_LIST},or blank to select all useabilities matching the other criteria
-	 * <br> selectOrder		field used to ORDER the list by {@link DataHunterConstants#FILTERED_SELECT_ORDER_LIST} default is natural key order
+	 * <br> identifierLikeSelected true|false to filter on identifier
+	 * <br> identifierLike  identifier filter - SQL 'LIke' format is used eg %id6%  
 	 * <br> otherdataSelected true|false to filter on otherdata
 	 * <br> otherdata     	otherdata filter - SQL 'LIke' format is used eg %5other% 
 	 * <br> createdSelected true|false to filter on a created date range
@@ -185,6 +186,7 @@ public class DataHunterRestApiClient {
 	 * <br> epochtimeSelected true|false to filter on an epochtime range
 	 * <br> epochtimeFrom 	eg 0   (max 13 numerics)
 	 * <br> epochtimeTo		eg 4102444799999 (max 13 numerics)
+	 * <br> selectOrder		field used to ORDER the list by {@link DataHunterConstants#FILTERED_SELECT_ORDER_LIST} default is natural key order
 	 * <br> orderDirection  ASCENDING (default) | DESCENDING  {@link DataHunterConstants#ORDER_DIRECTION_LIST}
 	 * <br> limit			0 to 1000  (default 100, if gt 1000 will be set to 1000)
  	 * 
@@ -197,7 +199,8 @@ public class DataHunterRestApiClient {
 				+ "application=" 		+ encode(policySelectionFilter.getApplication())  
 				+ "&lifecycle="  		+ encode(policySelectionFilter.getLifecycle()) 
 				+ "&useability=" 		+ encode(policySelectionFilter.getUseability())
-				+ "&selectOrder=" 		+ encode(policySelectionFilter.getSelectOrder())
+				+ "&identifierLikeSelected="+ Boolean.valueOf(policySelectionFilter.isIdentifierLikeSelected()) 
+				+ "&identifierLike=" 	+ encode(policySelectionFilter.getIdentifierLike())				
 				+ "&otherdataSelected=" + Boolean.valueOf(policySelectionFilter.isOtherdataSelected()) 
 				+ "&otherdata="  		+ encode(policySelectionFilter.getOtherdata())
 				+ "&createdSelected=" 	+ Boolean.valueOf(policySelectionFilter.isCreatedSelected())
@@ -209,6 +212,7 @@ public class DataHunterRestApiClient {
 				+ "&epochtimeSelected=" + Boolean.valueOf(policySelectionFilter.isEpochtimeSelected())
 				+ "&epochtimeFrom="  	+ encode(policySelectionFilter.getEpochtimeFrom()) 				
 				+ "&epochtimeTo="  		+ encode(policySelectionFilter.getEpochtimeTo())
+				+ "&selectOrder=" 		+ encode(policySelectionFilter.getSelectOrder())
 				+ "&orderDirection=" 	+ encode(policySelectionFilter.getOrderDirection())  
 				+ "&limit=" 			+ encode(policySelectionFilter.getLimit()) ;
 		
@@ -258,6 +262,8 @@ public class DataHunterRestApiClient {
 	 * <br> application  	application (required)
 	 * <br> lifecycle    	blank to select all lifecycles matching the other criteria
 	 * <br> useability   	{@link DataHunterConstants#USEABILITY_LIST},or blank to select all useabilities matching the other criteria
+	 * <br> identifierLikeSelected true|false to filter on identifier
+	 * <br> identifierLike  identifier filter - SQL 'LIke' format is used eg %id6%  %  
 	 * <br> otherdataSelected true|false to filter on otherdata
 	 * <br> otherdata     	otherdata filter - SQL 'LIke' format is used eg %5other% 
 	 * <br> createdSelected true|false to filter on a created date range
@@ -279,6 +285,8 @@ public class DataHunterRestApiClient {
 				+ "application=" 		+ encode(policySelectionFilter.getApplication())  
 				+ "&lifecycle="  		+ encode(policySelectionFilter.getLifecycle()) 
 				+ "&useability=" 		+ encode(policySelectionFilter.getUseability())
+				+ "&identifierLikeSelected="+ Boolean.valueOf(policySelectionFilter.isIdentifierLikeSelected()) 
+				+ "&identifierLike=" 	+ encode(policySelectionFilter.getIdentifierLike())							
 				+ "&otherdataSelected=" + Boolean.valueOf(policySelectionFilter.isOtherdataSelected()) 
 				+ "&otherdata="  		+ encode(policySelectionFilter.getOtherdata())
 				+ "&createdSelected=" 	+ Boolean.valueOf(policySelectionFilter.isCreatedSelected())

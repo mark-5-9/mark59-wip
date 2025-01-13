@@ -27,7 +27,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.ModelAndView;
 
 import com.mark59.datahunter.application.DataHunterConstants;
 import com.mark59.datahunter.application.SqlWithParms;
@@ -278,7 +277,10 @@ public class DataHunterRestController {
 	 * @param application  	application (required)
 	 * @param lifecycle    	blank to select all lifecycles matching the other criteria
 	 * @param useability   	{@link DataHunterConstants#USEABILITY_LIST},or blank to select all useabilities matching the other criteria
-	 * @param selectOrder	field used to ORDER the list by {@link DataHunterConstants#FILTERED_SELECT_ORDER_LIST} default is natural key order
+	 * @param identifierLikeSelected true|false to filter on identifier 'LIKE'
+	 * @param identifierLike identifier filter - SQL 'LIke' format is used eg %id6% 
+	 * @param identifierListSelected true|false to filter on identifier 'IN'
+	 * @param identifierList identifier filter - comma separated list of identifiers to be used in a SQL 'IN' format   
 	 * @param otherdataSelected true|false to filter on otherdata
 	 * @param otherdata     otherdata filter - SQL 'LIke' format is used eg %5other% 
 	 * @param createdSelected true|false to filter on a created date range
@@ -290,24 +292,32 @@ public class DataHunterRestController {
 	 * @param epochtimeSelected true|false to filter on an epochtime range
 	 * @param epochtimeFrom eg 0   (max 13 numerics)
 	 * @param epochtimeTo	eg 4102444799999 (max 13 numerics)
+	 * @param selectOrder	field used to ORDER the list by {@link DataHunterConstants#FILTERED_SELECT_ORDER_LIST} default is natural key order
 	 * @param orderDirection ASCENDING (default) | DESCENDING  {@link DataHunterConstants#ORDER_DIRECTION_LIST}
 	 * @param limit			0 to 1000  (default 100, if gt 1000 will be set to 1000)
 	 * @return ResponseEntity (ok) list of items matching the above criteria.  Maximum of 1000 returned rows
 	 */
 	@GetMapping(path = "/printSelectedPolicies")
-	public ResponseEntity<Object> printSelectedPolicies(@RequestParam String application, @RequestParam(required=false) String lifecycle, 
-			@RequestParam(required=false) String useability,@RequestParam(required=false) String selectOrder, 
+	public ResponseEntity<Object> printSelectedPolicies(@RequestParam String application, 
+			@RequestParam(required=false) String lifecycle,
+			@RequestParam(required=false) String useability,
+			@RequestParam(required=false) String identifierLikeSelected,@RequestParam(required=false) String identifierLike,
+			@RequestParam(required=false) String identifierListSelected,@RequestParam(required=false) String identifierList,
 			@RequestParam(required=false) String otherdataSelected,@RequestParam(required=false) String otherdata,
 			@RequestParam(required=false) String createdSelected,@RequestParam(required=false) String createdFrom,@RequestParam(required=false) String createdTo,
 			@RequestParam(required=false) String updatedSelected,@RequestParam(required=false) String updatedFrom,@RequestParam(required=false) String updatedTo,
 			@RequestParam(required=false) String epochtimeSelected,@RequestParam(required=false) String epochtimeFrom,@RequestParam(required=false) String epochtimeTo,
-			@RequestParam(required=false) String orderDirection,@RequestParam(required=false) String limit ){
+			@RequestParam(required=false) String selectOrder, @RequestParam(required=false) String orderDirection,
+			@RequestParam(required=false) String limit ){
 		
 		PolicySelectionFilter policySelectionFilter = new PolicySelectionFilter();
 		policySelectionFilter.setApplication(application);
 		policySelectionFilter.setLifecycle(lifecycle);
 		policySelectionFilter.setUseability(useability);
-		policySelectionFilter.setSelectOrder(selectOrder);
+		policySelectionFilter.setIdentifierLikeSelected(Boolean.valueOf(identifierLikeSelected));
+		policySelectionFilter.setIdentifierLike(identifierLike);
+		policySelectionFilter.setIdentifierListSelected(Boolean.valueOf(identifierListSelected));
+		policySelectionFilter.setIdentifierList(identifierList);			
 		policySelectionFilter.setOtherdataSelected(Boolean.valueOf(otherdataSelected));
 		policySelectionFilter.setOtherdata(otherdata);	
 		policySelectionFilter.setCreatedSelected(Boolean.valueOf(createdSelected));
@@ -319,6 +329,7 @@ public class DataHunterRestController {
 		policySelectionFilter.setEpochtimeSelected(Boolean.valueOf(epochtimeSelected));
 		policySelectionFilter.setEpochtimeFrom(epochtimeFrom);	
 		policySelectionFilter.setEpochtimeTo(epochtimeTo);
+		policySelectionFilter.setSelectOrder(selectOrder);
 		policySelectionFilter.setOrderDirection(orderDirection);
 		policySelectionFilter.setLimit(limit);	
 		
@@ -404,6 +415,10 @@ public class DataHunterRestController {
 	 * <br> application  	application (required)
 	 * <br> lifecycle    	blank to select all lifecycles matching the other criteria
 	 * <br> useability   	{@link DataHunterConstants#USEABILITY_LIST},or blank to select all useabilities matching the other criteria
+	 * <br> identifierLikeSelected true|false to filter on identifier 'LIKE'
+	 * <br> identifierLike identifier filter - SQL 'LIke' format is used eg %id6% 
+	 * <br> identifierListSelected true|false to filter on identifier 'IN'
+	 * <br> identifierList identifier filter - comma separated list of identifiers to be used in a SQL 'IN' format   
 	 * <br> otherdataSelected true|false to filter on otherdata
 	 * <br> otherdata     	otherdata filter - SQL 'LIke' format is used eg %5other% 
 	 * <br> createdSelected true|false to filter on a created date range
@@ -420,16 +435,24 @@ public class DataHunterRestController {
 	 * @return ResponseEntity (ok) indicates number of rows deleted
 	 */
 	@GetMapping(path = "/deleteMultiplePolicies")
-	public ResponseEntity<Object> deleteMultiplePolicies(@RequestParam String application, @RequestParam(required=false) String lifecycle, 
-			@RequestParam(required=false) String useability,@RequestParam(required=false) String otherdataSelected,@RequestParam(required=false) String otherdata,
-			@RequestParam(required=false) String createdSelected,@RequestParam(required=false) String createdFrom,@RequestParam(required=false) String createdTo,
-			@RequestParam(required=false) String updatedSelected,@RequestParam(required=false) String updatedFrom,@RequestParam(required=false) String updatedTo,
-			@RequestParam(required=false) String epochtimeSelected,@RequestParam(required=false) String epochtimeFrom,@RequestParam(required=false) String epochtimeTo){
-
+	public ResponseEntity<Object> deleteMultiplePolicies(@RequestParam String application,
+		@RequestParam(required=false) String lifecycle,
+		@RequestParam(required=false) String useability,
+		@RequestParam(required=false) String identifierLikeSelected,@RequestParam(required=false) String identifierLike,
+		@RequestParam(required=false) String identifierListSelected,@RequestParam(required=false) String identifierList,		
+		@RequestParam(required=false) String otherdataSelected,@RequestParam(required=false) String otherdata,
+		@RequestParam(required=false) String createdSelected,@RequestParam(required=false) String createdFrom,@RequestParam(required=false) String createdTo,
+		@RequestParam(required=false) String updatedSelected,@RequestParam(required=false) String updatedFrom,@RequestParam(required=false) String updatedTo,
+		@RequestParam(required=false) String epochtimeSelected,@RequestParam(required=false) String epochtimeFrom,@RequestParam(required=false) String epochtimeTo){		
+		
 		PolicySelectionFilter policySelectionFilter = new PolicySelectionFilter();
 		policySelectionFilter.setApplication(application);
 		policySelectionFilter.setLifecycle(lifecycle);
 		policySelectionFilter.setUseability(useability);
+		policySelectionFilter.setIdentifierLikeSelected(Boolean.valueOf(identifierLikeSelected));
+		policySelectionFilter.setIdentifierLike(identifierLike);
+		policySelectionFilter.setIdentifierListSelected(Boolean.valueOf(identifierListSelected));
+		policySelectionFilter.setIdentifierList(identifierList);			
 		policySelectionFilter.setOtherdataSelected(Boolean.valueOf(otherdataSelected));
 		policySelectionFilter.setOtherdata(otherdata);	
 		policySelectionFilter.setCreatedSelected(Boolean.valueOf(createdSelected));
@@ -441,6 +464,7 @@ public class DataHunterRestController {
 		policySelectionFilter.setEpochtimeSelected(Boolean.valueOf(epochtimeSelected));
 		policySelectionFilter.setEpochtimeFrom(epochtimeFrom);	
 		policySelectionFilter.setEpochtimeTo(epochtimeTo);
+		
 		
 		DataHunterRestApiResponsePojo response = new DataHunterRestApiResponsePojo();
 		

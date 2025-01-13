@@ -88,7 +88,6 @@ public class ManageMultiplePoliciesController {
 				response.flush();
 			}
 		};
-		
 	
 		return ResponseEntity.ok()
 				.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=DataHunterItems.csv")
@@ -101,6 +100,12 @@ public class ManageMultiplePoliciesController {
 	public String printSelectedPoliciesUrl(@RequestParam(required=false) String application,@ModelAttribute PolicySelectionFilter policySelectionFilter, Model model){ 
 		// System.out.println("/print_selected_policies : " + policySelectionFilter );
 
+		if (DataHunterUtils.isEmpty(policySelectionFilter.getIdentifierLike())){
+			policySelectionFilter.setIdentifierLike("%");
+		}
+		if (DataHunterUtils.isEmpty(policySelectionFilter.getIdentifierList())){
+			policySelectionFilter.setIdentifierList("");
+		}		
 		if (DataHunterUtils.isEmpty(policySelectionFilter.getOtherdata())){
 			policySelectionFilter.setOtherdata("%");
 		}

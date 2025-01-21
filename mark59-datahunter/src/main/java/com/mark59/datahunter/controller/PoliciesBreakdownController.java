@@ -99,8 +99,24 @@ public class PoliciesBreakdownController {
 				"application="   + DataHunterUtils.encode(countPoliciesBreakdown.getApplication()) 
 				+ "&lifecycle="  + DataHunterUtils.encode(countPoliciesBreakdown.getLifecycle())
 				+ "&useability=" + DataHunterUtils.encode(countPoliciesBreakdown.getUseability()));
+			
+			countPoliciesBreakdownForm.setIsIndexedReusable("N");
+			countPoliciesBreakdownForm.setHoleCount(0L);
+			countPoliciesBreakdownForm.setHoleStats("");
+			int reusableIndexedCount = policiesDAO.reusableIndexedDataCount(countPoliciesBreakdown);
+			if (reusableIndexedCount > -1){
+				countPoliciesBreakdownForm.setIsIndexedReusable("Y");
+				countPoliciesBreakdown.setHoleCount(Long.valueOf(reusableIndexedCount) - countPoliciesBreakdown.getRowCount()+1);
+				if (countPoliciesBreakdown.getRowCount() <= 1 ){  // only the IX row itself exists (or dud rows / hacked index)
+					countPoliciesBreakdownForm.setHoleStats("na");
+				} else {
+					Long pcHoles = (countPoliciesBreakdown.getHoleCount() * 100) / (countPoliciesBreakdown.getRowCount()-1); 
+					countPoliciesBreakdownForm.setHoleStats(countPoliciesBreakdown.getHoleCount() + " ("+pcHoles+"%)");
+				}	
+			}
 			countPoliciesBreakdownFormList.add(countPoliciesBreakdownForm);
 		}
+
 		model.addAttribute("countPoliciesBreakdownFormList", countPoliciesBreakdownFormList);
 
 		model.addAttribute("sql", sqlWithParms);

@@ -42,6 +42,8 @@
     <th>lifecycle</th>
     <th>useability</th>    
     <th>count</th>
+    <th>indexed?</th>
+    <th>holes</th>
     <th style="display:none;"></th>
    </tr>
    <c:forEach var="countPoliciesBreakdownForm" items="${model.countPoliciesBreakdownFormList}">
@@ -54,6 +56,8 @@
      <td id=lifecycle>${countPoliciesBreakdownForm.lifecycle}</td>
      <td id=useability>${countPoliciesBreakdownForm.useability}</td>
      <td id=${app_id}_${lcy_id}_${countPoliciesBreakdownForm.useability}_count>${countPoliciesBreakdownForm.rowCount}</td>
+     <td id=${app_id}_${lcy_id}_${countPoliciesBreakdownForm.useability}_isindexed>${countPoliciesBreakdownForm.isIndexedReusable}</td>
+     <td id=${app_id}_${lcy_id}_${countPoliciesBreakdownForm.useability}_holestats>${countPoliciesBreakdownForm.holeStats}</td>
 	 <td style="display:none;" id=counter>${countPoliciesBreakdownForm.rowCount}</td>
     </tr>
    </c:forEach>

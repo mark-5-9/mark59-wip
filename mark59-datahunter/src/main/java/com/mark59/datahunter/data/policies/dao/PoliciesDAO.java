@@ -45,6 +45,7 @@ public interface PoliciesDAO
 	SqlWithParms constructSelectNextPolicySql(PolicySelectionCriteria policySelect);
 	SqlWithParms constructCountPoliciesSql(PolicySelectionCriteria policySelect);
 	SqlWithParms constructCountPoliciesBreakdownSql(PolicySelectionCriteria policySelectionCriteria);
+	int reusableIndexedDataCount(PolicySelectionCriteria policySelect);
 	SqlWithParms constructAsyncMessageaAnalyzerSql(PolicySelectionCriteria policySelectionCriteria);
 	
 	int runCountSql(SqlWithParms sqlWithParms);
@@ -73,6 +74,8 @@ public interface PoliciesDAO
 
 	void getLock(String lockResouceString, int timeout);
 	void releaseLock(String lockResouceString) throws SQLException;
+
+
 
 
 }

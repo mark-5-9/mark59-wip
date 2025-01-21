@@ -212,8 +212,24 @@ public class DataHunterRestController {
 		
 		SqlWithParms sqlWithParms = policiesDAO.constructCountPoliciesBreakdownSql(policySelectionCriteria);
 		List<CountPoliciesBreakdown> countPoliciesBreakdownList = policiesDAO.runCountPoliciesBreakdownSql(sqlWithParms);
+		
+		for (CountPoliciesBreakdown countPoliciesBreakdown : countPoliciesBreakdownList) {
+			countPoliciesBreakdown.setIsIndexedReusable("N");
+			countPoliciesBreakdown.setHoleCount(0L);
+			int reusableIndexedCount = policiesDAO.reusableIndexedDataCount(countPoliciesBreakdown);
+			if (reusableIndexedCount > -1){
+				countPoliciesBreakdown.setIsIndexedReusable("Y");
+				countPoliciesBreakdown.setHoleCount(Long.valueOf(reusableIndexedCount) - countPoliciesBreakdown.getRowCount()+1);
+			}
+		}		
+		
+		
+		for (CountPoliciesBreakdown countPoliciesBreakdown : countPoliciesBreakdownList) {
+			System.out.println("    DRC : " + countPoliciesBreakdown );
+		}	
+		
+		
 		int rowsAffected = countPoliciesBreakdownList.size();
-
 		response.setCountPoliciesBreakdown(countPoliciesBreakdownList);
 		response.setRowsAffected(rowsAffected);
 		response.setSuccess(String.valueOf(true));			

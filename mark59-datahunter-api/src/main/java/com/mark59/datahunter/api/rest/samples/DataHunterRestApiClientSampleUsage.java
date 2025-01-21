@@ -435,27 +435,38 @@ public class DataHunterRestApiClientSampleUsage {
 
 		response = dhApiClient.policiesBreakdown(DataHunterConstants.EQUALS, " testapi ", " nonblanklc ", "USED");
 		assertEquals(Integer.valueOf(1), response.getRowsAffected());
-		assertEquals("[[application= testapi , identifier=null, lifecycle= nonblanklc , useability=USED, otherdata=EQUALS, created=null, updated=null, epochtime=null]]", response.getPolicies().toString());
+		assertEquals("[[application= testapi , identifier=null, lifecycle= nonblanklc , useability=USED, otherdata=EQUALS, created=null, updated=null, epochtime=null]]", 
+				response.getPolicies().toString());
 		assertEquals(1, response.getCountPoliciesBreakdown().size());	
-		assertEquals("[[application=testapi, startsWith=null, identifier=null, lifecycle=nonblanklc, useability=USED, selectOrder=null], rowCount=1]]", response.getCountPoliciesBreakdown().toString());
+		assertEquals("[[application=testapi, startsWith=null, identifier=null, lifecycle=nonblanklc, useability=USED, selectOrder=null], rowCount=1, isIndexedReusable=N, holeCount=0]]",
+				response.getCountPoliciesBreakdown().toString());
 	
 		assertEquals(Integer.valueOf(5), dhApiClient.countPolicies("testapi", null, null).getRowsAffected());
 
 		response = dhApiClient.policiesBreakdown(DataHunterConstants.EQUALS, "testapi", null, null);
 		assertEquals(4, response.getCountPoliciesBreakdown().size());		
-		assertEquals("[application=testapi, startsWith=null, identifier=null, lifecycle=, useability=USED, selectOrder=null], rowCount=2]", 				response.getCountPoliciesBreakdown().get(0).toString());
-		assertEquals("[application=testapi, startsWith=null, identifier=null, lifecycle=duplicatedid, useability=REUSABLE, selectOrder=null], rowCount=1]", response.getCountPoliciesBreakdown().get(1).toString());
-		assertEquals("[application=testapi, startsWith=null, identifier=null, lifecycle=nonblanklc, useability=UNUSED, selectOrder=null], rowCount=1]", 	response.getCountPoliciesBreakdown().get(2).toString());
-		assertEquals("[application=testapi, startsWith=null, identifier=null, lifecycle=nonblanklc, useability=USED, selectOrder=null], rowCount=1]", 		response.getCountPoliciesBreakdown().get(3).toString());
+		assertEquals("[application=testapi, startsWith=null, identifier=null, lifecycle=, useability=USED, selectOrder=null], rowCount=2, isIndexedReusable=N, holeCount=0]",
+				response.getCountPoliciesBreakdown().get(0).toString());
+			System.out.println("getCountPoliciesBreakdown=" + response.getCountPoliciesBreakdown().get(0).toString());
+		assertEquals("[application=testapi, startsWith=null, identifier=null, lifecycle=duplicatedid, useability=REUSABLE, selectOrder=null], rowCount=1, isIndexedReusable=N, holeCount=0]", 
+				response.getCountPoliciesBreakdown().get(1).toString());
+		assertEquals("[application=testapi, startsWith=null, identifier=null, lifecycle=nonblanklc, useability=UNUSED, selectOrder=null], rowCount=1, isIndexedReusable=N, holeCount=0]", 	
+				response.getCountPoliciesBreakdown().get(2).toString());
+		assertEquals("[application=testapi, startsWith=null, identifier=null, lifecycle=nonblanklc, useability=USED, selectOrder=null], rowCount=1, isIndexedReusable=N, holeCount=0]", 		
+				response.getCountPoliciesBreakdown().get(3).toString());
 				
 		assertEquals(Integer.valueOf(5), dhApiClient.countPolicies("testapi", "", "").getRowsAffected() );
 
 		response = dhApiClient.policiesBreakdown(DataHunterConstants.EQUALS, "testapi", "", "");
 		assertEquals(4, response.getCountPoliciesBreakdown().size());		
-		assertEquals("[application=testapi, startsWith=null, identifier=null, lifecycle=, useability=USED, selectOrder=null], rowCount=2]", 				response.getCountPoliciesBreakdown().get(0).toString());
-		assertEquals("[application=testapi, startsWith=null, identifier=null, lifecycle=duplicatedid, useability=REUSABLE, selectOrder=null], rowCount=1]", response.getCountPoliciesBreakdown().get(1).toString());
-		assertEquals("[application=testapi, startsWith=null, identifier=null, lifecycle=nonblanklc, useability=UNUSED, selectOrder=null], rowCount=1]", 	response.getCountPoliciesBreakdown().get(2).toString());
-		assertEquals("[application=testapi, startsWith=null, identifier=null, lifecycle=nonblanklc, useability=USED, selectOrder=null], rowCount=1]", 		response.getCountPoliciesBreakdown().get(3).toString());
+		assertEquals("[application=testapi, startsWith=null, identifier=null, lifecycle=, useability=USED, selectOrder=null], rowCount=2, isIndexedReusable=N, holeCount=0]",
+				response.getCountPoliciesBreakdown().get(0).toString());
+		assertEquals("[application=testapi, startsWith=null, identifier=null, lifecycle=duplicatedid, useability=REUSABLE, selectOrder=null], rowCount=1, isIndexedReusable=N, holeCount=0]", 
+				response.getCountPoliciesBreakdown().get(1).toString());
+		assertEquals("[application=testapi, startsWith=null, identifier=null, lifecycle=nonblanklc, useability=UNUSED, selectOrder=null], rowCount=1, isIndexedReusable=N, holeCount=0]", 	
+				response.getCountPoliciesBreakdown().get(2).toString());
+		assertEquals("[application=testapi, startsWith=null, identifier=null, lifecycle=nonblanklc, useability=USED, selectOrder=null], rowCount=1, isIndexedReusable=N, holeCount=0]", 		
+				response.getCountPoliciesBreakdown().get(3).toString());
 		
 		assertEquals(Integer.valueOf(0), dhApiClient.countPolicies("nonexisting", "", "").getRowsAffected() );
 
@@ -468,8 +479,10 @@ public class DataHunterRestApiClientSampleUsage {
 		
 		response = dhApiClient.policiesBreakdown(DataHunterConstants.EQUALS, "testapi", "", "USED");
 		assertEquals(2, response.getCountPoliciesBreakdown().size());		
-		assertEquals("[application=testapi, startsWith=null, identifier=null, lifecycle=, useability=USED, selectOrder=null], rowCount=2]", 				response.getCountPoliciesBreakdown().get(0).toString());
-		assertEquals("[application=testapi, startsWith=null, identifier=null, lifecycle=nonblanklc, useability=USED, selectOrder=null], rowCount=1]", 		response.getCountPoliciesBreakdown().get(1).toString());
+		assertEquals("[application=testapi, startsWith=null, identifier=null, lifecycle=, useability=USED, selectOrder=null], rowCount=2, isIndexedReusable=N, holeCount=0]", 				
+				response.getCountPoliciesBreakdown().get(0).toString());
+		assertEquals("[application=testapi, startsWith=null, identifier=null, lifecycle=nonblanklc, useability=USED, selectOrder=null], rowCount=1, isIndexedReusable=N, holeCount=0]", 		
+				response.getCountPoliciesBreakdown().get(1).toString());
 
 		assertEquals(Integer.valueOf(0), dhApiClient.countPolicies("testapi", "nonexistingc",  "").getRowsAffected() );
 		assertEquals(0, dhApiClient.policiesBreakdown(DataHunterConstants.EQUALS, "testapi", "nonexistingc",  "").getCountPoliciesBreakdown().size()); 
@@ -478,14 +491,17 @@ public class DataHunterRestApiClientSampleUsage {
 
 		response = dhApiClient.policiesBreakdown(DataHunterConstants.EQUALS, "testapi", null,  "UNUSED");
 		assertEquals(1, response.getCountPoliciesBreakdown().size());		
-		assertEquals("[application=testapi, startsWith=null, identifier=null, lifecycle=nonblanklc, useability=UNUSED, selectOrder=null], rowCount=1]", 	response.getCountPoliciesBreakdown().get(0).toString());
+		assertEquals("[application=testapi, startsWith=null, identifier=null, lifecycle=nonblanklc, useability=UNUSED, selectOrder=null], rowCount=1, isIndexedReusable=N, holeCount=0]", 	
+				response.getCountPoliciesBreakdown().get(0).toString());
 		
 		assertEquals(Integer.valueOf(2), dhApiClient.countPolicies("testapi", "nonblanklc", "").getRowsAffected() );
 
 		response = dhApiClient.policiesBreakdown(DataHunterConstants.EQUALS, "testapi", "nonblanklc", "");
 		assertEquals(2, response.getCountPoliciesBreakdown().size());		
-		assertEquals("[application=testapi, startsWith=null, identifier=null, lifecycle=nonblanklc, useability=UNUSED, selectOrder=null], rowCount=1]", 	response.getCountPoliciesBreakdown().get(0).toString());
-		assertEquals("[application=testapi, startsWith=null, identifier=null, lifecycle=nonblanklc, useability=USED, selectOrder=null], rowCount=1]", 		response.getCountPoliciesBreakdown().get(1).toString());
+		assertEquals("[application=testapi, startsWith=null, identifier=null, lifecycle=nonblanklc, useability=UNUSED, selectOrder=null], rowCount=1, isIndexedReusable=N, holeCount=0]", 	
+				response.getCountPoliciesBreakdown().get(0).toString());
+		assertEquals("[application=testapi, startsWith=null, identifier=null, lifecycle=nonblanklc, useability=USED, selectOrder=null], rowCount=1, isIndexedReusable=N, holeCount=0]", 		
+				response.getCountPoliciesBreakdown().get(1).toString());
 		System.out.println("	<< policyCountsAndBreakdowns");
 	}	
 	

@@ -157,10 +157,13 @@ public class PoliciesDAOjdbcTemplateImpl implements PoliciesDAO
 
 
 	/**
-	 * @param policySelect
+	 * Check if a dataset (Application/Lifecycle) is a 'Reusable Indexed' type 
+	 * 
+	 * @param policySelect  PolicySelectionCriteria
 	 * @return reusableIndexedCount - indicates the max index for 'Reusable Indexed'data 
 	 */
-	private int reusableIndexedDataCount(PolicySelectionCriteria policySelect) {
+	@Override	
+	public int reusableIndexedDataCount(PolicySelectionCriteria policySelect) {
 		int reusableIndexedCount = -1;
 		if (DataHunterConstants.REUSABLE.equals(policySelect.getUseability())){
 			PolicySelectionCriteria policySelectIxRow = new PolicySelectionCriteria();

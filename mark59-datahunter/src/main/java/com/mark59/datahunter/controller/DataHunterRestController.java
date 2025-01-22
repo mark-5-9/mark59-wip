@@ -223,12 +223,6 @@ public class DataHunterRestController {
 			}
 		}		
 		
-		
-		for (CountPoliciesBreakdown countPoliciesBreakdown : countPoliciesBreakdownList) {
-			System.out.println("    DRC : " + countPoliciesBreakdown );
-		}	
-		
-		
 		int rowsAffected = countPoliciesBreakdownList.size();
 		response.setCountPoliciesBreakdown(countPoliciesBreakdownList);
 		response.setRowsAffected(rowsAffected);

@@ -447,7 +447,6 @@ public class DataHunterRestApiClientSampleUsage {
 		assertEquals(4, response.getCountPoliciesBreakdown().size());		
 		assertEquals("[application=testapi, startsWith=null, identifier=null, lifecycle=, useability=USED, selectOrder=null], rowCount=2, isIndexedReusable=N, holeCount=0]",
 				response.getCountPoliciesBreakdown().get(0).toString());
-			System.out.println("getCountPoliciesBreakdown=" + response.getCountPoliciesBreakdown().get(0).toString());
 		assertEquals("[application=testapi, startsWith=null, identifier=null, lifecycle=duplicatedid, useability=REUSABLE, selectOrder=null], rowCount=1, isIndexedReusable=N, holeCount=0]", 
 				response.getCountPoliciesBreakdown().get(1).toString());
 		assertEquals("[application=testapi, startsWith=null, identifier=null, lifecycle=nonblanklc, useability=UNUSED, selectOrder=null], rowCount=1, isIndexedReusable=N, holeCount=0]", 	
@@ -697,6 +696,53 @@ public class DataHunterRestApiClientSampleUsage {
 		System.out.println("	<< workingWithAsyncMessages");				
 	}
 
+	
+	/**
+	 * clears all "testapi..."
+	 * @param dhApiClient DataHunterRestApiClient
+	 */
+	public void workingWithIndexedRenewableData(DataHunterRestApiClient dhApiClient){
+		System.out.println("	>> workingWithIndexedRenewableData");
+		clearDatabase(dhApiClient, "testapi");
+		create6testPolices(dhApiClient);  // 'background'
+		create5IndexedRenewablePolices(dhApiClient);
+		
+		DataHunterRestApiResponsePojo response = dhApiClient.policiesBreakdown(DataHunterConstants.EQUALS, "testapi", "ixrew", null); //all REUSABLE
+		assertEquals(1, response.getCountPoliciesBreakdown().size());		
+		assertEquals("[application=testapi, startsWith=null, identifier=null, lifecycle=ixrew, useability=REUSABLE, selectOrder=null], rowCount=6, isIndexedReusable=Y, holeCount=0]",
+				response.getCountPoliciesBreakdown().get(0).toString());
+	
+		response = dhApiClient.printSelectedPolicies("testapi", "ixrew", "REUSABLE");
+		assertEquals(6, response.getPolicies().size());		
+		assertTrue(response.getPolicies().get(0).toString().startsWith("[application=testapi, identifier=0000000000_IX, lifecycle=ixrew, useability=REUSABLE, otherdata=5,"));		
+		assertTrue(response.getPolicies().get(1).toString().startsWith("[application=testapi, identifier=0000000001, lifecycle=ixrew, useability=REUSABLE, otherdata=mydata1,"));		
+		assertTrue(response.getPolicies().get(2).toString().startsWith("[application=testapi, identifier=0000000002, lifecycle=ixrew, useability=REUSABLE, otherdata=mydata2,"));		
+		assertTrue(response.getPolicies().get(3).toString().startsWith("[application=testapi, identifier=0000000003, lifecycle=ixrew, useability=REUSABLE, otherdata=mydata3,"));		
+		assertTrue(response.getPolicies().get(4).toString().startsWith("[application=testapi, identifier=0000000004, lifecycle=ixrew, useability=REUSABLE, otherdata=mydata4,"));		
+		assertTrue(response.getPolicies().get(5).toString().startsWith("[application=testapi, identifier=0000000005, lifecycle=ixrew, useability=REUSABLE, otherdata=mydata5,"));		
+		
+		for (int i = 0; i < 10; i++) {
+			response = dhApiClient.lookupNextPolicy("testapi", "ixrew", "REUSABLE", DataHunterConstants.SELECT_RANDOM_ENTRY);
+			Policies randPolicy =  response.getPolicies().get(0);
+			assertTrue(randPolicy.getApplication().equals("testapi"));
+			assertTrue(randPolicy.getIdentifier().startsWith("000000000") && randPolicy.getIdentifier().substring(9).matches("[1-5]") && randPolicy.getIdentifier().length()==10);
+			assertTrue(randPolicy.getLifecycle().equals("ixrew"));
+			assertTrue(randPolicy.getUseability().equals("REUSABLE"));
+			assertTrue(randPolicy.getOtherdata().startsWith("mydata") && randPolicy.getOtherdata().substring(6).equals(randPolicy.getIdentifier().substring(9))
+					&& randPolicy.getOtherdata().length()==7);			
+		}
+		response = dhApiClient.lookupNextPolicy("testapi", "ixrew", "REUSABLE", DataHunterConstants.SELECT_OLDEST_ENTRY);
+		assertTrue(response.getPolicies().get(0).toString().startsWith("[application=testapi, identifier=0000000001, lifecycle=ixrew, useability=REUSABLE, otherdata=mydata1,"));		
+		response = dhApiClient.lookupNextPolicy("testapi", "ixrew", "REUSABLE", DataHunterConstants.SELECT_MOST_RECENTLY_ADDED);
+		assertTrue(response.getPolicies().get(0).toString().startsWith("[application=testapi, identifier=0000000005, lifecycle=ixrew, useability=REUSABLE, otherdata=mydata5,"));			
+		
+		
+		
+		System.out.println("	<< workingWithIndexedRenewableData");	
+		
+	}	
+	
+	
 
 	private void clearDatabase(DataHunterRestApiClient dhApiClient) {
 		clearDatabase(dhApiClient, "");
@@ -744,6 +790,16 @@ public class DataHunterRestApiClientSampleUsage {
 	}	
 	
 	
+	private void create5IndexedRenewablePolices(DataHunterRestApiClient dhApiClient) {
+		dhApiClient.addPolicy(new Policies("testapi","0000000001", "ixrew", "REUSABLE", "mydata1", 314159L));	
+		dhApiClient.addPolicy(new Policies("testapi","0000000002", "ixrew", "REUSABLE", "mydata2", 314159L));
+		dhApiClient.addPolicy(new Policies("testapi","0000000003", "ixrew", "REUSABLE", "mydata3", 314159L));	
+		dhApiClient.addPolicy(new Policies("testapi","0000000004", "ixrew", "REUSABLE", "mydata4", 444444L));
+		dhApiClient.addPolicy(new Policies("testapi","0000000005", "ixrew", "REUSABLE", "mydata5", 555555L));	
+		dhApiClient.addPolicy(new Policies("testapi","0000000000_IX", "ixrew", "REUSABLE", "5", null));
+	}		
+	
+	
 	private void assertsOnPolicy(Policies expectedPolicy, Policies actualPolicy) {
 		assertEquals(expectedPolicy.getApplication(), actualPolicy.getApplication()); 
 		assertEquals(expectedPolicy.getIdentifier(), actualPolicy.getIdentifier()); 
@@ -771,6 +827,7 @@ public class DataHunterRestApiClientSampleUsage {
 		sample.workingWithUseStateChanges(dhApiClient);
 		sample.asyncLifeCycleTestWithUseabilityUpdate(dhApiClient);	
 		sample.workingWithAsyncMessages(dhApiClient); //clears testapi-..
+		sample.workingWithIndexedRenewableData(dhApiClient); //clears testapi..
 		// sample.policyCountBreakdownsUsingStartWith(dhApiClient);	      // clears the database !!
 		System.out.println("completed DataHunterRestApiClientSampleUsage ok");
 	}

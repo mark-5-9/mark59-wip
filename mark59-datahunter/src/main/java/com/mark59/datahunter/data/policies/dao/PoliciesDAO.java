@@ -28,6 +28,7 @@ import com.mark59.datahunter.model.CountPoliciesBreakdown;
 import com.mark59.datahunter.model.PolicySelectionCriteria;
 import com.mark59.datahunter.model.PolicySelectionFilter;
 import com.mark59.datahunter.model.UpdateUseStateAndEpochTime;
+import com.mark59.datahunter.pojo.ValidReuseIxPojo;
 
 /**
  * @author Philip Webb
@@ -39,13 +40,13 @@ public interface PoliciesDAO
 	public final String SELECT_POLICY_COLUMNS = " application, identifier, lifecycle, useability, otherdata, created, updated, epochtime ";
 	
 	SqlWithParms constructSelectPolicySql(PolicySelectionCriteria policySelect);
+	SqlWithParms constructSelectPolicySql(Policies policies);
 
 	SqlWithParms constructSelectPoliciesFilterSql(PolicySelectionFilter PolicySelectionFilter);
 	SqlWithParms constructSelectPoliciesFilterSql(PolicySelectionFilter policySelectionFilter, boolean applyLimit);	
 	SqlWithParms constructSelectNextPolicySql(PolicySelectionCriteria policySelect);
 	SqlWithParms constructCountPoliciesSql(PolicySelectionCriteria policySelect);
 	SqlWithParms constructCountPoliciesBreakdownSql(PolicySelectionCriteria policySelectionCriteria);
-	int reusableIndexedDataCount(PolicySelectionCriteria policySelect);
 	SqlWithParms constructAsyncMessageaAnalyzerSql(PolicySelectionCriteria policySelectionCriteria);
 	
 	int runCountSql(SqlWithParms sqlWithParms);
@@ -54,6 +55,11 @@ public interface PoliciesDAO
 	List<AsyncMessageaAnalyzerResult> runAsyncMessageaAnalyzerSql(SqlWithParms sqlWithParms);
 	
 	SqlWithParms constructInsertDataSql(Policies policies);
+	
+	ValidReuseIxPojo validateReusableIndexed(Policies policy);
+	ValidReuseIxPojo validateReusableIndexed(PolicySelectionCriteria policySelect);
+	SqlWithParms countReusableIndexedIdsInExpectedRange(PolicySelectionCriteria policySelect, int ixCount);
+
 	void insertMultiple(List<Policies> policiesList);
 	SqlWithParms constructDeletePoliciesSql(PolicySelectionCriteria policySelectionCriteria);
 	SqlWithParms constructDeleteMultiplePoliciesSql(PolicySelectionFilter policySelectionFilter);
@@ -74,8 +80,6 @@ public interface PoliciesDAO
 
 	void getLock(String lockResouceString, int timeout);
 	void releaseLock(String lockResouceString) throws SQLException;
-
-
 
 
 }

@@ -36,6 +36,7 @@ import com.mark59.datahunter.data.policies.dao.PoliciesDAO;
 import com.mark59.datahunter.model.CountPoliciesBreakdown;
 import com.mark59.datahunter.model.CountPoliciesBreakdownForm;
 import com.mark59.datahunter.model.PolicySelectionCriteria;
+import com.mark59.datahunter.pojo.ValidReuseIxPojo;
 
 import jakarta.servlet.http.HttpServletRequest;
 
@@ -103,16 +104,28 @@ public class PoliciesBreakdownController {
 			countPoliciesBreakdownForm.setIsIndexedReusable("N");
 			countPoliciesBreakdownForm.setHoleCount(0L);
 			countPoliciesBreakdownForm.setHoleStats("");
-			int reusableIndexedCount = policiesDAO.reusableIndexedDataCount(countPoliciesBreakdown);
-			if (reusableIndexedCount > -1){
+
+			ValidReuseIxPojo validReuseIx = policiesDAO.validateReusableIndexed(countPoliciesBreakdown);
+			if (validReuseIx.getPolicyReusableIndexed()){
 				countPoliciesBreakdownForm.setIsIndexedReusable("Y");
-				countPoliciesBreakdown.setHoleCount(Long.valueOf(reusableIndexedCount) - countPoliciesBreakdown.getRowCount()+1);
-				if (countPoliciesBreakdown.getRowCount() <= 1 ){  // only the IX row itself exists (or dud rows / hacked index)
-					countPoliciesBreakdownForm.setHoleStats("na");
-				} else {
-					Long pcHoles = (countPoliciesBreakdown.getHoleCount() * 100) / (countPoliciesBreakdown.getRowCount()-1); 
-					countPoliciesBreakdownForm.setHoleStats(countPoliciesBreakdown.getHoleCount() + " ("+pcHoles+"%)");
-				}	
+				if (validReuseIx.getValidatedOk()) {
+					if (countPoliciesBreakdown.getRowCount() <= 1 ){  // only the IX row itself exists 
+						countPoliciesBreakdownForm.setHoleCount(0L);
+						countPoliciesBreakdownForm.setHoleStats("na");
+						
+					} else {
+						Long pcHoles = 100L; 
+						countPoliciesBreakdown.setHoleCount(
+								Long.valueOf(validReuseIx.getCurrentIxCount()) - validReuseIx.getIdsinRangeCount());
+						if (validReuseIx.getCurrentIxCount() > 0) {
+							pcHoles = (countPoliciesBreakdown.getHoleCount()*100) / validReuseIx.getCurrentIxCount(); 
+						}
+						countPoliciesBreakdownForm.setHoleStats(countPoliciesBreakdown.getHoleCount() + " ("+pcHoles+"%)");
+					}	
+				} else { // invalid 
+					countPoliciesBreakdownForm.setHoleCount(-1L);
+					countPoliciesBreakdownForm.setHoleStats("?");					
+				}
 			}
 			countPoliciesBreakdownFormList.add(countPoliciesBreakdownForm);
 		}

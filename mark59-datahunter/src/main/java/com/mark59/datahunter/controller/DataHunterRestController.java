@@ -39,6 +39,7 @@ import com.mark59.datahunter.model.DataHunterRestApiResponsePojo;
 import com.mark59.datahunter.model.PolicySelectionCriteria;
 import com.mark59.datahunter.model.PolicySelectionFilter;
 import com.mark59.datahunter.model.UpdateUseStateAndEpochTime;
+import com.mark59.datahunter.pojo.ValidReuseIxPojo;
 
 
 /**
@@ -105,17 +106,45 @@ public class DataHunterRestController {
 		} else {
 			policies.setEpochtime(System.currentTimeMillis());
 		}
-		
-		SqlWithParms sqlWithParms = policiesDAO.constructInsertDataSql(policies);
-		int rowsAffected;
 
 		DataHunterRestApiResponsePojo response = new DataHunterRestApiResponsePojo();
 		response.setPolicies(Collections.singletonList(policies));
-		
+
 		if (!DataHunterConstants.USEABILITY_LIST.contains(useability)){
 			return ResponseEntity.ok(UseabilityError(useability, response));	
 		}
+	
+		ValidReuseIxPojo validReuseIx = policiesDAO.validateReusableIndexed(policies);
+		
+		if (validReuseIx.getPolicyReusableIndexed()){
+			if (validReuseIx.getValidatedOk()) {
+				int newCount = validReuseIx.getCurrentIxCount() + 1;
+				validReuseIx.getIxPolicy().setOtherdata(String.valueOf(newCount)); 		
+				SqlWithParms sqlWithParmsIx = policiesDAO.constructUpdatePoliciesSql(validReuseIx.getIxPolicy());
+				
+				try {
+					//System.out.println("update ix : " + validReuseIx.getIxPolicy());
+					policiesDAO.runDatabaseUpdateSql(sqlWithParmsIx);
+				} catch (Exception e) {
+					response.setSuccess(String.valueOf(false));			
+					response.setFailMsg("sql exception caught: " + e.getMessage() + ", sqlWithParms=" + sqlWithParmsIx);
+					response.setRowsAffected(-1);
+					return ResponseEntity.ok(response);						
+				}	
+				
+				policies.setIdentifier(StringUtils.leftPad(String.valueOf(newCount), 10, "0"));
+				
+			} else { // invalid
+				response.setSuccess(String.valueOf(false));			
+				response.setFailMsg("validation error: "  + validReuseIx.getErrorMsg());
+				response.setRowsAffected(-1);
+				return ResponseEntity.ok(response);					
+			}
+		} 
 
+		SqlWithParms sqlWithParms = policiesDAO.constructInsertDataSql(policies);
+
+		int rowsAffected;
 		try {
 			rowsAffected = policiesDAO.runDatabaseUpdateSql(sqlWithParms);
 		} catch (Exception e) {
@@ -131,7 +160,7 @@ public class DataHunterRestController {
 			response.setFailMsg("");
 		} else {
 			response.setSuccess(String.valueOf(false));	
-			response.setFailMsg("sql execution : Error.  1 row should of been affected, but sql result indicates " + rowsAffected + " rows affected?" );
+			response.setFailMsg("sql execution : Error.  1 row should of been affected, but sql result indicates "+rowsAffected+" rows affected?" );
 		}
 		return ResponseEntity.ok(response);	
 	}
@@ -216,10 +245,14 @@ public class DataHunterRestController {
 		for (CountPoliciesBreakdown countPoliciesBreakdown : countPoliciesBreakdownList) {
 			countPoliciesBreakdown.setIsIndexedReusable("N");
 			countPoliciesBreakdown.setHoleCount(0L);
-			int reusableIndexedCount = policiesDAO.reusableIndexedDataCount(countPoliciesBreakdown);
-			if (reusableIndexedCount > -1){
+			ValidReuseIxPojo validReuseIx = policiesDAO.validateReusableIndexed(countPoliciesBreakdown);
+			if (validReuseIx.getPolicyReusableIndexed()){
 				countPoliciesBreakdown.setIsIndexedReusable("Y");
-				countPoliciesBreakdown.setHoleCount(Long.valueOf(reusableIndexedCount) - countPoliciesBreakdown.getRowCount()+1);
+				if (validReuseIx.getValidatedOk()) {
+					countPoliciesBreakdown.setHoleCount(Long.valueOf(validReuseIx.getCurrentIxCount()) - validReuseIx.getIdsinRangeCount());
+				} else {
+					countPoliciesBreakdown.setHoleCount(-1L);
+				}
 			}
 		}		
 		

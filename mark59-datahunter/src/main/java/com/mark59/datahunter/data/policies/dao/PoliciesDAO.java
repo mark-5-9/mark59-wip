@@ -18,6 +18,7 @@ package com.mark59.datahunter.data.policies.dao;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.stream.Stream;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 
@@ -51,6 +52,7 @@ public interface PoliciesDAO
 	
 	int runCountSql(SqlWithParms sqlWithParms);
 	List<Policies> runSelectPolicieSql(SqlWithParms sqlWithParms);
+	Stream<Policies> runStreamPolicieSql(SqlWithParms sqlWithParms);
 	List<CountPoliciesBreakdown> runCountPoliciesBreakdownSql(SqlWithParms sqlWithParms);
 	List<AsyncMessageaAnalyzerResult> runAsyncMessageaAnalyzerSql(SqlWithParms sqlWithParms);
 	
@@ -59,6 +61,9 @@ public interface PoliciesDAO
 	ValidReuseIxPojo validateReusableIndexed(Policies policy);
 	ValidReuseIxPojo validateReusableIndexed(PolicySelectionCriteria policySelect);
 	SqlWithParms countReusableIndexedIdsInExpectedRange(PolicySelectionCriteria policySelect, int ixCount);
+	SqlWithParms countNonReusableIdsForReusableIndexedData(String application, String lifecycle);
+	SqlWithParms constructCollectDataOutOfExpectedIxRangeSql(String application, String lifecycle, int policyCount);
+//	SqlWithParms constructSelectHighestInRangePolicySql(String application, String lifecycle, int policyCount);
 
 	void insertMultiple(List<Policies> policiesList);
 	SqlWithParms constructDeletePoliciesSql(PolicySelectionCriteria policySelectionCriteria);

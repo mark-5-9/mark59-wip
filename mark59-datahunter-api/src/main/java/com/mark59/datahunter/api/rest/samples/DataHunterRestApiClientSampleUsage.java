@@ -735,14 +735,9 @@ public class DataHunterRestApiClientSampleUsage {
 		assertTrue(response.getPolicies().get(0).toString().startsWith("[application=testapi, identifier=0000000001, lifecycle=ixrew, useability=REUSABLE, otherdata=mydata1,"));		
 		response = dhApiClient.lookupNextPolicy("testapi", "ixrew", "REUSABLE", DataHunterConstants.SELECT_MOST_RECENTLY_ADDED);
 		assertTrue(response.getPolicies().get(0).toString().startsWith("[application=testapi, identifier=0000000005, lifecycle=ixrew, useability=REUSABLE, otherdata=mydata5,"));			
-		
-		
-		
 		System.out.println("	<< workingWithIndexedRenewableData");	
-		
 	}	
-	
-	
+
 
 	private void clearDatabase(DataHunterRestApiClient dhApiClient) {
 		clearDatabase(dhApiClient, "");

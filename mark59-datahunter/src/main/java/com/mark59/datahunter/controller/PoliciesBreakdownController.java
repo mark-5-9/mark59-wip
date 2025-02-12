@@ -18,7 +18,9 @@ package com.mark59.datahunter.controller;
 
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.stream.Stream;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +33,9 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.mark59.datahunter.application.DataHunterConstants;
 import com.mark59.datahunter.application.DataHunterUtils;
+import com.mark59.datahunter.application.IndexedReusableUtils;
 import com.mark59.datahunter.application.SqlWithParms;
+import com.mark59.datahunter.data.beans.Policies;
 import com.mark59.datahunter.data.policies.dao.PoliciesDAO;
 import com.mark59.datahunter.model.CountPoliciesBreakdown;
 import com.mark59.datahunter.model.CountPoliciesBreakdownForm;
@@ -143,7 +147,84 @@ public class PoliciesBreakdownController {
 		}
 		DataHunterUtils.expireSession(httpServletRequest);
 		
+		System.out.println(">> ============ ADDRESSES-HARMONY  TESTTAS");
+		reindexReusableIx("ADDRESSES-HARMONY", "TESTTAS");
+		System.out.println("<< ============ ");
+		
+		System.out.println("============ ADDRESSES-HARMONY  BIGGY");
+		reindexReusableIx("ADDRESSES-HARMONY", "BIGGY");
+		System.out.println("<< ============ ");
+		
+		
 		return new ModelAndView("policies_breakdown_action", "model", model);
+	}
+	
+
+	public String reindexReusableIx(String application, String lifecycle){
+		String resutMsg = DataHunterConstants.OK;
+		PolicySelectionCriteria targetData =  new PolicySelectionCriteria();
+		targetData.setApplication(application);
+		targetData.setLifecycle(lifecycle);
+		targetData.setUseability(DataHunterConstants.REUSABLE);
+		
+		ValidReuseIxPojo validReuseIx = policiesDAO.validateReusableIndexed(targetData);
+		if (!validReuseIx.getPolicyReusableIndexed()){
+			return "No action : "+targetData+" is not marked as IndexedReusable (no Id 0000000000_IX row";  
+		}
+		
+		SqlWithParms sqlWithParms = policiesDAO.countNonReusableIdsForReusableIndexedData(application, lifecycle);
+		int nonReuseableidsCount = policiesDAO.runCountSql(sqlWithParms);		
+		if (nonReuseableidsCount != 0){
+			return "No action : App|lifecycle "+application+" | "+lifecycle+" contains Ids that are marked"
+					+ " other than REUSABLE. Please reset or remove this data as appropriate";  
+		}
+		
+		sqlWithParms = policiesDAO.constructCountPoliciesSql(targetData);
+		int policyCount = policiesDAO.runCountSql(sqlWithParms) - 1;
+		
+		sqlWithParms = policiesDAO.constructCollectDataOutOfExpectedIxRangeSql(application, lifecycle, policyCount);
+		Stream<Policies> policyStream = policiesDAO.runStreamPolicieSql(sqlWithParms);
+		
+		System.out.println(" -- "+application+":"+lifecycle+":"+policyCount); 
+		
+		Iterator<Policies> policyStreamIter = policyStream.iterator();
+
+		Policies currPolicy = new Policies();
+		currPolicy.setApplication(application);
+		currPolicy.setLifecycle(lifecycle);
+		currPolicy.setUseability(DataHunterConstants.REUSABLE);
+
+		for (int ix = 1; ix <= policyCount && policyStreamIter.hasNext(); ix++) { // lets start filling up holes
+			currPolicy.setIdentifier(StringUtils.leftPad(String.valueOf(ix), 10, "0"));
+			System.out.println("loop "+ix+" currPolicy: "+ currPolicy );
+			sqlWithParms = policiesDAO.constructSelectPolicySql(currPolicy);
+			List<Policies> existingidInRange = policiesDAO.runSelectPolicieSql(sqlWithParms);
+			System.out.println("loop "+ix+" found: "+ existingidInRange );
+			
+			if (existingidInRange.isEmpty()) { // a hole in range, use a out of range row to plug it
+				movePolicyToHole(currPolicy, ix, policyStreamIter.next());
+			}
+		}
+		
+		IndexedReusableUtils.updateIndexedRowCounter(currPolicy, policyCount, policiesDAO);	
+		System.out.println("msg:"+ resutMsg);
+		return resutMsg; 
+	}
+
+
+	private void movePolicyToHole(Policies currPolicy, int ix, Policies toMovePolicy) {
+		System.out.println("moving:"+toMovePolicy+", to:"+currPolicy);
+		// delete toMovePolicy from db
+		PolicySelectionCriteria pscToMovePolicy = new PolicySelectionCriteria();
+		pscToMovePolicy.setApplication(toMovePolicy.getApplication());
+		pscToMovePolicy.setIdentifier(toMovePolicy.getIdentifier());
+		pscToMovePolicy.setLifecycle(toMovePolicy.getLifecycle());
+		SqlWithParms sqlWithParms = policiesDAO.constructDeletePoliciesSql(pscToMovePolicy);
+		policiesDAO.runDatabaseUpdateSql(sqlWithParms);
+		// add back into slot
+		currPolicy.setOtherdata(toMovePolicy.getOtherdata());
+		sqlWithParms =  policiesDAO.constructInsertDataSql(currPolicy);
+		policiesDAO.runDatabaseUpdateSql(sqlWithParms);
 	}
 	
 }

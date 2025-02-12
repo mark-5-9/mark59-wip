@@ -18,6 +18,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.mark59.datahunter.application.DataHunterConstants;
 import com.mark59.datahunter.application.DataHunterUtils;
+import com.mark59.datahunter.application.IndexedReusableUtils;
 import com.mark59.datahunter.application.SqlWithParms;
 import com.mark59.datahunter.data.beans.Policies;
 import com.mark59.datahunter.data.policies.dao.PoliciesDAO;
@@ -147,7 +148,7 @@ public class UploadIdsFileController {
 					&& rowsInserted > 0){
 	    		policiesDAO.insertMultiple(policiesList);
 	    		policiesList.clear();
-				updateIndexedRowCountPolicy(policies, indexedId);		
+				IndexedReusableUtils.updateIndexedRowCounter(policies, indexedId, policiesDAO);		
 			}
 			br.close();
 		
@@ -210,14 +211,6 @@ public class UploadIdsFileController {
 	private int addNewPolicy(Policies policies) {
 		policies.setEpochtime(System.currentTimeMillis());
 		SqlWithParms sqlWithParms = policiesDAO.constructInsertDataSql(policies);
-		return policiesDAO.runDatabaseUpdateSql(sqlWithParms);
-	}
-
-	private int updateIndexedRowCountPolicy(Policies policies, int indexedId) {
-		policies.setIdentifier(DataHunterConstants.INDEXED_ROW_COUNT);
-		policies.setOtherdata(String.valueOf(indexedId));
-		policies.setEpochtime(System.currentTimeMillis());
-		SqlWithParms sqlWithParms = policiesDAO.constructUpdatePoliciesSql(policies);
 		return policiesDAO.runDatabaseUpdateSql(sqlWithParms);
 	}
 	

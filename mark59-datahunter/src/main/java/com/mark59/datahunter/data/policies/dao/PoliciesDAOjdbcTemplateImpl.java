@@ -465,7 +465,8 @@ public class PoliciesDAOjdbcTemplateImpl implements PoliciesDAO
 				+ "  AND LIFECYCLE = :lifecycle "
 				+ "  AND USEABILITY = 'REUSABLE'"
 				+ "  AND IDENTIFIER BETWEEN '0000000001' AND :highid "
-				+ "  AND CHAR_LENGTH(IDENTIFIER) = 10 ";
+				+ "  AND CHAR_LENGTH(IDENTIFIER) = 10 "
+				+ "  AND NOT IDENTIFIER REGEXP '[^0-9]' ";
 
 		if (StringUtils.isBlank(policySelect.getLifecycle())) {
 			policySelect.setLifecycle(""); 

@@ -28,7 +28,6 @@ import javax.sql.DataSource;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.DataClassRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -81,7 +80,6 @@ public class PoliciesDAOjdbcTemplateImpl implements PoliciesDAO
 		} else {
 			sql = "SELECT " + PoliciesDAO.SELECT_POLICY_COLUMNS + " FROM POLICIES ";
 		}
-		
 		sql += "WHERE APPLICATION = :application "
 				+ "  AND IDENTIFIER = :identifier "
 				+ "  AND LIFECYCLE = :lifecycle ";
@@ -89,11 +87,6 @@ public class PoliciesDAOjdbcTemplateImpl implements PoliciesDAO
 		if (StringUtils.isBlank(policySelect.getLifecycle())) {
 			policySelect.setLifecycle(""); 
 		}   	
-				
-//		System.out.println("  >>constructSelectPolicySql");
-//		System.out.println("    ps  :" + policySelect);
-//		System.out.println("    sql :" + sql);
-//		System.out.println("  <<");
 		
 		MapSqlParameterSource sqlparameters = new MapSqlParameterSource()
 				.addValue("application", policySelect.getApplication())
@@ -125,7 +118,6 @@ public class PoliciesDAOjdbcTemplateImpl implements PoliciesDAO
 		if (applyLimit) {
 			sql = limitSelector(policySelectionFilter, sql);
 		}
-		
 		return new SqlWithParms(sql,sqlparameters);
 	}
 
@@ -158,7 +150,6 @@ public class PoliciesDAOjdbcTemplateImpl implements PoliciesDAO
 				// mark this as a special case of a random lookup on 'reusable Indexed' data.
 				sqlparameters = sqlWithParms.getSqlparameters().addValue(DataHunterConstants.REUSEABLE_INDEXED_RAND, String.valueOf(true));
 				sql += " AND IDENTIFIER = :identifier ";
-//				sql += " AND IDENTIFIER >= :identifier LIMIT 1 ";
 			} else {
 				throw new RuntimeException("error - invalid Select Order (Reusable Indexed data) : " + policySelect.getSelectOrder());
 			}
@@ -361,18 +352,11 @@ public class PoliciesDAOjdbcTemplateImpl implements PoliciesDAO
 	
 	@Override
 	public Stream<Policies> runStreamPolicieSql(SqlWithParms sqlWithParms) {
-
-//		List<Policies> policiesList = new ArrayList<>();
 		NamedParameterJdbcTemplate jdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
 		Stream<Policies> PolicyStream = jdbcTemplate.queryForStream (
 				sqlWithParms.getSql(), 
 				sqlWithParms.getSqlparameters(),
 				new PoliciesRowMapper());		
-	
-//		for (Map<String, Object> row : rows) {
-//			Policies policies = populatePoliciesFromResultSet(row);
-//			policiesList.add(policies);
-//		}	
 		return PolicyStream;
 	}
 	
@@ -449,8 +433,8 @@ public class PoliciesDAOjdbcTemplateImpl implements PoliciesDAO
 							+ "for the Reusuabe Index row, but was " + ixPolicyRow.getOtherdata().trim());
 					return validReuseIxPojo;
 				}
-			}
-		}
+			} // ix exists
+		} // reusable
 		return validReuseIxPojo;
 	}	
 	
@@ -465,9 +449,13 @@ public class PoliciesDAOjdbcTemplateImpl implements PoliciesDAO
 				+ "  AND LIFECYCLE = :lifecycle "
 				+ "  AND USEABILITY = 'REUSABLE'"
 				+ "  AND IDENTIFIER BETWEEN '0000000001' AND :highid "
-				+ "  AND CHAR_LENGTH(IDENTIFIER) = 10 "
-				+ "  AND NOT IDENTIFIER REGEXP '[^0-9]' ";
-
+				+ "  AND CHAR_LENGTH(IDENTIFIER) = 10 ";
+		if (DataHunterConstants.PG.equalsIgnoreCase(currentDatabaseProfile)){				
+			sql = sql + " AND NOT IDENTIFIER ~ '[^0-9]' ";
+		} else {	
+			sql = sql + " AND NOT IDENTIFIER REGEXP '[^0-9]' ";
+		}
+		
 		if (StringUtils.isBlank(policySelect.getLifecycle())) {
 			policySelect.setLifecycle(""); 
 		}   	
@@ -508,9 +496,12 @@ public class PoliciesDAOjdbcTemplateImpl implements PoliciesDAO
 				+ "  AND IDENTIFIER != '0000000000_IX' "  
 				+ "  AND (IDENTIFIER < '0000000001' "
 				+ "      OR IDENTIFIER > :highid "
-				+ "      OR CHAR_LENGTH(IDENTIFIER) != 10 "           // belt and braces check
-				+ "      OR IDENTIFIER REGEXP '[^0-9]' ) ";
-				
+				+ "      OR CHAR_LENGTH(IDENTIFIER) != 10 " ;          // belt and braces check
+		if (DataHunterConstants.PG.equalsIgnoreCase(currentDatabaseProfile)){				
+			sql = sql + " OR IDENTIFIER ~ '[^0-9]' ) ";
+		} else {	
+			sql = sql + " OR IDENTIFIER REGEX '[^0-9]' ) ";
+		}
 
 		if (StringUtils.isBlank(lifecycle)){
 			lifecycle = ""; 
@@ -523,36 +514,6 @@ public class PoliciesDAOjdbcTemplateImpl implements PoliciesDAO
 		return new SqlWithParms(sql,sqlparameters);
 	}
 
-
-
-//	@Override
-//	public SqlWithParms constructSelectHighestInRangePolicySql(String application, String lifecycle, int policyCount) {
-//		String highid = StringUtils.leftPad(String.valueOf(policyCount), 10, "0");
-//		
-//		String sql = " SELECT " + PoliciesDAO.SELECT_POLICY_COLUMNS + " FROM POLICIES "
-//				+ " WHERE APPLICATION = :application "
-//				+ "  AND LIFECYCLE = :lifecycle "
-//				+ "  AND USEABILITY = 'REUSABLE'"
-//				+ "  AND IDENTIFIER BETWEEN '0000000001' AND :highid "
-//				+ "  AND CHAR_LENGTH(IDENTIFIER) = 10 "				
-//				+ "  AND IDENTIFIER =  SELECT MAX(IDENTIFIER) FROM POLICIES " 
-//					+ " WHERE APPLICATION = :application "
-//					+ "  AND LIFECYCLE = :lifecycle "
-//					+ "  AND USEABILITY = 'REUSABLE' "
-//					+ "  AND IDENTIFIER BETWEEN '0000000001' AND :highid) "
-//					+ "  AND CHAR_LENGTH(IDENTIFIER) = 10 "		;
-//
-//		if (StringUtils.isBlank(lifecycle)){
-//			lifecycle = ""; 
-//		}   	
-//		MapSqlParameterSource sqlparameters = new MapSqlParameterSource()
-//				.addValue("application", application)
-//				.addValue("lifecycle", lifecycle)
-//				.addValue("highid", highid); 
-//	
-//		return new SqlWithParms(sql,sqlparameters);
-//	}
-	
 	
 	@Override
 	public void insertMultiple(List<Policies> policiesList) {

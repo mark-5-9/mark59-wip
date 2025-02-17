@@ -34,6 +34,7 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 
 import com.mark59.datahunter.application.DataHunterConstants;
 import com.mark59.datahunter.application.DataHunterUtils;
+import com.mark59.datahunter.application.IndexedReusableUtils;
 import com.mark59.datahunter.application.SqlWithParms;
 import com.mark59.datahunter.data.beans.Policies;
 import com.mark59.datahunter.model.AsyncMessageaAnalyzerResult;
@@ -56,7 +57,6 @@ public class PoliciesDAOjdbcTemplateImpl implements PoliciesDAO
 
     @Autowired
     private String currentDatabaseProfile;
-
     
     
 	@Override	
@@ -133,7 +133,7 @@ public class PoliciesDAOjdbcTemplateImpl implements PoliciesDAO
 
 		String sql = "SELECT " + PoliciesDAO.SELECT_POLICY_COLUMNS + " FROM POLICIES WHERE APPLICATION = :application " + sqlWithParms.getSql();
 		
-		ValidReuseIxPojo validReuseIx = validateReusableIndexed(policySelect);
+		ValidReuseIxPojo validReuseIx = IndexedReusableUtils.validateReusableIndexed(policySelect, this);
 
 		if (validReuseIx.getPolicyReusableIndexed()){  // the special  'Reusable Indexed' case
 			if (!validReuseIx.getValidatedOk()) {
@@ -384,60 +384,6 @@ public class PoliciesDAOjdbcTemplateImpl implements PoliciesDAO
 		return new SqlWithParms(sql,sqlparameters);
 	}
 
-
-	@Override
-	public ValidReuseIxPojo validateReusableIndexed(Policies policies){
-		PolicySelectionCriteria policySelect = new PolicySelectionCriteria();
-		policySelect.setApplication(policies.getApplication());
-		policySelect.setLifecycle(policies.getLifecycle());
-		policySelect.setUseability(policies.getUseability());
-		return validateReusableIndexed(policySelect);
-	}			
-	
-	
-	@Override
-	public ValidReuseIxPojo validateReusableIndexed(PolicySelectionCriteria policySelect){
-
-		ValidReuseIxPojo validReuseIxPojo = new ValidReuseIxPojo();
-		validReuseIxPojo.setPolicyReusableIndexed(false);
-		validReuseIxPojo.setValidatedOk(true);
-		validReuseIxPojo.setErrorMsg("");
-		validReuseIxPojo.setCurrentIxCount(-1);
-		validReuseIxPojo.setIdsinRangeCount(0);
-		
-		if (DataHunterConstants.REUSABLE.equals(policySelect.getUseability())){
-			Policies ixPolicyRow = new Policies();
-			ixPolicyRow.setApplication(policySelect.getApplication());
-			ixPolicyRow.setIdentifier(DataHunterConstants.INDEXED_ROW_COUNT);
-			ixPolicyRow.setLifecycle(policySelect.getLifecycle());
-			
-			SqlWithParms sqlWithParmsIx = constructSelectPolicySql(ixPolicyRow);
-			List<Policies> policiesIxs = runSelectPolicieSql(sqlWithParmsIx);
-			
-			if (!policiesIxs.isEmpty() && DataHunterConstants.REUSABLE.equals(policiesIxs.get(0).getUseability())){	
-				// an index row exists for this set of REUSABLE data
-				validReuseIxPojo.setPolicyReusableIndexed(true);
-				ixPolicyRow = policiesIxs.get(0);
-				validReuseIxPojo.setIxPolicy(ixPolicyRow); 
-				
-				if (StringUtils.isNumeric(ixPolicyRow.getOtherdata().trim())){
-					int currentIxCount = Integer.valueOf(ixPolicyRow.getOtherdata().trim());
-					validReuseIxPojo.setCurrentIxCount(currentIxCount);
-					
-					SqlWithParms sqlWithParms = countReusableIndexedIdsInExpectedRange(policySelect, currentIxCount);
-					int idsinRangeCount = runCountSql(sqlWithParms);
-					validReuseIxPojo.setIdsinRangeCount(idsinRangeCount);
-				} else {
-					validReuseIxPojo.setValidatedOk(false);
-					validReuseIxPojo.setErrorMsg("Error: For selection "+ policySelect + " numeric value expected in Otherdata"
-							+ "for the Reusuabe Index row, but was " + ixPolicyRow.getOtherdata().trim());
-					return validReuseIxPojo;
-				}
-			} // ix exists
-		} // reusable
-		return validReuseIxPojo;
-	}	
-	
     
 	@Override	
 	public SqlWithParms countReusableIndexedIdsInExpectedRange(PolicySelectionCriteria policySelect, int ixCount){
@@ -500,7 +446,7 @@ public class PoliciesDAOjdbcTemplateImpl implements PoliciesDAO
 		if (DataHunterConstants.PG.equalsIgnoreCase(currentDatabaseProfile)){				
 			sql = sql + " OR IDENTIFIER ~ '[^0-9]' ) ";
 		} else {	
-			sql = sql + " OR IDENTIFIER REGEX '[^0-9]' ) ";
+			sql = sql + " OR IDENTIFIER REGEXP '[^0-9]' ) ";
 		}
 
 		if (StringUtils.isBlank(lifecycle)){

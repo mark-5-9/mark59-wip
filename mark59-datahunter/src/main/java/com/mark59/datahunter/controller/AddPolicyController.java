@@ -31,6 +31,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.mark59.datahunter.application.DataHunterConstants;
 import com.mark59.datahunter.application.DataHunterUtils;
+import com.mark59.datahunter.application.IndexedReusableUtils;
 import com.mark59.datahunter.application.SqlWithParms;
 import com.mark59.datahunter.data.beans.Policies;
 import com.mark59.datahunter.data.policies.dao.PoliciesDAO;
@@ -52,7 +53,7 @@ public class AddPolicyController {
 	@RequestMapping("/add_policy")
 	public String addPolicyUrl(@RequestParam(required=false) String application,@ModelAttribute Policies policies, Model model) {
 		
-		ValidReuseIxPojo validReuseIx = policiesDAO.validateReusableIndexed(policies);
+		ValidReuseIxPojo validReuseIx = IndexedReusableUtils.validateReusableIndexed(policies, policiesDAO);
 		if (validReuseIx.getPolicyReusableIndexed()){
 			if (validReuseIx.getValidatedOk()) {
 				int newCount = validReuseIx.getCurrentIxCount() + 1;
@@ -84,7 +85,7 @@ public class AddPolicyController {
 			+ "&useability=" + DataHunterUtils.encode(policies.getUseability());
 		model.addAttribute("navUrParms", navUrParms);		
 				
-		ValidReuseIxPojo validReuseIx = policiesDAO.validateReusableIndexed(policies);
+		ValidReuseIxPojo validReuseIx = IndexedReusableUtils.validateReusableIndexed(policies, policiesDAO);
 		
 		if (validReuseIx.getPolicyReusableIndexed()){
 			if (validReuseIx.getValidatedOk()) {

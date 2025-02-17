@@ -106,7 +106,7 @@ public class PoliciesBreakdownController {
 			countPoliciesBreakdownForm.setHoleCount(0L);
 			countPoliciesBreakdownForm.setHoleStats("");
 
-			ValidReuseIxPojo validReuseIx = policiesDAO.validateReusableIndexed(countPoliciesBreakdown);
+			ValidReuseIxPojo validReuseIx = IndexedReusableUtils.validateReusableIndexed(countPoliciesBreakdown, policiesDAO);
 			if (validReuseIx.getPolicyReusableIndexed()){
 				countPoliciesBreakdownForm.setIsIndexedReusable("Y");
 				if (validReuseIx.getValidatedOk()) {

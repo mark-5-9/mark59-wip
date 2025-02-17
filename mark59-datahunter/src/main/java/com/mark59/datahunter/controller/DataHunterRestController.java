@@ -29,6 +29,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.mark59.datahunter.application.DataHunterConstants;
+import com.mark59.datahunter.application.IndexedReusableUtils;
 import com.mark59.datahunter.application.SqlWithParms;
 import com.mark59.datahunter.data.beans.Policies;
 import com.mark59.datahunter.data.policies.dao.PoliciesDAO;
@@ -114,7 +115,7 @@ public class DataHunterRestController {
 			return ResponseEntity.ok(UseabilityError(useability, response));	
 		}
 	
-		ValidReuseIxPojo validReuseIx = policiesDAO.validateReusableIndexed(policies);
+		ValidReuseIxPojo validReuseIx = IndexedReusableUtils.validateReusableIndexed(policies, policiesDAO);
 		
 		if (validReuseIx.getPolicyReusableIndexed()){
 			if (validReuseIx.getValidatedOk()) {
@@ -245,7 +246,7 @@ public class DataHunterRestController {
 		for (CountPoliciesBreakdown countPoliciesBreakdown : countPoliciesBreakdownList) {
 			countPoliciesBreakdown.setIsIndexedReusable("N");
 			countPoliciesBreakdown.setHoleCount(0L);
-			ValidReuseIxPojo validReuseIx = policiesDAO.validateReusableIndexed(countPoliciesBreakdown);
+			ValidReuseIxPojo validReuseIx = IndexedReusableUtils.validateReusableIndexed(countPoliciesBreakdown, policiesDAO);
 			if (validReuseIx.getPolicyReusableIndexed()){
 				countPoliciesBreakdown.setIsIndexedReusable("Y");
 				if (validReuseIx.getValidatedOk()) {

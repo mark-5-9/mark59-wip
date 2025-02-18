@@ -172,7 +172,7 @@ public class PoliciesBreakdownController {
 			+ "&useability=" + DataHunterUtils.encode(policySelectionCriteria.getUseability());
 
 		System.out.println(">> ============ reindexing ....");
-		String resutMsg = IndexedReusableUtils.reindexReusableIx(
+		String resutMsg = IndexedReusableUtils.reindexReusableIndexed(
 				policySelectionCriteria.getApplication(),
 				policySelectionCriteria.getLifecycle(), 
 				policiesDAO);

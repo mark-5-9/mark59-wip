@@ -308,7 +308,21 @@ public class DataHunterRestApiClient {
 				+ "&epochtimeTo="  		+ encode(policySelectionFilter.getEpochtimeTo());
 		return invokeDataHunterRestApi(webServiceUrl);
 	}
+		
 	
+	/**
+	 * Reindex Indexed Reusable Policies 
+	 * 
+	 * @param application application
+	 * @param lifecycle blank for a blank lifecycle (not all lifecycles within the application)
+	 * @return DataHunterRestApiResponsePojo indicates the success or otherwise on the operation
+	 */
+	public DataHunterRestApiResponsePojo reindexReusableIndexedPolicies(String application, String lifecycle){
+		String webServiceUrl = dataHunterUrl + "/api/reindexReusableIndexedPolicies?application=" + encode(application) + 
+				"&lifecycle=" + encode(lifecycle); 
+		return invokeDataHunterRestApi(webServiceUrl);
+	}
+		
 	
 	/**
 	 * Update an existing Item

@@ -44,7 +44,7 @@ public class IndexedReusableUtils  {
 		ValidReuseIxPojo validReuseIxPojo = new ValidReuseIxPojo();
 		validReuseIxPojo.setPolicyReusableIndexed(false);
 		validReuseIxPojo.setValidatedOk(true);
-		validReuseIxPojo.setErrorMsg("");
+		validReuseIxPojo.setErrorMsg("Not Reusable Indexed data (usability of REUSABLE required) ");
 		validReuseIxPojo.setCurrentIxCount(-1);
 		validReuseIxPojo.setIdsinRangeCount(0);
 		
@@ -76,8 +76,10 @@ public class IndexedReusableUtils  {
 							+ "for the Reusuabe Index row, but was " + ixPolicyRow.getOtherdata().trim());
 					return validReuseIxPojo;
 				}
-			} // ix exists
-		} // reusable
+			} else { // no index row
+				validReuseIxPojo.setErrorMsg("Not marked as Reusable Indexed Data (no Id 0000000000_IX row) ");
+			}
+		}
 		return validReuseIxPojo;
 	}	
 	
@@ -91,7 +93,7 @@ public class IndexedReusableUtils  {
 	}
 
 
-	public static String reindexReusableIx(String application, String lifecycle, PoliciesDAO policiesDAO){
+	public static String reindexReusableIndexed(String application, String lifecycle, PoliciesDAO policiesDAO){
 		String resutMsg = DataHunterConstants.OK;
 		PolicySelectionCriteria targetData =  new PolicySelectionCriteria();
 		targetData.setApplication(application);
@@ -100,14 +102,15 @@ public class IndexedReusableUtils  {
 		
 		ValidReuseIxPojo validReuseIx = validateReusableIndexed(targetData, policiesDAO);
 		if (!validReuseIx.getPolicyReusableIndexed()){
-			return "No action : "+targetData+" is not marked as IndexedReusable (no Id 0000000000_IX row";  
+			return validReuseIx.getErrorMsg();  
+//			return "No action : "+targetData+" is not marked as IndexedReusable (no Id 0000000000_IX row";  
 		}
 		
 		SqlWithParms sqlWithParms = policiesDAO.countNonReusableIdsForReusableIndexedData(application, lifecycle);
 		int nonReuseableidsCount = policiesDAO.runCountSql(sqlWithParms);		
 		if (nonReuseableidsCount != 0){
-			return "No action : App|lifecycle "+application+" | "+lifecycle+" contains Ids that are marked"
-					+ " other than REUSABLE. Please reset or remove this data as appropriate";  
+			return "No action : Application | lifecycle "+application+" | "+lifecycle+" contains Ids that are "
+					+ "marked other than REUSABLE. Please reset or remove this data as appropriate";  
 		}
 		
 		sqlWithParms = policiesDAO.constructCountPoliciesSql(targetData);

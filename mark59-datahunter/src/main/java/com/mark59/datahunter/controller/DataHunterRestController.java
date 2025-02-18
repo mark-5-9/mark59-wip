@@ -17,6 +17,7 @@
 package com.mark59.datahunter.controller;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -538,8 +539,41 @@ public class DataHunterRestController {
 		}
 		return ResponseEntity.ok(response);	
 	}
+
 	
+	/**
+	 * Reindex Indexed Reusable Policies 
+	 * 
+	 * http://localhost:8081/mark59-datahunter/api/reindexReusableIndexedPolicies?application=ADDRESSES-HARMONY&lifecycle=TESTTAS
+	 * 
+	 * @param application  application
+	 * @param lifecycle    blank for a blank lifecycle (not all lifecycles within the application)
+	 * @return ResponseEntity (ok) indicates the success or otherwise on the operation
+	 */
+	@GetMapping(path = "/reindexReusableIndexedPolicies")
+	public ResponseEntity<Object> reindexReusableIndexedPolicies(@RequestParam String application, @RequestParam String lifecycle){ 
+		
+		String resultMsg = IndexedReusableUtils.reindexReusableIndexed(application, lifecycle, policiesDAO);
+
+		DataHunterRestApiResponsePojo response = new DataHunterRestApiResponsePojo();
+		Policies policy = new Policies();
+		policy.setApplication(application);
+		policy.setLifecycle(lifecycle);
+		policy.setUseability(DataHunterConstants.REUSABLE);
+		
+		response.setPolicies(Arrays.asList(policy));
+		response.setRowsAffected(0);
+		response.setSuccess(String.valueOf(true));			
+		response.setFailMsg(resultMsg);
+		if (resultMsg.startsWith(DataHunterConstants.OK)) {
+			response.setSuccess(String.valueOf(true));			
+		} else {
+			response.setSuccess(String.valueOf(false));			
+		}
+		return ResponseEntity.ok(response);	
+	}
 	
+
 	/**
 	 * Update an existing Item 
 	 *  

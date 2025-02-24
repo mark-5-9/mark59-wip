@@ -434,7 +434,7 @@ public class PoliciesDAOjdbcTemplateImpl implements PoliciesDAO
 	@Override
 	public SqlWithParms constructCollectDataOutOfExpectedIxRangeSql(String application, String lifecycle, int policyCount) {
 		String highid = StringUtils.leftPad(String.valueOf(policyCount), 10, "0");
-		System.out.println("highid:"+highid);
+		//System.out.println("highid:"+highid);
 		
 		String sql = " SELECT " + PoliciesDAO.SELECT_POLICY_COLUMNS + " FROM POLICIES "
 				+ " WHERE APPLICATION = :application "

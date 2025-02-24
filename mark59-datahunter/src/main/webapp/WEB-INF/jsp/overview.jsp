@@ -41,8 +41,8 @@ examples using the DataHunter UI and Rest API.
 
 <h3>Data Structure</h3>
 
-<p>The DataHunter data has a key 'Application,Identifier,Lifecycle'.  For general use 'Application,Identifier' is expected to be 
-sufficient and you can leave 'Lifecycle' blank. The exception is for Timing Asynchronous Processes where 'Lifecycle' is needed.</p>
+<p>The DataHunter data has a key 'Application,Identifier,Lifecycle'.  For general use 'Application,Identifier' is sufficient, Lifecycle'
+may be blank, except when Timing Asynchronous Processes where 'Lifecycle' is required.</p>
 <p>The 'Useability' field should always be set, to one of REUSABLE, UNPAIRED, UNUSED, USED</p>
 
 <p>'Epochtime' can be  user-controlled - a numeric value can be entered or updated for an entry.  When a DataHunter entry is added 
@@ -76,6 +76,13 @@ Basic validation checks are done during upload, and invalid lines reported in th
 The 'application', 'lifecycle' and 'useability' data being set as options on the page.
 <p>There is no corresponding Rest API for these UI only functions.
 
+<h3>Reusable Indexed Items for Randomized Lookups</h3>
+
+<p>For fast randomized lookup of large datasets, for instance all addresses for a state or country, a special datatype referred to in the 
+documentation as Reusable Indexed should be used.  It is intended for relatively static data, although a process exists to 'reindex' the data
+that takes changes into account. See the example under '/policies_breakdown_reindex below. More information in the Mark59 User Guide. There
+is also a more complete example in the mark59-datahunter-api project (see DataHunterRestApiClientSampleUsage). 
+
 
 <h3>DataHunter API</h3> 
 
@@ -95,7 +102,7 @@ JavaDocs for the API Client from the mark59-datahunter-api project, class com.ma
  </tr>
  
  <tr>
-	<td>/policies_breakdown<br><br><br><b>Intems Breakdown</b></td>
+	<td>/policies_breakdown<br><br><br><b>Items Breakdown</b></td>
 	<td>
 	<p>public DataHunterRestApiResponsePojo policiesBreakdown(String applicationStartsWithOrEquals, String application, String lifecycle, 
 	String useability)<br>
@@ -114,7 +121,41 @@ JavaDocs for the API Client from the mark59-datahunter-api project, class com.ma
 	            api/policiesBreakdown?applicationStartsWithOrEquals=STARTS_WITH&amp;application=</a>
 	</td>
  </tr>
- 
+    
+ <tr>
+	<td>/policies_breakdown_reindex<br>
+	<br><br><b>Reindex&nbsp;Reusable&nbsp;Indexed&nbsp;Items</b><br>(an option within Policies&nbsp;Breakdown)</td>
+	<td>
+	<p>public DataHunterRestApiResponsePojo reindexReusableIndexedPolicies(String application, String lifecycle)<br>
+	__________________________________________________________________<br>	
+   
+	<p><b>.../api/reindexReusableIndexedPolicies?application={application}&amp;lifecycle={lifecycle}</b>
+	
+	<p>Optional parameter: lifecycle (this means items with a blank lifecycle, not all items for the application<br>
+	
+	<p>Example: Create a set of Reusable Indexed Items that need to be reindexed (holes and extraneous items exist). Then invoke the reindexing Rest API.
+	<p>Start by removing any example data previously created:
+	<p><a href='api/deleteMultiplePolicies?application=testrestindexed'>
+	            api/deleteMultiplePolicies?application=testrestindexed</a>
+	<p>Create a set of items with 'holes' and extra items:	            	
+	<p><a href='api/addPolicy?application=testrestindexed&identifier=0000000001&lifecycle=ix&useability=REUSABLE&otherdata=1 MY STREET TAS 7111'>
+			api/addPolicy?application=testrestindexedt&amp;identifier=0000000001&amp;lifecycle=ix&amp;useability=REUSABLE&amp;otherdata=1 MY STREET TAS 7111</a>
+	<p><a href='api/addPolicy?application=testrestindexed&identifier=0000000003&lifecycle=ix&useability=REUSABLE&otherdata=3 MY STREET TAS 7111'>
+			api/addPolicy?application=testrestindexedt&amp;identifier=0000000003&amp;lifecycle=ix&amp;useability=REUSABLE&amp;otherdata=3 MY STREET TAS 7111</a>
+	<p><a href='api/addPolicy?application=testrestindexed&identifier=00000x&lifecycle=ix&useability=REUSABLE&otherdata=x MY STREET TAS 7111'>
+			api/addPolicy?application=testrestindexedt&amp;identifier=00000x&amp;lifecycle=ix&amp;useability=REUSABLE&amp;otherdata=x MY STREET TAS 7111</a>
+	<p><a href='api/addPolicy?application=testrestindexed&identifier=00000y&lifecycle=ix&useability=REUSABLE&otherdata=y MY STREET TAS 7111'>
+			api/addPolicy?application=testrestindexedt&amp;identifier=00000y&amp;lifecycle=ix&amp;useability=REUSABLE&amp;otherdata=y MY STREET TAS 7111</a>										
+	<p>Now create the 'index' row that marks the data as Reusable Indexed:
+	<p><a href='api/addPolicy?application=testrestindexed&identifier=0000000000_IX&lifecycle=ix&useability=REUSABLE&otherdata=3'>
+		api/addPolicy?application=testrestindexedt&amp;identifier=0000000000_IX&amp;lifecycle=ix&amp;useability=REUSABLE&amp;otherdata=3</a>
+	<p>Have a look at the items (via the UI):<a href='select_multiple_policies?application=testrestindexed'>select_multiple_policies?application=testrestindexed</a>
+	<p>Reindex the Items:
+	<p><a href='api/reindexReusableIndexedPolicies?application=testrestindexed&lifecycle=ix'>api/reindexReusableIndexedPolicies?application=testrestindexedE&amp;lifecycle=ix</a>	
+	<p>Now look at the updated items (via the UI):<a href='select_multiple_policies?application=testrestindexed'>select_multiple_policies?application=testrestindexed</a>
+	</td>
+ </tr>
+
  <tr>
 	<td>/select_multiple_policies<br><br><br><b>Manage&nbsp;Multiple&nbsp;Items</b></td>
 	<td>

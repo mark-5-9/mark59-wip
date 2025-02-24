@@ -31,12 +31,13 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.mark59.datahunter.application.DataHunterConstants;
 import com.mark59.datahunter.application.DataHunterUtils;
-import com.mark59.datahunter.application.IndexedReusableUtils;
+import com.mark59.datahunter.application.ReusableIndexedUtils;
 import com.mark59.datahunter.application.SqlWithParms;
 import com.mark59.datahunter.data.policies.dao.PoliciesDAO;
 import com.mark59.datahunter.model.CountPoliciesBreakdown;
 import com.mark59.datahunter.model.CountPoliciesBreakdownForm;
 import com.mark59.datahunter.model.PolicySelectionCriteria;
+import com.mark59.datahunter.pojo.ReindexResult;
 import com.mark59.datahunter.pojo.ValidReuseIxPojo;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -102,13 +103,13 @@ public class PoliciesBreakdownController {
 				+ "&lifecycle="  + DataHunterUtils.encode(countPoliciesBreakdown.getLifecycle())
 				+ "&useability=" + DataHunterUtils.encode(countPoliciesBreakdown.getUseability()));
 			
-			countPoliciesBreakdownForm.setIsIndexedReusable("N");
+			countPoliciesBreakdownForm.setIsReusableIndexed("N");
 			countPoliciesBreakdownForm.setHoleCount(0L);
 			countPoliciesBreakdownForm.setHoleStats("");
 
-			ValidReuseIxPojo validReuseIx = IndexedReusableUtils.validateReusableIndexed(countPoliciesBreakdown, policiesDAO);
+			ValidReuseIxPojo validReuseIx = ReusableIndexedUtils.validateReusableIndexed(countPoliciesBreakdown, policiesDAO);
 			if (validReuseIx.getPolicyReusableIndexed()){
-				countPoliciesBreakdownForm.setIsIndexedReusable("Y");
+				countPoliciesBreakdownForm.setIsReusableIndexed("Y");
 				if (validReuseIx.getValidatedOk()) {
 					if (countPoliciesBreakdown.getRowCount() <= 1 ){  // only the IX row itself exists 
 						countPoliciesBreakdownForm.setHoleCount(0L);
@@ -145,43 +146,30 @@ public class PoliciesBreakdownController {
 		}
 		DataHunterUtils.expireSession(httpServletRequest);
 		
-//		System.out.println(">> ============ ADDRESSES-HARMONY  TESTTAS");
-//		IndexedReusableUtils.reindexReusableIx("ADDRESSES-HARMONY", "TESTTAS", policiesDAO);
-//		System.out.println("<< ============ ");
-		
-//		System.out.println("============ ADDRESSES-HARMONY  BIGGY");
-//		IndexedReusableUtils.reindexReusableIx("ADDRESSES-HARMONY", "BIGGY", policiesDAO);
-//		System.out.println("<< ============ ");
-		
 		return new ModelAndView("policies_breakdown_action", "model", model);
 	}
-	
 	
 	
 	@RequestMapping("/policies_breakdown_reindex")
 	public ModelAndView policiesBreakdownReindex(@ModelAttribute PolicySelectionCriteria policySelectionCriteria,
 			Model model, HttpServletRequest httpServletRequest) {
 		DataHunterUtils.expireSession(httpServletRequest);
-		
-		System.out.println("at policies_breakdown_reindex ... sleeping...");
-		System.out.println("  PSC="+policySelectionCriteria);
 
 		String navUrParms = "application=" + DataHunterUtils.encode(policySelectionCriteria.getApplication())
 			+ "&applicationStartsWithOrEquals="+DataHunterUtils.encode(policySelectionCriteria.getApplicationStartsWithOrEquals()) 
 			+ "&lifecycle="  + DataHunterUtils.encode(policySelectionCriteria.getLifecycle()) 
 			+ "&useability=" + DataHunterUtils.encode(policySelectionCriteria.getUseability());
 
-		System.out.println(">> ============ reindexing ....");
-		String resutMsg = IndexedReusableUtils.reindexReusableIndexed(
+		ReindexResult result = new ReusableIndexedUtils().reindexReusableIndexed(
 				policySelectionCriteria.getApplication(),
 				policySelectionCriteria.getLifecycle(), 
 				policiesDAO);
-		System.out.println("<< ============ ");		
 
 		model.addAttribute("navUrParms", navUrParms);			
-		model.addAttribute("reindexResult",resutMsg);			
-		System.out.println("at policies_breakdown_reindex ... end sleep");
-		
+		model.addAttribute("reindexResultSuccess",result.getSuccess());			
+		model.addAttribute("reindexResultMessage",result.getMessage());			
+		model.addAttribute("reindexResultRowsMoved",result.getRowsMoved());			
+		model.addAttribute("reindexResulIxCount",result.getIxCount());			
 		return new ModelAndView("policies_breakkown_reindex_action", "model", model);
 	}
 	

@@ -67,11 +67,11 @@ function displayReindexing(lineid) {
      <td id=lifecycle>${countPoliciesBreakdownForm.lifecycle}</td>
      <td id=useability>${countPoliciesBreakdownForm.useability}</td>
      <td id=${app_id}_${lcy_id}_${countPoliciesBreakdownForm.useability}_count>${countPoliciesBreakdownForm.rowCount}</td>
-     <td id=${app_id}_${lcy_id}_${countPoliciesBreakdownForm.useability}_isindexed>${countPoliciesBreakdownForm.isIndexedReusable}</td>
+     <td id=${app_id}_${lcy_id}_${countPoliciesBreakdownForm.useability}_isindexed>${countPoliciesBreakdownForm.isReusableIndexed}</td>
      <td id=${app_id}_${lcy_id}_${countPoliciesBreakdownForm.useability}_holestats>${countPoliciesBreakdownForm.holeStats}</td>
      
           
-     <c:if test = "${countPoliciesBreakdownForm.isIndexedReusable == 'Y'}">
+     <c:if test = "${countPoliciesBreakdownForm.isReusableIndexed == 'Y'}">
      	<td id=${app_id}_${lcy_id}_${countPoliciesBreakdownForm.useability}_reindex>
      		<a href="policies_breakdown_reindex?${countPoliciesBreakdownForm.lookupParmsUrl}" 
      			title="reindex" 
@@ -81,7 +81,7 @@ function displayReindexing(lineid) {
      	<td><span id="${app_id}_${lcy_id}_${countPoliciesBreakdownForm.useability}_tag" 
      			class="loading" style="display: none;" >Indexing<br>.</span></td>     
      </c:if>	
-     <c:if test = "${countPoliciesBreakdownForm.isIndexedReusable != 'Y'}">
+     <c:if test = "${countPoliciesBreakdownForm.isReusableIndexed != 'Y'}">
      	<td id=${app_id}_${lcy_id}_${countPoliciesBreakdownForm.useability}_reindex ></td>
      	<td></td>     
      </c:if>	

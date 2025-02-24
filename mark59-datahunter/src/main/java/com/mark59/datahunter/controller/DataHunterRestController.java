@@ -30,7 +30,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.mark59.datahunter.application.DataHunterConstants;
-import com.mark59.datahunter.application.IndexedReusableUtils;
+import com.mark59.datahunter.application.ReusableIndexedUtils;
 import com.mark59.datahunter.application.SqlWithParms;
 import com.mark59.datahunter.data.beans.Policies;
 import com.mark59.datahunter.data.policies.dao.PoliciesDAO;
@@ -41,6 +41,7 @@ import com.mark59.datahunter.model.DataHunterRestApiResponsePojo;
 import com.mark59.datahunter.model.PolicySelectionCriteria;
 import com.mark59.datahunter.model.PolicySelectionFilter;
 import com.mark59.datahunter.model.UpdateUseStateAndEpochTime;
+import com.mark59.datahunter.pojo.ReindexResult;
 import com.mark59.datahunter.pojo.ValidReuseIxPojo;
 
 
@@ -116,7 +117,7 @@ public class DataHunterRestController {
 			return ResponseEntity.ok(UseabilityError(useability, response));	
 		}
 	
-		ValidReuseIxPojo validReuseIx = IndexedReusableUtils.validateReusableIndexed(policies, policiesDAO);
+		ValidReuseIxPojo validReuseIx = ReusableIndexedUtils.validateReusableIndexed(policies, policiesDAO);
 		
 		if (validReuseIx.getPolicyReusableIndexed()){
 			if (validReuseIx.getValidatedOk()) {
@@ -245,11 +246,11 @@ public class DataHunterRestController {
 		List<CountPoliciesBreakdown> countPoliciesBreakdownList = policiesDAO.runCountPoliciesBreakdownSql(sqlWithParms);
 		
 		for (CountPoliciesBreakdown countPoliciesBreakdown : countPoliciesBreakdownList) {
-			countPoliciesBreakdown.setIsIndexedReusable("N");
+			countPoliciesBreakdown.setIsReusableIndexed("N");
 			countPoliciesBreakdown.setHoleCount(0L);
-			ValidReuseIxPojo validReuseIx = IndexedReusableUtils.validateReusableIndexed(countPoliciesBreakdown, policiesDAO);
+			ValidReuseIxPojo validReuseIx = ReusableIndexedUtils.validateReusableIndexed(countPoliciesBreakdown, policiesDAO);
 			if (validReuseIx.getPolicyReusableIndexed()){
-				countPoliciesBreakdown.setIsIndexedReusable("Y");
+				countPoliciesBreakdown.setIsReusableIndexed("Y");
 				if (validReuseIx.getValidatedOk()) {
 					countPoliciesBreakdown.setHoleCount(Long.valueOf(validReuseIx.getCurrentIxCount()) - validReuseIx.getIdsinRangeCount());
 				} else {
@@ -510,7 +511,6 @@ public class DataHunterRestController {
 		policySelectionFilter.setEpochtimeFrom(epochtimeFrom);	
 		policySelectionFilter.setEpochtimeTo(epochtimeTo);
 		
-		
 		DataHunterRestApiResponsePojo response = new DataHunterRestApiResponsePojo();
 		
 		if (StringUtils.isNotBlank(useability) && !DataHunterConstants.USEABILITY_LIST.contains(useability)){
@@ -542,34 +542,34 @@ public class DataHunterRestController {
 
 	
 	/**
-	 * Reindex Indexed Reusable Policies 
+	 * Reindex Reusable Indexed datatype 
 	 * 
-	 * http://localhost:8081/mark59-datahunter/api/reindexReusableIndexedPolicies?application=ADDRESSES-HARMONY&lifecycle=TESTTAS
+	 * This will remove 'holes' the in the ids for a ReusableIndexed datatype.  Id's are ideally a contiguous
+	 * 'numeric' (actually stored as a string with leading zeros).
+	 * 
+	 * Where rows exist than do not have valid ids ('numeric' and within the row range count), they will be shuffled 
+	 * into any holes in the range. When the holes are filled they are added to the end of the range.    
 	 * 
 	 * @param application  application
 	 * @param lifecycle    blank for a blank lifecycle (not all lifecycles within the application)
 	 * @return ResponseEntity (ok) indicates the success or otherwise on the operation
+	 * 
+	 * @see ReusableIndexedUtils#reindexReusableIndexed(String, String, PoliciesDAO)
 	 */
 	@GetMapping(path = "/reindexReusableIndexedPolicies")
 	public ResponseEntity<Object> reindexReusableIndexedPolicies(@RequestParam String application, @RequestParam String lifecycle){ 
-		
-		String resultMsg = IndexedReusableUtils.reindexReusableIndexed(application, lifecycle, policiesDAO);
-
-		DataHunterRestApiResponsePojo response = new DataHunterRestApiResponsePojo();
 		Policies policy = new Policies();
 		policy.setApplication(application);
 		policy.setLifecycle(lifecycle);
 		policy.setUseability(DataHunterConstants.REUSABLE);
+
+		ReindexResult result = new ReusableIndexedUtils().reindexReusableIndexed(application, lifecycle, policiesDAO);
 		
+		DataHunterRestApiResponsePojo response = new DataHunterRestApiResponsePojo();
 		response.setPolicies(Arrays.asList(policy));
-		response.setRowsAffected(0);
-		response.setSuccess(String.valueOf(true));			
-		response.setFailMsg(resultMsg);
-		if (resultMsg.startsWith(DataHunterConstants.OK)) {
-			response.setSuccess(String.valueOf(true));			
-		} else {
-			response.setSuccess(String.valueOf(false));			
-		}
+		response.setSuccess(String.valueOf(result.getSuccess()));			
+		response.setRowsAffected(result.getRowsMoved());
+		response.setFailMsg(result.getMessage());
 		return ResponseEntity.ok(response);	
 	}
 	

@@ -51,8 +51,11 @@
   </table>
  
   <br><br>
-  <table>
-      <tr><td>Result</td><td>:</td><td id=sqlResult>${model.reindexResult}</td></tr>
+  <table  class="tip">
+      <tr><td>Success?</td><td>:</td><td id=reindexResultSuccess>${model.reindexResultSuccess}</td></tr>
+      <tr><td>Message</td><td>:</td><td id=reindexResultMessage>${model.reindexResultMessage}</td></tr>
+      <tr><td>Rows Moved</td><td>:</td><td id=reindexResultRowsMoved>${model.reindexResultRowsMoved}</td></tr>
+      <tr><td>Index Row Count</td><td>:</td><td id=reindexResulIxCount>${model.reindexResulIxCount}</td></tr>
   </table>
 
   <br><br><a href='policies_breakdown_action?${model.navUrParms}'>Back</a>

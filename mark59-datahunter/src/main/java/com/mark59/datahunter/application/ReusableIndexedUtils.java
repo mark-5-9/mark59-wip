@@ -25,11 +25,22 @@ import org.apache.commons.lang3.StringUtils;
 import com.mark59.datahunter.data.beans.Policies;
 import com.mark59.datahunter.data.policies.dao.PoliciesDAO;
 import com.mark59.datahunter.model.PolicySelectionCriteria;
+import com.mark59.datahunter.pojo.ReindexResult;
 import com.mark59.datahunter.pojo.ValidReuseIxPojo;
 
-public class IndexedReusableUtils  {
+public class ReusableIndexedUtils  {
 
+	private int rowsMoved=0;
 	
+	/**
+	 * validation of a ReusableIndexed data type via a Polices object
+	 * 
+	 * @param policies  a Policies object
+	 * @param policiesDAO policiesDAO bean
+	 * @return ValidReuseIxPojo result
+	 * 
+	 * @see #validateReusableIndexed(PolicySelectionCriteria, PoliciesDAO)
+	 */
 	public static ValidReuseIxPojo validateReusableIndexed(Policies policies, PoliciesDAO policiesDAO){
 		PolicySelectionCriteria policySelect = new PolicySelectionCriteria();
 		policySelect.setApplication(policies.getApplication());
@@ -39,6 +50,13 @@ public class IndexedReusableUtils  {
 	}			
 	
 	
+	/**
+	 * Validates if a passed Application-Lifecycle-Useability-Usability is a valid ReusableIndexed datatype.  
+	 * 
+	 * @param policySelect a PolicySelectionCriteria object
+	 * @param policiesDAO  policiesDAO bean
+	 * @return ValidReuseIxPojo result
+	 */
 	public static ValidReuseIxPojo validateReusableIndexed(PolicySelectionCriteria policySelect, PoliciesDAO policiesDAO){
 
 		ValidReuseIxPojo validReuseIxPojo = new ValidReuseIxPojo();
@@ -84,6 +102,14 @@ public class IndexedReusableUtils  {
 	}	
 	
 	
+	/**
+	 * Updates the index counter of a ReusableIndexed datatype
+	 * 
+	 * @param policies
+	 * @param indexedId the number of rows (excluding the index itself) in a ReusableIndexed datatype.
+	 * @param policiesDAO policiesDAO bean
+	 * @return affected row count (1 - the index row) 
+	 */
 	public static int updateIndexedRowCounter(Policies policies, int indexedId, PoliciesDAO policiesDAO) {
 		policies.setIdentifier(DataHunterConstants.INDEXED_ROW_COUNT);
 		policies.setOtherdata(String.valueOf(indexedId));
@@ -93,8 +119,25 @@ public class IndexedReusableUtils  {
 	}
 
 
-	public static String reindexReusableIndexed(String application, String lifecycle, PoliciesDAO policiesDAO){
-		String resutMsg = DataHunterConstants.OK;
+	/**
+	 * This will remove 'holes' the in the ids for a ReusableIndexed datatype.  Id's are ideally a contiguous
+	 * 'numeric' (actually stored as a string with leading zeros).
+	 * 
+	 * Where rows exist than do not have valid ids ('numeric' and within the row range count), they will be shuffled 
+	 * into any holes in the range. When the holes are filled they are added to the end of the range.    
+	 * 
+	 * @param application  application for the ReusableIndexed datatype
+	 * @param lifecycle lifecycle for the ReusableIndexed datatype   
+	 * @param policiesDAO policiesDAO bean
+	 * @return ReindexResult indicates success and rows affected (moved)
+	 */
+	public ReindexResult reindexReusableIndexed(String application, String lifecycle, PoliciesDAO policiesDAO){
+		ReindexResult result = new ReindexResult();
+		result.setSuccess(false);
+		result.setMessage("?");
+		result.setRowsMoved(0);
+		result.setIxCount(-1); 
+		
 		PolicySelectionCriteria targetData =  new PolicySelectionCriteria();
 		targetData.setApplication(application);
 		targetData.setLifecycle(lifecycle);
@@ -102,15 +145,16 @@ public class IndexedReusableUtils  {
 		
 		ValidReuseIxPojo validReuseIx = validateReusableIndexed(targetData, policiesDAO);
 		if (!validReuseIx.getPolicyReusableIndexed()){
-			return validReuseIx.getErrorMsg();  
-//			return "No action : "+targetData+" is not marked as IndexedReusable (no Id 0000000000_IX row";  
+			result.setMessage(validReuseIx.getErrorMsg());
+			return result;
 		}
 		
 		SqlWithParms sqlWithParms = policiesDAO.countNonReusableIdsForReusableIndexedData(application, lifecycle);
 		int nonReuseableidsCount = policiesDAO.runCountSql(sqlWithParms);		
 		if (nonReuseableidsCount != 0){
-			return "No action : Application | lifecycle "+application+" | "+lifecycle+" contains Ids that are "
-					+ "marked other than REUSABLE. Please reset or remove this data as appropriate";  
+			result.setMessage("No action : Application | lifecycle "+application+" | "+lifecycle+" contains Ids "
+					+ "that are marked other than REUSABLE. Please reset or remove this data as appropriate");
+			return result;
 		}
 		
 		sqlWithParms = policiesDAO.constructCountPoliciesSql(targetData);
@@ -127,7 +171,8 @@ public class IndexedReusableUtils  {
 		currPolicy.setApplication(application);
 		currPolicy.setLifecycle(lifecycle);
 		currPolicy.setUseability(DataHunterConstants.REUSABLE);
-
+		rowsMoved=0;
+		
 		for (int ix = 1; ix <= policyCount && policyStreamIter.hasNext(); ix++) { // lets start filling up holes
 			currPolicy.setIdentifier(StringUtils.leftPad(String.valueOf(ix), 10, "0"));
 //			System.out.println("loop "+ix+" currPolicy: "+ currPolicy );
@@ -140,25 +185,29 @@ public class IndexedReusableUtils  {
 			}
 		}
 		
-		IndexedReusableUtils.updateIndexedRowCounter(currPolicy, policyCount, policiesDAO);	
-//		System.out.println("msg:"+ resutMsg);
-		return resutMsg; 
+		ReusableIndexedUtils.updateIndexedRowCounter(currPolicy, policyCount, policiesDAO);
+		
+		result.setIxCount(policyCount); 
+		result.setSuccess(true);
+		result.setMessage(DataHunterConstants.OK);
+		result.setRowsMoved(rowsMoved);
+		return result;
 	}
 
 
-	private static void movePolicyToHole(Policies currPolicy, int ix, Policies toMovePolicy, PoliciesDAO policiesDAO){
+	private synchronized void movePolicyToHole(Policies currPolicy, int ix, Policies toMovePolicy, PoliciesDAO policiesDAO){
 		//System.out.println("moving:"+toMovePolicy+", to:"+currPolicy);
-		// delete toMovePolicy from db
 		PolicySelectionCriteria pscToMovePolicy = new PolicySelectionCriteria();
 		pscToMovePolicy.setApplication(toMovePolicy.getApplication());
 		pscToMovePolicy.setIdentifier(toMovePolicy.getIdentifier());
 		pscToMovePolicy.setLifecycle(toMovePolicy.getLifecycle());
 		SqlWithParms sqlWithParms = policiesDAO.constructDeletePoliciesSql(pscToMovePolicy);
 		policiesDAO.runDatabaseUpdateSql(sqlWithParms);
-		// add back into slot
+		
 		currPolicy.setOtherdata(toMovePolicy.getOtherdata());
 		sqlWithParms =  policiesDAO.constructInsertDataSql(currPolicy);
 		policiesDAO.runDatabaseUpdateSql(sqlWithParms);
+		rowsMoved++; 
 	}
 	
 }

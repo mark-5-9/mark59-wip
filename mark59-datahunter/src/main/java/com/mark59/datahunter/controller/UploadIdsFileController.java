@@ -18,7 +18,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.mark59.datahunter.application.DataHunterConstants;
 import com.mark59.datahunter.application.DataHunterUtils;
-import com.mark59.datahunter.application.IndexedReusableUtils;
+import com.mark59.datahunter.application.ReusableIndexedUtils;
 import com.mark59.datahunter.application.SqlWithParms;
 import com.mark59.datahunter.data.beans.Policies;
 import com.mark59.datahunter.data.policies.dao.PoliciesDAO;
@@ -148,7 +148,7 @@ public class UploadIdsFileController {
 					&& rowsInserted > 0){
 	    		policiesDAO.insertMultiple(policiesList);
 	    		policiesList.clear();
-				IndexedReusableUtils.updateIndexedRowCounter(policies, indexedId, policiesDAO);		
+				ReusableIndexedUtils.updateIndexedRowCounter(policies, indexedId, policiesDAO);		
 			}
 			br.close();
 		

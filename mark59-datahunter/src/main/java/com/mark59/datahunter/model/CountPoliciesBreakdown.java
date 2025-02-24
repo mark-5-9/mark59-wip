@@ -23,7 +23,7 @@ package com.mark59.datahunter.model;
 public class CountPoliciesBreakdown extends PolicySelectionCriteria   {
 
 	Long rowCount;
-	String isIndexedReusable;
+	String isReusableIndexed;
 	Long holeCount;	
 	
 	public CountPoliciesBreakdown() {
@@ -37,12 +37,12 @@ public class CountPoliciesBreakdown extends PolicySelectionCriteria   {
 		this.rowCount = rowCount;
 	}
 	
-	public String getIsIndexedReusable() {
-		return isIndexedReusable;
+	public String getIsReusableIndexed() {
+		return isReusableIndexed;
 	}
 
-	public void setIsIndexedReusable(String isIndexedReusable) {
-		this.isIndexedReusable = isIndexedReusable;
+	public void setIsReusableIndexed(String isReusableIndexed) {
+		this.isReusableIndexed = isReusableIndexed;
 	}
 
 	public Long getHoleCount() {
@@ -57,7 +57,7 @@ public class CountPoliciesBreakdown extends PolicySelectionCriteria   {
     public String toString() {
         return  super.toString() + 
         		", rowCount="+ rowCount +         		
-        		", isIndexedReusable="+ isIndexedReusable +         		
+        		", isReusableIndexed="+ isReusableIndexed +         		
         		", holeCount="+ holeCount +         		
         		"]";
 	}

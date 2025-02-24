@@ -311,7 +311,7 @@ public class DataHunterRestApiClient {
 		
 	
 	/**
-	 * Reindex Indexed Reusable Policies 
+	 * Reindex Reusable Indexed Policies 
 	 * 
 	 * @param application application
 	 * @param lifecycle blank for a blank lifecycle (not all lifecycles within the application)

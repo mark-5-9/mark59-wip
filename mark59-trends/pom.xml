@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>3.4.3</version>			
+		<relativePath /> <!-- lookup parent from repository -->
+	</parent>
+
+	
+	<groupId>com.mark59</groupId>
+	<artifactId>mark59-trends</artifactId>
+	<version>6.3</version>
+	<packaging>war</packaging>
+
+	<name>mark59-trends</name>
+
+	<properties>
+		<maven.compiler.release>17</maven.compiler.release>
+		<maven.compiler.target>17</maven.compiler.target>
+		<maven.compiler.source>17</maven.compiler.source>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>
+
+	<dependencies>
+
+		<dependency>
+			<groupId>com.mark59</groupId>
+			<artifactId>mark59-core</artifactId>
+			<version>6.3</version>
+		</dependency>
+
+		<!-- Spring Boot related dependencies -->
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-jdbc</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>jakarta.servlet</groupId>
+			<artifactId>jakarta.servlet-api</artifactId>
+		</dependency>
+		
+		<dependency>
+			<groupId>jakarta.servlet.jsp.jstl</groupId>
+			<artifactId>jakarta.servlet.jsp.jstl-api</artifactId>
+		</dependency>
+	
+		<dependency>
+			<groupId>org.glassfish.web</groupId>
+			<artifactId>jakarta.servlet.jsp.jstl</artifactId>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-tomcat</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.apache.tomcat.embed</groupId>
+			<artifactId>tomcat-embed-jasper</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		
+		<!-- required from Spring Boot 3.2.8+ (for com.sun.el.ExpressionFactoryImpl) -->		
+		<dependency>
+		    <groupId>org.glassfish.expressly</groupId>
+		    <artifactId>expressly</artifactId>
+		    <version>6.0.0-M1</version>
+		</dependency>
+		
+		<!-- Other project dependencies -->
+
+		<dependency>
+		    <groupId>org.apache.commons</groupId>
+		    <artifactId>commons-lang3</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>com.mysql</groupId>
+			<artifactId>mysql-connector-j</artifactId>
+			<scope>runtime</scope>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.postgresql</groupId>
+			<artifactId>postgresql</artifactId>
+		</dependency>
+		
+		<dependency>
+			<groupId>com.h2database</groupId>
+			<artifactId>h2</artifactId>
+		</dependency>
+
+		<!-- the following only required for testing -->
+	
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+		
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+		</dependency>		
+		
+	</dependencies>
+
+	<build>
+		<!-- phase/goals: clean package  (install not needed as the maven-install-plugin runs in the package phase) -->
+		<plugins>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+			</plugin>
+
+			<!-- spring boot maven plugin -->
+			<!-- Constructs the Trends Analysis Spring Boot War during the package phase. -->
+
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+				<configuration>
+					<finalName>${project.artifactId}</finalName>
+				</configuration>
+			</plugin>
+
+			<!-- maven jar plugin and install plugins -->
+			<!-- In conjunction, these two plugins compile the classes into a jar file, and then 'install' the jar
+			     into the local repository. The jar can then be referenced (via a pom entry) to resolve dependencies
+			     in projects requiring classes from this project.  Note the 'prepare-package' phase is used in the 
+			     maven jar plugin (rather than 'compile' or 'package') to bypass an annoying eclipse error -->
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>create-a-jar</id>
+						<phase>prepare-package</phase>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-install-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>Add-to-local-repository</id>
+						<phase>package</phase>
+						<configuration>
+							<packaging>jar</packaging>
+							<file>${project.build.directory}\${project.artifactId}.jar</file>
+						</configuration>
+						<goals>
+							<goal>install-file</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+
+		</plugins>
+		<finalName>${project.artifactId}</finalName>
+	</build>
+
+</project>

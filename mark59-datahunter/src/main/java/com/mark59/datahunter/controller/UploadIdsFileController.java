@@ -9,9 +9,9 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
@@ -36,7 +36,7 @@ public class UploadIdsFileController {
 	PoliciesDAO policiesDAO;	
 	
 	
-	@RequestMapping("/upload_ids")
+	@GetMapping("/upload_ids")
 	public ModelAndView uploadIds(@ModelAttribute UploadIdsFile uploadIdsFile, Model model) {
 		createDropdownAttributes(model);		
 		return new ModelAndView("upload_ids");
@@ -45,7 +45,7 @@ public class UploadIdsFileController {
 	
 	@PostMapping("/upload_ids_action")	
 	public ModelAndView uploadIdsAction(@ModelAttribute UploadIdsFile uploadIdsFile, Model model, 
-			@RequestParam("file") MultipartFile file){
+			@RequestParam MultipartFile file){
 		
 		Policies policies = new Policies();
 		policies.setApplication(uploadIdsFile.getApplication().trim());

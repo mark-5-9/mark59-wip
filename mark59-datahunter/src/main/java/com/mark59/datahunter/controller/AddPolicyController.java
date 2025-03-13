@@ -24,8 +24,9 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -50,7 +51,7 @@ public class AddPolicyController {
 	PoliciesDAO policiesDAO;	
 		
 
-	@RequestMapping("/add_policy")
+	@GetMapping("/add_policy")
 	public String addPolicyUrl(@RequestParam(required=false) String application,@ModelAttribute Policies policies, Model model) {
 		
 		ValidReuseIxPojo validReuseIx = ReusableIndexedUtils.validateReusableIndexed(policies, policiesDAO);
@@ -70,7 +71,7 @@ public class AddPolicyController {
 	}
 	
 		
-	@RequestMapping("/add_policy_action")
+	@PostMapping("/add_policy_action")
 	public ModelAndView addPolicyAction(@ModelAttribute Policies policies, Model model, HttpServletRequest httpServletRequest ) {
 
 		DataHunterUtils.expireSession(httpServletRequest); 

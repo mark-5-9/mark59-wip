@@ -24,8 +24,9 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -53,7 +54,7 @@ public class PoliciesBreakdownController {
 	PoliciesDAO policiesDAO;	
 		
 
-	@RequestMapping("/policies_breakdown")
+	@GetMapping("/policies_breakdown")
 	public String policiesBreakdownUrl(@RequestParam(required = false) String reqApplication,
 			PolicySelectionCriteria policySelectionCriteria, Model model) {
 //		System.out.println("/policies_breakdown");
@@ -66,7 +67,7 @@ public class PoliciesBreakdownController {
 	}
 	
 		
-	@RequestMapping("/policies_breakdown_action")
+	@PostMapping("/policies_breakdown_action")
 	public ModelAndView policiesBreakdownAction(@ModelAttribute PolicySelectionCriteria policySelectionCriteria,
 			Model model, HttpServletRequest httpServletRequest) {
 		
@@ -150,7 +151,7 @@ public class PoliciesBreakdownController {
 	}
 	
 	
-	@RequestMapping("/policies_breakdown_reindex")
+	@GetMapping("/policies_breakdown_reindex")
 	public ModelAndView policiesBreakdownReindex(@ModelAttribute PolicySelectionCriteria policySelectionCriteria,
 			Model model, HttpServletRequest httpServletRequest) {
 		DataHunterUtils.expireSession(httpServletRequest);

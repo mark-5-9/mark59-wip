@@ -18,7 +18,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.mark59.datahunter.application.DataHunterConstants;
 import com.mark59.datahunter.application.DataHunterUtils;
-import com.mark59.datahunter.application.ReusableIndexedUtils;
 import com.mark59.datahunter.application.SqlWithParms;
 import com.mark59.datahunter.data.beans.Policies;
 import com.mark59.datahunter.data.policies.dao.PoliciesDAO;
@@ -31,10 +30,9 @@ import com.mark59.datahunter.model.UploadIdsFile;
 @Controller
 public class UploadIdsFileController {
 
-	
 	@Autowired
 	PoliciesDAO policiesDAO;	
-	
+
 	
 	@GetMapping("/upload_ids")
 	public ModelAndView uploadIds(@ModelAttribute UploadIdsFile uploadIdsFile, Model model) {
@@ -148,7 +146,7 @@ public class UploadIdsFileController {
 					&& rowsInserted > 0){
 	    		policiesDAO.insertMultiple(policiesList);
 	    		policiesList.clear();
-				ReusableIndexedUtils.updateIndexedRowCounter(policies, indexedId, policiesDAO);		
+	    		policiesDAO.updateIndexedRowCounter(policies, indexedId);		
 			}
 			br.close();
 		

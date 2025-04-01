@@ -32,7 +32,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.mark59.datahunter.application.DataHunterConstants;
 import com.mark59.datahunter.application.DataHunterUtils;
-import com.mark59.datahunter.application.ReusableIndexedUtils;
 import com.mark59.datahunter.application.SqlWithParms;
 import com.mark59.datahunter.data.policies.dao.PoliciesDAO;
 import com.mark59.datahunter.model.CountPoliciesBreakdown;
@@ -52,7 +51,6 @@ public class PoliciesBreakdownController {
 	
 	@Autowired
 	PoliciesDAO policiesDAO;	
-		
 
 	@GetMapping("/policies_breakdown")
 	public String policiesBreakdownUrl(@RequestParam(required = false) String reqApplication,
@@ -108,18 +106,21 @@ public class PoliciesBreakdownController {
 			countPoliciesBreakdownForm.setHoleCount(0L);
 			countPoliciesBreakdownForm.setHoleStats("");
 
-			ValidReuseIxPojo validReuseIx = ReusableIndexedUtils.validateReusableIndexed(countPoliciesBreakdown, policiesDAO);
+			ValidReuseIxPojo validReuseIx = policiesDAO.validateReusableIndexed(countPoliciesBreakdown);
 			if (validReuseIx.getPolicyReusableIndexed()){
 				countPoliciesBreakdownForm.setIsReusableIndexed("Y");
 				if (validReuseIx.getValidatedOk()) {
 					if (countPoliciesBreakdown.getRowCount() <= 1 ){  // only the IX row itself exists 
 						countPoliciesBreakdownForm.setHoleCount(0L);
 						countPoliciesBreakdownForm.setHoleStats("na");
-						
 					} else {
 						Long pcHoles = 100L; 
+						sqlWithParms = policiesDAO.countValidIndexedIdsInExpectedRange(policySelectionCriteria, validReuseIx.getCurrentIxCount());
+						validReuseIx.setValidIdsinRangeCount(policiesDAO.runCountSql(sqlWithParms));		
+						countPoliciesBreakdown.setHoleCount(Long.valueOf(validReuseIx.getCurrentIxCount()) - validReuseIx.getValidIdsinRangeCount());	
+						
 						countPoliciesBreakdown.setHoleCount(
-								Long.valueOf(validReuseIx.getCurrentIxCount()) - validReuseIx.getIdsinRangeCount());
+								Long.valueOf(validReuseIx.getCurrentIxCount()) - validReuseIx.getValidIdsinRangeCount());
 						if (validReuseIx.getCurrentIxCount() > 0) {
 							pcHoles = (countPoliciesBreakdown.getHoleCount()*100) / validReuseIx.getCurrentIxCount(); 
 						}
@@ -161,10 +162,9 @@ public class PoliciesBreakdownController {
 			+ "&lifecycle="  + DataHunterUtils.encode(policySelectionCriteria.getLifecycle()) 
 			+ "&useability=" + DataHunterUtils.encode(policySelectionCriteria.getUseability());
 
-		ReindexResult result = new ReusableIndexedUtils().reindexReusableIndexed(
+		ReindexResult result = policiesDAO.reindexReusableIndexed(
 				policySelectionCriteria.getApplication(),
-				policySelectionCriteria.getLifecycle(), 
-				policiesDAO);
+				policySelectionCriteria.getLifecycle());
 
 		model.addAttribute("navUrParms", navUrParms);			
 		model.addAttribute("reindexResultSuccess",result.getSuccess());			

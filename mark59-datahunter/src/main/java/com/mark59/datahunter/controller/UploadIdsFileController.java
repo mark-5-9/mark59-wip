@@ -71,7 +71,6 @@ public class UploadIdsFileController {
 				lineCount++;
 				if (!DataHunterUtils.isEmpty(line)){
 					// System.out.println("  <"+lineCount+"> ["+line+"]" );
-					
 		
 					if (DataHunterConstants.UPDATE_USEABILITY_ON_EXISTING_ITEMS.equals(uploadIdsFile.getTypeOfUpload())){
 						
@@ -144,9 +143,11 @@ public class UploadIdsFileController {
 			if ( (DataHunterConstants.BULK_LOAD.equals(uploadIdsFile.getTypeOfUpload()) || 
 				  DataHunterConstants.BULK_LOAD_AS_INDEXED_REUSABLE.equals(uploadIdsFile.getTypeOfUpload()))
 					&& rowsInserted > 0){
-	    		policiesDAO.insertMultiple(policiesList);
-	    		policiesList.clear();
-	    		policiesDAO.updateIndexedRowCounter(policies, indexedId);		
+				policiesDAO.insertMultiple(policiesList);
+				policiesList.clear();
+				if (DataHunterConstants.BULK_LOAD_AS_INDEXED_REUSABLE.equals(uploadIdsFile.getTypeOfUpload())){
+					policiesDAO.updateIndexedRowCounter(policies, indexedId);
+				}	
 			}
 			br.close();
 		
@@ -180,7 +181,6 @@ public class UploadIdsFileController {
 
 		return new ModelAndView("/upload_ids_action", "model", model);		
 	}
-
 	
 
 	private boolean policyAlreadyExists(Policies policies) {

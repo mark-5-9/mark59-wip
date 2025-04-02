@@ -64,6 +64,21 @@ public class PoliciesBreakdownController {
 		return "/policies_breakdown";
 	}
 	
+	
+	@GetMapping("/policies_breakdown_action")
+	public ModelAndView policiesBreakdownActionGet(@RequestParam(required = false) String application,
+			@RequestParam(required = false) String applicationStartsWithOrEquals,
+			@RequestParam(required = false) String lifecycle,
+			@RequestParam(required = false) String useability,
+			Model model, HttpServletRequest httpServletRequest) {
+		
+		PolicySelectionCriteria policySelectionCriteria = new PolicySelectionCriteria();
+		policySelectionCriteria.setApplication(application);
+		policySelectionCriteria.setApplicationStartsWithOrEquals(applicationStartsWithOrEquals);
+		policySelectionCriteria.setLifecycle(lifecycle);
+		policySelectionCriteria.setUseability(useability);
+		return policiesBreakdownAction(policySelectionCriteria, model, httpServletRequest);	
+	}
 		
 	@PostMapping("/policies_breakdown_action")
 	public ModelAndView policiesBreakdownAction(@ModelAttribute PolicySelectionCriteria policySelectionCriteria,
@@ -114,13 +129,10 @@ public class PoliciesBreakdownController {
 						countPoliciesBreakdownForm.setHoleCount(0L);
 						countPoliciesBreakdownForm.setHoleStats("na");
 					} else {
-						Long pcHoles = 100L; 
-						sqlWithParms = policiesDAO.countValidIndexedIdsInExpectedRange(policySelectionCriteria, validReuseIx.getCurrentIxCount());
+						Long pcHoles = 0L; 
+						sqlWithParms = policiesDAO.countValidIndexedIdsInExpectedRange(countPoliciesBreakdown, validReuseIx.getCurrentIxCount());
 						validReuseIx.setValidIdsinRangeCount(policiesDAO.runCountSql(sqlWithParms));		
-						countPoliciesBreakdown.setHoleCount(Long.valueOf(validReuseIx.getCurrentIxCount()) - validReuseIx.getValidIdsinRangeCount());	
-						
-						countPoliciesBreakdown.setHoleCount(
-								Long.valueOf(validReuseIx.getCurrentIxCount()) - validReuseIx.getValidIdsinRangeCount());
+						countPoliciesBreakdown.setHoleCount(Long.valueOf(validReuseIx.getCurrentIxCount()) - validReuseIx.getValidIdsinRangeCount());						
 						if (validReuseIx.getCurrentIxCount() > 0) {
 							pcHoles = (countPoliciesBreakdown.getHoleCount()*100) / validReuseIx.getCurrentIxCount(); 
 						}

@@ -250,7 +250,7 @@ public class DataHunterRestController {
 			if (validReuseIx.getPolicyReusableIndexed()){
 				countPoliciesBreakdown.setIsReusableIndexed("Y");
 				if (validReuseIx.getValidatedOk()) {
-					sqlWithParms = policiesDAO.countValidIndexedIdsInExpectedRange(policySelectionCriteria, validReuseIx.getCurrentIxCount());
+					sqlWithParms = policiesDAO.countValidIndexedIdsInExpectedRange(countPoliciesBreakdown, validReuseIx.getCurrentIxCount());
 					validReuseIx.setValidIdsinRangeCount(policiesDAO.runCountSql(sqlWithParms));		
 					countPoliciesBreakdown.setHoleCount(Long.valueOf(validReuseIx.getCurrentIxCount()) - validReuseIx.getValidIdsinRangeCount());
 				} else {

@@ -140,8 +140,8 @@ public class TrendsLoad  implements CommandLineRunner
 		options.addOption("l", "simulationLog",			true, "Gatling only. Simulation log file name - must be in the Input directory (defaults to simulation.log)" );
 		options.addOption("m", "simlogcustoM",			true, "Gatling only. Simulation log comma-separated customized 'REQUEST' field column positions in order : txn name, epoch start, epoch end, tnx OK, error msg. "
 																+ "The text 'REQUEST' is assumed in position 1. EG: for a 3.6.1 layout: '2,3,4,5,6,' (This parameter may assist with un-catered for Gatling versions)" );
-		options.addOption("z", "timeZone",    			true, "Loadrunner only. Required when running ann extract from azone other than where the Analysis Report was generated. Also, internal raw stored time"
-																+ " may not take daylight saving into account.  Two format options 1) offset against GMT. Eg 'GMT+02:00' or 2) IANA Time Zone Database (TZDB) codes."
+		options.addOption("z", "timeZone",    			true, "Loadrunner only. Required when running an extract from a zone other than where the Analysis Report was generated. Also, internal raw stored time"
+																+ " may not take daylight savings into account.  Two format options 1) offset against GMT. Eg 'GMT+02:00' or 2) IANA Time Zone Database (TZDB) codes."
 																+ " Refer to https://en.wikipedia.org/wiki/List_of_tz_database_time_zones. Eg 'Australia/Sydney' ");   	
 		HelpFormatter formatter = new HelpFormatter();
 		CommandLine commandLine;

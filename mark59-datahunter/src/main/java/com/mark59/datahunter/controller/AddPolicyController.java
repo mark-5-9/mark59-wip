@@ -94,7 +94,7 @@ public class AddPolicyController {
 				SqlWithParms sqlWithParmsIx = policiesDAO.constructUpdatePoliciesSql(validReuseIx.getIxPolicy());
 				
 				try {
-					System.out.println("update ix : " + validReuseIx.getIxPolicy());
+					// System.out.println("update ix : " + validReuseIx.getIxPolicy());
 					policiesDAO.runDatabaseUpdateSql(sqlWithParmsIx);
 				} catch (Exception e) {
 					model.addAttribute("sqlResult", "FAIL");

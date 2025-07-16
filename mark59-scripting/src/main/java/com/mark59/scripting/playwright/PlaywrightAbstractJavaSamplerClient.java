@@ -513,7 +513,7 @@ public abstract class PlaywrightAbstractJavaSamplerClient extends UiAbstractJava
 			}
 			
 		} catch (Exception ex) {
-			LOG.error("["+ thread + "]  ERROR : " + this.getClass() + ".  An exception occurred during scriptExceptionHandling (documentExceptionState) "
+			LOG.error("["+ thread + "]  ERROR : " + this.getClass() + ".  An exception occurred during scriptExceptionHandling  "
 					+  ex.getClass().getName() +  " thrown",  e);
 			ex.printStackTrace();
 		}	

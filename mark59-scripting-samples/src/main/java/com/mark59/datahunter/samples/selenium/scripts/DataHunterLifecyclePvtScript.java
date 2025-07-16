@@ -82,7 +82,7 @@ import com.mark59.scripting.selenium.driversimpl.SeleniumDriverFactory;
  * It takes a list of polling interval times, rather than just the one constant value using in FluentWaint for waiting between polls.  
  * For example, you can set a very short polling time for the first polling (has been found useful in some situations like 'waitUntilStale'
  * conditions or modal spinners), and/or then increase polling intervals incrementally (the last value in the list is just repeated), 
- * to reduce CPU load.    
+ * to reduce CPU load.  In practice we have found the reduction in CPU usage relatively minimal for the tests we have implemented it.    
  * 
  * <p>In a performance test, DataHunter should be invoked using it's API. Review 
  * {@link com.mark59.datahunter.api.rest.samples.DataHunterRestApiClientSampleUsage}, and 

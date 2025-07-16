@@ -329,7 +329,7 @@ public abstract class SeleniumAbstractJavaSamplerClient extends UiAbstractJavaSa
 			}
 			
 		} catch (Exception ex) {
-			LOG.error("["+ thread + "]  ERROR : " + this.getClass() + ".  An exception occurred during scriptExceptionHandling (documentExceptionState) "
+			LOG.error("["+ thread + "]  ERROR : " + this.getClass() + ".  An exception occurred during scriptExceptionHandling "
 					+  ex.getClass().getName() +  " thrown",  e);
 			ex.printStackTrace();
 		}	

@@ -117,6 +117,7 @@ public class DataHunterLifecyclePvtScript  extends SeleniumAbstractJavaSamplerCl
 		jmeterAdditionalParameters.put("FORCE_TXN_FAIL_PERCENT", "20");
 		jmeterAdditionalParameters.put("START_CDP_LISTENERS", String.valueOf(true));
 		jmeterAdditionalParameters.put("USER", "default_user");				
+		jmeterAdditionalParameters.put("FORCE_EXCEPTION", String.valueOf(false));				
 
 		// optional selenium driver related settings (defaults apply)
 		jmeterAdditionalParameters.put(SeleniumDriverFactory.DRIVER, Mark59Constants.CHROME);
@@ -179,6 +180,7 @@ public class DataHunterLifecyclePvtScript  extends SeleniumAbstractJavaSamplerCl
 		int forceTxnFailPercent   = Integer.parseInt(context.getParameter("FORCE_TXN_FAIL_PERCENT").trim());
 		boolean startCdpListeners = Boolean.parseBoolean(context.getParameter("START_CDP_LISTENERS"));
 		String user               = context.getParameter("USER");
+		boolean forceException    = Boolean.parseBoolean(context.getParameter("FORCE_EXCEPTION"));		
 				
 		PrintSomeMsgOnceAtStartUp(dataHunterUrl, driver);
 
@@ -218,6 +220,7 @@ public class DataHunterLifecyclePvtScript  extends SeleniumAbstractJavaSamplerCl
 			AddPolicyActionPage addPolicyActionPage = new AddPolicyActionPage(driver);			
 			
 			jm.startTransaction("DH_lifecycle_0200_addPolicy");
+			if (forceException){throw new RuntimeException("Selenium script throws runtime ex");};
 			SafeSleep.sleep(200);  // Mocking a 200 ms txn delay
 			addPolicyPage.submit().submit().waitUntilClickable( addPolicyActionPage.backLink() );   // ** note 2	
 			waitForSqlResultsTextOnActionPageAndCheckOk(addPolicyActionPage);						// ** note 4 
@@ -330,7 +333,7 @@ public class DataHunterLifecyclePvtScript  extends SeleniumAbstractJavaSamplerCl
 	
 	
 	/**
-	 *  Just as a demo, create some transaction and go the home page (in a real test you may want go to a logout page/option).
+	 *  Just as a demo, create some transaction (in a real test in a real test you may want go to a home page/logout page etc).
 	 *  Will be triggered when an exception is thrown during script . 	
 	 */
 	@Override

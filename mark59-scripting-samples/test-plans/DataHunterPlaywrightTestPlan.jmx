@@ -380,12 +380,12 @@ return 0;</stringProp>
               </elementProp>
               <elementProp name="On_Exception_Write_Stack_Trace_to_Console" elementType="Argument">
                 <stringProp name="Argument.name">On_Exception_Write_Stack_Trace_to_Console</stringProp>
-                <stringProp name="Argument.value">false</stringProp>
+                <stringProp name="Argument.value">true</stringProp>
                 <stringProp name="Argument.metadata">=</stringProp>
               </elementProp>
               <elementProp name="On_Exception_Write_Stack_Trace_to_Log4J_Logger" elementType="Argument">
                 <stringProp name="Argument.name">On_Exception_Write_Stack_Trace_to_Log4J_Logger</stringProp>
-                <stringProp name="Argument.value">false</stringProp>
+                <stringProp name="Argument.value">true</stringProp>
                 <stringProp name="Argument.metadata">=</stringProp>
               </elementProp>
               <elementProp name="LOG_RESULTS_SUMMARY" elementType="Argument">

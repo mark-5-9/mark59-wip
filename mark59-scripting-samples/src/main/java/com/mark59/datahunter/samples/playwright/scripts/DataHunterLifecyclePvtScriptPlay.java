@@ -127,13 +127,15 @@ public class DataHunterLifecyclePvtScriptPlay  extends PlaywrightAbstractJavaSam
 		jmeterAdditionalParameters.put(JmeterFunctionsForPlaywrightScripts.LOG_PAGE_SOURCE_AT_START_OF_TRANSACTIONS,Mark59LogLevels.DEFAULT.getName());
 		jmeterAdditionalParameters.put(JmeterFunctionsForPlaywrightScripts.LOG_PAGE_SOURCE_AT_END_OF_TRANSACTIONS, 	Mark59LogLevels.DEFAULT.getName());
 
-		jmeterAdditionalParameters.put(ON_EXCEPTION_WRITE_BUFFERED_LOGS,	String.valueOf(true));
-		jmeterAdditionalParameters.put(ON_EXCEPTION_WRITE_SCREENSHOT, 		String.valueOf(true));
-		jmeterAdditionalParameters.put(ON_EXCEPTION_WRITE_PAGE_SOURCE, 		String.valueOf(true));
-		jmeterAdditionalParameters.put(ON_EXCEPTION_WRITE_STACK_TRACE,		String.valueOf(true));
+		jmeterAdditionalParameters.put(ON_EXCEPTION_WRITE_BUFFERED_LOGS,				String.valueOf(true));
+		jmeterAdditionalParameters.put(ON_EXCEPTION_WRITE_SCREENSHOT, 					String.valueOf(true));
+		jmeterAdditionalParameters.put(ON_EXCEPTION_WRITE_PAGE_SOURCE, 					String.valueOf(true));
+		jmeterAdditionalParameters.put(ON_EXCEPTION_WRITE_STACK_TRACE,					String.valueOf(true));
+		jmeterAdditionalParameters.put(ON_EXCEPTION_WRITE_STACK_TRACE_TO_CONSOLE,	 	String.valueOf(true));
+		jmeterAdditionalParameters.put(ON_EXCEPTION_WRITE_STACK_TRACE_TO_LOG4J_LOGGER,	String.valueOf(true));		
 		
-		jmeterAdditionalParameters.put(JmeterFunctionsImpl.LOG_RESULTS_SUMMARY, String.valueOf(true));		// default is 'false'		
-		jmeterAdditionalParameters.put(JmeterFunctionsImpl.PRINT_RESULTS_SUMMARY, String.valueOf(false));		
+		jmeterAdditionalParameters.put(JmeterFunctionsImpl.LOG_RESULTS_SUMMARY, 		String.valueOf(true));	// default is 'false'		
+		jmeterAdditionalParameters.put(JmeterFunctionsImpl.PRINT_RESULTS_SUMMARY, 		String.valueOf(false));		
 	
 		return jmeterAdditionalParameters;			
 	}

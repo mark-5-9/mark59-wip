@@ -39,6 +39,7 @@ import com.mark59.core.Outcome;
 import com.mark59.core.utils.IpUtilities;
 import com.mark59.core.utils.Log4jConfigurationHelper;
 import com.mark59.core.utils.Mark59Constants;
+import com.mark59.core.utils.Mark59LogLevels;
 import com.mark59.core.utils.SafeSleep;
 import com.mark59.datahunter.samples.dsl.datahunterSpecificPages.AddPolicyActionPage;
 import com.mark59.datahunter.samples.dsl.datahunterSpecificPages.AddPolicyPage;
@@ -130,21 +131,23 @@ public class DataHunterLifecyclePvtScript  extends SeleniumAbstractJavaSamplerCl
 		jmeterAdditionalParameters.put(SeleniumDriverFactory.UNHANDLED_PROMPT_BEHAVIOUR, UnexpectedAlertBehaviour.IGNORE.toString());
 //		jmeterAdditionalParameters.put(ScriptingConstants.OVERRIDE_PROPERTY_MARK59_BROWSER_EXECUTABLE, "");		
 		
-		// optional logging settings (defaults apply) 
-//		jmeterAdditionalParameters.put(JmeterFunctionsForSeleniumScripts.LOG_SCREENSHOTS_AT_START_OF_TRANSACTIONS,	Mark59LogLevels.DEFAULT.getName());
-//		jmeterAdditionalParameters.put(JmeterFunctionsForSeleniumScripts.LOG_SCREENSHOTS_AT_END_OF_TRANSACTIONS, 	Mark59LogLevels.DEFAULT.getName());
-//		jmeterAdditionalParameters.put(JmeterFunctionsForSeleniumScripts.LOG_PAGE_SOURCE_AT_START_OF_TRANSACTIONS,	Mark59LogLevels.DEFAULT.getName());
-//		jmeterAdditionalParameters.put(JmeterFunctionsForSeleniumScripts.LOG_PAGE_SOURCE_AT_END_OF_TRANSACTIONS, 	Mark59LogLevels.DEFAULT.getName());
-//		jmeterAdditionalParameters.put(JmeterFunctionsForSeleniumScripts.LOG_PERF_LOG_AT_END_OF_TRANSACTIONS, 		Mark59LogLevels.DEFAULT.getName());		
-//
-//		jmeterAdditionalParameters.put(ON_EXCEPTION_WRITE_BUFFERED_LOGS,	String.valueOf(true));
-//		jmeterAdditionalParameters.put(ON_EXCEPTION_WRITE_SCREENSHOT, 		String.valueOf(true));
-//		jmeterAdditionalParameters.put(ON_EXCEPTION_WRITE_PAGE_SOURCE, 		String.valueOf(true));
-//		jmeterAdditionalParameters.put(ON_EXCEPTION_WRITE_PERF_LOG,			String.valueOf(true));
-//		jmeterAdditionalParameters.put(ON_EXCEPTION_WRITE_STACK_TRACE,		String.valueOf(true));
+		// optional log settings, defaults shown 
+		jmeterAdditionalParameters.put(JmeterFunctionsForSeleniumScripts.LOG_SCREENSHOTS_AT_START_OF_TRANSACTIONS,	Mark59LogLevels.DEFAULT.getName());
+		jmeterAdditionalParameters.put(JmeterFunctionsForSeleniumScripts.LOG_SCREENSHOTS_AT_END_OF_TRANSACTIONS, 	Mark59LogLevels.DEFAULT.getName());
+		jmeterAdditionalParameters.put(JmeterFunctionsForSeleniumScripts.LOG_PAGE_SOURCE_AT_START_OF_TRANSACTIONS,	Mark59LogLevels.DEFAULT.getName());
+		jmeterAdditionalParameters.put(JmeterFunctionsForSeleniumScripts.LOG_PAGE_SOURCE_AT_END_OF_TRANSACTIONS, 	Mark59LogLevels.DEFAULT.getName());
+		jmeterAdditionalParameters.put(JmeterFunctionsForSeleniumScripts.LOG_PERF_LOG_AT_END_OF_TRANSACTIONS, 		Mark59LogLevels.DEFAULT.getName());		
+
+		jmeterAdditionalParameters.put(ON_EXCEPTION_WRITE_BUFFERED_LOGS,				String.valueOf(true));
+		jmeterAdditionalParameters.put(ON_EXCEPTION_WRITE_SCREENSHOT, 					String.valueOf(true));
+		jmeterAdditionalParameters.put(ON_EXCEPTION_WRITE_PAGE_SOURCE, 					String.valueOf(true));
+		jmeterAdditionalParameters.put(ON_EXCEPTION_WRITE_PERF_LOG,						String.valueOf(true));
+		jmeterAdditionalParameters.put(ON_EXCEPTION_WRITE_STACK_TRACE,					String.valueOf(true));
+		jmeterAdditionalParameters.put(ON_EXCEPTION_WRITE_STACK_TRACE_TO_CONSOLE,	 	String.valueOf(true));
+		jmeterAdditionalParameters.put(ON_EXCEPTION_WRITE_STACK_TRACE_TO_LOG4J_LOGGER,	String.valueOf(true));				
 		
-		jmeterAdditionalParameters.put(JmeterFunctionsImpl.LOG_RESULTS_SUMMARY, String.valueOf(true));		
-		jmeterAdditionalParameters.put(JmeterFunctionsImpl.PRINT_RESULTS_SUMMARY, String.valueOf(false));		
+		jmeterAdditionalParameters.put(JmeterFunctionsImpl.LOG_RESULTS_SUMMARY, 		String.valueOf(true));  // default is 'false'		
+		jmeterAdditionalParameters.put(JmeterFunctionsImpl.PRINT_RESULTS_SUMMARY, 		String.valueOf(false));		
 
 		// optional miscellaneous settings (defaults apply) 
 		jmeterAdditionalParameters.put(IpUtilities.RESTRICT_TO_ONLY_RUN_ON_IPS_LIST, "");			

@@ -6,6 +6,8 @@
       <elementProp name="TestPlan.user_defined_variables" elementType="Arguments" guiclass="ArgumentsPanel" testclass="Arguments" testname="User Defined Variables">
         <collectionProp name="Arguments.arguments"/>
       </elementProp>
+      <boolProp name="TestPlan.functional_mode">false</boolProp>
+      <boolProp name="TestPlan.serialize_threadgroups">false</boolProp>
     </TestPlan>
     <hashTree>
       <Arguments guiclass="ArgumentsPanel" testclass="Arguments" testname="User Defined Variables">
@@ -57,7 +59,7 @@
         </collectionProp>
       </Arguments>
       <hashTree/>
-      <SetupThreadGroup guiclass="SetupThreadGroupGui" testclass="SetupThreadGroup" testname="setUp Thread Group ">
+      <SetupThreadGroup guiclass="SetupThreadGroupGui" testclass="SetupThreadGroup" testname="setUp Thread Group " enabled="true">
         <intProp name="ThreadGroup.num_threads">1</intProp>
         <intProp name="ThreadGroup.ramp_time">0</intProp>
         <boolProp name="ThreadGroup.same_user_on_next_iteration">true</boolProp>
@@ -89,7 +91,7 @@ OUT.println (&quot;------------------------------------------------------------&
           <stringProp name="TestPlan.comments">Windows example of using system properties to override mark59.properties setting  (by default this script should be disabled)</stringProp>
         </JSR223Sampler>
         <hashTree/>
-        <JSR223Sampler guiclass="TestBeanGUI" testclass="JSR223Sampler" testname="setOperatingSystemProperty">
+        <JSR223Sampler guiclass="TestBeanGUI" testclass="JSR223Sampler" testname="setOperatingSystemProperty" enabled="true">
           <stringProp name="scriptLanguage">groovy</stringProp>
           <stringProp name="parameters"></stringProp>
           <stringProp name="filename"></stringProp>
@@ -139,7 +141,7 @@ if (&quot;LINUX&quot;.equals(os)){
         </elementProp>
       </ThreadGroup>
       <hashTree>
-        <BeanShellTimer guiclass="TestBeanGUI" testclass="BeanShellTimer" testname="Iteration Pacing Timer">
+        <BeanShellTimer guiclass="TestBeanGUI" testclass="BeanShellTimer" testname="Iteration Pacing Timer" enabled="true">
           <stringProp name="filename"></stringProp>
           <stringProp name="parameters">${pacing}</stringProp>
           <boolProp name="resetInterpreter">false</boolProp>
@@ -193,7 +195,7 @@ Thread.sleep(delay);
 return 0;</stringProp>
         </BeanShellTimer>
         <hashTree/>
-        <UserParameters guiclass="UserParametersGui" testclass="UserParameters" testname="User Parameters">
+        <UserParameters guiclass="UserParametersGui" testclass="UserParameters" testname="User Parameters" enabled="true">
           <collectionProp name="UserParameters.names">
             <stringProp name="3599307">user</stringProp>
             <stringProp name="-713045828">headlessMode</stringProp>
@@ -357,6 +359,16 @@ return 0;</stringProp>
                 <stringProp name="Argument.value">true</stringProp>
                 <stringProp name="Argument.metadata">=</stringProp>
               </elementProp>
+              <elementProp name="On_Exception_Write_Stack_Trace_to_Console" elementType="Argument">
+                <stringProp name="Argument.name">On_Exception_Write_Stack_Trace_to_Console</stringProp>
+                <stringProp name="Argument.value">true</stringProp>
+                <stringProp name="Argument.metadata">=</stringProp>
+              </elementProp>
+              <elementProp name="On_Exception_Write_Stack_Trace_to_Log4J_Logger" elementType="Argument">
+                <stringProp name="Argument.name">On_Exception_Write_Stack_Trace_to_Log4J_Logger</stringProp>
+                <stringProp name="Argument.value">true</stringProp>
+                <stringProp name="Argument.metadata">=</stringProp>
+              </elementProp>
               <elementProp name="LOG_RESULTS_SUMMARY" elementType="Argument">
                 <stringProp name="Argument.name">LOG_RESULTS_SUMMARY</stringProp>
                 <stringProp name="Argument.value">true</stringProp>
@@ -399,7 +411,7 @@ return 0;</stringProp>
         </JavaSampler>
         <hashTree/>
       </hashTree>
-      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="DataHunterLifecycleIterator">
+      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="DataHunterLifecycleIterator" enabled="true">
         <stringProp name="ThreadGroup.num_threads">${__P(Users,2)}</stringProp>
         <stringProp name="ThreadGroup.ramp_time">${__P(RampUp,20)}</stringProp>
         <stringProp name="ThreadGroup.duration">${__P(Duration,70)}</stringProp>
@@ -412,7 +424,7 @@ return 0;</stringProp>
         </elementProp>
       </ThreadGroup>
       <hashTree>
-        <UserParameters guiclass="UserParametersGui" testclass="UserParameters" testname="User Parameters">
+        <UserParameters guiclass="UserParametersGui" testclass="UserParameters" testname="User Parameters" enabled="true">
           <collectionProp name="UserParameters.names">
             <stringProp name="3599307">user</stringProp>
           </collectionProp>
@@ -427,7 +439,7 @@ return 0;</stringProp>
           <boolProp name="UserParameters.per_iteration">false</boolProp>
         </UserParameters>
         <hashTree/>
-        <JavaSampler guiclass="JavaTestSamplerGui" testclass="JavaSampler" testname="DataHunterLifecycleIterator">
+        <JavaSampler guiclass="JavaTestSamplerGui" testclass="JavaSampler" testname="DataHunterLifecycleIterator" enabled="true">
           <elementProp name="arguments" elementType="Arguments" guiclass="ArgumentsPanel" testclass="Arguments">
             <collectionProp name="Arguments.arguments">
               <elementProp name="DATAHUNTER_URL" elementType="Argument">
@@ -585,6 +597,16 @@ return 0;</stringProp>
                 <stringProp name="Argument.value">true</stringProp>
                 <stringProp name="Argument.metadata">=</stringProp>
               </elementProp>
+              <elementProp name="On_Exception_Write_Stack_Trace_to_Console" elementType="Argument">
+                <stringProp name="Argument.name">On_Exception_Write_Stack_Trace_to_Console</stringProp>
+                <stringProp name="Argument.value">true</stringProp>
+                <stringProp name="Argument.metadata">=</stringProp>
+              </elementProp>
+              <elementProp name="On_Exception_Write_Stack_Trace_to_Log4J_Logger" elementType="Argument">
+                <stringProp name="Argument.name">On_Exception_Write_Stack_Trace_to_Log4J_Logger</stringProp>
+                <stringProp name="Argument.value">true</stringProp>
+                <stringProp name="Argument.metadata">=</stringProp>
+              </elementProp>
               <elementProp name="LOG_RESULTS_SUMMARY" elementType="Argument">
                 <stringProp name="Argument.name">LOG_RESULTS_SUMMARY</stringProp>
                 <stringProp name="Argument.value">true</stringProp>
@@ -627,7 +649,7 @@ return 0;</stringProp>
         </JavaSampler>
         <hashTree/>
       </hashTree>
-      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="ServerMetrics_localhost-via-web">
+      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="ServerMetrics_localhost-via-web" enabled="true">
         <stringProp name="ThreadGroup.num_threads">${__P(MonitoringUsers,1)}</stringProp>
         <intProp name="ThreadGroup.ramp_time">0</intProp>
         <stringProp name="ThreadGroup.duration">${__P(Duration,80)}</stringProp>
@@ -640,7 +662,7 @@ return 0;</stringProp>
         </elementProp>
       </ThreadGroup>
       <hashTree>
-        <ConstantThroughputTimer guiclass="TestBeanGUI" testclass="ConstantThroughputTimer" testname="Constant Throughput Timer">
+        <ConstantThroughputTimer guiclass="TestBeanGUI" testclass="ConstantThroughputTimer" testname="Constant Throughput Timer" enabled="true">
           <doubleProp>
             <name>throughput</name>
             <value>3.0</value>
@@ -649,7 +671,7 @@ return 0;</stringProp>
           <intProp name="calcMode">0</intProp>
         </ConstantThroughputTimer>
         <hashTree/>
-        <JavaSampler guiclass="JavaTestSamplerGui" testclass="JavaSampler" testname="localhost_via_web">
+        <JavaSampler guiclass="JavaTestSamplerGui" testclass="JavaSampler" testname="localhost_via_web" enabled="true">
           <elementProp name="arguments" elementType="Arguments" guiclass="ArgumentsPanel" testclass="Arguments">
             <collectionProp name="Arguments.arguments">
               <elementProp name="MARK59_METRICS_URL" elementType="Argument">
@@ -753,7 +775,7 @@ return 0;</stringProp>
         </JavaSampler>
         <hashTree/>
       </hashTree>
-      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="ServerMetrics_local_via_excel">
+      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="ServerMetrics_local_via_excel" enabled="true">
         <stringProp name="TestPlan.comments">Using the HOSTID profile ( &quot;localhost_WINDOWS_HOSTID&quot; ) Useful  to pick up the load generator name for distrubted tests - set MonitoringUsersExcel to 1 to activate</stringProp>
         <stringProp name="ThreadGroup.num_threads">${__P(MonitoringUsersExcel,0)}</stringProp>
         <intProp name="ThreadGroup.ramp_time">0</intProp>
@@ -767,7 +789,7 @@ return 0;</stringProp>
         </elementProp>
       </ThreadGroup>
       <hashTree>
-        <ConstantThroughputTimer guiclass="TestBeanGUI" testclass="ConstantThroughputTimer" testname="Constant Throughput Timer">
+        <ConstantThroughputTimer guiclass="TestBeanGUI" testclass="ConstantThroughputTimer" testname="Constant Throughput Timer" enabled="true">
           <doubleProp>
             <name>throughput</name>
             <value>3.0</value>
@@ -776,7 +798,7 @@ return 0;</stringProp>
           <intProp name="calcMode">0</intProp>
         </ConstantThroughputTimer>
         <hashTree/>
-        <JavaSampler guiclass="JavaTestSamplerGui" testclass="JavaSampler" testname="localhost_via_excel">
+        <JavaSampler guiclass="JavaTestSamplerGui" testclass="JavaSampler" testname="localhost_via_excel" enabled="true">
           <elementProp name="arguments" elementType="Arguments" guiclass="ArgumentsPanel" testclass="Arguments">
             <collectionProp name="Arguments.arguments">
               <elementProp name="SERVER_PROFILE_NAME" elementType="Argument">
@@ -870,7 +892,7 @@ return 0;</stringProp>
         </elementProp>
       </ThreadGroup>
       <hashTree>
-        <JSR223Sampler guiclass="TestBeanGUI" testclass="JSR223Sampler" testname="DataHunterBasicSampleScriptJSR223Format" enabled="true">
+        <JSR223Sampler guiclass="TestBeanGUI" testclass="JSR223Sampler" testname="DataHunterBasicSampleScriptJSR223Format">
           <stringProp name="scriptLanguage">groovy</stringProp>
           <stringProp name="parameters"></stringProp>
           <stringProp name="filename"></stringProp>
@@ -1475,7 +1497,7 @@ SampleResult.setEndTime(0);
         </JavaSampler>
         <hashTree/>
       </hashTree>
-      <ResultCollector guiclass="ViewResultsFullVisualizer" testclass="ResultCollector" testname="View Results Tree">
+      <ResultCollector guiclass="ViewResultsFullVisualizer" testclass="ResultCollector" testname="View Results Tree" enabled="true">
         <boolProp name="ResultCollector.error_logging">false</boolProp>
         <objProp>
           <name>saveConfig</name>

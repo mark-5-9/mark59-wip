@@ -99,10 +99,11 @@ public class TrendsLoad  implements CommandLineRunner
 	private static String argTool;
 	private static String argExcludestart;
 	private static String argCaptureperiod;
+	private static String argMaxNumberofruns;
 	private static String argIgnoredErrors;
 	private static String argSimulationLog;
 	private static String argKeeprawresults;
-	private static String argSimlogCustom;
+	private static String argSimlogcustoM;
 	private static String argTimeZone;
 
 	private PerformanceTest performanceTest;
@@ -113,7 +114,7 @@ public class TrendsLoad  implements CommandLineRunner
 	public static void parseArguments(String[] args) {
 		Options options = new Options(); 
 		options.addRequiredOption("a", "application",	true, "Application Id, as it will appear in the Trending Graph Application dropdown selections.  It must consist of only alphanumerics,"
-																+ " underscores, dashes and dots (no whitespace and also cannot be empty)");
+																+ " underscores, dashes and dots (no whitespace and cannot be empty)");
 		options.addRequiredOption("i", "input",			true, "The directory or file containing the performance test results.  Multiple xml/csv/jtl results files allowed for JMeter within a directory,"
 																+ " a single .mdb file is required for Loadrunner");			
 		options.addOption("d", "databasetype",			true, "Load data to a 'h2', 'pg' or 'mysql' database (defaults to 'mysql')");			
@@ -132,10 +133,12 @@ public class TrendsLoad  implements CommandLineRunner
 																+ "(the quotes are needed to escape the ampersand)");				
 		options.addOption("x", "eXcludestart",     		true, "exclude results at the start of the test for the given number of minutes (defaults to 0)" );			
 		options.addOption("c", "captureperiod",    		true, "Only capture test results for the given number of minutes, from the excluded start period "
-																+ "(default is all results except those skipped by the excludestart parm are included)" );			
+																+ "(default is all results except those skipped by the excludestart parameter are included)" );			
+		options.addOption("n", "maxNumberofruns",  		true, "Maximum number of runs to be stored for this application id excluding baselines.  The oldest non-baseline run(s) will be removed frome the database "
+																+ "when this count is exceeded.  Set to '-1' or '0' to deactive. Defaults to 500" );			
 		options.addOption("k", "keeprawresults", 		true, "Keep Raw Test Results. If 'true' will keep each transaction for each run in the database (System metrics data is not captured for Loadrunner). "
-																+ "This can use a large amount of storage and is not recommended (defaults to false).");
-		options.addOption("e", "ignoredErrors",    		true, "Gatling, JMeter(csv) only. A list of pipe (|) delimited strings.  When an error msg starts with any of the strings in the list, "
+																+ "This can use a large amount of storage and is not recommended as a standard settomg (defaults to false).");
+		options.addOption("e", "ignoredErrors",    		true, "Gatling, JMeter(csv format) only. A list of pipe (|) delimited strings.  When an error msg starts with any of the strings in the list, "
 																+ "it will be treated as a Passed transaction rather than an Error." );	
 		options.addOption("l", "simulationLog",			true, "Gatling only. Simulation log file name - must be in the Input directory (defaults to simulation.log)" );
 		options.addOption("m", "simlogcustoM",			true, "Gatling only. Simulation log comma-separated customized 'REQUEST' field column positions in order : txn name, epoch start, epoch end, tnx OK, error msg. "
@@ -162,9 +165,10 @@ public class TrendsLoad  implements CommandLineRunner
 		argTool   			= commandLine.getOptionValue("t", AppConstantsTrends.JMETER );
 		argExcludestart  	= commandLine.getOptionValue("x", "0");		
 		argCaptureperiod  	= commandLine.getOptionValue("c", AppConstantsTrends.ALL );
+		argMaxNumberofruns	= commandLine.getOptionValue("n", "500");		
 		argIgnoredErrors	= commandLine.getOptionValue("e", "");				
 		argSimulationLog	= commandLine.getOptionValue("l", "simulation.log");				
-		argSimlogCustom		= commandLine.getOptionValue("m", "");				
+		argSimlogcustoM		= commandLine.getOptionValue("m", "");				
 		argKeeprawresults	= commandLine.getOptionValue("k", String.valueOf(false));
 		argTimeZone  		= commandLine.getOptionValue("z", new GregorianCalendar().getTimeZone().getID() );				
 		
@@ -172,14 +176,14 @@ public class TrendsLoad  implements CommandLineRunner
 		if (argApplication.length() > 32 ) {
 			argApplication = argApplication.substring(0, 32);					
 			System.out.println();
-			System.out.println("** The application arugment will be truncated to 32 characters : " + argApplication );
+			System.out.println("** The Application argument will be truncated to 32 characters : " + argApplication );
 			System.out.println();
 		}
 	
 		if (StringUtils.isEmpty(argApplication) ||  
 			StringUtils.containsWhitespace(argApplication) || 
 			!argApplication.matches(AppConstantsTrends.ALLOWED_CHARS_APP_NAME)){
-			throw new RuntimeException("The Application name (a) argument must consist of only alphanumerics, underscores (_), dashes (-) and dots (.)."
+			throw new RuntimeException("The application id (a) argument must consist of only alphanumerics, underscores (_), dashes (-) and dots (.)."
 					+ " It must not contain any whitespace and must not be empty");
 		}
 		
@@ -193,12 +197,12 @@ public class TrendsLoad  implements CommandLineRunner
 			throw new RuntimeException(
 					"The database type (d) argument must be set to 'pg', 'mysql', 'h2', 'h2mem' or 'h2tcpclient'! (or not used, in which case 'mysql' is assumed)");
 		}
-		if ( !AppConstantsTrends.JMETER.equalsIgnoreCase(argTool)  &&  !AppConstantsTrends.LOADRUNNER.equalsIgnoreCase(argTool) && !AppConstantsTrends.GATLING.equalsIgnoreCase(argTool) ) {
+		if ( !AppConstantsTrends.JMETER.equalsIgnoreCase(argTool) && !AppConstantsTrends.LOADRUNNER.equalsIgnoreCase(argTool) && !AppConstantsTrends.GATLING.equalsIgnoreCase(argTool) ) {
 			formatter.printHelp( "TrendsLoad", options );
 			printSampleUsage();
 			throw new RuntimeException("The tool (t) argument must be set to JMETER or LOADRUNNER or GATLING ! (or not used, in which case JMETER is assumed)");  
 		}
-		if ( !String.valueOf(false).equalsIgnoreCase(argKeeprawresults)  &&  !String.valueOf(true).equalsIgnoreCase(argKeeprawresults)) {
+		if ( !String.valueOf(false).equalsIgnoreCase(argKeeprawresults) && !String.valueOf(true).equalsIgnoreCase(argKeeprawresults)) {
 			formatter.printHelp( "TrendsLoad", options );
 			printSampleUsage();
 			throw new RuntimeException("The Keeprawresults (k) argument must be set to 'true' or 'false' ! (or not used, in which case 'false' is assumed)");  
@@ -206,22 +210,27 @@ public class TrendsLoad  implements CommandLineRunner
 		if (!StringUtils.isNumeric(argExcludestart) ) {
 			formatter.printHelp( "TrendsLoad", options );
 			printSampleUsage();
-			throw new RuntimeException("The excludestart (x) parameter must be numeric");  
+			throw new RuntimeException("The eXcludestart (x) argument must be numeric");  
 		}
 		if (!StringUtils.isNumeric(argCaptureperiod) && !argCaptureperiod.equalsIgnoreCase(AppConstantsTrends.ALL) ) {
 			formatter.printHelp( "TrendsLoad", options );
 			printSampleUsage();
-			throw new RuntimeException("The captureperiod (c) parameter must be numeric or '" + AppConstantsTrends.ALL + "'" );  
+			throw new RuntimeException("The Captureperiod (c) argument must be numeric or '" + AppConstantsTrends.ALL + "'" );  
 		}
-		if (StringUtils.isNotBlank(argSimlogCustom)){
-				List<String> mPos = Mark59Utils.commaDelimStringToStringList(argSimlogCustom); 
+		if (!StringUtils.isNumeric(argMaxNumberofruns) && !(Integer.parseInt(argMaxNumberofruns)>=-1)){
+			formatter.printHelp( "TrendsLoad", options );
+			printSampleUsage();
+			throw new RuntimeException("The maxNumberofruns (n) argument must a number greater than or equal to '-1'");  
+		}
+		if (StringUtils.isNotBlank(argSimlogcustoM)){
+				List<String> mPos = Mark59Utils.commaDelimStringToStringList(argSimlogcustoM); 
 				if ((mPos.size() != 5) ||
 					(!StringUtils.isNumeric(mPos.get(0)) || !StringUtils.isNumeric(mPos.get(1)) ||
 					 !StringUtils.isNumeric(mPos.get(2)) || !StringUtils.isNumeric(mPos.get(3)) ||
 					 !StringUtils.isNumeric(mPos.get(4)) )){
 				formatter.printHelp( "TrendsLoad", options );
 				printSampleUsage();
-				throw new RuntimeException("The simlogcustoM (m) parameter must blank or 5 comma-delimited integers") ;  
+				throw new RuntimeException("The simlogcustoM (m) argument must blank or 5 comma-delimited integers") ;  
 			}
 		}
 		if (! ( argTimeZone.equals("GMT") || !TimeZone.getTimeZone(argTimeZone).getID().equals("GMT"))){
@@ -267,12 +276,12 @@ public class TrendsLoad  implements CommandLineRunner
 		// for H2/H2MEM database settings are hard coded in their property files and cannot be changed,
 		// so this is just for display purposes
 		if (Mark59Constants.H2.equalsIgnoreCase(argDatabasetype)){
-			dbserver   = "localhost (all db settings hard-coded for h2";
+			dbserver   = "localhost (all db settings are hard-coded for h2)";
 			dbPort     = "";
 			dbSchema   = "trends";
 			dbUsername = "sa";
 		} else if (Mark59Constants.H2MEM.equalsIgnoreCase(argDatabasetype)){
-			dbserver   = "localhost (all db settings hard-coded for h2mem)";
+			dbserver   = "localhost (all db settings are hard-coded for h2mem)";
 			dbPort     = "";
 			dbSchema   = "trendsmem";
 			dbUsername = "sa";			
@@ -292,23 +301,24 @@ public class TrendsLoad  implements CommandLineRunner
 		System.out.println();
 		System.out.println("TrendsLoad executing using the following arguments " );
 		System.out.println("-------------------------------------------------- " );	
-		System.out.println(" application    : " + argApplication );				    
-		System.out.println(" input          : " + argInput );
-		System.out.println(" database       : " + argDatabasetype );
-		System.out.println(" reference      : " + argReference );
-		System.out.println(" tool           : " + argTool );		
-		System.out.println(" dbserver       : " + dbserver );		
-		System.out.println(" dbPort         : " + dbPort );				
-		System.out.println(" dbSchema       : " + dbSchema );				
-		System.out.println(" dbxtraurlparms : " + dbxtraurlparms );				
-		System.out.println(" dbUsername     : " + dbUsername );				
-		System.out.println(" eXcludestart   : " + argExcludestart + " (mins)" );		
-		System.out.println(" captureperiod  : " + argCaptureperiod + " (mins)"  );
-		System.out.println(" ignoredErrors  : " + argIgnoredErrors );		
-		System.out.println(" simulationlog  : " + argSimulationLog );		
-		System.out.println(" simlogcustoM   : " + argSimlogCustom );		
-		System.out.println(" keeprawresults : " + argKeeprawresults );		
-		System.out.println(" timeZone       : " + argTimeZone );		
+		System.out.println(" application     (a): " + argApplication );				    
+		System.out.println(" input           (i): " + argInput );
+		System.out.println(" database        (d): " + argDatabasetype );
+		System.out.println(" reference       (r): " + argReference );
+		System.out.println(" tool            (t): " + argTool );		
+		System.out.println(" dbserver        (h): " + dbserver );		
+		System.out.println(" dbPort          (p): " + dbPort );				
+		System.out.println(" dbSchema        (s): " + dbSchema );				
+		System.out.println(" dbUsername      (u): " + dbUsername );				
+		System.out.println(" dbxtraurlparms  (q): " + dbxtraurlparms );				
+		System.out.println(" eXcludestart    (x): " + argExcludestart + " (mins)" );		
+		System.out.println(" captureperiod   (c): " + argCaptureperiod + " (mins)"  );
+		System.out.println(" maxNumberofruns (n): " + argMaxNumberofruns );		
+		System.out.println(" keeprawresults  (k): " + argKeeprawresults );		
+		System.out.println(" ignoredErrors   (e): " + argIgnoredErrors );		
+		System.out.println(" simulationLog   (l): " + argSimulationLog );		
+		System.out.println(" simlogcustoM    (m): " + argSimlogcustoM );		
+		System.out.println(" timeZone        (z): " + argTimeZone );		
 		System.out.println("------------------------------------------------   " );				    
 		System.out.println();
 	}
@@ -371,18 +381,18 @@ public class TrendsLoad  implements CommandLineRunner
 			System.out.println();			
 		}
 		
-		loadTestRun(argTool, argApplication, argInput, argReference, argExcludestart, argCaptureperiod, argKeeprawresults,
-				argTimeZone, argIgnoredErrors, argSimulationLog, argSimlogCustom);
+		loadTestRun(argTool, argApplication, argInput, argReference, argExcludestart, argCaptureperiod, argMaxNumberofruns, 
+				argKeeprawresults, argTimeZone, argIgnoredErrors, argSimulationLog, argSimlogcustoM);
 	}
 
 
-    public void loadTestRun(String tool, String application, String input, String runReference, String excludestart, String captureperiod, String keeprawresults,
-			String timeZone, String ignoredErrors, String simulationLog, String simlogCustom) {
+    public void loadTestRun(String tool, String application, String input, String runReference, String excludestart, String captureperiod, String maxNumberofruns,
+    		String keeprawresults, String timeZone, String ignoredErrors, String simulationLog, String simlogcustoM) {
 		
 		if (AppConstantsTrends.JMETER.equalsIgnoreCase(tool)){		
 			performanceTest = new JmeterRun(context, application, input, runReference, excludestart, captureperiod, keeprawresults, ignoredErrors );
 		} else if (AppConstantsTrends.GATLING.equalsIgnoreCase(tool)){	
-			performanceTest = new GatlingRun(context, application, input, runReference, excludestart, captureperiod, keeprawresults, ignoredErrors, simulationLog, simlogCustom);
+			performanceTest = new GatlingRun(context, application, input, runReference, excludestart, captureperiod, keeprawresults, ignoredErrors, simulationLog, simlogcustoM);
 		} else { 
 			performanceTest = new LrRun(context, application, input, runReference, excludestart, captureperiod, keeprawresults, timeZone );
 		}
@@ -401,9 +411,35 @@ public class TrendsLoad  implements CommandLineRunner
 		
 		metricSlaResults = new MetricSlaChecker().listFailedMetricSLAs(application, runTime, null, metricSlaDAO, transactionDAO);
 		printMetricSlaResults(metricSlaResults);
+		
+		System.out.println("Integer.parseInt(maxNumberofruns) = '" + Integer.parseInt(maxNumberofruns) + "'");
+		System.out.println("runDAO.findRunsCount(application) = '" + runDAO.findRunsCount(application) + "'");
+		
+		if (Integer.parseInt(maxNumberofruns) > 0 && runDAO.findRunsCount(application) > Integer.parseInt(maxNumberofruns)){
+			removeAgedRuns(application,Integer.parseInt(maxNumberofruns));			
+		}
 	}
 	
 
+	private void removeAgedRuns(String application, int maxNumberofruns) {
+		List<String> runDatesDesc = runDAO.findRunDates(application); 
+		System.out.println(">>>>>>>>>>>>>>>>>");
+		for (int i = 0; i < runDatesDesc.size(); i++) {
+			System.out.println("    " + i + "  " + runDatesDesc.get(i));
+		}
+		System.out.println("<<<<<<<<<<<<<<<<<");		
+		
+		System.out.println( "TrendsLoad: " + (runDatesDesc.size()-maxNumberofruns) + " run(s) will be removed from the " + application + " application"
+			+ " due to the maxNumberofruns policy.  List of run date/times removed : " );
+		System.out.print( "    ");
+		for (int i = maxNumberofruns; i < runDatesDesc.size(); i++) {
+			 // delete from the (maxNumberofruns+1)th to the last element of the run list
+			System.out.print(runDatesDesc.get(i) + "  ");        
+			runDAO.deleteRun(application, runDatesDesc.get(i));
+		}
+	}
+
+	
 	private void printSlasWitMissingTxnsInThisRun(List<String> cdpTaggedMissingTransactions) {
 		for (String slaWithMissingTxn : cdpTaggedMissingTransactions) {
     		System.out.println( "TrendsLoad: SLA Failed : Error : an SLA exists for transaction " + slaWithMissingTxn + ", but that transaction does not appear in the run results ! "  );			

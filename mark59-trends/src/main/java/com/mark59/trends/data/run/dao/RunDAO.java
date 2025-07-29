@@ -37,6 +37,8 @@ public interface RunDAO
 	Run findRun(String application, String runTime);
 
 	List<Run> findRuns(String application);
+
+	int findRunsCount(String application);
 		
 	List<String> findApplications();
 	
@@ -53,6 +55,7 @@ public interface RunDAO
 	String determineRunDatesToGraph(String application, String sqlSelectRunLike, String reqSqlSelectRunNotLike, boolean isManuallySelectRuns, String chosenRuns, boolean isUseRawRunSQL, String runTimeSelectionSQL, String maxRun, String maxBaselineRun);
 	
 	String runsSQL(String application, String sqlSelectRunLike, String reqSqlSelectRunNotLike, boolean useRawRunSQL, String rawRunTimeSelectionSQL);
+
 
 
 }

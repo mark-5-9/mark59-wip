@@ -199,7 +199,7 @@ public class RunDAOjdbcTemplateImpl implements RunDAO
 	/** 
 	 * Will pick all runs for a given application - that have any transactions.  Runs marked as 'ignore run on graph' will 
 	 * also be returned.<br>
-	 * Note this does not mean every graph will have transactions for every run.  For example, a run may not of captured
+	 * Note this does not mean every graph is expected to have transactions for every run.  For example, a run may not of captured
 	 * any Server statistics    
 	 */
 	@Override
@@ -294,6 +294,19 @@ public class RunDAOjdbcTemplateImpl implements RunDAO
 			//System.out.println("values from runDAOjdbcTemplateImpl.run_times  : " + row.get("RUN_TIME")  ) ;
 		}	
 		return  runsList;
+	}
+
+	
+	@Override
+	public int findRunsCount(String application){	
+
+		String countSql = "SELECT count(*) as COUNTER FROM RUNS WHERE APPLICATION = :application "; 
+
+		MapSqlParameterSource sqlparameters = new MapSqlParameterSource()
+				.addValue("application", application);	
+
+		NamedParameterJdbcTemplate jdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
+		return Integer.parseInt(jdbcTemplate.queryForObject(countSql, sqlparameters, String.class));
 	}
 
 

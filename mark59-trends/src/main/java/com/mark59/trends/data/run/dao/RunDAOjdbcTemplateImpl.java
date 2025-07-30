@@ -35,6 +35,7 @@ import com.mark59.trends.application.UtilsTrends;
 import com.mark59.trends.data.application.dao.ApplicationDAO;
 import com.mark59.trends.data.beans.Application;
 import com.mark59.trends.data.beans.Run;
+import com.mark59.trends.data.run.dao.RunDAO.BaselineOption;
 import com.mark59.trends.data.transaction.dao.TransactionDAO;
 
 /**
@@ -196,14 +197,19 @@ public class RunDAOjdbcTemplateImpl implements RunDAO
 	}	
 	
 
+	@Override
+	public List<String> findRunDates(String application){
+		return findRunDates(application, BaselineOption.ALL_RUNS); 
+	}
+
 	/** 
-	 * Will pick all runs for a given application - that have any transactions.  Runs marked as 'ignore run on graph' will 
-	 * also be returned.<br>
+	 * Will pick all runs for a given application/baseline option that have any transactions.  Runs marked as 'ignore run on graph'
+	 * will also be returned.<br>
 	 * Note this does not mean every graph is expected to have transactions for every run.  For example, a run may not of captured
 	 * any Server statistics    
 	 */
 	@Override
-	public List<String> findRunDates(String application){
+	public List<String> findRunDates(String application, BaselineOption baselineOption){
 		List<String> runDates = new ArrayList<>();
 
 		String sql = runsSqlNamedParms("%","", false, "" );  
@@ -214,14 +220,28 @@ public class RunDAOjdbcTemplateImpl implements RunDAO
 //		System.out.println(" findRunDates : " + sql +  UtilsMetrics.prettyPrintParms(sqlparameters));
 		NamedParameterJdbcTemplate jdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
 		List<Map<String, Object>> rows = jdbcTemplate.queryForList(sql, sqlparameters);
+		String baselineRunIndicator;
 		
 		for (Map<String, Object> row : rows) {
-			runDates.add( (String)row.get("RUN_TIME") );
+			baselineRunIndicator = (String)row.get("BASELINE_RUN");
+			if (BaselineOption.EXCLUDE_BASELINES.equals(baselineOption)) {
+				if ("N".equalsIgnoreCase(baselineRunIndicator)) {
+					runDates.add( (String)row.get("RUN_TIME") );
+				}
+			} else if (BaselineOption.ONLY_BASELINES.equals(baselineOption)) {
+				if ("Y".equalsIgnoreCase(baselineRunIndicator)) {
+					runDates.add( (String)row.get("RUN_TIME") );
+				}
+			} else {
+				runDates.add( (String)row.get("RUN_TIME") );
+			}
 //			System.out.println("  RunDao findRunDates : " + row.get("RUN_TIME")  ) ;
 		}	
 		return  runDates;
 	}
-
+	
+	
+	
 
 	@Override
 	public Run findRun(String application, String runTime){
@@ -296,18 +316,18 @@ public class RunDAOjdbcTemplateImpl implements RunDAO
 		return  runsList;
 	}
 
-	
-	@Override
-	public int findRunsCount(String application){	
-
-		String countSql = "SELECT count(*) as COUNTER FROM RUNS WHERE APPLICATION = :application "; 
-
-		MapSqlParameterSource sqlparameters = new MapSqlParameterSource()
-				.addValue("application", application);	
-
-		NamedParameterJdbcTemplate jdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
-		return Integer.parseInt(jdbcTemplate.queryForObject(countSql, sqlparameters, String.class));
-	}
+//	
+//	@Override
+//	public int findRunsCount(String application){	
+//
+//		String countSql = "SELECT count(*) as COUNTER FROM RUNS WHERE APPLICATION = :application "; 
+//
+//		MapSqlParameterSource sqlparameters = new MapSqlParameterSource()
+//				.addValue("application", application);	
+//
+//		NamedParameterJdbcTemplate jdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
+//		return Integer.parseInt(jdbcTemplate.queryForObject(countSql, sqlparameters, String.class));
+//	}
 
 
 	@Override

@@ -43,6 +43,7 @@ import com.mark59.trends.application.AppConstantsTrends;
 import com.mark59.trends.data.eventMapping.dao.EventMappingDAO;
 import com.mark59.trends.data.metricSla.dao.MetricSlaDAO;
 import com.mark59.trends.data.run.dao.RunDAO;
+import com.mark59.trends.data.run.dao.RunDAO.BaselineOption;
 import com.mark59.trends.data.sla.dao.SlaDAO;
 import com.mark59.trends.data.testTransactions.dao.TestTransactionsDAO;
 import com.mark59.trends.data.transaction.dao.TransactionDAO;
@@ -91,6 +92,7 @@ public class TrendsLoad  implements CommandLineRunner
 	@Autowired
 	ApplicationContext context;
 
+	private static final String DEFAULT_500_MAX_NUMBER_OF_RUNS = "500"; 
 	
 	private static String argApplication;
 	private static String argInput;
@@ -165,7 +167,7 @@ public class TrendsLoad  implements CommandLineRunner
 		argTool   			= commandLine.getOptionValue("t", AppConstantsTrends.JMETER );
 		argExcludestart  	= commandLine.getOptionValue("x", "0");		
 		argCaptureperiod  	= commandLine.getOptionValue("c", AppConstantsTrends.ALL );
-		argMaxNumberofruns	= commandLine.getOptionValue("n", "500");		
+		argMaxNumberofruns	= commandLine.getOptionValue("n", DEFAULT_500_MAX_NUMBER_OF_RUNS);		
 		argIgnoredErrors	= commandLine.getOptionValue("e", "");				
 		argSimulationLog	= commandLine.getOptionValue("l", "simulation.log");				
 		argSimlogcustoM		= commandLine.getOptionValue("m", "");				
@@ -412,31 +414,26 @@ public class TrendsLoad  implements CommandLineRunner
 		metricSlaResults = new MetricSlaChecker().listFailedMetricSLAs(application, runTime, null, metricSlaDAO, transactionDAO);
 		printMetricSlaResults(metricSlaResults);
 		
-		System.out.println("Integer.parseInt(maxNumberofruns) = '" + Integer.parseInt(maxNumberofruns) + "'");
-		System.out.println("runDAO.findRunsCount(application) = '" + runDAO.findRunsCount(application) + "'");
-		
-		if (Integer.parseInt(maxNumberofruns) > 0 && runDAO.findRunsCount(application) > Integer.parseInt(maxNumberofruns)){
-			removeAgedRuns(application,Integer.parseInt(maxNumberofruns));			
+		if (Integer.parseInt(maxNumberofruns) > 0) { 
+			List<String> runDatesExBaselines = runDAO.findRunDates(application,BaselineOption.EXCLUDE_BASELINES);
+			if (runDatesExBaselines.size() > Integer.parseInt(maxNumberofruns)){
+				removeAgedRuns(application,Integer.parseInt(maxNumberofruns), runDatesExBaselines);
+			}
 		}
 	}
 	
 
-	private void removeAgedRuns(String application, int maxNumberofruns) {
-		List<String> runDatesDesc = runDAO.findRunDates(application); 
-		System.out.println(">>>>>>>>>>>>>>>>>");
-		for (int i = 0; i < runDatesDesc.size(); i++) {
-			System.out.println("    " + i + "  " + runDatesDesc.get(i));
-		}
-		System.out.println("<<<<<<<<<<<<<<<<<");		
-		
-		System.out.println( "TrendsLoad: " + (runDatesDesc.size()-maxNumberofruns) + " run(s) will be removed from the " + application + " application"
-			+ " due to the maxNumberofruns policy.  List of run date/times removed : " );
+	private void removeAgedRuns(String application, int maxNumberofruns, List<String> runDatesExBaselines){
+		System.out.println( "TrendsLoad:  " + (runDatesExBaselines.size()-maxNumberofruns) + " run(s) will be removed from the " 
+			+ application + " application due to the maxNumberofruns policy.  List of run date/times removed : " );
 		System.out.print( "    ");
-		for (int i = maxNumberofruns; i < runDatesDesc.size(); i++) {
-			 // delete from the (maxNumberofruns+1)th to the last element of the run list
-			System.out.print(runDatesDesc.get(i) + "  ");        
-			runDAO.deleteRun(application, runDatesDesc.get(i));
+		for (int i = maxNumberofruns; i < runDatesExBaselines.size(); i++) {
+			 // delete from the (maxNumberofruns+1)th to the last element of the runs list
+			if ((i-maxNumberofruns)%6 == 0){System.out.print("\n    ");};
+			System.out.print(runDatesExBaselines.get(i) + "  ");        
+			runDAO.deleteRun(application, runDatesExBaselines.get(i));
 		}
+		System.out.println();
 	}
 
 	

@@ -316,19 +316,6 @@ public class RunDAOjdbcTemplateImpl implements RunDAO
 		return  runsList;
 	}
 
-//	
-//	@Override
-//	public int findRunsCount(String application){	
-//
-//		String countSql = "SELECT count(*) as COUNTER FROM RUNS WHERE APPLICATION = :application "; 
-//
-//		MapSqlParameterSource sqlparameters = new MapSqlParameterSource()
-//				.addValue("application", application);	
-//
-//		NamedParameterJdbcTemplate jdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
-//		return Integer.parseInt(jdbcTemplate.queryForObject(countSql, sqlparameters, String.class));
-//	}
-
 
 	@Override
 	public Run findLastBaselineRun(String application) {

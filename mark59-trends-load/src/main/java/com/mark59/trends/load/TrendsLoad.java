@@ -327,7 +327,7 @@ public class TrendsLoad  implements CommandLineRunner
 
 	public static void printSampleUsage() {
 		System.out.println();	
-		System.out.println( "Sample usages");
+		System.out.println( "Usage Samples");
 		System.out.println( "------------");
 		System.out.println( "   1. JMeter example ");
 		System.out.println( "   Process JMeter xml formatted result in directory C:/jmeter-results/BIGAPP  (file/s ends in .xml)");
@@ -489,7 +489,7 @@ public class TrendsLoad  implements CommandLineRunner
 	
 	private void printMetricSlaResults(List<MetricSlaResult> metricSlaResults) {
 		for (MetricSlaResult metricSlaResult : metricSlaResults) {
-			System.out.println( "TrendsLoad: " + metricSlaResult.getMessageText()); 
+			System.out.println( "TrendsLoad:  " + metricSlaResult.getMessageText()); 
 		}
 		if (metricSlaResults.isEmpty()){
 			System.out.println( "TrendsLoad:  No metric SLA has failed (as recorded on the SLA Metrics Reference Database)");

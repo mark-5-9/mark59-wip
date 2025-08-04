@@ -44,8 +44,6 @@ public interface RunDAO
 	Run findRun(String application, String runTime);
 
 	List<Run> findRuns(String application);
-
-//	int findRunsCount(String application);
 		
 	List<String> findApplications();
 	

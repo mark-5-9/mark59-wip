@@ -35,7 +35,6 @@ import com.mark59.trends.application.UtilsTrends;
 import com.mark59.trends.data.application.dao.ApplicationDAO;
 import com.mark59.trends.data.beans.Application;
 import com.mark59.trends.data.beans.Run;
-import com.mark59.trends.data.run.dao.RunDAO.BaselineOption;
 import com.mark59.trends.data.transaction.dao.TransactionDAO;
 
 /**

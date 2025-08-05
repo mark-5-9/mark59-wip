@@ -62,18 +62,47 @@
 		
    		<!-- add back jars from metrics-commons not included in ApacheJmeter
    		     but used by this this project -->
+
+	<dependency>
+			<groupId>org.apache.logging.log4j</groupId>
+			<artifactId>log4j-core</artifactId>
+			<version>2.24.3</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.logging.log4j</groupId>
+			<artifactId>log4j-api</artifactId>
+			<version>2.24.3</version>
+		</dependency>
+
+ 		<!-- implement log4j 'SFLF bindings' for test purposes only  -->
+		<dependency>
+		    <groupId>org.apache.logging.log4j</groupId>
+		    <artifactId>log4j-slf4j-impl</artifactId>
+		    <version>2.24.3</version>
+		    <scope>test</scope>
+		</dependency>
    		     
 		<dependency>
 		    <groupId>org.apache.poi</groupId>
 		    <artifactId>poi</artifactId>
-		    <version>4.1.2</version>
+		    <version>5.4.1</version>
 		</dependency>
       
 		<dependency>
 		    <groupId>org.apache.poi</groupId>
 		    <artifactId>poi-ooxml</artifactId>
-		    <version>4.1.2</version>
+		    <version>5.4.1</version>
 		</dependency>
+
+		<!-- added to dep issue with the POI classes
+			 https://stackoverflow.com/questions/79580510/springboot-apache-poi-error-reading-xlsx-files/79580564 -->
+	    <dependency>
+	        <groupId>commons-io</groupId>
+	        <artifactId>commons-io</artifactId>
+	        <version>2.20.0</version>
+	    </dependency>
+				
 
 		<dependency>
 			<groupId>com.jcraft</groupId>

@@ -172,6 +172,9 @@ public class ServerMetricsCaptureViaExcel extends AbstractJavaSamplerClient {
 				e.printStackTrace();
 			}
         	LOG.debug("File excelFile path: " + Objects.requireNonNull(excelFile).getPath()+":"+excelFile.getCanonicalPath() );
+
+//        	WorkbookFactory.addProvider(new HSSFWorkbookFactory());
+//        	WorkbookFactory.addProvider(new XSSFWorkbookFactory());        	
         	 
         	Workbook workbook = WorkbookFactory.create(excelFile, null, true);    // Factory class necessary to avoid excel file being 'touched' 
             

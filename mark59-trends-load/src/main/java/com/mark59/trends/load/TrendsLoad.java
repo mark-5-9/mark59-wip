@@ -136,7 +136,7 @@ public class TrendsLoad  implements CommandLineRunner
 		options.addOption("x", "eXcludestart",     		true, "exclude results at the start of the test for the given number of minutes (defaults to 0)" );			
 		options.addOption("c", "captureperiod",    		true, "Only capture test results for the given number of minutes, from the excluded start period "
 																+ "(default is all results except those skipped by the excludestart parameter are included)" );			
-		options.addOption("n", "maxNumberofruns",  		true, "Maximum number of runs to be stored for this application id excluding baselines.  The oldest non-baseline run(s) will be removed frome the database "
+		options.addOption("n", "maxNumberofruns",  		true, "Maximum number of runs to be stored for this application id excluding baselines.  The oldest non-baseline run(s) will be removed from the database "
 																+ "when this count is exceeded.  Set to '-1' or '0' to deactive. Defaults to 500" );			
 		options.addOption("k", "keeprawresults", 		true, "Keep Raw Test Results. If 'true' will keep each transaction for each run in the database (System metrics data is not captured for Loadrunner). "
 																+ "This can use a large amount of storage and is not recommended as a standard settomg (defaults to false).");

@@ -21,9 +21,10 @@ This is the <b>WORK-IN-PROGRESS</b> repository for Mark59 - be aware it may NOT 
 	<li>All Web Apps : Explicitly use GetMapping or PostMapping anotation instead of RequestMapping, plus many smaller code and JavaDocs tidy ups</li> 
 	<li>Dependencies Updated: spring-boot to 3.5.4, selenium to 4.34.0 (to chrome v138), playwright to 1.53.0</li>  
   </ul>
+  
   <figure>
     <figcaption>Summary of Changes with Potential Incompatibilities For this Release 
-	<li>For UI scripting BROWSER_EXECUTABLE argument is no longer in use. Please use OVERRIDE_PROPERTY_MARK59_BROWSER_EXECUTABLE</li>
+	<li>For UI scripting BROWSER_EXECUTABLE argument is no longer in use. Please use OVERRIDE_PROPERTY_MARK59_BROWSER_EXECUTABLE.</li>
   </figure>
 
 

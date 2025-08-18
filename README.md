@@ -24,7 +24,7 @@ This is the <b>WORK-IN-PROGRESS</b> repository for Mark59 - be aware it may NOT 
   
   <figure>
     <figcaption>Summary of Changes with Potential Incompatibilities For this Release 
-	<li>For UI scripting BROWSER_EXECUTABLE argument is no longer in use. Please use OVERRIDE_PROPERTY_MARK59_BROWSER_EXECUTABLE.</li>
+	<li>For UI scripting BROWSER_EXECUTABLE argument is no longer in use. Please use OVERRIDE_PROPERTY_MARK59_BROWSER_EXECUTABLE<br><br></li>
   </figure>
 
 

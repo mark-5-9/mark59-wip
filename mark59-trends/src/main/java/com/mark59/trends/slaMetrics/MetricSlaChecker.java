@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.mark59.trends.metricSla;
+package com.mark59.trends.slaMetrics;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;

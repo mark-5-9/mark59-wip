@@ -373,7 +373,14 @@ html, body {
            	<textarea id='trxnIdsRangeBarId' style="width:100%;height:50px" >${trxnIdsRangeBarId}</textarea> 
            </td> 	
          </tr> 
-        	
+
+		 <tr> 
+		   <td width="15%">Sla Icon Colour Codes</td> 
+		   <td width="85%"> 
+		   	<textarea id='slaIconColoursId' style="width:100%;height:50px" >${slaIconColoursId}</textarea> 
+		   </td> 	
+		 </tr> 
+      	
          <tr> 
            <td width="15%">csvTextarea (data used by vis graphics)</td> 
            <td width="85%"> 

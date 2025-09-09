@@ -51,10 +51,10 @@ import com.mark59.trends.load.run.GatlingRun;
 import com.mark59.trends.load.run.JmeterRun;
 import com.mark59.trends.load.run.LrRun;
 import com.mark59.trends.load.run.PerformanceTest;
-import com.mark59.trends.metricSla.MetricSlaChecker;
-import com.mark59.trends.metricSla.MetricSlaResult;
-import com.mark59.trends.sla.SlaChecker;
-import com.mark59.trends.sla.SlaTransactionResult;
+import com.mark59.trends.slaMetrics.MetricSlaChecker;
+import com.mark59.trends.slaMetrics.MetricSlaResult;
+import com.mark59.trends.slaTransactions.SlaChecker;
+import com.mark59.trends.slaTransactions.SlaTransactionResult;
 
 /**
  * @author Philip Webb

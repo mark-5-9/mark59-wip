@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.mark59.trends.sla;
+package com.mark59.trends.slaTransactions;
 
 import java.math.BigDecimal;
 

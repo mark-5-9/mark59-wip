@@ -18,7 +18,7 @@ package com.mark59.trends.slaIcons;
 
 /**
  * @author Philip Webb
- * Written: Australian Winter 2025
+ * Written: Australian Spring 2025
  * 
  * Interface to allow Spring Injection for SlaIconColourCodes     
  */

@@ -11,7 +11,7 @@
 	<groupId>com.mark59</groupId>
 	<artifactId>mark59-datahunter</artifactId>
 	<packaging>war</packaging>
-	<version>6.4</version>
+	<version>6.5</version>
 	<name>mark59-datahunter</name>
 
 	<properties>

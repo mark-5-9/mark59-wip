@@ -36,9 +36,8 @@ import com.mark59.trends.slaTransactions.SlaTransactionResult;
 
 /**
  * @author Philip Webb
- * Written: Australian Winter 2019  
+ * Written: Australian Spring 2025  
  */
-
 public class SlaIconColourCodes implements SlaIconColourCodesInterface {
 
 	@Autowired
@@ -61,7 +60,6 @@ public class SlaIconColourCodes implements SlaIconColourCodesInterface {
 				reqRunTime = runDAO.findLastRunDate(reqApp);
 				slaResultColours =  reqApp+","+reqRunTime+",unknown,unknown,unknown";
 			}
-			System.out.println(">> via slaIconColoursForRun : " + reqApp+":"+reqRunTime );
 			String slaTransactionIcon = computeSlaTransactionResultIconColour(reqApp,reqRunTime);
 			String slaMetricsIcon = computeMetricSlasResultIconColour(reqApp,reqRunTime);
 			String slaSummaryIcon = computeSlaSummaryIconColour(slaTransactionIcon,slaMetricsIcon);
@@ -70,8 +68,7 @@ public class SlaIconColourCodes implements SlaIconColourCodesInterface {
 			System.out.println(reqApp + ":" + reqRunTime
 					+ " failed to load sla results to the dashboard - is it valid? (" + slaResultColours + ")");
 		}
-		System.out.println("<< via slaIconColoursForRun : " + reqApp + " : "+ slaResultColours);
-		//SafeSleep.sleep(1000);
+		// System.out.println("<< via slaIconColoursForRun : " + reqApp + " : "+ slaResultColours);
 		return slaResultColours;
 	}
 	

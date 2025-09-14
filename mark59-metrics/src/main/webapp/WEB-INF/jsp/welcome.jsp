@@ -126,7 +126,7 @@ Also put your userid in the Username field (but do not enter a password).
 The supplied examples should get you started. There is much more detail available including a fully worked example of
  adding a Profile, a Command and its Parser, in the User Guide. 
 
-<p>Version: 6.4  Please see our User Guide at <a href="https://mark59.com" target="_blank">mark59.com</a></p>  
+<p>Version: 6.5  Please see our User Guide at <a href="https://mark59.com" target="_blank">mark59.com</a></p>  
 			
 </div>
 </body>

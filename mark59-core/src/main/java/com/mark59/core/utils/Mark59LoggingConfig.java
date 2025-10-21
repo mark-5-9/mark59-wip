@@ -82,7 +82,8 @@ public class Mark59LoggingConfig {
 
 
 	/**
-	 * @return Mark59LoggingConfig singleton instance
+	 * return Mark59LoggingConfig singleton instance
+	 * @return a Mark59LoggingConfig instance
 	 */
 	public static Mark59LoggingConfig getInstance() {
 		return instance;
@@ -217,7 +218,8 @@ public class Mark59LoggingConfig {
 
 
 	/**
-	 * @return logDirectory  the name of the directory being used to hold Mark59 logs in this run.
+	 * return logDirectory - the name of the directory being used to hold Mark59 logs in this run.
+	 * @return File.
 	 */
 	public File getLogDirectory() {
 		return logDirectory;
@@ -225,13 +227,15 @@ public class Mark59LoggingConfig {
 
 
 	/**
-	 * @return logDirectoryPathName  the pathname of the directory being used to hold Mark59 logs in this run.
+	 * return logDirectoryPathName - the pathname of the directory being used to hold Mark59 logs in this run
+	 * @return string.
 	 */
 	public String getLogDirectoryPathName () {
 		return logDirectoryPathName;
 	}	
 	/**
-	 * @return logNamesFormat a comma delimited string indicating the formatting to be used for logs in this run.
+	 * return logNamesFormat - a comma delimited string indicating the formatting to be used for logs in this run.
+	 * @return string.
 	 */
 	public String getLogNamesFormat() {
 		return logNamesFormat;

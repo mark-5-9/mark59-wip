@@ -44,6 +44,14 @@ public class Mark59Utils {
 	private static final Logger LOG = LogManager.getLogger(Mark59Utils.class);
 
 	/**
+	 * Private constructor to prevent instantiation of this utility class.
+	 * This class contains only static methods and should not be instantiated.
+	 */
+	private Mark59Utils() {
+		// Utility class - no instances should be created
+	}
+
+	/**
 	 * Allows a map with additional keys or keys that already exist in a base map to be combined. Where the same key exists in
 	 * both maps, the value in the override (additional entries) map will be used.
 	 * <p>returned as Jmeter Arguments
@@ -55,7 +63,7 @@ public class Mark59Utils {
 	public static Arguments mergeMapWithAnOverrideMap(Map<String,String> baseMap, Map<String, String> overrideEntriesMap) {
 		Arguments jmeterArguments = new Arguments();
 		Map<String,String> baseMapMergedWithOverrideMap = new LinkedHashMap<>();
-		
+
 		// use the override map to change entries for existing base map values in the merge
 		for (Map.Entry<String, String> baseEntry : baseMap.entrySet()) {
 			if (overrideEntriesMap.containsKey(baseEntry.getKey())){
@@ -69,7 +77,7 @@ public class Mark59Utils {
 		for (Map.Entry<String, String> overrideEntry : overrideEntriesMap.entrySet()) {
 			if ( ! baseMap.containsKey(overrideEntry.getKey())){
 				baseMapMergedWithOverrideMap.put(overrideEntry.getKey(), overrideEntriesMap.get(overrideEntry.getKey()));
-			} 
+			}
 		}
 
 		for (Map.Entry<String, String> parameter : baseMapMergedWithOverrideMap.entrySet()) {
@@ -197,8 +205,9 @@ public class Mark59Utils {
 
 
 	/**
+	 * return the Set of split strings
 	 * @param commaDelimitedString string with comma(",") being used as a field delimiter
-	 * @return the Set of split strings
+	 * @return Set of strings
 	 */
 	public static Set<String> commaDelimStringToStringSet(String commaDelimitedString) {
 		List<String> listOfStrings = commaDelimStringToStringList(commaDelimitedString);
@@ -206,8 +215,9 @@ public class Mark59Utils {
 	}
 
 	/**
+	 * return the split list of strings
 	 * @param commaDelimitedString string with comma(",") being used as a field delimiter
-	 * @return the split list of strings
+	 * @return list of strings
 	 */
 	public static List<String> commaDelimStringToStringList(String commaDelimitedString) {
 		List<String> listOfStrings = new ArrayList<>();
@@ -218,8 +228,9 @@ public class Mark59Utils {
 	}
 
 	/**
+	 * return the split list of strings
 	 * @param pipeDelimitedString string with pipe char ("|") being used as a field delimiter
-	 * @return the split list of strings
+	 * @return list of strings
 	 */
 	public static List<String> pipeDelimStringToStringList(String pipeDelimitedString) {
 		List<String> listOfStrings = new ArrayList<>();
@@ -231,7 +242,8 @@ public class Mark59Utils {
 
 
 	/**
-	 * @return LINUX is returned as the default, other options are WINDOWS and MAC
+	 * LINUX is returned as the default, other options are WINDOWS and MAC
+	 * @return string
 	 */
 	public static String obtainOperatingSystemForLocalhost() {
 		String operatingSystem = Mark59Constants.OS.LINUX.getOsName();

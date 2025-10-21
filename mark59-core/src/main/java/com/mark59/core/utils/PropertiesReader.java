@@ -268,8 +268,9 @@ public class PropertiesReader {
 	}
 
 	/**
+	 * return the given property's value
 	 * @param key property name
-	 * @return property value
+	 * @return string
 	 */
 	public String getProperty(String key) {
 		if (!properties.containsKey(key))
@@ -278,7 +279,8 @@ public class PropertiesReader {
 	}
 
 	/**
-	 * @return exist or otherwise new instance of PropertiesReader
+	 * return existing or otherwise a new instance of PropertiesReader
+	 * @return PropertiesReader instance
 	 * @throws IOException when attempting to read mark59.properties
 	 */
 	public static synchronized PropertiesReader getInstance() throws IOException {

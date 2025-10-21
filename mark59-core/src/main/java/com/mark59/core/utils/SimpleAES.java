@@ -43,6 +43,14 @@ public class SimpleAES {
 	private static final Logger LOG = LogManager.getLogger(JmeterFunctionsImpl.class);
 
 	/**
+	 * Private constructor to prevent instantiation of this utility class.
+	 * This class contains only static methods and should not be instantiated.
+	 */
+	private SimpleAES() {
+		// Utility class - no instances should be created
+	}
+
+	/**
 	 * <b>DO NOT USE</b> when a anything other than the use of non clear case password
 	 * level of security is required.<br>
 	 * It is <b>NEVER TO BE USED IN A PRODUCTION IMPLEMENTATION</b><br>
@@ -68,8 +76,9 @@ public class SimpleAES {
 
 
 	/**
+	 * return decrypted string
 	 * @param strToDecrypt  string to decrypt
-	 * @return decrypted string
+	 * @return string
 	 * @throws RuntimeException if decryption fails
 	 */
 	public static synchronized String decrypt(String strToDecrypt) {

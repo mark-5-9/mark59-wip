@@ -73,7 +73,8 @@ public enum Mark59LogLevels {
 	}
 
 	/**
-	 * @return the string representation of a Mark59LogLevels enum
+	 * the string representation of a Mark59LogLevels enum
+	 * @return string
 	 */
 	public String getName() {
 		return mark59LogLevelString;
@@ -81,6 +82,7 @@ public enum Mark59LogLevels {
 
 
 	/**
+	 * return mark59LogLevel values
 	 * @param mark59LogLevelString the string representation of a Mark59LogLevels enum
 	 * @return mark59LogLevels
 	 */

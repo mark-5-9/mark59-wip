@@ -14,26 +14,49 @@
  * limitations under the License.
  */
 
-package com.mark59.test.core;
-
-import org.junit.Test;
-import org.mockito.Mock;
-import org.mockito.Mockito;
+package com.mark59.core;
 
 import com.mark59.core.interfaces.DriverFunctions;
+
 /**
 * @author Michael Cohen
 * Written: Australian Winter 2019 
 */
-public class DriverFunctionMockTest {
+public class DriverFunctionMock implements DriverFunctions<MockDriver> {
 
-	@Mock
-	private final MockDriver mockDriver = Mockito.mock(MockDriver.class);
+	MockDriver mockDriver;
 	
-	@Test
-	public final void bufferScreenshot_bufferAScreenshotWithASpecifiedName_screenshotBufferContainsScreenshot() {
-		DriverFunctions<?> w = new DriverFunctionMock(mockDriver);
-		w.captureScreenshot();
-		assert(w.captureScreenshot() != null);
+	/**
+	 * @param webDriver the WebDriver to package
+	 */
+	public DriverFunctionMock(MockDriver mockDriver) {
+		this.mockDriver = mockDriver;
 	}
+	
+	@Override
+	public MockDriver getDriver() {
+		return this.mockDriver;
+	}
+
+	@Override
+	public byte[] captureScreenshot() {
+		return "ShouldReturnSomeIminageAsaByteArray".getBytes();
+	}
+
+	@Override
+	public void driverDispose() {
+		// Auto-generated method stub
+	}
+
+	public void clearDriverLogs() {
+		// Auto-generated method stub
+		
+	}
+
+	@Override
+	public String getDriverClass() {
+		// Auto-generated method stub
+		return null;
+	}
+
 }

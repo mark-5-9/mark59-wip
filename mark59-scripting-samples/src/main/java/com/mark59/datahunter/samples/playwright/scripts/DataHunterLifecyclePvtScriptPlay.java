@@ -50,9 +50,8 @@ import com.microsoft.playwright.Page;
  * written using Playwright.  In fact you may find any DSL classes will often be overkill for Playwright scripting.
  *        
  * <p>The reason for a simple DSL structure in Playwright, compared to that provided in the Selenium examples, basically comes down to 
- * the fact Playwright implicitly provides <code>waitUntilClickable(..)</code> on retrieval of html elements, so there's not the need 
- * to explicitly control the waits (using custom FluentWaits) or a 'PAGE_LOAD_STRATEGY' as for Selenium (refer to the core 'Elemental' 
- * class in the DSL project). 
+ * the fact Playwright implicitly provides a <code>waitUntilClickable(..)</code> option on retrieval of html elements, so there's not the 
+ * need to explicitly code for waits (using custom FluentWaits or a 'PAGE_LOAD_STRATEGY' as for Selenium). 
  * 
  * <p>In a performance test, DataHunter should be invoked using it's API. Review
  * {@link com.mark59.datahunter.api.rest.samples.DataHunterRestApiClientSampleUsage}, and 

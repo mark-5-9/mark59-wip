@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.mark59.test.core;
+package com.mark59.core;
 
 public class MockDriver {
 

@@ -89,15 +89,20 @@ public abstract class AbstractJmeterFunctionsUiCommon extends JmeterFunctionsImp
 	/** log4J class logger */
 	public static final Logger LOG = LogManager.getLogger(AbstractJmeterFunctionsUiCommon.class);
 
-	/**	@see #logScreenshotsAtStartOfTransactions  */
+	/** Parameter name for controlling screenshot logging at transaction start.
+	 *  @see #logScreenshotsAtStartOfTransactions  */
 	public static final String LOG_SCREENSHOTS_AT_START_OF_TRANSACTIONS = "Log_Screenshots_At_Start_Of_Transactions";
-	/**	@see #logScreenshotsAtEndOfTransactions */
+	/** Parameter name for controlling screenshot logging at transaction end.
+	 *  @see #logScreenshotsAtEndOfTransactions */
 	public static final String LOG_SCREENSHOTS_AT_END_OF_TRANSACTIONS 	= "Log_Screenshots_At_End_Of_Transactions";
-	/**	@see #logPageSourceAtStartOfTransactions   */
+	/** Parameter name for controlling page source logging at transaction start.
+	 *  @see #logPageSourceAtStartOfTransactions   */
 	public static final String LOG_PAGE_SOURCE_AT_START_OF_TRANSACTIONS = "Log_Page_Source_At_Start_Of_Transactions";
-	/**	@see #logPageSourceAtEndOfTransactions  */
+	/** Parameter name for controlling page source logging at transaction end.
+	 *  @see #logPageSourceAtEndOfTransactions  */
 	public static final String LOG_PAGE_SOURCE_AT_END_OF_TRANSACTIONS	= "Log_Page_Source_At_End_Of_Transactions";
-	/**	@see #logPerformanceLogAtEndOfTransactions  (Selenium only) */
+	/** Parameter name for controlling performance log at transaction end (Selenium only).
+	 *  @see #logPerformanceLogAtEndOfTransactions */
 	public static final String LOG_PERF_LOG_AT_END_OF_TRANSACTIONS 		= "Log_Perf_Log_At_End_Of_Transactions";
 
 
@@ -113,6 +118,8 @@ public abstract class AbstractJmeterFunctionsUiCommon extends JmeterFunctionsImp
 	private boolean bufferPerformanceLogAtEndOfTransactions = false;
 
 	/**
+	 * Constructs an AbstractJmeterFunctionsUiCommon instance and initializes logging behavior.
+	 *
 	 * @param context the JMeter JavaSamplerContext
 	 * @param jmeterRuntimeArgumentsMap used to override default state of Mark59 log output
 	 */

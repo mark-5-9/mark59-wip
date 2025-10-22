@@ -83,31 +83,37 @@ public abstract class UiAbstractJavaSamplerClient extends AbstractJavaSamplerCli
 	public static final Logger LOG = LogManager.getLogger(UiAbstractJavaSamplerClient.class);
 
 
-	/** @see PlaywrightAbstractJavaSamplerClient#scriptExceptionHandling
+	/** Parameter to control writing of buffered logs when an exception occurs.
+	 *  @see PlaywrightAbstractJavaSamplerClient#scriptExceptionHandling
 	 *  @see SeleniumAbstractJavaSamplerClient#scriptExceptionHandling  */
 	public static final String ON_EXCEPTION_WRITE_BUFFERED_LOGS	 			= "On_Exception_Write_Buffered_Logs";
 
-	/** @see PlaywrightAbstractJavaSamplerClient#scriptExceptionHandling
+	/** Parameter to control writing of screenshots when an exception occurs.
+	 *  @see PlaywrightAbstractJavaSamplerClient#scriptExceptionHandling
 	 *  @see SeleniumAbstractJavaSamplerClient#scriptExceptionHandling  */
 	public static final String ON_EXCEPTION_WRITE_SCREENSHOT	 			= "On_Exception_Write_Screenshot";
 
-	/** @see PlaywrightAbstractJavaSamplerClient#scriptExceptionHandling
+	/** Parameter to control writing of page source when an exception occurs.
+	 *  @see PlaywrightAbstractJavaSamplerClient#scriptExceptionHandling
 	 *  @see SeleniumAbstractJavaSamplerClient#scriptExceptionHandling  */
 	public static final String ON_EXCEPTION_WRITE_PAGE_SOURCE	 			= "On_Exception_Write_Page_Source";
 
-	/** This is a Selenium only log
+	/** Parameter to control writing of performance log when an exception occurs (Selenium only).
 	 *  @see SeleniumAbstractJavaSamplerClient#scriptExceptionHandling  */
 	public static final String ON_EXCEPTION_WRITE_PERF_LOG		 			= "On_Exception_Write_Perf_Log";
 
-	/** @see PlaywrightAbstractJavaSamplerClient#scriptExceptionHandling
+	/** Parameter to control writing of stack trace when an exception occurs.
+	 *  @see PlaywrightAbstractJavaSamplerClient#scriptExceptionHandling
 	 *  @see SeleniumAbstractJavaSamplerClient#scriptExceptionHandling  */
 	public static final String ON_EXCEPTION_WRITE_STACK_TRACE	 			= "On_Exception_Write_Stack_Trace";
 
-	/** @see PlaywrightAbstractJavaSamplerClient#scriptExceptionHandling
+	/** Parameter to control writing of stack trace to console when an exception occurs.
+	 *  @see PlaywrightAbstractJavaSamplerClient#scriptExceptionHandling
 	 *  @see SeleniumAbstractJavaSamplerClient#scriptExceptionHandling  */
 	public static final String ON_EXCEPTION_WRITE_STACK_TRACE_TO_CONSOLE	= "On_Exception_Write_Stack_Trace_to_Console";
 
-	/** @see PlaywrightAbstractJavaSamplerClient#scriptExceptionHandling
+	/** Parameter to control writing of stack trace to Log4J logger when an exception occurs.
+	 *  @see PlaywrightAbstractJavaSamplerClient#scriptExceptionHandling
 	 *  @see SeleniumAbstractJavaSamplerClient#scriptExceptionHandling  */
 	public static final String ON_EXCEPTION_WRITE_STACK_TRACE_TO_LOG4J_LOGGER= "On_Exception_Write_Stack_Trace_to_Log4J_Logger";
 
@@ -133,6 +139,14 @@ public abstract class UiAbstractJavaSamplerClient extends AbstractJavaSamplerCli
 	private static final int POS_2_SUM_RESPONSE_TIME 	= 2;
 	private static final int POS_3_RESPONSE_TIME_MIN 	= 3;
 	private static final int POS_4_RESPONSE_TIME_MAX	= 4;
+
+
+	/**
+	 * Constructor for UiAbstractJavaSamplerClient.
+	 */
+	public UiAbstractJavaSamplerClient() {
+		super();
+	}
 
 
 	@Override
@@ -188,6 +202,8 @@ public abstract class UiAbstractJavaSamplerClient extends AbstractJavaSamplerCli
 
 
 	/**
+	 * Converts JMeter context parameters to a map for easier access.
+	 *
 	 * @param context the JavaSamplerContext (used by JMeter)
 	 * @return a map of the script arguments (retrieved from the context 'parameters')
 	 */
@@ -222,6 +238,8 @@ public abstract class UiAbstractJavaSamplerClient extends AbstractJavaSamplerCli
 
 
 	/**
+	 * Gets the current browser keep-open setting.
+	 *
 	 * @return the keepBrowserOpen value in use
 	 */
 	public KeepBrowserOpen getKeepBrowserOpen() {
@@ -539,6 +557,8 @@ public abstract class UiAbstractJavaSamplerClient extends AbstractJavaSamplerCli
 		private final PrintWriter csvPrintWriter;
 
 		/**
+		 * constructor
+		 *
 		 * @param testClass testClass
 		 * @param thisThreadParametersOverride map of parm overrides
 		 * @param keepBrowserOpen keep browser open enum
@@ -655,7 +675,7 @@ public abstract class UiAbstractJavaSamplerClient extends AbstractJavaSamplerCli
 			} else {
 				summaryTableTxnData.set(POS_1_NUM_FAIL, summaryTableTxnData.get(POS_1_NUM_FAIL)+1);
 			}
-			
+
 			resultsSummaryTable.put(summaryTableTxn, summaryTableTxnData);
 		}
 	}

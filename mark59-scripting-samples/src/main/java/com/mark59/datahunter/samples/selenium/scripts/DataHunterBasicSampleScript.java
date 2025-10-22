@@ -35,6 +35,7 @@ import com.mark59.core.JmeterFunctionsImpl;
 import com.mark59.core.utils.IpUtilities;
 import com.mark59.core.utils.Log4jConfigurationHelper;
 import com.mark59.core.utils.Mark59Constants;
+import com.mark59.core.utils.Mark59LogLevels;
 import com.mark59.core.utils.SafeSleep;
 import com.mark59.datahunter.samples.dsl.helpers.DslConstants;
 import com.mark59.scripting.KeepBrowserOpen;
@@ -120,12 +121,17 @@ public class DataHunterBasicSampleScript  extends SeleniumAbstractJavaSamplerCli
 		jm.writeLog("kilroy", "txt", "Kilroy was here".getBytes());
 		jm.bufferLog("kilroybuffer", "txt", "Kilroy was buffered here".getBytes());		
 		
+		jm.logAllLogsAtEndOfTransactions(Mark59LogLevels.WRITE);		
+		
 // 		delete any existing policies for this application/thread combination
 		jm.startTransaction("DH_lifecycle_0001_loadInitialPage");
 		driver.get(dataHunterUrl + DslConstants.SELECT_MULTIPLE_POLICIES_URL_PATH + "?application=" + application);
 		driver.findElement(By.id("lifecycle")).sendKeys(lifecycle);
 		driver.findElement(By.id("submit")).submit();	
 		jm.endTransaction("DH_lifecycle_0001_loadInitialPage");
+		
+//		switch back to standard log levels (only log on script exception) 
+		jm.logAllLogsAtEndOfTransactions(Mark59LogLevels.DEFAULT);			
 		
 		jm.startTransaction("DH_lifecycle_0100_deleteMultiplePolicies");
 		driver.findElement(By.partialLinkText("Delete Selected Items")).click();
@@ -191,24 +197,24 @@ public class DataHunterBasicSampleScript  extends SeleniumAbstractJavaSamplerCli
 		
 		
 		//2: multi-thread  (a. with and b. without KeepBrowserOpen option) 
-//		thisTest.runMultiThreadedSeleniumTest(2, 500);
-//		thisTest.runMultiThreadedSeleniumTest(2, 2000, KeepBrowserOpen.ONFAILURE);   
+//		thisTest.runMultiThreadedUiTest(2, 500);
+//		thisTest.runMultiThreadedUiTest(2, 2000, KeepBrowserOpen.ONFAILURE);   
   
 
 		//3: multi-thread with parms
 //		Map<String, java.util.List<String>>threadParameters = new java.util.LinkedHashMap<String,java.util.List<String>>();
-//		threadParameters.put("USER",                              java.util.Arrays.asList( "USER-MATTHEW", "USER-MARK", "USER-LUKE", "USER-JOHN"));
-//		threadParameters.put(SeleniumDriverFactory.HEADLESS_MODE, java.util.Arrays.asList( "true"        , "false"    , "true"     , "false"));	
+//		threadParameters.put("USER",                           java.util.Arrays.asList( "USER-MATTHEW", "USER-MARK", "USER-LUKE", "USER-JOHN"));
+//		threadParameters.put(ScriptingConstants.HEADLESS_MODE, java.util.Arrays.asList( "true"        , "false"    , "true"     , "false"));	
 //		//  (a. with and b. without KeepBrowserOpen option)
-//		thisTest.runMultiThreadedSeleniumTest(4, 2000, threadParameters);
-//		thisTest.runMultiThreadedSeleniumTest(4, 2000, threadParameters, KeepBrowserOpen.ONFAILURE);	
+//		thisTest.runMultiThreadedUiTest(4, 2000, threadParameters);
+//		thisTest.runMultiThreadedUiTest(4, 2000, threadParameters, KeepBrowserOpen.ONFAILURE);	
 		
 		
 		//4: multi-thread with parms, each thread iterating, optional summary printout and/or CSV file in JMeter format. See JavaDocs for details. 
 //		Map<String, java.util.List<String>>threadParameters = new java.util.LinkedHashMap<String,java.util.List<String>>();
-//		threadParameters.put("USER",                              java.util.Arrays.asList( "USER-MATTHEW", "USER-MARK", "USER-LUKE", "USER-JOHN"));
-//		threadParameters.put(SeleniumDriverFactory.HEADLESS_MODE, java.util.Arrays.asList( "true"        , "false"    , "true"     , "false"));	
-//		thisTest.runMultiThreadedSeleniumTest(4, 2000, threadParameters, KeepBrowserOpen.ONFAILURE, 3, 1500, true, new File("C:/Mark59_Runs/csvSample.csv"));
+//		threadParameters.put("USER",                           java.util.Arrays.asList( "USER-MATTHEW", "USER-MARK", "USER-LUKE", "USER-JOHN"));
+//		threadParameters.put(ScriptingConstants.HEADLESS_MODE, java.util.Arrays.asList( "true"        , "false"    , "true"     , "false"));	
+//		thisTest.runMultiThreadedUiTest(4, 1500, threadParameters, KeepBrowserOpen.ONFAILURE, 3, 1500, true, new File("C:/Mark59_Runs/csvSample.csv"));
 	}
 		
 }

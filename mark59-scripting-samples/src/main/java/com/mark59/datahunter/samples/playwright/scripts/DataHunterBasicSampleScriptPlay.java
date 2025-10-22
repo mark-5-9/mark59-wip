@@ -28,6 +28,7 @@ import org.apache.logging.log4j.Logger;
 
 import com.mark59.core.JmeterFunctionsImpl;
 import com.mark59.core.utils.Log4jConfigurationHelper;
+import com.mark59.core.utils.Mark59LogLevels;
 import com.mark59.core.utils.SafeSleep;
 import com.mark59.datahunter.api.application.DataHunterConstants;
 import com.mark59.datahunter.samples.dsl.helpers.DslConstants;
@@ -107,8 +108,10 @@ public class DataHunterBasicSampleScriptPlay  extends PlaywrightAbstractJavaSamp
 		String application 		= context.getParameter("DATAHUNTER_APPLICATION_ID");
 		String user 			= context.getParameter("USER");
 		
-//		jm.writeLog("kilroy", "txt", "Kilroy was here".getBytes());
-//		jm.bufferLog("kilroybuffer", "txt", "Kilroy was buffered here".getBytes());		
+		jm.writeLog("kilroy", "txt", "Kilroy was here".getBytes());
+		jm.bufferLog("kilroybuffer", "txt", "Kilroy was buffered here".getBytes());	
+		
+		jm.logAllLogsAtEndOfTransactions(Mark59LogLevels.WRITE);				
 		
 // 		delete any existing policies for this application/thread combination
 		jm.startTransaction("DH_lifecycle_0001_loadInitialPage");
@@ -116,6 +119,9 @@ public class DataHunterBasicSampleScriptPlay  extends PlaywrightAbstractJavaSamp
 		page.locator("id=lifecycle").fill(lifecycle);		
 		page.locator("id=submit").click();
 		jm.endTransaction("DH_lifecycle_0001_loadInitialPage");
+		
+//		switch back to standard log levels (only log on script exception) 
+		jm.logAllLogsAtEndOfTransactions(Mark59LogLevels.DEFAULT);			
 		
 		jm.startTransaction("DH_lifecycle_0100_deleteMultiplePolicies");
 		Locator deleteSelectedItemsLink = page.getByRole(AriaRole.LINK, new Page.GetByRoleOptions().setName("Delete Selected Items")); 
@@ -195,8 +201,8 @@ public class DataHunterBasicSampleScriptPlay  extends PlaywrightAbstractJavaSamp
 
 		//3: multi-thread with parms
 //		Map<String, java.util.List<String>>threadParameters = new java.util.LinkedHashMap<String,java.util.List<String>>();
-//		threadParameters.put("USER",                              java.util.Arrays.asList( "USER-MATTHEW", "USER-MARK", "USER-LUKE", "USER-JOHN"));
-//		threadParameters.put(SeleniumDriverFactory.HEADLESS_MODE, java.util.Arrays.asList( "true"        , "false"    , "true"     , "false"));	
+//		threadParameters.put("USER",                            java.util.Arrays.asList( "USER-MATTHEW", "USER-MARK", "USER-LUKE", "USER-JOHN"));
+//		threadParameters.put(ScriptingConstants.HEADLESS_MODE, 	java.util.Arrays.asList( "true"        , "false"    , "true"     , "false"));	
 //		//  (a. with and b. without KeepBrowserOpen option)
 //		thisTest.runMultiThreadedUiTest(4, 2000, threadParameters);
 //		thisTest.runMultiThreadedUiTest(4, 2000, threadParameters, KeepBrowserOpen.ONFAILURE);	
@@ -204,9 +210,9 @@ public class DataHunterBasicSampleScriptPlay  extends PlaywrightAbstractJavaSamp
 		
 		//4: multi-thread with parms, each thread iterating, optional summary printout and/or CSV file in JMeter format. See JavaDocs for details. 
 //		Map<String, java.util.List<String>>threadParameters = new java.util.LinkedHashMap<String,java.util.List<String>>();
-//		threadParameters.put("USER",                              java.util.Arrays.asList( "USER-MATTHEW", "USER-MARK", "USER-LUKE", "USER-JOHN"));
-//		threadParameters.put(SeleniumDriverFactory.HEADLESS_MODE, java.util.Arrays.asList( "true"        , "false"    , "true"     , "false"));	
-//		thisTest.runMultiThreadedUiTest(4, 2000, threadParameters, KeepBrowserOpen.ONFAILURE, 3, 1500, true, new File("C:/Mark59_Runs/csvSample.csv"));
+//		threadParameters.put("USER",                            java.util.Arrays.asList( "USER-MATTHEW", "USER-MARK", "USER-LUKE", "USER-JOHN"));
+//		threadParameters.put(ScriptingConstants.HEADLESS_MODE,  java.util.Arrays.asList( "true"        , "false"    , "true"     , "false"));	
+//		thisTest.runMultiThreadedUiTest(4, 1500, threadParameters, KeepBrowserOpen.ONFAILURE, 3, 1500, true, new File("C:/Mark59_Runs/csvSample.csv"));
 	}
 		
 }

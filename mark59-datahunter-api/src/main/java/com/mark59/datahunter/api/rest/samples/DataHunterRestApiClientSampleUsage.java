@@ -320,8 +320,7 @@ public class DataHunterRestApiClientSampleUsage {
 		psc.setUseability("");
 		psc.setIdentifierListSelected(true);
 		psc.setIdentifierList("im2,im3");
-		psc.setOtherdataSelected(false);
-		psc.setOtherdataSelected(false);
+		psc.setOtherdataSelected(false); 
 		psc.setOtherdata("nothing!");
 		psc.setCreatedSelected(false);
 		psc.setEpochtimeSelected(false);

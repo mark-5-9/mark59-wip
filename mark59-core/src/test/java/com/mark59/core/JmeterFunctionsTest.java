@@ -28,9 +28,6 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
-import com.mark59.core.JmeterFunctionsImpl;
-import com.mark59.core.Outcome;
-
 /**
 * @author Michael Cohen
 * Written: Australian Winter 2019 

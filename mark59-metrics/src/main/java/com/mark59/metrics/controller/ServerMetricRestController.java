@@ -33,7 +33,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.mark59.core.utils.Mark59Utils;
-import com.mark59.core.utils.SimpleAES;
+import com.mark59.core.utils.SecureAES;
 import com.mark59.metrics.PropertiesConfiguration;
 import com.mark59.metrics.data.beans.CommandResponseParser;
 import com.mark59.metrics.data.commandResponseParsers.dao.CommandResponseParsersDAO;
@@ -120,7 +120,7 @@ public class ServerMetricRestController {
 	public ResponseEntity<Object> cipher(@RequestParam(required=false) String pwd) {
 		// System.out.println("cipher called pwd : [" + pwd +"]");
 		LOG.debug("cipher called pwd : [" + pwd +"]");
-		String encrypted = SimpleAES.encrypt(pwd);
+		String encrypted = SecureAES.encrypt(pwd);
 		if (encrypted == null ) {
 			encrypted = "Oops. Something went wrong attempting to encrypt this password (" + pwd + ")";
 		}

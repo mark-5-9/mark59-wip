@@ -11,7 +11,7 @@ import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.ss.usermodel.Cell;
 
-import com.mark59.core.utils.SimpleAES;
+import com.mark59.core.utils.SecureAES;
 import com.mark59.metrics.data.beans.ServerProfile;
 
 import groovy.lang.Binding;
@@ -119,7 +119,7 @@ public class MetricsUtils {
 			actualPwd = serverProfile.getPassword();
 		} else {
 			try {
-				actualPwd = SimpleAES.decrypt(serverProfile.getPasswordCipher());
+				actualPwd = SecureAES.decrypt(serverProfile.getPasswordCipher());
 			} catch (Exception e) {
 				throw new RuntimeException("pwd decryption error: " + e.getMessage());
 			}

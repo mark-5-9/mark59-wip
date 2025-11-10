@@ -38,7 +38,7 @@ import org.springframework.context.ApplicationContext;
 
 import com.mark59.core.utils.Mark59Constants;
 import com.mark59.core.utils.Mark59Utils;
-import com.mark59.core.utils.SimpleAES;
+import com.mark59.core.utils.SecureAES;
 import com.mark59.trends.application.AppConstantsTrends;
 import com.mark59.trends.data.eventMapping.dao.EventMappingDAO;
 import com.mark59.trends.data.metricSla.dao.MetricSlaDAO;
@@ -296,8 +296,8 @@ public class TrendsLoad  implements CommandLineRunner
 			System.setProperty("mysql.password", dbpassWord);		
 			System.setProperty("pg.password",    dbpassWord);		
 		} else {
-			System.setProperty("mysql.password", SimpleAES.decrypt(dbpassencrYpted));			
-			System.setProperty("pg.password", 	 SimpleAES.decrypt(dbpassencrYpted));			
+			System.setProperty("mysql.password", SecureAES.decrypt(dbpassencrYpted));			
+			System.setProperty("pg.password", 	 SecureAES.decrypt(dbpassencrYpted));			
 		}
 		
 		System.out.println();

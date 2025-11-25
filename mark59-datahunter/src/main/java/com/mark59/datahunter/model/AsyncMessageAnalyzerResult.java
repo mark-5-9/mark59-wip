@@ -20,27 +20,60 @@ package com.mark59.datahunter.model;
  * @author Philip Webb
  * Written: Australian Winter 2019
  */
-public class AsyncMessageaAnalyzerRequest extends PolicySelectionCriteria   {
+public class AsyncMessageAnalyzerResult extends PolicySelectionCriteria   {
 
 	// note application, applicationStartsWithOrEquals, identifier and useability are populated in PolicySelectionCriteria 
 	
-	String toUseability;	
+	Long starttm;	
+	Long endtm;	
+	Long differencetm;
 	
-	public AsyncMessageaAnalyzerRequest() {
+	public AsyncMessageAnalyzerResult() {
+		
 	}
 
-	public String getToUseability() {
-		return toUseability;
+
+	public Long getStarttm() {
+		return starttm;
 	}
 
-	public void setToUseability(String toUseability) {
-		this.toUseability = toUseability;
+
+	public void setStarttm(Long starttm) {
+		this.starttm = starttm;
 	}
 
+
+	public Long getEndtm() {
+		return endtm;
+	}
+
+
+	public void setEndtm(Long endtm) {
+		this.endtm = endtm;
+	}
+
+
+	public Long getDifferencetm() {
+		return differencetm;
+	}
+
+
+	public void setDifferencetm(Long differencetm) {
+		this.differencetm = differencetm;
+	}
+
+
+	/* (non-Javadoc)
+	 * @see com.pnv.metrics.model.PolicySelectionCriteria#toString()
+	 */
 	@Override
     public String toString() {
         return  super.toString() + 
-        		", toUseability= "+ toUseability +         	
+        		", starttm= "+ starttm +         	
+        		", endtm= "+ endtm +        
+        		", differencetm= "+ differencetm +                		
         		"]";
 	}
+		
+		
 }

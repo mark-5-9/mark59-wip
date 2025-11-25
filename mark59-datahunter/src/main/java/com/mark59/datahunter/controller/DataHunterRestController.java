@@ -33,8 +33,8 @@ import com.mark59.datahunter.application.DataHunterConstants;
 import com.mark59.datahunter.application.SqlWithParms;
 import com.mark59.datahunter.data.beans.Policies;
 import com.mark59.datahunter.data.policies.dao.PoliciesDAO;
-import com.mark59.datahunter.model.AsyncMessageaAnalyzerRequest;
-import com.mark59.datahunter.model.AsyncMessageaAnalyzerResult;
+import com.mark59.datahunter.model.AsyncMessageAnalyzerRequest;
+import com.mark59.datahunter.model.AsyncMessageAnalyzerResult;
 import com.mark59.datahunter.model.CountPoliciesBreakdown;
 import com.mark59.datahunter.model.DataHunterRestApiResponsePojo;
 import com.mark59.datahunter.model.PolicySelectionCriteria;
@@ -889,7 +889,7 @@ public class DataHunterRestController {
 	 * @param identifier   blank to select all identifier values matching the other criteria
 	 * @param useability   blank to select all useability values matching the other criteria, otherwise {@link DataHunterConstants#USEABILITY_LIST}   
 	 * @param toUseability blank to not update useability, otherwise one of {@link DataHunterConstants#USEABILITY_LIST}.
-	 * @return  ResponseEntity (ok)  The getAsyncMessageaAnalyzerResults list in the response provides the results, including the max time difference
+	 * @return  ResponseEntity (ok)  The getAsyncMessageAnalyzerResults list in the response provides the results, including the max time difference
 	 *  between each set of matched rows.  
 	 */
 	@GetMapping(path = "/asyncMessageAnalyzer")
@@ -915,27 +915,27 @@ public class DataHunterRestController {
 			return ResponseEntity.ok(UseabilityError(toUseability, response));	
 		}
 		
-		AsyncMessageaAnalyzerRequest asyncMessageaAnalyzerRequest = new AsyncMessageaAnalyzerRequest();
-		asyncMessageaAnalyzerRequest.setApplicationStartsWithOrEquals(applicationStartsWithOrEquals);
-		asyncMessageaAnalyzerRequest.setApplication(application);
-		asyncMessageaAnalyzerRequest.setIdentifier(identifier);
-		asyncMessageaAnalyzerRequest.setUseability(useability);
-		asyncMessageaAnalyzerRequest.setToUseability(toUseability);
+		AsyncMessageAnalyzerRequest asyncMessageAnalyzerRequest = new AsyncMessageAnalyzerRequest();
+		asyncMessageAnalyzerRequest.setApplicationStartsWithOrEquals(applicationStartsWithOrEquals);
+		asyncMessageAnalyzerRequest.setApplication(application);
+		asyncMessageAnalyzerRequest.setIdentifier(identifier);
+		asyncMessageAnalyzerRequest.setUseability(useability);
+		asyncMessageAnalyzerRequest.setToUseability(toUseability);
 
-		SqlWithParms analyzerSqlWithParms = policiesDAO.constructAsyncMessageaAnalyzerSql(asyncMessageaAnalyzerRequest);
-		List<AsyncMessageaAnalyzerResult> asyncMessageaAnalyzerResultList = new ArrayList<>();
+		SqlWithParms analyzerSqlWithParms = policiesDAO.constructAsyncMessageAnalyzerSql(asyncMessageAnalyzerRequest);
+		List<AsyncMessageAnalyzerResult> asyncMessageAnalyzerResultList = new ArrayList<>();
 
 		try {
-			asyncMessageaAnalyzerResultList = policiesDAO.runAsyncMessageaAnalyzerSql(analyzerSqlWithParms);
+			asyncMessageAnalyzerResultList = policiesDAO.runAsyncMessageAnalyzerSql(analyzerSqlWithParms);
 		} catch (Exception e) {
 			response.setSuccess(String.valueOf(false));			
 			response.setFailMsg("sql exception caught: " + e.getMessage() + ", analyzerSqlWithParms=" + analyzerSqlWithParms 
-					+ ", asyncMessageaAnalyzerRequest=[" + asyncMessageaAnalyzerRequest + "]"  );
+					+ ", asyncMessageAnalyzerRequest=[" + asyncMessageAnalyzerRequest + "]"  );
 			response.setRowsAffected(-1);
 			return ResponseEntity.ok(response);		
 		}	
-		int rowsAffected = asyncMessageaAnalyzerResultList.size();
-		response.setAsyncMessageaAnalyzerResults(asyncMessageaAnalyzerResultList);
+		int rowsAffected = asyncMessageAnalyzerResultList.size();
+		response.setAsyncMessageAnalyzerResults(asyncMessageAnalyzerResultList);
 		
 		response.setPolicies(Collections.singletonList(new Policies(application,identifier,null, useability, null, null)));
 		response.setSuccess(String.valueOf(true));			
@@ -948,16 +948,16 @@ public class DataHunterRestController {
 		
 		if (StringUtils.isNotBlank(toUseability)){
 			try {
-				asyncMessageaAnalyzerResultList = policiesDAO.updateMultiplePoliciesUseState(asyncMessageaAnalyzerResultList, toUseability);
+				asyncMessageAnalyzerResultList = policiesDAO.updateMultiplePoliciesUseState(asyncMessageAnalyzerResultList, toUseability);
 			} catch (Exception e) {
 				response.setSuccess(String.valueOf(false));			
-				response.setFailMsg("sql exception caught: " + e.getMessage() + ", asyncMessageaAnalyzerRequest=[" + asyncMessageaAnalyzerRequest + "]"
-						+ ", toUseability=[" + toUseability + "], asyncMessageaAnalyzerResultList= [" + asyncMessageaAnalyzerResultList + "]" );
+				response.setFailMsg("sql exception caught: " + e.getMessage() + ", asyncMessageAnalyzerRequest=[" + asyncMessageAnalyzerRequest + "]"
+						+ ", toUseability=[" + toUseability + "], asyncMessageAnalyzerResultList= [" + asyncMessageAnalyzerResultList + "]" );
 				response.setRowsAffected(rowsAffected);					
 				return  ResponseEntity.ok(response);		
 			}
 		}
-		response.setAsyncMessageaAnalyzerResults(asyncMessageaAnalyzerResultList);  
+		response.setAsyncMessageAnalyzerResults(asyncMessageAnalyzerResultList);  
 		response.setSuccess(String.valueOf(true));			
 		response.setFailMsg("");
 		return ResponseEntity.ok(response);	

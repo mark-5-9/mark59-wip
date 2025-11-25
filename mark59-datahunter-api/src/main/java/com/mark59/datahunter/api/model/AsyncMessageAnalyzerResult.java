@@ -20,13 +20,13 @@ package com.mark59.datahunter.api.model;
  * @author Philip Webb
  * Written: Australian Winter 2019
  */
-public class AsyncMessageaAnalyzerResult extends PolicySelectionCriteria   {
+public class AsyncMessageAnalyzerResult extends PolicySelectionCriteria   {
 
 	Long starttm;	
 	Long endtm;	
 	Long differencetm;
 	
-	public AsyncMessageaAnalyzerResult() {
+	public AsyncMessageAnalyzerResult() {
 		
 	}
 

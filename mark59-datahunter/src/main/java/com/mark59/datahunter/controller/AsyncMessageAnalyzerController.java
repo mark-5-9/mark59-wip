@@ -32,8 +32,8 @@ import com.mark59.datahunter.application.DataHunterConstants;
 import com.mark59.datahunter.application.DataHunterUtils;
 import com.mark59.datahunter.application.SqlWithParms;
 import com.mark59.datahunter.data.policies.dao.PoliciesDAO;
-import com.mark59.datahunter.model.AsyncMessageaAnalyzerRequest;
-import com.mark59.datahunter.model.AsyncMessageaAnalyzerResult;
+import com.mark59.datahunter.model.AsyncMessageAnalyzerRequest;
+import com.mark59.datahunter.model.AsyncMessageAnalyzerResult;
 
 import jakarta.servlet.http.HttpServletRequest;
 
@@ -42,14 +42,14 @@ import jakarta.servlet.http.HttpServletRequest;
  * Written: Australian Winter 2019
  */
 @Controller
-public class AsyncMessageaAnalyzerController {
+public class AsyncMessageAnalyzerController {
 	
 	@Autowired
 	PoliciesDAO policiesDAO;	
 		
 
 	@GetMapping("/async_message_analyzer")
-	public String asyncMessageaAnalyzerUrl(@RequestParam(required=false) String application, AsyncMessageaAnalyzerRequest asyncMessageaAnalyzerRequest, Model model) { 
+	public String asyncMessageAnalyzerUrl(@RequestParam(required=false) String application, AsyncMessageAnalyzerRequest asyncMessageAnalyzerRequest, Model model) { 
 		List<String> applicationOperators = new ArrayList<>(DataHunterConstants.APPLICATION_OPERATORS);
 		model.addAttribute("applicationOperators",applicationOperators);
 		List<String> usabilityList = new ArrayList<>(DataHunterConstants.USEABILITY_LIST);
@@ -67,22 +67,22 @@ public class AsyncMessageaAnalyzerController {
 	
 		
 	@PostMapping("/async_message_analyzer_action")
-	public ModelAndView asyncMessageaAnalyzerUrlAction(@ModelAttribute AsyncMessageaAnalyzerRequest asyncMessageaAnalyzerRequest, Model model, HttpServletRequest httpServletRequest) {
+	public ModelAndView asyncMessageAnalyzerUrlAction(@ModelAttribute AsyncMessageAnalyzerRequest asyncMessageAnalyzerRequest, Model model, HttpServletRequest httpServletRequest) {
 		
-		SqlWithParms analyzerSqlWithParms = policiesDAO.constructAsyncMessageaAnalyzerSql(asyncMessageaAnalyzerRequest);
-		List<AsyncMessageaAnalyzerResult> asyncMessageaAnalyzerResultList = policiesDAO.runAsyncMessageaAnalyzerSql(analyzerSqlWithParms);
-		int rowsAffected = asyncMessageaAnalyzerResultList.size();
+		SqlWithParms analyzerSqlWithParms = policiesDAO.constructAsyncMessageAnalyzerSql(asyncMessageAnalyzerRequest);
+		List<AsyncMessageAnalyzerResult> asyncMessageAnalyzerResultList = policiesDAO.runAsyncMessageAnalyzerSql(analyzerSqlWithParms);
+		int rowsAffected = asyncMessageAnalyzerResultList.size();
 
-		String navUrParms = "application=" + DataHunterUtils.encode(asyncMessageaAnalyzerRequest.getApplication())
-			+ "&applicationStartsWithOrEquals=" + DataHunterUtils.encode(asyncMessageaAnalyzerRequest.getApplicationStartsWithOrEquals()) 
-			+ "&identifier="   + DataHunterUtils.encode(asyncMessageaAnalyzerRequest.getIdentifier()) 
-			+ "&useability="   + DataHunterUtils.encode(asyncMessageaAnalyzerRequest.getUseability())
-			+ "&toUseability=" + DataHunterUtils.encode(asyncMessageaAnalyzerRequest.getToUseability());
+		String navUrParms = "application=" + DataHunterUtils.encode(asyncMessageAnalyzerRequest.getApplication())
+			+ "&applicationStartsWithOrEquals=" + DataHunterUtils.encode(asyncMessageAnalyzerRequest.getApplicationStartsWithOrEquals()) 
+			+ "&identifier="   + DataHunterUtils.encode(asyncMessageAnalyzerRequest.getIdentifier()) 
+			+ "&useability="   + DataHunterUtils.encode(asyncMessageAnalyzerRequest.getUseability())
+			+ "&toUseability=" + DataHunterUtils.encode(asyncMessageAnalyzerRequest.getToUseability());
 
 		model.addAttribute("navUrParms", navUrParms);			
 		
 		if (rowsAffected == 0 ){
-			model.addAttribute("asyncMessageaAnalyzerResultList", asyncMessageaAnalyzerResultList);		
+			model.addAttribute("asyncMessageAnalyzerResultList", asyncMessageAnalyzerResultList);		
 			model.addAttribute("sql", analyzerSqlWithParms);
 			model.addAttribute("sqlResult", "PASS");
 			model.addAttribute("rowsAffected", rowsAffected);
@@ -90,11 +90,11 @@ public class AsyncMessageaAnalyzerController {
 			return new ModelAndView("/async_message_analyzer_action", "model", model);
 		}
 		
-		if ( ! DataHunterUtils.isEmpty(asyncMessageaAnalyzerRequest.getToUseability())){
+		if ( ! DataHunterUtils.isEmpty(asyncMessageAnalyzerRequest.getToUseability())){
 			try {
-				asyncMessageaAnalyzerResultList = policiesDAO.updateMultiplePoliciesUseState(asyncMessageaAnalyzerResultList, asyncMessageaAnalyzerRequest.getToUseability());
+				asyncMessageAnalyzerResultList = policiesDAO.updateMultiplePoliciesUseState(asyncMessageAnalyzerResultList, asyncMessageAnalyzerRequest.getToUseability());
 			} catch (Exception e) {
-				model.addAttribute("asyncMessageaAnalyzerResultList", asyncMessageaAnalyzerResultList);						
+				model.addAttribute("asyncMessageAnalyzerResultList", asyncMessageAnalyzerResultList);						
 				model.addAttribute("sql", "not provided (failure of change of useability may indicate point of failure)");
 				model.addAttribute("sqlResult", "FAIL");
 				model.addAttribute("sqlResultText", "sql exception caught: "  + e.getMessage() );
@@ -103,7 +103,7 @@ public class AsyncMessageaAnalyzerController {
 			}
 		}
 		
-		model.addAttribute("asyncMessageaAnalyzerResultList", asyncMessageaAnalyzerResultList);		
+		model.addAttribute("asyncMessageAnalyzerResultList", asyncMessageAnalyzerResultList);		
 		model.addAttribute("sql", analyzerSqlWithParms);
 		model.addAttribute("sqlResult", "PASS");
 		model.addAttribute("rowsAffected", rowsAffected);	

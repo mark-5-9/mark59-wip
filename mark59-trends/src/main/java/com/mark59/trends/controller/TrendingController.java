@@ -107,13 +107,19 @@ public class TrendingController {
 		if (reqApp == null ){
 			// on initial entry, when no application request parameter has been sent, take the first "active" application
 			reqAppListSelector = AppConstantsTrends.ACTIVE;
-			if (runDAO.findApplications(reqAppListSelector).isEmpty()) { // if no active apps, just use any existing app
+			List<String> applications = runDAO.findApplications(reqAppListSelector);
+
+			if (applications.isEmpty()) { // if no active apps, try all apps
 				reqAppListSelector = AppConstantsTrends.ALL;
+				applications = runDAO.findApplications(reqAppListSelector);
+
+				if (applications.isEmpty()) { // no apps at all
+					throw new RuntimeException("Whoa !!  No Applications found " );
+				}
 			}
-			reqApp = runDAO.findApplications(reqAppListSelector).get(0);
-			if (StringUtils.isBlank(reqApp)){
-				throw new RuntimeException("Whoa !!  No Applications found " );
-			}
+
+			// At this point, applications list is guaranteed to have at least one item
+			reqApp = applications.get(0);
 		}
 		trendingForm.setApplication(reqApp);
 
@@ -305,10 +311,20 @@ public class TrendingController {
 	}
 
 
+	/**
+	 * POST method is deprecated - all trending requests should use GET with URL parameters.
+	 * This allows users to copy/paste URLs for sharing trending analysis results.
+	 *
+	 * @deprecated Use GET /trending with URL parameters instead
+	 * @return HTTP 405 Method Not Allowed
+	 */
+	@Deprecated
 	@PostMapping("/trending")
-	public String processTrendingForm(@RequestParam(required = false) String reqApp,
+	@ResponseStatus(code = org.springframework.http.HttpStatus.METHOD_NOT_ALLOWED,
+	                reason = "POST method is not supported. Use GET /trending with URL parameters instead.")
+	public void processTrendingForm(@RequestParam(required = false) String reqApp,
 			@ModelAttribute TrendingForm trendingForm, Model model, HttpServletRequest request) {
-		throw new RuntimeException("The POST method has been removed.  All requests are now by GET, using URL parms (to allow copy paste)" );
+		// Method intentionally empty - annotation handles the response
 	}
 
 

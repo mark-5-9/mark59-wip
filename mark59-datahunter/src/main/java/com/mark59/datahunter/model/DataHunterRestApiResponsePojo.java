@@ -26,7 +26,7 @@ import com.mark59.datahunter.data.beans.Policies;
  * not requiring policy data to be returned) 
  * <p><code>countPoliciesBreakdown</code> : is only designed to be populated when the using the countPoliciesBreakdown
  * operation is invoked 
- * <p><code>asyncMessageaAnalyzerResult</code> : is only designed to be populated when the using the asyncMessageAnalyzer
+ * <p><code>asyncMessageAnalyzerResult</code> : is only designed to be populated when the using the asyncMessageAnalyzer
  * operation is invoked  
  * <p><code>success, rowsAffected, failMsg</code> : are populated in a similar manner to the values seen in the DataHunter
  * web application, aligning to most DataHunter action result pages with the values labeled 'result', 'rows affected' and
@@ -40,7 +40,7 @@ public class DataHunterRestApiResponsePojo {
 
 	private List<Policies> policies;
 	private List<CountPoliciesBreakdown> countPoliciesBreakdown;
-	private List<AsyncMessageaAnalyzerResult> asyncMessageaAnalyzerResults;
+	private List<AsyncMessageAnalyzerResult> asyncMessageAnalyzerResults;
 	private String success;
 	private Integer rowsAffected;
 	private String failMsg;	
@@ -67,12 +67,12 @@ public class DataHunterRestApiResponsePojo {
 		this.countPoliciesBreakdown = countPoliciesBreakdown;
 	}
 
-	public List<AsyncMessageaAnalyzerResult> getAsyncMessageaAnalyzerResults() {
-		return asyncMessageaAnalyzerResults;
+	public List<AsyncMessageAnalyzerResult> getAsyncMessageAnalyzerResults() {
+		return asyncMessageAnalyzerResults;
 	}
 
-	public void setAsyncMessageaAnalyzerResults(List<AsyncMessageaAnalyzerResult> asyncMessageaAnalyzerResults) {
-		this.asyncMessageaAnalyzerResults = asyncMessageaAnalyzerResults;
+	public void setAsyncMessageAnalyzerResults(List<AsyncMessageAnalyzerResult> asyncMessageAnalyzerResults) {
+		this.asyncMessageAnalyzerResults = asyncMessageAnalyzerResults;
 	}
 
 	public String getSuccess() {
@@ -103,7 +103,7 @@ public class DataHunterRestApiResponsePojo {
     public String toString() {
        return   "[policies=" + policies
         		+ ", countPoliciesBreakdown="+ countPoliciesBreakdown
-        		+ ", asyncMessageaAnalyzerResults="+ asyncMessageaAnalyzerResults
+        		+ ", asyncMessageAnalyzerResults="+ asyncMessageAnalyzerResults
         		+ ", succes="+ success
         		+ ", rowsAffected="+ rowsAffected
         		+ ", failMsg="+ failMsg

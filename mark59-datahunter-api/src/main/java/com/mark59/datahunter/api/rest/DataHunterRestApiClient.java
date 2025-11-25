@@ -483,7 +483,7 @@ public class DataHunterRestApiClient {
 	 * @param identifier   blank to select all identifier values matching the other criteria
 	 * @param useability   blank to select all useability values matching the other criteria, otherwise {@link DataHunterConstants#USEABILITY_LIST}
 	 * @param toUseability blank to not update useability, otherwise one of {@link DataHunterConstants#USEABILITY_LIST}.
-	 * @return  DataHunterRestApiResponsePojo  The getAsyncMessageaAnalyzerResults list in the response provides the results, including the max time difference
+	 * @return  DataHunterRestApiResponsePojo  The getAsyncMessageAnalyzerResults list in the response provides the results, including the max time difference
 	 *  between each set of matched rows.
 	 */
 	public DataHunterRestApiResponsePojo asyncMessageAnalyzer(String applicationStartsWithOrEquals, String application, String identifier,

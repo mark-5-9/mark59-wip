@@ -63,7 +63,7 @@ import jodd.util.CsvUtil;
  * This class contains core methods for the Mark59 implementation of UI scripting, to be extended to handle particular UI
  * implementations (Selenium, Playwright).
  *
- * <p>Those extended implementations of are expected to contain method(s) to be used with actual test scripts
+ * <p>Those extended implementations are expected to contain method(s) to be used with actual test scripts
  * See the 'DataHunter' samples provided for implementation details.
  *
  * <p>Includes a few standard parameters, around core logging and reporting capabilities.</p>
@@ -126,12 +126,10 @@ public abstract class UiAbstractJavaSamplerClient extends AbstractJavaSamplerCli
 	protected KeepBrowserOpen keepBrowserOpen = KeepBrowserOpen.NEVER;
 
 	/**
-	 * Results table for this script instance execution.
-	 * Since each AbstractJavaSamplerClient instance runs on a single thread only,
-	 * no synchronization is needed for this table.
-	 * Using TreeMap to maintain natural ordering of transaction names.
+	 * TreeMap that maintains natural ordering of transaction names.
+	 * Intended for use to output results table when running from a script Main() 
 	 */
-	protected final Map<String, List<Long>> resultsSummaryTable = new TreeMap<>();
+	protected static Map<String, List<Long>> resultsSummaryTable = new TreeMap<>();
 
 	// Array position constants for results summary table data structure
 	private static final int POS_0_NUM_SAMPLES  		= 0;
@@ -469,9 +467,10 @@ public abstract class UiAbstractJavaSamplerClient extends AbstractJavaSamplerCli
 		// Each instance maintains its own results - no aggregation needed
 
 		if (jmeterResultsFile != null ) {
-			try {
-				FileOutputStream jmeterResultsFOS = FileUtils.openOutputStream(jmeterResultsFile);
-				csvPrintWriter = new PrintWriter(new OutputStreamWriter(jmeterResultsFOS));
+			try (FileOutputStream jmeterResultsFOS = FileUtils.openOutputStream(jmeterResultsFile);
+			     OutputStreamWriter outputStreamWriter = new OutputStreamWriter(jmeterResultsFOS)) {
+				
+				csvPrintWriter = new PrintWriter(outputStreamWriter);
 
 				String csvLine = CsvUtil.toCsvString("timeStamp","elapsed","label","responseCode","responseMessage","threadName","dataType","success",
 						"failureMessage","bytes","sentBytes", "grpThreads","allThreads","URL","Latency","Hostname","IdleTime","Connect");
@@ -588,12 +587,13 @@ public abstract class UiAbstractJavaSamplerClient extends AbstractJavaSamplerCli
 			UiAbstractJavaSamplerClient testInstance = null;
 			try {
 				testInstance = testClass.getDeclaredConstructor().newInstance();
-			} catch (Exception e) {	e.printStackTrace(); System.out.println(" Error " + e.getMessage()); }
+			} catch (Exception e) {
+				System.err.println("Error instantiating test class: " + e.getMessage());
+				e.printStackTrace();
+			}
 
-			Arguments thisThreadParameterAuguments = Mark59Utils.mergeMapWithAnOverrideMap(getDefaultParameters().getArgumentsAsMap(), thisThreadParametersOverride);
-//			thisThreadParameterAuguments.removeArgument(JmeterFunctionsImpl.LOG_RESULTS_SUMMARY);
-//			thisThreadParameterAuguments.addArgument(JmeterFunctionsImpl.LOG_RESULTS_SUMMARY, String.valueOf(true));
-			JavaSamplerContext context = new JavaSamplerContext( thisThreadParameterAuguments  );
+			Arguments thisThreadParameterArguments = Mark59Utils.mergeMapWithAnOverrideMap(getDefaultParameters().getArgumentsAsMap(), thisThreadParametersOverride);
+			JavaSamplerContext context = new JavaSamplerContext( thisThreadParameterArguments  );
 
 			if (String.valueOf(true).equalsIgnoreCase(context.getParameter(ScriptingConstants.HEADLESS_MODE))) {
 				this.keepBrowserOpen = KeepBrowserOpen.NEVER;
@@ -626,7 +626,7 @@ public abstract class UiAbstractJavaSamplerClient extends AbstractJavaSamplerCli
 		synchronized (csvPrintWriter) {
 			for (SampleResult subResult : testInstanceSampleResult.getSubResults()) {
 
-				Boolean success = false;
+				boolean success = false;
 				if (Outcome.PASS.getOutcomeText().equalsIgnoreCase(subResult.getResponseMessage())){
 					success = true;
 				}
@@ -645,28 +645,28 @@ public abstract class UiAbstractJavaSamplerClient extends AbstractJavaSamplerCli
 
 	/**
 	 * Add test results to this instance's summary table.
-	 * Since each AbstractJavaSamplerClient instance is guaranteed to run on a single thread only,
-	 * no synchronization is needed.
 	 */
-	private void addResultsToSummaryTable(SampleResult testInstanceSampleResult) {
-
+	private synchronized static void addResultsToSummaryTable(SampleResult testInstanceSampleResult) {
+		List<Long> summaryTableTxnData; 
+		
 		for (SampleResult subResult : testInstanceSampleResult.getSubResults()) {
 
 			String summaryTableTxn = subResult.getSampleLabel();
-
+			
 			if (StringUtils.isNotBlank(subResult.getDataType())){
 				summaryTableTxn = summaryTableTxn + " (" + subResult.getDataType() + ")";
+			}		
+		
+			summaryTableTxnData = resultsSummaryTable.get(summaryTableTxn);
+			if (summaryTableTxnData == null) {
+				summaryTableTxnData = new ArrayList<>(Arrays.asList(0L, 0L, 0L, Long.MAX_VALUE, 0L));
 			}
-
-			List<Long> summaryTableTxnData = resultsSummaryTable.computeIfAbsent(summaryTableTxn,
-				k -> new ArrayList<>(Arrays.asList(0L, 0L, 0L, 0L, 0L)));
-
+			
 			if (Outcome.PASS.getOutcomeText().equalsIgnoreCase(subResult.getResponseMessage())){
 				summaryTableTxnData.set(POS_0_NUM_SAMPLES,       summaryTableTxnData.get(POS_0_NUM_SAMPLES)+1 );
 				summaryTableTxnData.set(POS_2_SUM_RESPONSE_TIME, summaryTableTxnData.get(POS_2_SUM_RESPONSE_TIME) + subResult.getTime());
-
-				if  (summaryTableTxnData.get(POS_3_RESPONSE_TIME_MIN) == null ||
-						subResult.getTime() < summaryTableTxnData.get(POS_3_RESPONSE_TIME_MIN)){
+				
+				if (subResult.getTime() < summaryTableTxnData.get(POS_3_RESPONSE_TIME_MIN)){
 					summaryTableTxnData.set(POS_3_RESPONSE_TIME_MIN, subResult.getTime());
 				}
 				if  (subResult.getTime() > summaryTableTxnData.get(POS_4_RESPONSE_TIME_MAX)){
@@ -675,7 +675,7 @@ public abstract class UiAbstractJavaSamplerClient extends AbstractJavaSamplerCli
 			} else {
 				summaryTableTxnData.set(POS_1_NUM_FAIL, summaryTableTxnData.get(POS_1_NUM_FAIL)+1);
 			}
-
+			
 			resultsSummaryTable.put(summaryTableTxn, summaryTableTxnData);
 		}
 	}
@@ -718,7 +718,7 @@ public abstract class UiAbstractJavaSamplerClient extends AbstractJavaSamplerCli
 			System.out.printf("%-80s%-12s%-10s%-12s%-12s%-12s%n", k,
 					v.get(POS_0_NUM_SAMPLES),v.get(POS_1_NUM_FAIL),average,v.get(POS_3_RESPONSE_TIME_MIN),v.get(POS_4_RESPONSE_TIME_MAX));
 		});
-		System.out.println(StringUtils.repeat("-", 132));   // 132 because I'm a COBOL programmer really
+		System.out.println(StringUtils.repeat("-", 132));
 	}
 
 

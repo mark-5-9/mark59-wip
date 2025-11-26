@@ -32,7 +32,7 @@ import com.mark59.scripting.selenium.SeleniumAbstractJavaSamplerClient;
 import com.mark59.core.utils.Mark59LogLevels;
 
 /**
- * UI flavored extension of the Mark59 class {@link JmeterFunctionsImpl} ( whose primary purpose to to handle transaction results,
+ * UI flavored extension of the Mark59 class {@link JmeterFunctionsImpl} ( whose primary purpose is to handle transaction results,
  * implemented in Mark59 by the use of 'sub-results' within a {@link SampleResult} )
  *
  * <p>This class is designed to additionally handle Common UI (Selenium and Playwright) related functions within Mark59,
@@ -42,7 +42,7 @@ import com.mark59.core.utils.Mark59LogLevels;
  * and/or directly calling the methods in this class from the script.
  * Please refer to {@link #overrideTxnLoggingBehaviourUsingJmeterParameters(Map)}</p>
  *
- * <p>Mark59 UI scripts can been provisioned to have transaction-level 'logging settings' available.<br>
+ * <p>Mark59 UI scripts can be provisioned to have transaction-level 'logging settings' available.<br>
  *
  * <p>Current default outputs setting are :
  *
@@ -252,16 +252,16 @@ public abstract class AbstractJmeterFunctionsUiCommon extends JmeterFunctionsImp
 	@Override
 	public void startTransaction(String transactionLabel, JMeterFileDatatypes jMeterFileDatatypes, boolean includeInStartOfTransactionLogs){
 		if (includeInStartOfTransactionLogs) {
-			if 	(bufferScreenshotsAtStartOfTransactions) {
+			if (bufferScreenshotsAtStartOfTransactions) {
 				bufferScreenshot(transactionLabel + "_before" );
 			}
-			if 	(writeScreenshotsAtStartOfTransactions) {
+			if (writeScreenshotsAtStartOfTransactions) {
 				writeScreenshot(transactionLabel + "_before" );
 			}
-			if 	(bufferPageSourceAtStartOfTransactions) {
+			if (bufferPageSourceAtStartOfTransactions) {
 				bufferPageSource(transactionLabel + "_source_before" );
 			}
-			if 	(writePageSourceAtStartOfTransactions) {
+			if (writePageSourceAtStartOfTransactions) {
 				writePageSource(transactionLabel + "_source_before" );
 			}
 		}
@@ -292,7 +292,7 @@ public abstract class AbstractJmeterFunctionsUiCommon extends JmeterFunctionsImp
 
 	/**
 	 * As per {@link #endTransaction(String)}, but also allows for overriding current logging config and forcing logging off for
-	 * this transaction (set includeInEndOfTransactionshots to false).
+	 * this transaction (set includeInEndOfTransactionLogs to false).
 	 *
 	 * @param transactionLabel ('label' in JMeter terminology) for the transaction
 	 * @param includeInEndOfTransactionLogs boolean option to switch on/off logs for transaction ends (an override for this txn)
@@ -352,22 +352,22 @@ public abstract class AbstractJmeterFunctionsUiCommon extends JmeterFunctionsImp
 		}
 
 		if (includeInEndOfTransactionLogs) {
-			if 	(bufferScreenshotsAtEndOfTransactions) {
+			if (bufferScreenshotsAtEndOfTransactions) {
 				bufferScreenshot(transactionLabel + markIfailedTxnTag + "_ends" );
 			}
-			if 	(writeScreenshotsAtEndOfTransactions) {
+			if (writeScreenshotsAtEndOfTransactions) {
 				writeScreenshot(transactionLabel + markIfailedTxnTag + "_ends" );
 			}
-			if 	(bufferPageSourceAtEndOfTransactions) {
+			if (bufferPageSourceAtEndOfTransactions) {
 				bufferPageSource(transactionLabel + markIfailedTxnTag + "_source_at_end" );
 			}
-			if 	(writePageSourceAtEndOfTransactions) {
+			if (writePageSourceAtEndOfTransactions) {
 				writePageSource(transactionLabel + markIfailedTxnTag + "_source_at_end" );
 			}
-			if 	(bufferPerformanceLogAtEndOfTransactions) {
+			if (bufferPerformanceLogAtEndOfTransactions) {
 				bufferDriverPerfLogs(transactionLabel + markIfailedTxnTag + "_perflog");
 			}
-			if 	(writePerformanceLogAtEndOfTransactions) {
+			if (writePerformanceLogAtEndOfTransactions) {
 				writeDriverPerfLogs(transactionLabel + markIfailedTxnTag + "_perflog");
 			}
 		}
@@ -489,22 +489,22 @@ public abstract class AbstractJmeterFunctionsUiCommon extends JmeterFunctionsImp
 		SampleResult sampleResult = super.setTransaction(transactionLabel, jMeterFileDatatypes, transactionTime, success, responseCode);
 
 		if (includeInEndOfTransactionLogs) {
-			if 	(bufferScreenshotsAtEndOfTransactions) {
+			if (bufferScreenshotsAtEndOfTransactions) {
 				bufferScreenshot(transactionLabel + "_set");
 			}
-			if 	(writeScreenshotsAtEndOfTransactions) {
+			if (writeScreenshotsAtEndOfTransactions) {
 				writeScreenshot(transactionLabel + "_set");
 			}
-			if 	(bufferPageSourceAtEndOfTransactions) {
+			if (bufferPageSourceAtEndOfTransactions) {
 				bufferPageSource(transactionLabel + "_set");
 			}
-			if 	(writePageSourceAtEndOfTransactions) {
+			if (writePageSourceAtEndOfTransactions) {
 				writePageSource(transactionLabel + "_set");
 			}
-			if 	(bufferPerformanceLogAtEndOfTransactions) {
+			if (bufferPerformanceLogAtEndOfTransactions) {
 				bufferDriverPerfLogs(transactionLabel + "_perflog");
 			}
-			if 	(writePerformanceLogAtEndOfTransactions) {
+			if (writePerformanceLogAtEndOfTransactions) {
 				writeDriverPerfLogs(transactionLabel + "_perflog");
 			}
 		}

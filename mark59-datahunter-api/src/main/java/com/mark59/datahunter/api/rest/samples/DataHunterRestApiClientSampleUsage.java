@@ -629,7 +629,7 @@ public class DataHunterRestApiClientSampleUsage {
 		response = dhApiClient.useNextPolicy("testapi", null, "UNUSED", DataHunterConstants.SELECT_OLDEST_ENTRY);
 		assertEquals("No rows matching the selection.  Possibly we have ran out of data for application:[testapi]", response.getFailMsg()); 			
 		
-		response = dhApiClient.updatePoliciesUseState("testapi", "im3", "USED", "UNUSED", "1234");
+		response = dhApiClient.updatePoliciesUseState ("testapi", "im3", null, "USED", "UNUSED", "1234");
 		assertEquals(Integer.valueOf(2), response.getRowsAffected());
 		response = dhApiClient.useNextPolicy("testapi", null, "UNUSED", DataHunterConstants.SELECT_OLDEST_ENTRY);		
 		assertsOnPolicy(new Policies("testapi","im3", "nonblanklc", "UNUSED", "otherdata3", 1234L), response.getPolicies().get(0));		
@@ -638,8 +638,8 @@ public class DataHunterRestApiClientSampleUsage {
 		response = dhApiClient.useNextPolicy("testapi", null, "UNUSED", DataHunterConstants.SELECT_OLDEST_ENTRY);
 		assertEquals("No rows matching the selection.  Possibly we have ran out of data for application:[testapi]", response.getFailMsg()); 		
 	
-		assertEquals(Integer.valueOf(2), dhApiClient.updatePoliciesUseState("testapi", "im3", "USED", "UNUSED", null).getRowsAffected());
-		assertEquals(Integer.valueOf(1), dhApiClient.updatePoliciesUseState("testapi", "im4", "USED", "UNUSED", null).getRowsAffected());
+		assertEquals(Integer.valueOf(2), dhApiClient.updatePoliciesUseState("testapi", "im3", "", "USED", "UNUSED", null).getRowsAffected());
+		assertEquals(Integer.valueOf(1), dhApiClient.updatePoliciesUseState("testapi", "im4", null, "USED", "UNUSED", null).getRowsAffected());
 		response = dhApiClient.useNextPolicy("testapi", "nonblanklc", "UNUSED", DataHunterConstants.SELECT_OLDEST_ENTRY);		
 		assertsOnPolicy(new Policies("testapi","im3", "nonblanklc", "UNUSED", "otherdata3", null), response.getPolicies().get(0));	
 		response = dhApiClient.useNextPolicy("testapi", "nonblanklc", "UNUSED", DataHunterConstants.SELECT_OLDEST_ENTRY);

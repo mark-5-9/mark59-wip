@@ -1,11 +1,9 @@
 package com.mark59.datahunter.api.rest;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
@@ -64,7 +62,7 @@ public class DataHunterRestApiClient {
 	 *
 	 * @param policies :
 	 * 	  <br>&nbsp;  The Item key is application|identifier|lifecycle, and must be unique
-	 * 	  <br>&nbsp;  usability : One of {@link DataHunterConstants#USEABILITY_LIST}
+	 * 	  <br>&nbsp;  useability : One of {@link DataHunterConstants#USEABILITY_LIST}
 	 *    <br>&nbsp;  epochtime : for epochtime the system current time is used a numeric value is not passed
 	 * @return DataHunterRestApiResponsePojo
 	 */
@@ -107,7 +105,7 @@ public class DataHunterRestApiClient {
 	 * @param applicationStartsWithOrEquals  must be "EQUALS" or "STARTS_WITH" (applied to application selection)
 	 * @param application  application, or partial application id if using a applicationStartsWithOrEquals param of "STARTS_WITH"
 	 * @param lifecycle    blank to select all lifecycle values matching the other criteria
-	 * @param useability   {@link DataHunterConstants#USEABILITY_LIST}blank to select all useability values matching the other criteria
+	 * @param useability   {@link DataHunterConstants#USEABILITY_LIST} blank to select all useability values matching the other criteria
 	 * @return DataHunterRestApiResponsePojo containing breakdown counts by application, lifecycle and useability for Items matching the selection criteria.
 	 * The breakdown will appear in the <b>countPoliciesBreakdown</b> element of the response, and the <b>policies</b> element of the response
 	 * is used to indicate the selection request (note: just to provide visibility of all request params in the response,
@@ -164,7 +162,7 @@ public class DataHunterRestApiClient {
 	 * @param application application
 	 * @param lifecycle leave blank to select all lifecycle values matching the other criteria
 	 * @param useability {@link DataHunterConstants#USEABILITY_LIST}, leave blank to select all useability values matching the other criteria
-	 * @return DataHunterRestApiResponsePojo list of items matching the above criteria (limited t0 100 rows, natural key order)
+	 * @return DataHunterRestApiResponsePojo list of items matching the above criteria (limited to 100 rows, natural key order)
 	 * @see #printSelectedPolicies(PolicySelectionFilter)
 	 */
 	public DataHunterRestApiResponsePojo printSelectedPolicies(String application, String lifecycle, String useability){
@@ -352,7 +350,7 @@ public class DataHunterRestApiClient {
 	 *
 	 * @param policies an existing to be  updated:
 	 * 		<br>&nbsp;  The Item key is <i>application|identifier|lifecycle</i>.  No action if the item does not exist
-	 * 		<br>&nbsp;  <i>usability</i> : One of {@link DataHunterConstants#USEABILITY_LIST}
+	 * 		<br>&nbsp;  <i>useability</i> : One of {@link DataHunterConstants#USEABILITY_LIST}
 	 * 		<br>&nbsp;  <i>otherdata</i> : otherdata (set empty if null passed)
 	 * 		<br>&nbsp;  <i>epochtime</i> : a long value, or if blank or non-numeric will to set to System.currentTimeMillis().
 	 * @return DataHunterRestApiResponsePojo
@@ -416,7 +414,6 @@ public class DataHunterRestApiClient {
 
 	/**
 	 * Change the Use State for an Item, or for multiple Items in an Application (no lifecycle selection)
-	 *
 	 * <p>Included for backwards compatibility only (equivalent of passing an empty lifecycle value in
 	 * {@link #updatePoliciesUseState(String, String, String, String, String, String)})
 	 *
@@ -428,7 +425,10 @@ public class DataHunterRestApiClient {
 	 * @param toEpochTime  is only updated if passed a numeric value. Eg contains the System.currentTimeMillis() or another integer
 	 *
 	 * @return DataHunterRestApiResponsePojo indicates number of rows updated
+	 * @deprecated Use {@link #updatePoliciesUseState(String, String, String, String, String, String)} with empty lifecycle instead.
+	 * This method will be removed in a future version.
 	 */
+	@Deprecated
 	public DataHunterRestApiResponsePojo updatePoliciesUseState(String application, String identifier, String useability,
 			String toUseability, String toEpochTime){
 		String webServiceUrl = new UrlBuilder("/api/updatePoliciesUseState")
@@ -506,64 +506,57 @@ public class DataHunterRestApiClient {
 	 * @return DataHunterRestApiResponsePojo
 	 */
 	private DataHunterRestApiResponsePojo invokeDataHunterRestApi(String webServiceUrl)  {
-		BufferedReader in = null;
-		HttpURLConnection con = null;
-		DataHunterRestApiResponsePojo responsePojo = new DataHunterRestApiResponsePojo();
-		Integer responseCode = null;
-		try {
-			URL url = new URL(webServiceUrl);
-			con = (HttpURLConnection) url.openConnection();
-			con.setRequestMethod("GET");
-			responseCode = con.getResponseCode();
+    HttpURLConnection con = null;
+    DataHunterRestApiResponsePojo responsePojo = new DataHunterRestApiResponsePojo();
+    Integer responseCode = null;
 
-			in = new BufferedReader( new InputStreamReader(con.getInputStream()));
-			String respLine;
-			StringBuilder jsonResponseStr = new StringBuilder();
-			while ((respLine = in.readLine()) != null) {
-				jsonResponseStr.append(respLine);
-			}
-			in.close();
-			responsePojo = OBJECT_MAPPER.readValue(jsonResponseStr.toString(), DataHunterRestApiResponsePojo.class);
+    try {
+        URL url = new URL(webServiceUrl);
+        con = (HttpURLConnection) url.openConnection();
+        con.setRequestMethod("GET");
+        responseCode = con.getResponseCode();
 
-			if ( responsePojo == null ){
-				throw new RuntimeException("Error : Unexpected null Response returned from the DataHunter Api!");
-			}
+        try (BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()))) {
+            StringBuilder jsonResponseStr = new StringBuilder();
+            String respLine;
+            while ((respLine = in.readLine()) != null) {
+                jsonResponseStr.append(respLine);
+            }
+            responsePojo = OBJECT_MAPPER.readValue(jsonResponseStr.toString(), DataHunterRestApiResponsePojo.class);
 
-		} catch (Exception | AssertionError e) {
-			StringWriter stackTrace = new StringWriter();
-			e.printStackTrace(new PrintWriter(stackTrace));
-			String errorMsg = "Error: Failure calling the DataHunter Rest API at " + webServiceUrl + " message : \n"+e.getMessage()+"\n"+stackTrace.toString();
-			LOG.error(errorMsg);
-			System.out.println(errorMsg);
-			LOG.debug("        last response-code from DataHunter Rest API was " + responseCode);
-			LOG.debug("        last response from DataHunter Rest API was \n" + responsePojo );
+            if (responsePojo == null) {
+                throw new RuntimeException("Error : Unexpected null Response returned from the DataHunter Api!");
+            }
+        }
 
-			// Populate response object with error details
-			responsePojo.setSuccess("false");
-			responsePojo.setRowsAffected(0);
-			responsePojo.setFailMsg(errorMsg);
+    } catch (Exception e) {
+        StringWriter stackTrace = new StringWriter();
+        e.printStackTrace(new PrintWriter(stackTrace));
+        String errorMsg = "Error: Failure calling the DataHunter Rest API at " + webServiceUrl
+                + " message : \n" + e.getMessage() + "\n" + stackTrace.toString();
+        LOG.error(errorMsg);
+        LOG.debug("        last response-code from DataHunter Rest API was " + responseCode);
+        LOG.debug("        last response from DataHunter Rest API was \n" + responsePojo);
 
-			if (in != null){try {in.close();} catch (IOException ignored) {}}
-		} finally {
-			if (con != null) {
-				con.disconnect();
-			}
-		}
-		return responsePojo;
-	}
+        // Populate response object with error details
+        responsePojo.setSuccess("false");
+        responsePojo.setRowsAffected(0);
+        responsePojo.setFailMsg(errorMsg);
 
+	} finally {
+        if (con != null) {
+            con.disconnect();
+        }
+    }
+    return responsePojo;
+}
 
 	/**
 	 * @param uriParm  Parameter to encode
 	 * @return encoded parameter
 	 */
 	private String encode(String uriParm) {
-		try {
-			return URLEncoder.encode(nullToEmpty(uriParm), StandardCharsets.UTF_8.toString());
-		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
-			throw new RuntimeException("UnsupportedEncodingException using url : " + uriParm );
-		}
+		return URLEncoder.encode(nullToEmpty(uriParm), StandardCharsets.UTF_8);
 	}
 
 
@@ -573,8 +566,8 @@ public class DataHunterRestApiClient {
 
 	/**
 	 * Helper class to build URLs with query parameters in a clean and efficient way.
-	 * A relatively generic builder - makes some assumptions such as the first param value, 
-	 * and a optional empty param value are strings. 
+	 * A relatively generic builder - makes some assumptions such as the first param value,
+	 * and a optional empty param value are strings.
 	 */
 	private class UrlBuilder {
 		private final StringBuilder url;

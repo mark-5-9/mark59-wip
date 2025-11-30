@@ -30,7 +30,7 @@ import com.mark59.scripting.AbstractJmeterFunctionsUiCommon;
 import com.mark59.scripting.selenium.interfaces.DriverFunctionsSelenium;
 
 /**
- * Selenium flavored extension of the Mark59 class {@link AbstractJmeterFunctionsUiCommon} ( whose primary purpose to to handle transaction
+ * Selenium flavored extension of the Mark59 class {@link AbstractJmeterFunctionsUiCommon} ( whose primary purpose is to handle transaction
  *  results, implemented in Mark59 by the use of 'sub-results' within a {@link SampleResult} )
  *
  * <p>This class is designed to additionally implement Selenium related functions within Mark59, in particular logging.
@@ -129,7 +129,7 @@ public class JmeterFunctionsForSeleniumScripts extends AbstractJmeterFunctionsUi
 	 * @param imageName last part of the log filename (but excluding extension - which is set as '.html')
 	 */
 	public void writePageSource(String imageName) {
-		writeLog(imageName, "html", mark59SeleniumDriver.captureCurrentUrlAndtHtmlPageSource().getBytes());
+		writeLog(imageName, "html", mark59SeleniumDriver.captureCurrentUrlAndHtmlPageSource().getBytes());
 	}
 
 
@@ -139,7 +139,7 @@ public class JmeterFunctionsForSeleniumScripts extends AbstractJmeterFunctionsUi
 	 * @param imageName last part of the log filename (but excluding extension - which is set as '.html')
 	 */
 	public void bufferPageSource(String imageName) {
-		bufferLog(imageName, "html", mark59SeleniumDriver.captureCurrentUrlAndtHtmlPageSource().getBytes());
+		bufferLog(imageName, "html", mark59SeleniumDriver.captureCurrentUrlAndHtmlPageSource().getBytes());
 	}
 
 

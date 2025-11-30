@@ -37,8 +37,8 @@ import com.microsoft.playwright.Tracing;
 import com.microsoft.playwright.Page.ScreenshotOptions;
 
 /**
- * Playwright flavored extension of the Mark59 class {@link AbstractJmeterFunctionsUiCommon} ( whose primary purpose to to handle transaction
- *  results,implemented in Mark59 by the use of 'sub-results' within a {@link SampleResult} )
+ * Playwright flavored extension of the Mark59 class {@link AbstractJmeterFunctionsUiCommon} ( whose primary purpose is to handle transaction
+ *  results, implemented in Mark59 by the use of 'sub-results' within a {@link SampleResult} )
  *
  * <p>This class is designed to additionally implement Playwright related functions within Mark59, in particular logging.
  *
@@ -138,7 +138,7 @@ public class JmeterFunctionsForPlaywrightScripts extends AbstractJmeterFunctions
 
 
 	/**
-	 * (Playwright Only) As perAs per {@link #bufferScreenshot(String)}, but allows user to pass any desired
+	 * (Playwright Only) As per {@link #bufferScreenshot(String)}, but allows user to pass any desired
 	 * Playwright Page and optionally set ScreenshotOptions.
 	 * <p>If you want to immediately write a screenshot to file, use {@link #writeScreenshot(String)}  instead.
 	 *
@@ -165,7 +165,7 @@ public class JmeterFunctionsForPlaywrightScripts extends AbstractJmeterFunctions
 	 */
 	@Override
 	public void writeScreenshot(String imageName) {
-		List<Page> ctxPages = listBrowerCtxPages();
+		List<Page> ctxPages = listBrowserCtxPages();
 		for (int i = 0; i < ctxPages.size(); i++) {
 			writeLog(unique(imageName,ctxPages,i), "jpg", ctxPages.get(i).screenshot());
 		}
@@ -185,7 +185,7 @@ public class JmeterFunctionsForPlaywrightScripts extends AbstractJmeterFunctions
 	 */
 	@Override
 	public void bufferScreenshot(String imageName) {
-		List<Page> ctxPages = listBrowerCtxPages();
+		List<Page> ctxPages = listBrowserCtxPages();
 		for (int i = 0; i < ctxPages.size(); i++) {
 			bufferLog(unique(imageName,ctxPages,i), "jpg", ctxPages.get(i).screenshot());
 		}
@@ -202,9 +202,9 @@ public class JmeterFunctionsForPlaywrightScripts extends AbstractJmeterFunctions
 	 * @param imageName last part of the log filename (but excluding extension - which is set as '.html')
 	 */
 	public void writePageSource(String imageName) {
-		List<Page> ctxPages = listBrowerCtxPages();
+		List<Page> ctxPages = listBrowserCtxPages();
 		for (int i = 0; i < ctxPages.size(); i++) {
-			writeLog(unique(imageName,ctxPages,i), "html", captureCurrentUrlAndtHtmlPageSource(ctxPages.get(i)).getBytes());
+			writeLog(unique(imageName,ctxPages,i), "html", captureCurrentUrlAndHtmlPageSource(ctxPages.get(i)).getBytes());
 		}
 	}
 
@@ -218,9 +218,9 @@ public class JmeterFunctionsForPlaywrightScripts extends AbstractJmeterFunctions
 	 * @param imageName last part of the log filename (but excluding extension - which is set as '.html')
 	 */
 	public void bufferPageSource(String imageName) {
-		List<Page> ctxPages = listBrowerCtxPages();
+		List<Page> ctxPages = listBrowserCtxPages();
 		for (int i = 0; i < ctxPages.size(); i++) {
-			bufferLog(imageName, "html", captureCurrentUrlAndtHtmlPageSource(ctxPages.get(i)).getBytes());
+			bufferLog(imageName, "html", captureCurrentUrlAndHtmlPageSource(ctxPages.get(i)).getBytes());
 		}
 	}
 
@@ -274,14 +274,14 @@ public class JmeterFunctionsForPlaywrightScripts extends AbstractJmeterFunctions
 	/**
 	 * @return returns a string describing the url and full contents of the current page
 	 */
-	private String captureCurrentUrlAndtHtmlPageSource(Page ctxPage) {
+	private String captureCurrentUrlAndHtmlPageSource(Page ctxPage) {
 		String currentURL = ctxPage.url();
 		String pageSource = ctxPage.content();
 		return "<!--  Page CurrentUrl : " + currentURL + " --> \n" +  pageSource;
 	}
 
 
-	private List<Page> listBrowerCtxPages() {
+	private List<Page> listBrowserCtxPages() {
 		List<Page> ctxPages = new ArrayList<Page>();
 		List<BrowserContext> browserContexts =  new ArrayList<BrowserContext>();
 		try {

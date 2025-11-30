@@ -99,14 +99,14 @@ public abstract class DriverFunctionsSelenium<O extends WebDriver> implements Dr
 	 *
 	 * @return message string with url and page source
 	 */
-	public String captureCurrentUrlAndtHtmlPageSource() {
+	public String captureCurrentUrlAndHtmlPageSource() {
 		String currentURL;
 		try {
 			currentURL = (this.getDriver()).getCurrentUrl();
 		} catch (UnhandledAlertException e) {
 			LOG.debug("UnhandledAlertException.  Message : " + e.getMessage() );
 			LOG.warn("UnhandledAlertException thrown!  Message starts: " +  StringUtils.abbreviate(e.getMessage(), 100));
-			currentURL = "URL is not availale.  An UnhandledAlertException Exception has been thrown : " + e.getMessage();
+			currentURL = "URL is not available.  An UnhandledAlertException Exception has been thrown : " + e.getMessage();
 		}
 
 		String pageSource;

@@ -59,7 +59,7 @@ import com.microsoft.playwright.options.Proxy;
 
 /**
  * A Playwright enabled extension of the JMeter Java Sampler class {@link org.apache.jmeter.protocol.java.sampler.AbstractJavaSamplerClient}.
- * This is core class of the Mark59 Playwright implementation, and should be extended when creating
+ * This is a core class of the Mark59 Playwright implementation, and should be extended when creating
  * a JMeter-ready Playwright script.
  *
  * <p>Implementation of abstract method {@link #runPlaywrightTest(JavaSamplerContext, JmeterFunctionsForPlaywrightScripts, Page)}
@@ -103,7 +103,7 @@ public abstract class PlaywrightAbstractJavaSamplerClient extends UiAbstractJava
 	/** log4J class logger */
 	public static final Logger LOG = LogManager.getLogger(PlaywrightAbstractJavaSamplerClient.class);
 
-	/**  the mark59 JmeterFunctionsForSeleniumScripts for the test */
+	/**  the mark59 JmeterFunctionsForPlaywrightScripts for the test */
 	protected JmeterFunctionsForPlaywrightScripts jm;
 
 	//  Playwright Objects (used within Mark59)
@@ -318,7 +318,7 @@ public abstract class PlaywrightAbstractJavaSamplerClient extends UiAbstractJava
 		LaunchOptions browserLaunchOptions = new BrowserType.LaunchOptions();
 
 		// Set an alternate browser executable. If mark59.property contains mark59.browser.executable, that will be used
-		// but can overridden by the OVERRIDE_PROPERTY_MARK59_BROWSER_EXECUTABLE augment.
+		// but can overridden by the OVERRIDE_PROPERTY_MARK59_BROWSER_EXECUTABLE argument.
 		// If neither is present the a default location based on the o/s is guessed.
 
 		Path browserPath = null;
@@ -382,14 +382,9 @@ public abstract class PlaywrightAbstractJavaSamplerClient extends UiAbstractJava
 			browserLaunchOptions.setDownloadsPath(new File(arguments.get(ScriptingConstants.PLAYWRIGHT_DOWNLOADS_PATH)).toPath());
 		}
 
-		// Set Downloads directory path
-		if (StringUtils.isNotBlank(arguments.get(ScriptingConstants.PLAYWRIGHT_DOWNLOADS_PATH))){
-			browserLaunchOptions.setDownloadsPath(new File(arguments.get(ScriptingConstants.PLAYWRIGHT_DOWNLOADS_PATH)).toPath());
-		}
-
 		// Set Proxy Server and additional optional Proxy parameters
 		if (StringUtils.isNotBlank(arguments.get(ScriptingConstants.PLAYWRIGHT_PROXY_SERVER))){
-			Proxy proxy = new Proxy(arguments.get(ScriptingConstants.PLAYWRIGHT_PROXY_BYPASS));
+			Proxy proxy = new Proxy(arguments.get(ScriptingConstants.PLAYWRIGHT_PROXY_SERVER));
 
 			if (StringUtils.isNotBlank(arguments.get(ScriptingConstants.PLAYWRIGHT_PROXY_BYPASS))){
 				proxy.setBypass(arguments.get(ScriptingConstants.PLAYWRIGHT_PROXY_BYPASS));
@@ -422,7 +417,7 @@ public abstract class PlaywrightAbstractJavaSamplerClient extends UiAbstractJava
 
 		Browser.NewContextOptions browserContextOptions = new Browser.NewContextOptions();
 
-		// If .har recording requested, sets the .har file name and directory (to the mark59 log directlory
+		// If .har recording requested, sets the .har file name and directory (to the mark59 log directory)
 		if (Boolean.parseBoolean(arguments.get(ScriptingConstants.PLAYWRIGHT_HAR_FILE_CREATION))){
 			String harfilename = jm.reserveFullyQualifiedLogName("harfile","har");
 			browserContextOptions.setRecordHarPath(new File(harfilename).toPath());

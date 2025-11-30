@@ -72,7 +72,7 @@ import com.microsoft.playwright.Page;
  * STOP_THREAD_ON_FAILURE = false<br>
  * <p>
  *Then each iteration will take 10 seconds (unless the script execution goes over 10 secs - in which case the next iteration will start immediately provided iterations started no more than 25 secs ago).
- *After the 3rd iteration, the script would of been iterating for 30 seconds.  The total period of iteration is 25 secs, so the finalize will be performed and the script completes.
+ *After the 3rd iteration, the script would have been iterating for 30 seconds.  The total period of iteration is 25 secs, so the finalize will be performed and the script completes.
  *Assuming no other timers in the thread group, the script will then finish executing if the Thread Group Count or Scheduler conditions have been met, or otherwise restart again, even if a
  *failure occurred during the script execution.
  * <p>
@@ -111,7 +111,7 @@ public abstract class PlaywrightIteratorAbstractJavaSamplerClient extends Playwr
 	static {
 		Map<String,String> staticMap = new LinkedHashMap<>();
 
-		staticMap.put("______________________ interation settings: _____________________", "" );
+		staticMap.put("______________________ iteration settings: _____________________", "" );
 		staticMap.put(ITERATE_FOR_PERIOD_IN_SECS, 						"0");
 		staticMap.put(ITERATE_FOR_NUMBER_OF_TIMES,  					"1");
 		staticMap.put(ITERATION_PACING_IN_SECS,  						"0");
@@ -134,7 +134,7 @@ public abstract class PlaywrightIteratorAbstractJavaSamplerClient extends Playwr
 
 	/**
 	 * Creates the list of parameters with default values, as they would appear on the JMeter GUI for the JavaSampler being implemented.
-	 * <p>A standard set of parameters are defined (defaultArgumentsMap and defaultIterArgumentsMap). Additionally,an implementing class
+	 * <p>A standard set of parameters are defined (defaultArgumentsMap and defaultIterArgumentsMap). Additionally, an implementing class
 	 * (the script extending this class) can add additional parameters (or override the standard defaults) via the additionalTestParameters() method.
 	 *
 	 * @see #additionalTestParameters()
@@ -153,7 +153,7 @@ public abstract class PlaywrightIteratorAbstractJavaSamplerClient extends Playwr
 	 */
 	@Override
 	public SampleResult runTest(JavaSamplerContext context) {
-		if (LOG.isDebugEnabled()) LOG.debug(this.getClass().getName() +  " : exectuing runTest (iterator)" );
+		if (LOG.isDebugEnabled()) LOG.debug(this.getClass().getName() +  " : executing runTest (iterator)" );
 
 		AbstractThreadGroup tg = null;
 		String tgName = null;
@@ -194,7 +194,7 @@ public abstract class PlaywrightIteratorAbstractJavaSamplerClient extends Playwr
 			playwrightPage = makePlaywrightPage(jmeterRuntimeArgumentsMap);
 		} catch (Exception e) {
 			LOG.error("ERROR : " + this.getClass() + ". Fatal error has occurred for Thread Group " + tgName
-					+ " while attempting to initiate the selenium Driver. The Thread is stopping !" );
+					+ " while attempting to initiate the Playwright page. The Thread is stopping !" );
 			LOG.error(e.getMessage());
 			e.printStackTrace();
 			if (tg!=null) tg.stop();

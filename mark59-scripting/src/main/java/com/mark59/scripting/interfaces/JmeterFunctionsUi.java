@@ -49,8 +49,8 @@ public interface JmeterFunctionsUi extends JmeterFunctions {
 			boolean includeInStartOfTransactionLogs);
 
 	/**
-	 * As per endTransaction(String), but also allows for overriding current logging config and forcing logging off for 
-	 * this transaction (set includeInEndOfTransactionLogs to false). 
+	 * As per endTransaction(String transactionLabel), (JmeterFunctions in mark59-core), but also allows for overriding current logging config and 
+	 * forcing logging off for this transaction (set includeInEndOfTransactionLogs to false). 
 	 * 
 	 * @param transactionLabel ('label' in JMeter terminology) for the transaction
 	 * @param includeInEndOfTransactionLogs boolean option to switch on/off logs for transaction ends (an override for this txn) 
@@ -59,8 +59,8 @@ public interface JmeterFunctionsUi extends JmeterFunctions {
 	SampleResult endTransaction(String transactionLabel, boolean includeInEndOfTransactionLogs);
 
 	/**
-	 * As per {@link #endTransaction(String, Outcome, String)}, but also allows for overriding current logging config for this transaction 
-	 * (set includeInEndOfTransactionLogs to false). 
+	 * As per endTransaction(String transactionLabel, Outcome result, String responseCode) (JmeterFunctionsImpl in mark59-core), but also allows for 
+	 * overriding current logging config for this transaction (set includeInEndOfTransactionLogs to false). 
 	 * 
 	 * @param transactionLabel ('label' in JMeter terminology) for the transaction
 	 * @param result transaction pass or fail as Outcome

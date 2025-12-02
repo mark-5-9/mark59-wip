@@ -84,7 +84,7 @@ public class ServerMetricRestController {
 	/**
 	 *  <p>Invoke Server Profile execution for a mark59-metrics-api call. 
 	 *  <p>Controls and executes commands on the target servers, and returns a formatted response to the Api call.
-	 *  <p>Will be used by implementation(s) of JMeter Java Samplers designed to cater for metrics captured  
+	 *  <p>Will be used by implementation(s) of JMeter Java Samplers designed to cater to metrics captured  
 	 *  directly via this API call (refer to com.mark59.metrics.api.ServerMetricsCaptureViaWeb).
 	 *  <p> For example using profile localhost_LINUX (to capture local metrics when you are on a Linux machine) 
 	 *  the api url used would be <br>
@@ -118,13 +118,11 @@ public class ServerMetricRestController {
 
 	@GetMapping(path =  "/cipher")
 	public ResponseEntity<Object> cipher(@RequestParam(required=false) String pwd) {
-		// System.out.println("cipher called pwd : [" + pwd +"]");
 		LOG.debug("cipher called pwd : [" + pwd +"]");
 		String encrypted = SecureAES.encrypt(pwd);
 		if (encrypted == null ) {
 			encrypted = "Oops. Something went wrong attempting to encrypt this password (" + pwd + ")";
 		}
-		// System.out.println("     cipher response is : [" + encrypted +"]");
 		LOG.debug("     cipher response is : [" + encrypted +"]");
         return ResponseEntity.ok(encrypted);
 	}
@@ -133,7 +131,6 @@ public class ServerMetricRestController {
 	@GetMapping(path =  "/testCommandResponseParser")
 	public ResponseEntity<Object> testCommandResponseParser(@RequestParam(required=false) String parserName){
 		
-		// System.out.println("ServerMetricRestController.testCommandResponseParser script : " + parserName );
 		TestCommandParserResponsePojo testResponse = new TestCommandParserResponsePojo();
 		CommandResponseParser commandResponseParser = commandResponseParsersDAO.findCommandResponseParser(parserName); 
 			
@@ -159,7 +156,7 @@ public class ServerMetricRestController {
 				testResponse.setSummary("<font color='darkorange'> The parser has returned 0.  This is valid, but is it what you expected? <br>"
 						+ " Maybe try a Sample Response that returns a non-zero positive value.. </font>");				
 			} else if (doubleVal < 0) {
-				testResponse.setSummary("<font color='darkorange'> The parser has returned negative value, which will be ignored.  Is it what you expected? <br>"
+				testResponse.setSummary("<font color='darkorange'> The parser has returned a negative value, which will be ignored.  Is it what you expected? <br>"
 						+ " Maybe try a Sample Response that returns a non-zero positive value.. </font>");				
 			} else { 
 				testResponse.setSummary("<font color='green'> The parser has returned a valid number.  Please check the value is as you expect.. </font>");
@@ -178,12 +175,11 @@ public class ServerMetricRestController {
 
 	
 	private boolean authenticateApi(String authHeader, String authRequired, String apiUser, String apiPass) {
-		// System.out.println("authenticateApi : " + authHeader +" : " + authRequired + " : " + apiUser + " : " + apiPass);
 		if (!String.valueOf(true).equalsIgnoreCase(authRequired)){
 			return true;
 		}
 		try {
-			String decoded = new String(Base64.getDecoder().decode(StringUtils.removeStartIgnoreCase(authHeader,"Basic ")),StandardCharsets.UTF_8.toString());
+			String decoded = new String(Base64.getDecoder().decode(StringUtils.removeStartIgnoreCase(authHeader,"Basic ")),StandardCharsets.UTF_8);
 			String[] credsAry = StringUtils.split(decoded, ":", 2);
 			if (StringUtils.equals(apiUser, credsAry[0]) && StringUtils.equals(apiPass, credsAry[1])) {
 				return true;

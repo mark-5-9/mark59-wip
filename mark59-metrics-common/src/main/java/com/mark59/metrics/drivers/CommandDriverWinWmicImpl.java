@@ -81,8 +81,8 @@ public class CommandDriverWinWmicImpl implements CommandDriver {
 					.replaceAll("\\R", " ");
 		}
 
-		commandDriverResponse = CommandDriver.executeRuntimeCommand(runtimeCommand, command.getIngoreStderr(),CommandExecutorDatatypes.WMIC_WINDOWS);
-		commandDriverResponse.setCommandLog(CommandDriver.logExecution(runtimeCommandForLog, command.getIngoreStderr(),
+		commandDriverResponse = CommandDriver.executeRuntimeCommand(runtimeCommand, command.getIgnoreStderr(),CommandExecutorDatatypes.WMIC_WINDOWS);
+		commandDriverResponse.setCommandLog(CommandDriver.logExecution(runtimeCommandForLog, command.getIgnoreStderr(),
 				commandDriverResponse.getRawCommandResponseLines(), testMode));
 		return commandDriverResponse;
 	}

@@ -76,7 +76,7 @@
      <td>${commandWithParsers.command.commandName}</td>     
      <td>${commandWithParsers.command.executor}</td>     
      <td class="small">${commandWithParsers.command.command}</td> 
-     <td>${commandWithParsers.command.ingoreStderr}</td>   
+     <td>${commandWithParsers.command.ignoreStderr}</td>   
      <td>${commandWithParsers.command.comment}</td>
      <td>
  		<table>    

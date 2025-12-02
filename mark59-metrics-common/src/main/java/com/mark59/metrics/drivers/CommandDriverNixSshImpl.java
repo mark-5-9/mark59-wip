@@ -93,7 +93,7 @@ public class CommandDriverNixSshImpl implements CommandDriver {
 				.replace(MetricsConstants.PROFILE_PASSWORD_VAR, "********")).replaceAll("\\R", "\n");	
 		
 		if ("localhost".equalsIgnoreCase(serverProfile.getServer())) {
-			commandDriverResponse = CommandDriver.executeRuntimeCommand(runtimeCommand, command.getIngoreStderr(),
+			commandDriverResponse = CommandDriver.executeRuntimeCommand(runtimeCommand, command.getIgnoreStderr(),
 					CommandExecutorDatatypes.SSH_LINUX_UNIX);
 		
 		} else { // remote connection
@@ -108,10 +108,10 @@ public class CommandDriverNixSshImpl implements CommandDriver {
 				return commandDriverResponse;
 			}
 			
-			commandDriverResponse = executeRemoteNixSystemCommand(runtimeCommand, command.getIngoreStderr());
+			commandDriverResponse = executeRemoteNixSystemCommand(runtimeCommand, command.getIgnoreStderr());
 		}
 		
-		commandDriverResponse.setCommandLog(CommandDriver.logExecution(runtimeCommandForLog, command.getIngoreStderr(),
+		commandDriverResponse.setCommandLog(CommandDriver.logExecution(runtimeCommandForLog, command.getIgnoreStderr(),
 				commandDriverResponse.getRawCommandResponseLines(), testMode));
 		return commandDriverResponse;		
 	}
@@ -181,7 +181,7 @@ public class CommandDriverNixSshImpl implements CommandDriver {
 	}	
 
 	
-	private CommandDriverResponse executeRemoteNixSystemCommand(String runtimeCommand, String ingoreStderr) {
+	private CommandDriverResponse executeRemoteNixSystemCommand(String runtimeCommand, String ignoreStderr) {
 		LOG.debug( "executeRemoteNixSystemCommand : " + runtimeCommand );
 		
 		CommandDriverResponse commandDriverResponse = new CommandDriverResponse();   
@@ -199,7 +199,7 @@ public class CommandDriverNixSshImpl implements CommandDriver {
 	
 			channelExec.connect();               // its actually command execution
 							
-			if ( ! Mark59Utils.resolvesToTrue(ingoreStderr)){
+			if ( ! Mark59Utils.resolvesToTrue(ignoreStderr)){
 				rawCommandResponseLines = readCommandInputStream(commandErrStream);
 				if (rawCommandResponseLines.size() > 0  ) {
 					commandDriverResponse.setCommandFailure(true);

@@ -63,7 +63,7 @@ public class CommandsDAOjdbcTemplateImpl implements CommandsDAO
 		command.setCommandName((String)row.get("COMMAND_NAME"));
 		command.setExecutor((String)row.get("EXECUTOR"));
 		command.setCommand((String)row.get("COMMAND"));
-		command.setIngoreStderr((String)row.get("IGNORE_STDERR"));
+		command.setIgnoreStderr((String)row.get("IGNORE_STDERR"));
 		command.setComment((String)row.get("COMMENT"));
 		command.setParamNames(deserializeJsonToList((String)row.get("PARAM_NAMES")));
 		return  command;
@@ -99,7 +99,7 @@ public class CommandsDAOjdbcTemplateImpl implements CommandsDAO
 			command.setCommandName((String)row.get("COMMAND_NAME"));
 			command.setExecutor((String)row.get("EXECUTOR"));
 			command.setCommand((String)row.get("COMMAND"));
-			command.setIngoreStderr((String)row.get("IGNORE_STDERR"));			
+			command.setIgnoreStderr((String)row.get("IGNORE_STDERR"));			
 			command.setComment((String)row.get("COMMENT"));
 			command.setParamNames(deserializeJsonToList((String)row.get("PARAM_NAMES")));	
 			commandList.add(command);
@@ -121,7 +121,7 @@ public class CommandsDAOjdbcTemplateImpl implements CommandsDAO
 				command.getCommandName(),
 				command.getExecutor(),
 				command.getCommand(),
-				command.getIngoreStderr(),
+				command.getIgnoreStderr(),
 				command.getComment(),
 				serializeListToJson(command.getParamNames()));
 	}
@@ -139,7 +139,7 @@ public class CommandsDAOjdbcTemplateImpl implements CommandsDAO
 		jdbcTemplate.update(sql,
 				command.getExecutor(),
 				command.getCommand(),
-				command.getIngoreStderr(),
+				command.getIgnoreStderr(),
 				command.getComment(),
 				serializeListToJson(command.getParamNames()),
 				command.getCommandName());

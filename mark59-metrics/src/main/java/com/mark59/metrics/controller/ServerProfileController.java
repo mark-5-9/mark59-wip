@@ -179,7 +179,7 @@ public class ServerProfileController {
 			dataRow.createCell(0).setCellValue(command.getCommandName());
 			dataRow.createCell(1).setCellValue(command.getExecutor());
 			dataRow.createCell(2).setCellValue(command.getCommand());
-			dataRow.createCell(3).setCellValue(command.getIngoreStderr());
+			dataRow.createCell(3).setCellValue(command.getIgnoreStderr());
 			dataRow.createCell(4).setCellValue(command.getComment());
 			dataRow.createCell(5).setCellValue(commandsDAO.serializeListToJson(command.getParamNames()));
 			rowIndex++;

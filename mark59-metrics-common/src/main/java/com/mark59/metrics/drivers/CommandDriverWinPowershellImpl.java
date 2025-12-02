@@ -55,8 +55,8 @@ public class CommandDriverWinPowershellImpl implements CommandDriver {
 		String runtimeCommandForLog = POWERSHELL_COMMAND + "\"" + parmSubstitutor
 				.replace(command.getCommand().replace(MetricsConstants.PROFILE_PASSWORD_VAR, "********")).replaceAll("\\R", " ") + "\"";
 			
-		commandDriverResponse = CommandDriver.executeRuntimeCommand(runtimeCommand, command.getIngoreStderr(),CommandExecutorDatatypes.POWERSHELL_WINDOWS);
-		commandDriverResponse.setCommandLog(CommandDriver.logExecution(runtimeCommandForLog, command.getIngoreStderr(),
+		commandDriverResponse = CommandDriver.executeRuntimeCommand(runtimeCommand, command.getIgnoreStderr(),CommandExecutorDatatypes.POWERSHELL_WINDOWS);
+		commandDriverResponse.setCommandLog(CommandDriver.logExecution(runtimeCommandForLog, command.getIgnoreStderr(),
 				commandDriverResponse.getRawCommandResponseLines(), testMode));
 		return commandDriverResponse;
 	}

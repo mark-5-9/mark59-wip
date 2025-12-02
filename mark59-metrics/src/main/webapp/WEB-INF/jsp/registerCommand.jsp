@@ -71,7 +71,7 @@
   
      <tr id=ignoreStdErrRow>
       <td>Ignore&nbsp;StdErr?:</td>
-      <td><form:select path="command.ingoreStderr"  items="${map.ingoreStderrYesNo}" value="${map.ingoreStderr}" />
+      <td><form:select path="command.ignoreStderr"  items="${map.ignoreStderrYesNo}" value="${map.ignoreStderr}" />
           <span style="font-size: 10px">&nbsp;&nbsp;&nbsp;( If you are unsure, just leave as '<b>N</b>' )</span></td>      
      </tr>
      
@@ -109,7 +109,7 @@
      <tr><td><br></td><td></td></tr>
  
      <tr>
-      <td> </td>
+      <td></td>
       <td><button type="button" onclick="submitSaveCommand('exit')">Save and Exit</button>      
           <button type="button" onclick="submitSaveCommand('continue')">Save and Continue</button>
           <span style="font-size: 10px">&nbsp;&nbsp;&nbsp;Inactivity timeout: 30 min</span> 

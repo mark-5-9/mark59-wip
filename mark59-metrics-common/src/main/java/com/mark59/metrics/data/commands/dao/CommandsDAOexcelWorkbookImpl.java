@@ -52,11 +52,11 @@ public class CommandsDAOexcelWorkbookImpl implements CommandsDAO
 			if (commandName != null && commandName.equalsIgnoreCase(MetricsUtils.cellValue(commandRow.getCell(0)))){	            
             	notFound=false;
             	command =new Command();
-            	command.setCommandName 	(MetricsUtils.cellValue(commandRow.getCell(0)));
-            	command.setExecutor		(MetricsUtils.cellValue(commandRow.getCell(1)));
-            	command.setCommand		(MetricsUtils.cellValue(commandRow.getCell(2)));
-            	command.setIngoreStderr	(MetricsUtils.cellValue(commandRow.getCell(3)));
-            	command.setComment		(MetricsUtils.cellValue(commandRow.getCell(4)));
+            	command.setCommandName	(MetricsUtils.cellValue(commandRow.getCell(0)));
+            	command.setExecutor  	(MetricsUtils.cellValue(commandRow.getCell(1)));
+            	command.setCommand  	(MetricsUtils.cellValue(commandRow.getCell(2)));
+            	command.setIgnoreStderr	(MetricsUtils.cellValue(commandRow.getCell(3)));
+            	command.setComment   	(MetricsUtils.cellValue(commandRow.getCell(4)));
             	command.setParamNames(deserializeJsonToList(MetricsUtils.cellValue(commandRow.getCell(5))));
             }
         }   

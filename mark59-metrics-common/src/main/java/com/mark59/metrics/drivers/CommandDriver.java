@@ -43,11 +43,11 @@ import com.mark59.metrics.utils.MetricsConstants.CommandExecutorDatatypes;
  * or on remote servers), expected to be purposed for extraction and reporting of server/application statistics.
  * 
  * <p><b>Security Considerations</b> Note the permitted o/s system commands and Groovy scripts are generic in
- * nature. We suggest reviewing the Security sections of the Metrics application in the Mark59 User Guide,and 
+ * nature. We suggest reviewing the Security sections of the Metrics application in the Mark59 User Guide, and 
  * security guidelines at your installation, prior to implementation of mark59-metrics at your installation.     
  * 
  * @author Michael Cohen
- * @author Philip Web
+ * @author Philip Webb
  * <br>Written: Australian Winter 2019
  */
 public interface CommandDriver {
@@ -66,7 +66,7 @@ public interface CommandDriver {
 			} else { 
 				reportedServerId = System.getenv("HOSTNAME");
 			}
-			if (StringUtils.isAllBlank(reportedServerId)){	  // use IP Host Name as a alternative .
+			if (StringUtils.isAllBlank(reportedServerId)){	  // use IP Host Name as an alternative.
 				try {
 					reportedServerId = InetAddress.getLocalHost().getHostName();
 				} catch (UnknownHostException e) {
@@ -99,7 +99,7 @@ public interface CommandDriver {
 	CommandDriverResponse executeCommand(Command command, Map<String, String> cmdParms, boolean testMode);
 
 	
-	static CommandDriverResponse executeRuntimeCommand(String runtimeCommand, String ingoreStderr,
+	static CommandDriverResponse executeRuntimeCommand(String runtimeCommand, String ignoreStderr,
 			CommandExecutorDatatypes executorType) {
 		LOG.debug("executeRuntimeCommand : " + runtimeCommand );
 		CommandDriverResponse commandDriverResponse = new CommandDriverResponse();   
@@ -127,7 +127,7 @@ public interface CommandDriver {
 			
 			errors = new BufferedReader(new InputStreamReader(p.getErrorStream()));
 			while ((line = errors.readLine()) != null) {
-				if (line.length() > 0  && !Mark59Utils.resolvesToTrue(ingoreStderr) ) {
+				if (line.length() > 0  && !Mark59Utils.resolvesToTrue(ignoreStderr) ) {
 					commandDriverResponse.setCommandFailure(true);
 					rawCommandResponseLines.add("[ERR] " + line.trim());
 				}
@@ -160,10 +160,10 @@ public interface CommandDriver {
 	}
 
 	
-	static String logExecution(String runtimeCommand, String ingoreStderr, List<String> rawCommandResponseLines,
+	static String logExecution(String runtimeCommand, String ignoreStderr, List<String> rawCommandResponseLines,
 			boolean testMode) {
 		String IgnoreStdErrLog = "";
-		if(Mark59Utils.resolvesToTrue(ingoreStderr)){
+		if(Mark59Utils.resolvesToTrue(ignoreStderr)){
 			IgnoreStdErrLog = " (StdErr to be ignored) ";
 		}
 		String invokedRuntimeCommandMsg = "";

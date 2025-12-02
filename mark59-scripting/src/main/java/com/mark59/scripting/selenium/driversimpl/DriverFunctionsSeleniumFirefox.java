@@ -69,8 +69,8 @@ public class DriverFunctionsSeleniumFirefox extends DriverFunctionsSelenium<Fire
 
 	/**
 	 *  For a Firefox Selenium driver 'quit' will end the session.
-	 *  Wrapping it in a try/catch, as historical gekodrivers used 'close'
-	 *  (ie, just in case someone runs using an old gekodriver)
+	 *  Wrapping it in a try/catch, as historical geckodrivers used 'close'
+	 *  (ie, just in case someone runs using an old geckodriver)
 	 */
 	@Override
 	public void driverDispose() {

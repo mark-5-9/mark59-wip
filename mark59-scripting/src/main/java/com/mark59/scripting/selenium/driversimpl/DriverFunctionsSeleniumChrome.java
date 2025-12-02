@@ -31,7 +31,7 @@ import com.mark59.scripting.selenium.interfaces.DriverFunctionsSelenium;
 
 /**
  *
- * Chrom(ium) implementation of {@link DriverFunctionsSelenium}
+ * Chromium implementation of {@link DriverFunctionsSelenium}
  *
  * @author Michael Cohen
  * @author Philip Webb

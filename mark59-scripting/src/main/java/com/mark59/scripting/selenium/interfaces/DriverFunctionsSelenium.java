@@ -31,7 +31,7 @@ import com.mark59.scripting.selenium.driversimpl.DriverFunctionsSeleniumChrome;
 import com.mark59.scripting.selenium.driversimpl.DriverFunctionsSeleniumFirefox;
 
 /**
- * Encapsulates the WebDriver to be used in a Mark59 script. Currently can be a Firefox or Chom(ium) driver.
+ * Encapsulates the WebDriver to be used in a Mark59 script. Currently can be a Firefox or Chromium driver.
  *
  * <p>The WebDriver is available via the {@link #getDriver()} method.
  *
@@ -39,7 +39,7 @@ import com.mark59.scripting.selenium.driversimpl.DriverFunctionsSeleniumFirefox;
  * handling are included.  This class is intended as an internal class within the Mark59 framework, with its
  * functionality accessible in a script via {@link JmeterFunctionsForSeleniumScripts}
  *
- * <p>Note: Ending a Selenium connection is slightly different between FireFox and Chrom(ium), so
+ * <p>Note: Ending a Selenium connection is slightly different between FireFox and Chromium, so
  * {@link #driverDispose()} methods have been written in the implementation of those Mark59 drivers
  *
  * @param <O> the WebDriver type
@@ -72,7 +72,7 @@ public abstract class DriverFunctionsSelenium<O extends WebDriver> implements Dr
 
 
 	/**
-	 *  Note Performance logs (only implemented in chrom(ium) are read destructive,
+	 *  Note Performance logs (only implemented in Chromium) are read destructive,
 	 *  so you do not need to use this method after a standard capture of perflogs)
 	 */
 	public abstract void clearDriverPerfLogs();

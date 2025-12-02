@@ -41,7 +41,7 @@ import com.mark59.scripting.selenium.interfaces.DriverFunctionsSelenium;
 import com.mark59.scripting.selenium.interfaces.DriverFunctionsSeleniumBuilder;
 
 /**
- * <p>Invoking the {@link #build(Map)} method will create a Firefox (Geko) driver to be used in Mark59 scripts.
+ * <p>Invoking the {@link #build(Map)} method will create a Firefox (Gecko) driver to be used in Mark59 scripts.
  * <p>Selenium {@link FirefoxOptions} (which in Mark59 have been set by the {@link SeleniumDriverFactory}) 
  * are used by the service builder during driver creation.
  * 
@@ -128,7 +128,7 @@ public class DriverFunctionsSeleniumFirefoxBuilder implements DriverFunctionsSel
 	
 	@Override
 	public DriverFunctionsSeleniumBuilder<FirefoxOptions> setAdditionalOptions(List<String> arguments) {
-		LOG.debug("Note: setAdditionalOptions for Firefox not currenlty supported (options will be ignored)");
+		LOG.debug("Note: setAdditionalOptions for Firefox not currently supported (options will be ignored)");
 		return this;
 	}
 	
@@ -159,7 +159,7 @@ public class DriverFunctionsSeleniumFirefoxBuilder implements DriverFunctionsSel
 
 	
 	@Override
-	public DriverFunctionsSeleniumBuilder<FirefoxOptions> setVerbosePerformanceLoggingLogging(boolean isVerbose) {
+	public DriverFunctionsSeleniumBuilder<FirefoxOptions> setVerbosePerformanceLogging(boolean isVerbose) {
 		LOG.debug("Note: FireFox driver does not support Performance Logging");
 		return this;
 	}

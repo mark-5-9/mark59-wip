@@ -105,7 +105,7 @@ public class SeleniumDriverFactory {
 	
 	/**
 	 * "WRITE_FFOX_BROWSER_LOGFILE" - Only implemented for Firefox.  Primary purpose is to redirect 
-	 * gekodriver's copious error logging off the console.  Set to 'true' or 'false', default is 'false'.
+	 * geckodriver's copious error logging off the console.  Set to 'true' or 'false', default is 'false'.
 	 * @see com.mark59.scripting.selenium.interfaces.DriverFunctionsSeleniumBuilder#setWriteBrowserLogfile(boolean)
 	 */
 	public static final String WRITE_FFOX_BROWSER_LOGFILE = "WRITE_FFOX_BROWSER_LOGFILE";
@@ -214,7 +214,7 @@ public class SeleniumDriverFactory {
 		DriverFunctionsSeleniumBuilder<?> builder = getDriverBuilderOfType(arguments.get(DRIVER));
 		
 		// Set an alternate browser executable. If mark59.property contains mark59.browser.executable, that will be used
-		// but can overridden by the BROWSER_EXECUTABLE augment. If neither is present the default installation is used.
+		// but can overridden by the BROWSER_EXECUTABLE argument. If neither is present the default installation is used.
 		
 		Path browserPath = null;
 		String pathMsg = "";
@@ -308,7 +308,7 @@ public class SeleniumDriverFactory {
 		}
 
 		
-		//  Only implemented for Firefox - primary purpose is to redirect gekodriver's copious error logging off the console.. 	
+		//  Only implemented for Firefox - primary purpose is to redirect geckodriver's copious error logging off the console.. 	
 		if (arguments.containsKey(WRITE_FFOX_BROWSER_LOGFILE)) 
 			builder.setWriteBrowserLogfile(Boolean.parseBoolean(arguments.get(WRITE_FFOX_BROWSER_LOGFILE)));
 		else	
@@ -316,7 +316,7 @@ public class SeleniumDriverFactory {
 		
 				
 		//Note the Performance Log is currently only available for the Chrome Driver  
-		builder.setVerbosePerformanceLoggingLogging(false);
+		builder.setVerbosePerformanceLogging(false);
 		
 		return (T) builder.build(arguments);
 	}

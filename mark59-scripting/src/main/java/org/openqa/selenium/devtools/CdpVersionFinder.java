@@ -17,7 +17,7 @@
 
 
 // Mark59 changes
-// This class is being over shadowed by Mark59 in order to stop repeated 
+// This class is being over shadowed by Mark59 in order to stop repeated
 // warning messages during JMeter test executions
 
 
@@ -160,22 +160,22 @@ public Optional<CdpInfo> match(String browserVersion) {
       }
     }
 
-    // Mark59 : print warning once in a JVM (could use a sync block to guarantee print only once at start,
-    //          but not much point as only going to print once per JMeter JavaRequest Sampler).  
+    // Mark59: prints warning once per JVM (could use a sync block to guarantee print only once at start,
+    //         but not much point as only going to print once per JMeter JavaRequest Sampler).
 
     Properties sysprops = System.getProperties();
-	if (!"true".equals(sysprops.get("printedOnceCdpWarning")) ) {	
+	if (!"true".equals(sysprops.get("printedOnceCdpWarning")) ) {
 		LOG.warning(String.format(
 				"Unable to find an exact match for CDP version %d, so returning the closest version found: %s",
 				version,
 				nearestMatch == null ? "a no-op implementation" : nearestMatch.getMajorVersion()));
-		
+
 		if (nearestMatch == null) {
 			LOG.info(String.format("Unable to find CDP implementation matching %d.", version));
 		} else {
 			LOG.info(String.format("Found CDP implementation for version %d of %d", version, nearestMatch.getMajorVersion()));
 		}
-		sysprops.put("printedOnceCdpWarning", "true");		
+		sysprops.put("printedOnceCdpWarning", "true");
 	}
 
     return Optional.ofNullable(nearestMatch);

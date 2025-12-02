@@ -51,7 +51,7 @@ import com.mark59.scripting.selenium.interfaces.DriverFunctionsSeleniumBuilder;
 
 /**
  * <p>Creates a chromium Selenium driver to be used in the scripts.
- * <p>Invocation of the {@link #build(Map)} method will creates the a Chrom(ium) Selenium driver.
+ * <p>Invocation of the {@link #build(Map)} method creates a Chromium Selenium driver.
  * A {@link ChromeDriverService.Builder} is created, and Selenium {@link ChromeOptions} (which in Mark59 have been
  *  set by the {@link SeleniumDriverFactory}) are used by the service builder during driver creation.
  * <p>Note: this should be consistent with the implementation of network conditions in PlaywrightAbstractJavaSamplerClient.
@@ -172,7 +172,7 @@ public class DriverFunctionsSeleniumChromeBuilder implements DriverFunctionsSele
 
 	
 	@Override
-	public DriverFunctionsSeleniumBuilder<ChromeOptions> setVerbosePerformanceLoggingLogging(boolean isVerbose) {
+	public DriverFunctionsSeleniumBuilder<ChromeOptions> setVerbosePerformanceLogging(boolean isVerbose) {
 		LoggingPreferences logPreferences = new LoggingPreferences();
 		logPreferences.enable(LogType.PERFORMANCE, Level.INFO);
 		options.setCapability(ChromeOptions.LOGGING_PREFS, logPreferences);		// "goog:loggingPrefs"
@@ -183,7 +183,7 @@ public class DriverFunctionsSeleniumChromeBuilder implements DriverFunctionsSele
 	/** 
 	 * Creates a Selenium WebDriver, 'wrapping' it as a class variable in a Mark59SeleniumDriver implementation.
 	 * 
-	 * Note that the ChromeDriverService used is per instance of the driver, rather than one service for entire JVM (ie, the entire 
+	 * Note that the ChromeDriverService used is one per instance of the driver, rather than one service for the entire JVM (ie, the entire 
 	 * test run in JMeter). Experimentation showed this does not appear to be particularly inefficient (especially for longer running scripts).  
 	 * Using a shared ChromeDriverService also caused test failures, as the ChromeDriverService becomes a single point of failure.
 	 */
@@ -249,7 +249,7 @@ public class DriverFunctionsSeleniumChromeBuilder implements DriverFunctionsSele
 			LOG.error(" ERROR : " + this.getClass() + ". Stack trace: \n  " + sw.toString());
 			System.err.println("["+ thread + "]  ERROR : " + this.getClass() + ". Stack trace: \n  " + sw.toString());
 			if (driver != null) {driver.quit();}
-			throw new RuntimeException("An error has occurred during the creation of the ChromeDriver (throwing a RuntimeException" );
+			throw new RuntimeException("An error has occurred during the creation of the ChromeDriver" );
 		}
 		return new DriverFunctionsSeleniumChrome(driver);
 	}

@@ -153,8 +153,7 @@ public class Mark59LoggingConfig {
 					+ " (was " + directorySuffixFormat + "). '" + Mark59Constants.DATE + "' will be assumed.");
 			directoryTemporalName = LocalDate.now().toString();
 		}
-		
-		System.out.println("directoryTemporalName="+directoryTemporalName);
+		LOG.debug("directoryTemporalName="+directoryTemporalName);
 		
 		return directoryTemporalName;
 	}

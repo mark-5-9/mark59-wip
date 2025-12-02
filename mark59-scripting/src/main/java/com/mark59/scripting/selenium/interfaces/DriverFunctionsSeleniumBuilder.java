@@ -216,7 +216,7 @@ public interface DriverFunctionsSeleniumBuilder<O extends MutableCapabilities>	{
 
 	/**
 	 *
-	 * <p>Only implemented for Firefox.  Primary purpose is to redirect gekodriver's copious error logging off the console..</p>
+	 * <p>Only implemented for Firefox.  Primary purpose is to redirect geckodriver's copious error logging off the console..</p>
 	 * <p>From a selenium script, the only implemented JMeter parameter is '<b>WRITE_FFOX_BROWSER_LOGFILE</b>'.  Values are:
 	 * <ul>
 	 * <li><b>false</b> : suppresses Firefox error logging (the default)</li>
@@ -257,7 +257,7 @@ public interface DriverFunctionsSeleniumBuilder<O extends MutableCapabilities>	{
 	 *                  required, such as requests sent and received.
 	 * @return this
 	 */
-	DriverFunctionsSeleniumBuilder<?>setVerbosePerformanceLoggingLogging(boolean isVerbose);
+	DriverFunctionsSeleniumBuilder<?> setVerbosePerformanceLogging(boolean isVerbose);
 
 
 	/**

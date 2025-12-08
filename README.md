@@ -211,7 +211,7 @@ This is the <b>WORK-IN-PROGRESS</b> repository for Mark59 - be aware it may NOT 
 		paramters format convention.  Note this is only a breaking change if you have referenced it in your own WMIC scripts - 
 		the samples on the database have been updated.</li>		
 	<li>Metrics - Multiple improvements to data-entry screens (particularly around Commands and Profiles).</li>
-	<li>Metrics - Logging improved.  'Actual Commmand Run' is now only provided when running directly from the Web Application.</li>	  
+	<li>Metrics - Logging improved.  'Actual Command Run' is now only provided when running directly from the Web Application.</li>	  
 	<li>Metrics - Time taken for Profile execution is shown when running directly in the Web Application.</li>
 	<li>Metrics - Web Application TimeOut extended to 30 min (code change).</li>
 	<li>Metrics - Improved documentation on the Web Application's Overview Page.</li>	  

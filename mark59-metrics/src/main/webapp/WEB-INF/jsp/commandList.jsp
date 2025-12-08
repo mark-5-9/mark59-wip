@@ -72,7 +72,7 @@
     <tr>
      <td><a href="copyCommand?&reqCommandName=${commandWithParsers.command.commandName}&reqExecutor=${parmsMap.reqExecutor}" title="Copy"><img src="images/copy.png"/></a></td> 
      <td><a href="editCommand?&reqCommandName=${commandWithParsers.command.commandName}&reqExecutor=${parmsMap.reqExecutor}" title="Edit"><img src="images/edit.png"/></a></td>
-     <td><a href="deleteCommand?reqCommandName=${commandWithParsers.command.commandName}&reqExecutor=${parmsMap.reqExecutor}" onclick="return confirm('Are you sure (commmand name : ${commandWithParsers.command.commandName})?');" title="Delete"><img src="images/delete.png"/></a></td>
+     <td><a href="deleteCommand?reqCommandName=${commandWithParsers.command.commandName}&reqExecutor=${parmsMap.reqExecutor}" onclick="return confirm('Are you sure (command name : ${commandWithParsers.command.commandName})?');" title="Delete"><img src="images/delete.png"/></a></td>
      <td>${commandWithParsers.command.commandName}</td>     
      <td>${commandWithParsers.command.executor}</td>     
      <td class="small">${commandWithParsers.command.command}</td> 

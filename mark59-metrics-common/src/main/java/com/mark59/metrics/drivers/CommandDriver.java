@@ -25,7 +25,6 @@ import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
@@ -59,14 +58,14 @@ public interface CommandDriver {
 
 	static String obtainReportedServerId(String server, String alternateServerId) {
 		String reportedServerId = server;
-		if ( "localhost".equalsIgnoreCase(server) && HOSTID.equals(alternateServerId) ) {
+		if ("localhost".equalsIgnoreCase(server) && HOSTID.equals(alternateServerId)) {
 
-			if (Mark59Constants.OS.WINDOWS.getOsName().equals(Mark59Utils.obtainOperatingSystemForLocalhost())){
+			if (Mark59Constants.OS.WINDOWS.getOsName().equals(Mark59Utils.obtainOperatingSystemForLocalhost())) {
 				reportedServerId = System.getenv("COMPUTERNAME");
 			} else {
 				reportedServerId = System.getenv("HOSTNAME");
 			}
-			if (StringUtils.isAllBlank(reportedServerId)){	  // use IP Host Name as an alternative.
+			if (StringUtils.isAllBlank(reportedServerId)) {  // use IP Host Name as an alternative.
 				try {
 					reportedServerId = InetAddress.getLocalHost().getHostName();
 				} catch (UnknownHostException e) {
@@ -85,9 +84,9 @@ public interface CommandDriver {
 		CommandDriver driver;
 		if (CommandExecutorDatatypes.WMIC_WINDOWS.getExecutorText().equals(commandExecutor)) {
 			driver = new CommandDriverWinWmicImpl(serverProfile);
-		} else if (CommandExecutorDatatypes.POWERSHELL_WINDOWS.getExecutorText().equals(commandExecutor)){
+		} else if (CommandExecutorDatatypes.POWERSHELL_WINDOWS.getExecutorText().equals(commandExecutor)) {
 			driver = new CommandDriverWinPowershellImpl(serverProfile);
-		} else if (CommandExecutorDatatypes.SSH_LINUX_UNIX.getExecutorText().equals(commandExecutor)){
+		} else if (CommandExecutorDatatypes.SSH_LINUX_UNIX.getExecutorText().equals(commandExecutor)) {
 			driver = new CommandDriverNixSshImpl(serverProfile);
 		} else {  // GROOVY_SCRIPT
 			driver = new CommandDriverGroovyScriptImpl(serverProfile);
@@ -101,7 +100,7 @@ public interface CommandDriver {
 
 	static CommandDriverResponse executeRuntimeCommand(String runtimeCommand, String ignoreStderr,
 			CommandExecutorDatatypes executorType) {
-		LOG.debug("executeRuntimeCommand : " + runtimeCommand );
+		LOG.debug("executeRuntimeCommand : " + runtimeCommand);
 		CommandDriverResponse commandDriverResponse = new CommandDriverResponse();
 		commandDriverResponse.setCommandFailure(false);
 		List<String> rawCommandResponseLines = new ArrayList<>();
@@ -110,8 +109,6 @@ public interface CommandDriver {
 
 		ProcessBuilder processBuilder = new ProcessBuilder();
 		Process p = null;
-		BufferedReader errors = null;
-		BufferedReader reader = null;
 
 		try {
 
@@ -125,22 +122,22 @@ public interface CommandDriver {
 			p = processBuilder.start();
 			p.waitFor();
 
-			errors = new BufferedReader(new InputStreamReader(p.getErrorStream()));
-			while ((line = errors.readLine()) != null) {
-				if (line.length() > 0  && !Mark59Utils.resolvesToTrue(ignoreStderr) ) {
-					commandDriverResponse.setCommandFailure(true);
-					rawCommandResponseLines.add("[ERR] " + line.trim());
+			try (BufferedReader errors = new BufferedReader(new InputStreamReader(p.getErrorStream()))) {
+				while ((line = errors.readLine()) != null) {
+					if (line.length() > 0 && !Mark59Utils.resolvesToTrue(ignoreStderr)) {
+						commandDriverResponse.setCommandFailure(true);
+						rawCommandResponseLines.add("[ERR] " + line.trim());
+					}
 				}
 			}
-			errors.close();
 
-			reader = new BufferedReader(new InputStreamReader(p.getInputStream()));
-			while ((line = reader.readLine()) != null) {
-				if (line.length() > 0) {
-					rawCommandResponseLines.add(line.trim());
+			try (BufferedReader reader = new BufferedReader(new InputStreamReader(p.getInputStream()))) {
+				while ((line = reader.readLine()) != null) {
+					if (line.length() > 0) {
+						rawCommandResponseLines.add(line.trim());
+					}
 				}
 			}
-			reader.close();
 			p.destroy();
 
 		} catch (Exception e) {
@@ -149,9 +146,9 @@ public interface CommandDriver {
 			e.printStackTrace(new PrintWriter(stackTrace));
 			rawCommandResponseLines.add("<br>Command Failure: " + e.getMessage() + "<br>" + stackTrace.toString() + "<br>");
 
-			try {Objects.requireNonNull(errors).close();} catch (Exception ignored){}
-			try {Objects.requireNonNull(reader).close();} catch (Exception ignored){}
-			try {Objects.requireNonNull(p).destroy();} catch (Exception ignored){}
+			if (p != null) {
+				p.destroy();
+			}
 		}
 
 		commandDriverResponse.setRawCommandResponseLines(rawCommandResponseLines);
@@ -162,15 +159,15 @@ public interface CommandDriver {
 
 	static String logExecution(String runtimeCommand, String ignoreStderr, List<String> rawCommandResponseLines,
 			boolean testMode) {
-		String IgnoreStdErrLog = "";
-		if(Mark59Utils.resolvesToTrue(ignoreStderr)){
-			IgnoreStdErrLog = " (StdErr to be ignored) ";
+		String ignoreStdErrLog = "";
+		if (Mark59Utils.resolvesToTrue(ignoreStderr)) {
+			ignoreStdErrLog = " (StdErr to be ignored) ";
 		}
 		String invokedRuntimeCommandMsg = "";
-		if (testMode){
+		if (testMode) {
 			invokedRuntimeCommandMsg = "<br>Invoked Command :<br><font face='Courier'>" + runtimeCommand + "</font>";
 		}
-		return IgnoreStdErrLog + invokedRuntimeCommandMsg
+		return ignoreStdErrLog + invokedRuntimeCommandMsg
 				+ "<br>Response :<br><font face='Courier'>"
 				+ String.join("<br>", rawCommandResponseLines).replace(" ", "&nbsp;")
 				+ "</font><br>";

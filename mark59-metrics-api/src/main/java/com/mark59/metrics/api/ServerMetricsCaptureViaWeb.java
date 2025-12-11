@@ -173,7 +173,7 @@ public class ServerMetricsCaptureViaWeb extends AbstractJavaSamplerClient {
 				response = new ObjectMapper().readValue(jsonResponseStr.toString(), WebServerMetricsResponsePojo.class);
 			}
 			repsonseCode = con.getResponseCode();
-			
+
 			ServerMetricsCaptureUtils.validateCommandsResponse(response);
 
 			for (ParsedCommandResponse parsedCommandResponse : response.getParsedCommandResponses()) {

@@ -101,9 +101,6 @@ public class TrendingController {
 
 		TrendingForm trendingForm = new TrendingForm();
 
-		System.out.println("---------------------------------------");
-
-
 		if (reqApp == null ){
 			// on initial entry, when no application request parameter has been sent, take the first "active" application
 			reqAppListSelector = AppConstantsTrends.ACTIVE;

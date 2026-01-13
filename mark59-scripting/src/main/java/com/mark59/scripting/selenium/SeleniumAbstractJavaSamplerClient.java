@@ -112,6 +112,11 @@ public abstract class SeleniumAbstractJavaSamplerClient extends UiAbstractJavaSa
 	/** log4J class logger */
 	public static final Logger LOG = LogManager.getLogger(SeleniumAbstractJavaSamplerClient.class);
 
+	/** captures logging from selenium's ChromiumDriver class */
+	public static ChromiumDriverLogCapture chromiumDriverlogCapture = ChromiumDriverLogCapture.getInstance();
+	/** captures logging from selenium's CdpVersionFinder class */
+	public static CdpVersionFinderLogCapture cdpVersionFinderLogCapture = CdpVersionFinderLogCapture.getInstance();
+
 	/**  the mark59 JmeterFunctionsForSeleniumScripts for the test  */
 	protected JmeterFunctionsForSeleniumScripts jm;
 	/**  the Selenium driver 'Wrapper' for the test, with additional functions around logging and exception handling */

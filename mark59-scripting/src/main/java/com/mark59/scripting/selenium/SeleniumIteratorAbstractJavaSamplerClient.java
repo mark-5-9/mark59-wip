@@ -106,6 +106,10 @@ public abstract class SeleniumIteratorAbstractJavaSamplerClient extends Selenium
 	/** log4J class logger */
 	public static final Logger LOG = LogManager.getLogger(SeleniumIteratorAbstractJavaSamplerClient.class);
 
+	/** captures logging from selenium's ChromiumDriver class */
+	public static ChromiumDriverLogCapture chromiumDriverlogCapture = ChromiumDriverLogCapture.getInstance();
+	/** captures logging from selenium's CdpVersionFinder class */
+	public static CdpVersionFinderLogCapture cdpVersionFinderLogCapture = CdpVersionFinderLogCapture.getInstance();
 
 	/** Hold default arguments for implementations of this class */
 	private static final Map<String, String> seleniumDefaultIteratorArgumentsMap;

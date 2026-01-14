@@ -38,6 +38,7 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import com.mark59.core.utils.Mark59Constants;
 import com.mark59.core.utils.Mark59Utils;
 import com.mark59.trends.application.AppConstantsTrends;
+import com.mark59.trends.application.UtilsTrends;
 import com.mark59.trends.data.beans.Datapoint;
 import com.mark59.trends.data.beans.GraphMapping;
 import com.mark59.trends.data.beans.Run;
@@ -233,7 +234,10 @@ public class TransactionDAOjdbcTemplateImpl implements TransactionDAO
 	public Object getTransactionValue(String application, String txnType, String isCdpTxn, String runTime, String txnId, String transactionField) {
 		List<Object> transactionValues = new ArrayList<>();
 
-		String sql = "SELECT " + transactionField + " FROM TRANSACTION " +
+		// Validate transactionField to prevent SQL injection
+		String validatedField = validateAndSanitizeTransactionField(transactionField);
+
+		String sql = "SELECT " + validatedField + " FROM TRANSACTION " +
 										  	   "WHERE APPLICATION = :application AND " +
 				                                        "RUN_TIME = :runTime AND " +
 				                                        "TXN_TYPE = :txnType AND " +
@@ -264,6 +268,88 @@ public class TransactionDAOjdbcTemplateImpl implements TransactionDAO
 //			System.out.println("TransactionDAOjdbcTemplateImpl : [ " + transactionField + " returns " + transactionValues.get(0) + "]" ) ;
 			return transactionValues.get(0);
 		}
+	}
+
+
+	/**
+	 * Validates and sanitizes the transaction field parameter to prevent SQL injection.
+	 * Allows only whitelisted column names, safe SQL functions, and derivation expressions.
+	 *
+	 * <p>So these are all valid:<br>
+	 *
+	 *	sqlSelectLike = "DataHunter%" → generates LIKE '%DataHunter%%'<br>
+	 *	sqlSelectLike = "test_" → generates LIKE '%test_%'<br>
+	 *	sqlSelectLike = "CDP%Response" → generates LIKE '%CDP%Response%'<br>
+	 *	sqlSelectLike = "test'OR'1'='1" → generates LIKE '%test''OR''1''=''1%' (injection blocked)<br>
+	 *	The LIKE pattern wildcards (%, _) work correctly while SQL injection is prevented by escaping quotes.
+	 *
+	 * @param transactionField the field or expression to validate
+	 * @return the validated field/expression
+	 * @throws IllegalArgumentException if the field contains potentially malicious content
+	 */
+	private String validateAndSanitizeTransactionField(String transactionField) {
+		if (transactionField == null || transactionField.trim().isEmpty()) {
+			throw new IllegalArgumentException("Transaction field cannot be null or empty");
+		}
+
+		String field = transactionField.trim().toUpperCase();
+
+		// Whitelist of allowed column names
+		List<String> allowedColumns = List.of(
+			"APPLICATION", "RUN_TIME", "TXN_ID", "TXN_TYPE", "IS_CDP_TXN",
+			"TXN_MINIMUM", "TXN_AVERAGE", "TXN_MEDIAN", "TXN_MAXIMUM", "TXN_STD_DEVIATION",
+			"TXN_90TH", "TXN_95TH", "TXN_99TH",
+			"TXN_PASS", "TXN_FAIL", "TXN_STOP",
+			"TXN_FIRST", "TXN_LAST", "TXN_SUM", "TXN_DELAY"
+		);
+
+		// Whitelist of allowed SQL functions (safe aggregate and mathematical functions)
+		List<String> allowedFunctions = List.of(
+			"COALESCE", "NULLIF", "IFNULL", "NVL",
+			"ABS", "ROUND", "FLOOR", "CEILING", "CEIL",
+			"CAST", "CONVERT",
+			"AVG", "SUM", "COUNT", "MIN", "MAX",
+			"CASE", "WHEN", "THEN", "ELSE", "END"
+		);
+
+		// Check if it's a simple column name
+		if (allowedColumns.contains(field)) {
+			return field;
+		}
+
+		// Allow safe derivation expressions (calculations involving whitelisted columns and functions)
+		// Only allow: alphanumeric, underscores, spaces, parentheses, and basic arithmetic operators
+		if (!field.matches("^[A-Z0-9_\\s()*/+\\-.,]+$")) {
+			throw new IllegalArgumentException("Transaction field contains invalid characters: " + transactionField);
+		}
+
+		// Dangerous SQL keywords that should never appear
+		List<String> dangerousKeywords = List.of(
+			"SELECT", "INSERT", "UPDATE", "DELETE", "DROP", "CREATE", "ALTER",
+			"EXEC", "EXECUTE", "UNION", "WHERE", "FROM", "JOIN", "INTO",
+			"DECLARE", "SET", "GRANT", "REVOKE", "TRUNCATE", "MERGE"
+		);
+
+		// Additional check: ensure all tokens are either whitelisted columns, functions, or numeric literals
+		// Extract potential column/function names (words that start with letter or underscore)
+		String[] tokens = field.split("[\\s()*/+\\-,]+");
+		for (String token : tokens) {
+			if (token.isEmpty() || token.matches("^\\d+$")) {
+				continue; // Skip empty strings and numeric literals
+			}
+
+			// Check if token is a dangerous SQL keyword
+			if (dangerousKeywords.contains(token)) {
+				throw new IllegalArgumentException("Transaction field contains dangerous SQL keyword: " + token);
+			}
+
+			// Token must be either an allowed column or an allowed function
+			if (!allowedColumns.contains(token) && !allowedFunctions.contains(token)) {
+				throw new IllegalArgumentException("Transaction field contains unrecognized identifier: " + token + " (not in whitelist)");
+			}
+		}
+
+		return transactionField.trim(); // Return original case for compatibility
 	}
 
 
@@ -304,12 +390,22 @@ public class TransactionDAOjdbcTemplateImpl implements TransactionDAO
 		String sql = transactionIdsSqlNamedParms(showCdpOption, sqlSelectLike, sqlSelectNotLike, manuallySelectTxns, useRawSQL,
 				rawTransactionIdsSQL, graphMapping);
 
-		sql = sql.replace(":application", "'" + application + "' ")
-				 .replace(":graphMappingGetTxnType", "'" + graphMapping.getTxnType() + "' ")
-				 .replace(":chosenRuns", "'" + chosenRuns.replaceAll(",", "','") + "' " )
-				 .replace(":sqlSelectLike", "'%" +  sqlSelectLike + "%'" )
-				 .replace(":sqlSelectNotLike", "'%" +  sqlSelectNotLike + "%'" )
-				 .replace(":chosenTxns",   "'" +  chosenTxns.replaceAll("," , "','") + "'" );
+		// Validate and escape all user inputs before SQL string replacement to prevent SQL injection
+		// Note: This method returns a SQL string (not a PreparedStatement) so manual validation is critical
+
+		String escapedApplication = UtilsTrends.escapeSqlString(application);
+		String escapedTxnType = UtilsTrends.escapeSqlString(graphMapping.getTxnType());
+		String escapedChosenRuns = validateAndEscapeCommaDelimitedValues(chosenRuns, "chosenRuns");
+		String escapedSqlSelectLike = UtilsTrends.escapeSqlString(sqlSelectLike);
+		String escapedSqlSelectNotLike = UtilsTrends.escapeSqlString(sqlSelectNotLike);
+		String escapedChosenTxns = validateAndEscapeCommaDelimitedValues(chosenTxns, "chosenTxns");
+
+		sql = sql.replace(":application", "'" + escapedApplication + "' ")
+				 .replace(":graphMappingGetTxnType", "'" + escapedTxnType + "' ")
+				 .replace(":chosenRuns", "'" + escapedChosenRuns + "' " )
+				 .replace(":sqlSelectLike", "'%" +  escapedSqlSelectLike + "%'" )
+				 .replace(":sqlSelectNotLike", "'%" +  escapedSqlSelectNotLike + "%'" )
+				 .replace(":chosenTxns",   "'" +  escapedChosenTxns + "'" );
 
 		// System.out.println("TransactionDAOjdbcTemplateImpl.transactionIdsSQL 'raw'sql : \n" + sql );
 		return sql;
@@ -355,10 +451,16 @@ public class TransactionDAOjdbcTemplateImpl implements TransactionDAO
 					                                 (String)row.get("RUN_TIME"),
 					                                 (String)row.get("TXN_ID"));
 
-			if ( row.get("rankedValue").getClass().toString().contains("BigDecimal")  ){
-				rankedValue = ((BigDecimal)row.get("rankedValue"));
-			} else { // assume 'long'
-				rankedValue =  new BigDecimal((Long)row.get("rankedValue"));
+			Object rankedValueObj = row.get("rankedValue");
+			if (rankedValueObj == null) {
+				rankedValue = BigDecimal.ZERO; // Default value for null ranked values
+			} else if (rankedValueObj instanceof BigDecimal) {
+				rankedValue = (BigDecimal)rankedValueObj;
+			} else if (rankedValueObj instanceof Long) {
+				rankedValue = new BigDecimal((Long)rankedValueObj);
+			} else {
+				// Handle other numeric types
+				rankedValue = new BigDecimal(rankedValueObj.toString());
 			}
 			transactionListOrderedByValue.put(transaction, rankedValue);
 		}
@@ -530,10 +632,15 @@ public class TransactionDAOjdbcTemplateImpl implements TransactionDAO
 
 			datapointMetric = row.get("VALUE_TO_PLOT");
 
-			if ( datapointMetric.getClass().toString().contains("BigDecimal")  ){
+			if (datapointMetric == null) {
+				datapoint.setValue(BigDecimal.ZERO); // Default value for null metrics
+			} else if (datapointMetric instanceof BigDecimal) {
 				datapoint.setValue((BigDecimal)datapointMetric);
-			} else { // assume 'long'
+			} else if (datapointMetric instanceof Long) {
 				datapoint.setValue(new BigDecimal((Long)datapointMetric));
+			} else {
+				// Handle other numeric types
+				datapoint.setValue(new BigDecimal(datapointMetric.toString()));
 			}
 
 			if ( !runTime.equals(prevRunTime) ){
@@ -551,13 +658,48 @@ public class TransactionDAOjdbcTemplateImpl implements TransactionDAO
 
 	private String transactionDBColNameOrDerivationForRequestedValues(GraphMapping graphMapping) {
 		String transactionDBColNameOrDerivationForRequestedValues =
-				AppConstantsTrends.getValueDerivatonToSourceFieldMap().get(graphMapping.getValueDerivation());
+				AppConstantsTrends.getValueDerivationToSourceFieldMap().get(graphMapping.getValueDerivation());
 
 		if ( transactionDBColNameOrDerivationForRequestedValues == null){
 			// no mapping - we therefore assume a direct name translation from the derivation entry
 			transactionDBColNameOrDerivationForRequestedValues =  graphMapping.getValueDerivation();
 		}
-		return transactionDBColNameOrDerivationForRequestedValues;
+
+		// Validate to prevent SQL injection before using in SQL concatenation
+		return validateAndSanitizeTransactionField(transactionDBColNameOrDerivationForRequestedValues);
+	}
+
+
+	/**
+	 * Validates and escapes a comma-delimited list of values for safe SQL IN clause usage.
+	 * Each value is validated to contain only safe characters and then properly escaped.
+	 *
+	 * @param commaDelimitedValues comma-separated values
+	 * @param fieldName name of the field for error messages
+	 * @return SQL-safe quoted and comma-separated values
+	 * @throws IllegalArgumentException if any value contains suspicious characters
+	 */
+	private String validateAndEscapeCommaDelimitedValues(String commaDelimitedValues, String fieldName) {
+		if (StringUtils.isBlank(commaDelimitedValues)) {
+			return "''";
+		}
+
+		String[] values = commaDelimitedValues.split(",");
+		List<String> escapedValues = new ArrayList<>();
+
+		for (String value : values) {
+			String trimmed = value.trim();
+
+			// Validate: only allow alphanumeric, spaces, underscores, hyphens, colons (for timestamps)
+			if (!trimmed.matches("^[a-zA-Z0-9_\\s:\\-]+$")) {
+				throw new IllegalArgumentException(fieldName + " contains invalid characters: " + trimmed);
+			}
+
+			// Escape and quote each value
+			escapedValues.add(UtilsTrends.escapeSqlString(trimmed));
+		}
+
+		return String.join("','", escapedValues);
 	}
 
 }

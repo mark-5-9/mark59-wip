@@ -45,7 +45,7 @@ public class MetricSlaChecker {
 			metricSlas = metricSlaDAO.getMetricSlaList(application, metricTxnType);
 		}
 		
-		Map<String,String> valueDerivatonToSourceField = AppConstantsTrends.getValueDerivatonToSourceFieldMap();
+		Map<String,String> valueDerivatonToSourceField = AppConstantsTrends.getValueDerivationToSourceFieldMap();
 		
 		for (MetricSla metricSla : metricSlas) {
 			

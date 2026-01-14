@@ -69,7 +69,7 @@ public class GraphMappingController {
 			existingGraphMapping = graphMappingDAO.findGraphMapping(graphMapping.getGraph() ); 
 		
 			if (existingGraphMapping == null ){  //not trying to add something already there, so go ahead..
-				graphMappingDAO.inserttGraphMapping(graphMapping);
+				graphMappingDAO.insertGraphMapping(graphMapping);
 				return "redirect:/graphMappingList";
 			} else {
 				return "redirect:/registerGraphMapping?&reqErr=Oh, graph " + Objects.requireNonNull(graphMapping).getGraph()  + " AlreadyExists";

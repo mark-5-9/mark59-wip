@@ -116,7 +116,7 @@ public class AppConstantsTrends {
         result.put("PercentOver90",  "TXN_90TH");
         return Collections.unmodifiableMap(result);
     }
-	public static Map<String, String> getValueDerivatonToSourceFieldMap() {
+	public static Map<String, String> getValueDerivationToSourceFieldMap() {
 		return VALUE_DERIVATON_TO_SOURCE_FIELD_MAP;
 	}
 	

@@ -66,7 +66,7 @@ public class Mark59LoggingConfig {
 			instance = new Mark59LoggingConfig();
 		} catch (Exception e) {
 			e.printStackTrace();
-			throw new RuntimeException("Error creating a Mark59LoggingConfig Singleton");
+			throw new RuntimeException("Error creating a Mark59LoggingConfig Singleton"+e.getMessage());
 		}
 	}
 
@@ -154,7 +154,7 @@ public class Mark59LoggingConfig {
 			directoryTemporalName = LocalDate.now().toString();
 		}
 		LOG.debug("directoryTemporalName="+directoryTemporalName);
-		
+
 		return directoryTemporalName;
 	}
 
@@ -231,7 +231,7 @@ public class Mark59LoggingConfig {
 	 */
 	public String getLogDirectoryPathName () {
 		return logDirectoryPathName;
-	}	
+	}
 	/**
 	 * return logNamesFormat - a comma delimited string indicating the formatting to be used for logs in this run.
 	 * @return string.

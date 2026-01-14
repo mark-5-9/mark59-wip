@@ -85,15 +85,15 @@ public class IpUtilities {
 			// similar idea as jmeter RemoteStart.getRemoteHosts()
             StringTokenizer st = new StringTokenizer(commaDelimListOfIPaddresses, ",");
             List<String> listOfIPaddresses = new ArrayList<>();
-            while (st.hasMoreElements()) {
-            	listOfIPaddresses.add( ((String)st.nextElement()).trim() );
+            while (st.hasMoreTokens()) {
+            	listOfIPaddresses.add(st.nextToken().trim());
             }
 
 			if (!listOfIPaddresses.contains(localHostIP)){
 				isLocalIPisNotOnListOfIPaddresses = true;
-				LOG.debug("listOfIPaddresses: " + commaDelimListOfIPaddresses + ", localHostIP: " + localHostIP + " has not matched to list" );
+				LOG.debug("listOfIPaddresses: {}, localHostIP: {} has not matched to list", commaDelimListOfIPaddresses, localHostIP);
 			} else {
-				LOG.debug("listOfIPaddresses: " + commaDelimListOfIPaddresses + ", localHostIP: " + localHostIP + " has matched to list" );
+				LOG.debug("listOfIPaddresses: {}, localHostIP: {} has matched to list", commaDelimListOfIPaddresses, localHostIP);
 			}
 		}
 		return isLocalIPisNotOnListOfIPaddresses;

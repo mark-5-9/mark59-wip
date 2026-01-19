@@ -241,8 +241,9 @@ public class DataHunterWebApplicationTests {
 		assertTrue(response.getBody().contains("update_policy_data?application=testix&identifier=0000000006&lifecycle=junit"));
 		assertTrue(response.getBody().contains("update_policy_data?application=testix&identifier=0000000007&lifecycle=junit"));
 		assertTrue(response.getBody().contains("update_policy_data?application=testix&identifier=0000000008&lifecycle=junit"));
+		assertEquals(9, StringUtils.countMatches(response.getBody(), "update_policy_data?application=testix&identifier="));
 		assertTrue(response.getBody().contains("id=rowsAffected>9<"));
-		assertEquals(9, StringUtils.countMatches(response.getBody(), "<td>REUSABLE</td>"));
+		assertEquals(10, StringUtils.countMatches(response.getBody(), "<td>REUSABLE</td>"));  // 9 rows + sql param summary
 
 		String respNoWithSpace = response.getBody().replaceAll("\\s+", "");
 		assertTrue(respNoWithSpace.contains("<td>testix</td><td>0000000000_IX</td><td>junit</td><td>REUSABLE</td><td>8</td>"));

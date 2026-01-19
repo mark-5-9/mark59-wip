@@ -314,20 +314,18 @@ public class DataHunterLifecyclePvtScriptPlay  extends PlaywrightAbstractJavaSam
 	}
 	
 	
-	
-	
 	private void startNetworkListeners(JmeterFunctionsImpl jm,Page page) {
         // page.onRequest(req -> { System.out.println( "ON_REQ Url: "+req.url()+", Type: "+req.resourceType()+", Method: "+req.method());});
         
-        page.onResponse(res -> { 
-			if ((res.request().url().contains("_action") || StringUtils.contains(jm.getMostRecentTransactionStarted(), "loadInitialPage"))
-					&& "Document".equalsIgnoreCase(res.request().resourceType())
+        page.onRequestFinished(res -> { 
+			if ((res.url().contains("_action") || StringUtils.contains(jm.getMostRecentTransactionStarted(), "loadInitialPage"))
+					&& "Document".equalsIgnoreCase(res.resourceType())
 					&& jm.getMostRecentTransactionStarted() != null){
-        		// System.out.println( "ON_RES Url: "+res.url()+" , Timing: " + res.request().timing().startTime);
+        		System.out.println( "Req Finished Url: "+res.url()+" , Timing: " + res.timing().startTime);
 				String urlAction = StringUtils.substringBeforeLast(StringUtils.substringAfter(res.url(), "mark59-datahunter/"), "?");
 				String[] splitCurrTxn = StringUtils.split(jm.getMostRecentTransactionStarted(), "_", 4);
 				String cdpTxnId = splitCurrTxn[0] + "_" + splitCurrTxn[1] + "_" + splitCurrTxn[2] + "__net_" + urlAction;
-				jm.setTransaction(cdpTxnId, JMeterFileDatatypes.CDP, Double.valueOf(res.request().timing().responseStart).longValue(),true, "200");			
+				jm.setTransaction(cdpTxnId, JMeterFileDatatypes.CDP, Double.valueOf(res.timing().responseStart).longValue(),true, "200");			
         	}; 
         });       
 	}

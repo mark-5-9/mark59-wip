@@ -15,17 +15,13 @@
  */
 package com.mark59.core.utils;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.KeySpec;
-import java.util.ArrayList;
 import java.util.Base64;
-import java.util.List;
 
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
@@ -48,14 +44,6 @@ import org.apache.logging.log4j.Logger;
  *   <li>Authentication tag to prevent tampering</li>
  *   <li>Non-deterministic encryption (same plaintext produces different ciphertexts)</li>
  * </ul>
- *
- * <p><b>Migration from SimpleAES (prior version of mark59's encryption) :</b></p>
- * <ol>
- *   <li>Set environment variable or system property: MARK59_ENCRYPTION_KEY</li>
- *   <li>Replace SimpleAES.encrypt() with SecureAES.encrypt()</li>
- *   <li>Replace SimpleAES.decrypt() with SecureAES.decrypt()</li>
- *   <li>Re-encrypt all existing encrypted values (they are not compatible)</li>
- * </ol>
  *
  * <p><b>Key Management:</b></p>
  * The encryption key should be provided via environment variable or system property:
@@ -89,8 +77,7 @@ public class SecureAES {
 	private static final String ENCRYPTION_KEY_ENV = "MARK59_ENCRYPTION_KEY";
 	private static final String DEFAULT_KEY = "__Mark59.com____Default__Key__"; // Fallback only
 
-	private static final String ENCRYPTION_KEY_NOT_SET_WARNING_MSG = "\nNo encryption key set via environment variable or system property '"
-			+ ENCRYPTION_KEY_ENV + "'. Using default key. This is not secure for a Production Environment.\n";
+	private static final String ENCRYPTION_KEY_NOT_SET_MSG = "\nDefault encryption key used\n";
 
 	private static final SecureRandom SECURE_RANDOM = new SecureRandom();
 
@@ -253,8 +240,8 @@ public class SecureAES {
 		// logs being swamped during a full JMeter performance test.
 		if (key == null || key.trim().isEmpty()) {
 			if (! PRINTED_ONCE) {
-				LOG.warn(ENCRYPTION_KEY_NOT_SET_WARNING_MSG);
-				System.out.println(ENCRYPTION_KEY_NOT_SET_WARNING_MSG);
+				System.out.println(ENCRYPTION_KEY_NOT_SET_MSG);
+				LOG.info(ENCRYPTION_KEY_NOT_SET_MSG);
 				PRINTED_ONCE = true;
 			}
 			return DEFAULT_KEY;
@@ -275,79 +262,27 @@ public class SecureAES {
 	}
 
 	/**
-	 * Main method for testing and key generation.
-	 *
-	 * Usage:
-	 * <pre>
-	 * # Test encryption/decryption
-	 * java SecureAES test "My secret text"
-	 *
-	 * # Generate a new encryption key
-	 * java SecureAES genkey
-	 * </pre>
-	 *
-	 * @param args command line arguments
+	 * Main method for encrypt/decrypt a string, and printing out a new encryption key 
 	 */
 	public static void main(String[] args) {
-		if (args.length > 0 && "genkey".equalsIgnoreCase(args[0])) {
-			// Generate a new encryption key
-			String newKey = generateSecureKey();
-			System.out.println("Generated new encryption key:");
-			System.out.println(newKey);
-			System.out.println();
-			System.out.println("Set this as environment variable:");
-			System.out.println("export MARK59_ENCRYPTION_KEY=\"" + newKey + "\"");
-			System.out.println();
-			System.out.println("Or as system property:");
-			System.out.println("-DMARK59_ENCRYPTION_KEY=\"" + newKey + "\"");
-			return;
-		}
+		String originalString = "My test string!";
+		String encryptedString = SecureAES.encrypt(originalString);
+		String decryptedString = SecureAES.decrypt(encryptedString);
 
-		// Test encryption/decryption
-		String originalString = args.length > 0 && !"genkey".equalsIgnoreCase(args[0]) ? args[0] : "My test string!";
-
-		System.out.println("Original:  " + originalString);
-
-		// Encrypt
-		String encrypted1 = SecureAES.encrypt(originalString);
-		System.out.println("Encrypted: " + encrypted1);
-
-		// Decrypt
-		String decrypted = SecureAES.decrypt(encrypted1);
-		System.out.println("Decrypted: " + decrypted);
-
-		// Demonstrate non-deterministic encryption
-		String encrypted2 = SecureAES.encrypt(originalString);
-		System.out.println();
-		System.out.println("Second encryption of same text (should be different):");
-		System.out.println("Encrypted: " + encrypted2);
-		System.out.println("Decrypted: " + SecureAES.decrypt(encrypted2));
-
-		System.out.println();
-		System.out.println("Match: " + decrypted.equals(originalString));
-		System.out.println("Encrypted values differ: " + !encrypted1.equals(encrypted2));
-
-		// Warning message should not be repeated
-		String encrypted3 = SecureAES.encrypt(originalString);
-		System.out.println();
-		System.out.println("Third encryption of same text (warning message should not be repeated):");
-		System.out.println("Encrypted: " + encrypted3);
-		System.out.println("Decrypted: " + SecureAES.decrypt(encrypted2));
-
-		// Decrypt should work repeatedly on same encrypted string (only if using the same MARK59_ENCRYPTION_KEY! )
-		System.out.println();
-		System.out.println("Using previous encryption from above:");
-		System.out.println("Encrypted: " + encrypted2);
-
-		System.out.println();
-		System.out.println("Match: " + decrypted.equals(originalString));
-
+		System.out.println(originalString);
+		System.out.println(encryptedString);
+		System.out.println(decryptedString);
 		
-		System.out.println("_______________");
-		System.out.println("Demo create key");
-		System.out.println();		
-		String[] argsGenkey = {"genkey"} ;
-		SecureAES.main(argsGenkey); 
-    }		
+		System.out.println();
+		System.out.println();
+		String newKey = SecureAES.generateSecureKey();
+		System.out.println("Here's a newly generated encryption key"
+				+ " you may choose to use :");
+		System.out.println("------------------------------------------------");
+		System.out.println(newKey);
+		System.out.println("------------------------------------------------");		
+		System.out.println();
+	}
+
 
 }

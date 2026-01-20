@@ -107,7 +107,7 @@ public class ResultsSplitter {
 	public static final String ONLY_CDP = "OnlyCDP";
 
 	private static String argInputdirectory;
-	private static String argOutputdirectoy;
+	private static String argOutputdirectory;
 	private static String argOutputFilename;
 	private static String argErrortransactions;
 	private static String argeXcludeResultsWithSub;
@@ -154,7 +154,7 @@ public class ResultsSplitter {
 		Options options = new Options();
 		options.addOption("i", "inputdirectory", true,
 				"The directory containing the performance test result file(s).  Multiple xml/csv/jtl results files allowed.  Default is current directory");
-		options.addOption("o", "outputdirectoy", true,
+		options.addOption("o", "outputdirectory", true,
 				"Directory in which to write the output CSV file. Must already exist.  Default is a folder named 'MERGED' under the input directory");
 		options.addRequiredOption("f", "outputFilename", true,
 				"Base output CSV file name.  File extension will be .csv (will be suffixed .csv even if not included in the argument).  If metrics are split out, "
@@ -179,7 +179,7 @@ public class ResultsSplitter {
 		try {
 			commandLine = parser.parse( options, args );
 		} catch( ParseException exp ) {
-			System.err.println( "ERROR:  ERROR : Parsing failed.  Reason: " + exp.getMessage() );
+			System.err.println( "ERROR : Parsing failed.  Reason: " + exp.getMessage() );
 			formatter.printHelp( "ResultsConverter", options );
 			printSampleUsage();
 			throw new RuntimeException();
@@ -189,7 +189,7 @@ public class ResultsSplitter {
 		System.out.println("cwd = "  + cwd);
 
 		argInputdirectory 		 = commandLine.getOptionValue("i", cwd);
-		argOutputdirectoy		 = commandLine.getOptionValue("o", argInputdirectory + File.separator + DEFAULT_OUTPUT_FOLDER );
+		argOutputdirectory		 = commandLine.getOptionValue("o", argInputdirectory + File.separator + DEFAULT_OUTPUT_FOLDER );
 		argOutputFilename		 = commandLine.getOptionValue("f");
 		argErrortransactions	 = commandLine.getOptionValue("e", DEFAULT_NO);
 		argeXcludeResultsWithSub = commandLine.getOptionValue("x", "True");
@@ -205,12 +205,12 @@ public class ResultsSplitter {
 			throwRuntimeError(options, "The input directory (option i) '" + argInputdirectory + "' must be a directory (not a file) "  );
 		}
 
-		File outputdirectory = new File(argOutputdirectoy);
+		File outputdirectory = new File(argOutputdirectory);
 		if (! outputdirectory.exists()) {
-			throwRuntimeError(options, "The output directory (option o) '" + argOutputdirectoy + "' must exist! (please note it should also be a directory) "  );
+			throwRuntimeError(options, "The output directory (option o) '" + argOutputdirectory + "' must exist! (please note it should also be a directory) "  );
 		}
 		if (! outputdirectory.isDirectory()) {
-			throwRuntimeError(options, "The output directory (option o) '" + argOutputdirectoy + "' must be a directory (not a file) "  );
+			throwRuntimeError(options, "The output directory (option o) '" + argOutputdirectory + "' must be a directory (not a file) "  );
 		}
 
 		if ( !ERROR_TXNS_NO.equalsIgnoreCase(argErrortransactions)
@@ -241,7 +241,7 @@ public class ResultsSplitter {
 		System.out.println("ResultsSplitter executing using the following arguments " );
 		System.out.println("-------------------------------------------------------------- " );
 		System.out.println(" inputdirectory        : " + argInputdirectory );
-		System.out.println(" outputdirectoy        : " + argOutputdirectoy );
+		System.out.println(" outputdirectory       : " + argOutputdirectory );
 		System.out.println(" outputFilename        : " + argOutputFilename );
 		System.out.println(" errortransactions     : " + argErrortransactions );
 		System.out.println(" eXcludeResultsWithSub : " + argeXcludeResultsWithSub );
@@ -276,7 +276,7 @@ public class ResultsSplitter {
 
 
 	public void clearOutputDirectory() {
-		File outputDirectory = new File(argOutputdirectoy);
+		File outputDirectory = new File(argOutputdirectory);
 		if (outputDirectory.listFiles() != null) {
 			for (File file : Objects.requireNonNull(outputDirectory.listFiles())) {
 				if (!file.isDirectory()) {
@@ -289,7 +289,7 @@ public class ResultsSplitter {
 
 	public int convert() throws IOException,  ParserConfigurationException, SAXException {
 
-		String outputBaseCsvFileName = argOutputdirectoy + File.separator + removeCsvSuffixIfEntered(argOutputFilename);
+		String outputBaseCsvFileName = argOutputdirectory + File.separator + removeCsvSuffixIfEntered(argOutputFilename);
 		baseCsvFileNameWriter = initializeCsvWriter(outputBaseCsvFileName + ".csv");
 
 		boolean metricsOutputCsvFilesInitialized = false;

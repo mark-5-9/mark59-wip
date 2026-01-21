@@ -197,7 +197,9 @@ public class ServerMetricsCaptureViaWeb extends AbstractJavaSamplerClient {
 	 * Quick and dirty on the spot tests and basic auth formatter.
 	 * Expects server metrics web to be running on url and have profile(s) localhost_WINDOWS / localhost_LINUX
 	 * (or properly set SCRIPT profile)
-	 * @param args
+	 * <p>For an example of how to start the Metrics application so that a Basic Auth header is required by
+	 * the API, see StartMetricsFromTarget.bat/.sh sample startup in the root of the mark59-metrics project.   
+	 *  @param args
 	 */
 	public static void main(String[] args) {
 		Log4jConfigurationHelper.init(Level.INFO);

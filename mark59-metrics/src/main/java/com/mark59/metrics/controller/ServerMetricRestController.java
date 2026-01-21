@@ -22,6 +22,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.Strings;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -179,9 +180,9 @@ public class ServerMetricRestController {
 			return true;
 		}
 		try {
-			String decoded = new String(Base64.getDecoder().decode(StringUtils.removeStartIgnoreCase(authHeader,"Basic ")),StandardCharsets.UTF_8);
+			String decoded = new String(Base64.getDecoder().decode(Strings.CI.removeStart(authHeader,"Basic ")),StandardCharsets.UTF_8);
 			String[] credsAry = StringUtils.split(decoded, ":", 2);
-			if (StringUtils.equals(apiUser, credsAry[0]) && StringUtils.equals(apiPass, credsAry[1])) {
+			if (Strings.CS.equals(apiUser, credsAry[0]) && Strings.CS.equals(apiPass, credsAry[1])) {
 				return true;
 			} else {
 				LOG.error("Invalid credentials for api auth. Header token : " + authHeader );

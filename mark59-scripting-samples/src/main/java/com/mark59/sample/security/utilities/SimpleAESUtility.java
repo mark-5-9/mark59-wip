@@ -19,13 +19,18 @@ import com.mark59.core.utils.SimpleAES;
 
 
 /**
- * SimpleAES is NOT LONGER IN USE - ALL REFERENCES HAVE BEEN CHANGED TO USE SecureAES
+ * ----------------------------------------------------------------------------------------
+ * The class this Utility invokes, SimpleEAE is NOT LONGER IN USE. 
+ * ALL REFERENCES HAVE BEEN CHANGED TO USE SecureAES
+ * 
+ * <p>The only use case would be to 'decrypt' an existing string when you have lost 
+ * its actual value.  
+ *   
+ * <p>Please refer to the JavaDoc in SecureAES or SecureAESUtility for details 
+ * ----------------------------------------------------------------------------------------
  * 
  * <p>The only use case if that you may need to 'decrypt' an existing password if you 
  * have lost its actual value.   
- *   
- * <p>Pease refer
- * <br>https://github.com/mark-5-9/mark59/blob/master/docs/MIGRATION_SimpleAES_to_SecureAES.md   
  *   
  * @author Philip Webb
  * Written: Australian Summer 2025

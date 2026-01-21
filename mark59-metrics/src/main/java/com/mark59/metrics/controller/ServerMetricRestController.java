@@ -117,7 +117,7 @@ public class ServerMetricRestController {
 
 
 	@GetMapping(path =  "/cipher")
-	public ResponseEntity<Object> cipher(@RequestParam(required=false) String pwd) {
+	public ResponseEntity<Object> cipher(@RequestParam(required=true) String pwd) {
 		LOG.debug("cipher called pwd : [" + pwd +"]");
 		String encrypted = SecureAES.encrypt(pwd);
 		if (encrypted == null ) {

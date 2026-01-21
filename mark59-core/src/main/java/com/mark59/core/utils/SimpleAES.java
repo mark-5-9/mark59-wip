@@ -33,13 +33,12 @@ import com.mark59.core.JmeterFunctionsImpl;
  * ----------------------------------------------------------------------------------------
  * NOT LONGER IN USE - ALL REFERENCES HAVE BEEN CHANGED TO USE SecureAES
  * 
- * <p>The only use case if that you may need to 'decrypt' an existing password if you 
- * have lost its actual value.   
+ * <p>The only use case would be to 'decrypt' an existing string when you have lost 
+ * its actual value.  
  *   
- * <p>Pease refer
- * <br>https://github.com/mark-5-9/mark59/blob/master/docs/MIGRATION_SimpleAES_to_SecureAES.md   
- *   
+ * <p>Pease refer to the JavaDoc in SecureAES for details 
  * ----------------------------------------------------------------------------------------
+ * 
  * A simple encryption program to allow for non clear-case entry of passwords in scripts. <br>
  * It is <b>NOT</b> meant to be used when a high level of security is required.<br>
  * It is <b>NEVER TO BE USED IN A PRODUCTION IMPLEMENTATION</b><br>

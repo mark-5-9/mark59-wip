@@ -321,7 +321,7 @@ public class DataHunterLifecyclePvtScriptPlay  extends PlaywrightAbstractJavaSam
 			if ((res.url().contains("_action") || StringUtils.contains(jm.getMostRecentTransactionStarted(), "loadInitialPage"))
 					&& "Document".equalsIgnoreCase(res.resourceType())
 					&& jm.getMostRecentTransactionStarted() != null){
-        		System.out.println( "Req Finished Url: "+res.url()+" , Timing: " + res.timing().startTime);
+        		//System.out.println( "Req Finished Url: "+res.url()+" , Timing: " + res.timing().startTime);
 				String urlAction = StringUtils.substringBeforeLast(StringUtils.substringAfter(res.url(), "mark59-datahunter/"), "?");
 				String[] splitCurrTxn = StringUtils.split(jm.getMostRecentTransactionStarted(), "_", 4);
 				String cdpTxnId = splitCurrTxn[0] + "_" + splitCurrTxn[1] + "_" + splitCurrTxn[2] + "__net_" + urlAction;

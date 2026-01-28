@@ -597,7 +597,6 @@ public class TrendingController {
 	private String sanitizeSqlLikePattern(String input, String whenSanitizedEmpty) {
 		// Handle null or empty input
 		if ( input.isEmpty() || "%".equals(input.trim()) ) {
-			System.out.println("sanitize 1 "+ input + " to same");
 			return input;
 		}
 		String sanitized = input.trim();
@@ -624,14 +623,12 @@ public class TrendingController {
 
 		// If after sanitization the string is empty, default to wildcard
 		if (sanitized.isEmpty()) {
-			System.out.println("sanitize 3 "+ input + "            to          " + whenSanitizedEmpty);
 			return whenSanitizedEmpty;
 		}
-
-		System.out.println("sanitize x "+ input + "            to          " + sanitized);
 		return sanitized;
 	}
 
+	
 	/**
 	 * Validates raw SQL input to prevent SQL injection attacks.
 	 * Only allows safe SELECT statements without dangerous operations.
@@ -696,7 +693,9 @@ public class TrendingController {
 		}
 
 		// Check for UNION (could be used to chain queries and extract data)
-		if (sqlUpper.matches(".*\\bUNION\\b.*")) {
+		// Using indexOf to avoid ReDoS vulnerability from regex backtracking
+		if (sqlUpper.contains(" UNION ") || sqlUpper.contains("\tUNION\t") || 
+		    sqlUpper.contains("\tUNION ") || sqlUpper.contains(" UNION\t")) {
 			throw new IllegalArgumentException("UNION queries are not allowed");
 		}
 

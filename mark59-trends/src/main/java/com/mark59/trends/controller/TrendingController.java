@@ -701,8 +701,23 @@ public class TrendingController {
 		}
 
 		// Check for SELECT INTO (could create tables)
-		if (sqlUpper.matches(".*\\bSELECT\\b.*\\bINTO\\b.*")) {
-			throw new IllegalArgumentException("SELECT INTO is not allowed");
+		// Using indexOf to avoid ReDoS vulnerability from regex backtracking
+		if (sqlUpper.contains(" INTO ") || sqlUpper.contains("\tINTO\t") || sqlUpper.contains("\tINTO ") || sqlUpper.contains(" INTO\t")) {
+			// Verify it's actually "SELECT ... INTO" pattern by checking SELECT appears before INTO
+			int selectPos = sqlUpper.indexOf("SELECT");
+			int intoPos = Math.min(
+				sqlUpper.indexOf(" INTO ") != -1 ? sqlUpper.indexOf(" INTO ") : Integer.MAX_VALUE,
+				Math.min(
+					sqlUpper.indexOf("\tINTO\t") != -1 ? sqlUpper.indexOf("\tINTO\t") : Integer.MAX_VALUE,
+					Math.min(
+						sqlUpper.indexOf("\tINTO ") != -1 ? sqlUpper.indexOf("\tINTO ") : Integer.MAX_VALUE,
+						sqlUpper.indexOf(" INTO\t") != -1 ? sqlUpper.indexOf(" INTO\t") : Integer.MAX_VALUE
+					)
+				)
+			);
+			if (selectPos != -1 && intoPos != Integer.MAX_VALUE && selectPos < intoPos) {
+				throw new IllegalArgumentException("SELECT INTO is not allowed");
+			}
 		}
 
 		// Check for dangerous database functions/procedures across MySQL, H2, and PostgreSQL

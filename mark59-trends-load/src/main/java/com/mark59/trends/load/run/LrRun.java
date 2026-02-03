@@ -75,6 +75,10 @@ public class LrRun extends PerformanceTest  {
       			System.out.println("\n\nError :  Whoa!  This can happen if you try to match the same transaction name to two different LoadRunner events.\n"
       					+ "Review the Event Map Table (printed above) and your matching criteria to see if this is the issue.\n\n"
       					+ "The attempted transaction was : " + eventTransaction + "\n\n" );
+      			if (eventTransaction != null &&  eventTransaction.getTxnId() != null && eventTransaction.getTxnId().contains("-")){
+      				System.out.println(" - Note that if the transaction name contained a comma it is converted to a dash when stored, a potential "
+      					+ "problem if you are also using an dash in a like named transaction!\n\n");
+      			}
       			throw new RuntimeException(e);
       		}
 		}

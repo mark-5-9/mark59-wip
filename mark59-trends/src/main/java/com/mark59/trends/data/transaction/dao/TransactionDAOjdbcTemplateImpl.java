@@ -70,6 +70,12 @@ public class TransactionDAOjdbcTemplateImpl implements TransactionDAO
 //		System.out.println("TransactionDAOjdbcTemplateImpl insert [" + transaction.toString() + "]"   );
 		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
 
+		if (transaction != null && transaction.getTxnId() != null && transaction.getTxnId().contains(",")){
+			System.out.println("Note : a comma in the transaction name will be converted to a dash when stored (Dup key can occur). "
+					+ "Avoid the use of commas if possible : " + transaction.getTxnId());
+			transaction.setTxnId(transaction.getTxnId().replace(",","-"));
+		}
+		
 		jdbcTemplate.update(sql,
 				transaction.getApplication(), transaction.getRunTime(),
 				transaction.getTxnId(), transaction.getTxnType(), transaction.getIsCdpTxn(),

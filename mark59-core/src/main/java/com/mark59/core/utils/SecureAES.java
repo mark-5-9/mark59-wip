@@ -315,6 +315,7 @@ public class SecureAES {
 
 	/**
 	 * Main method for encrypt/decrypt a string, and printing out a new encryption key 
+	 * @param args  none required
 	 */
 	public static void main(String[] args) {
 		String originalString = "My test string!";

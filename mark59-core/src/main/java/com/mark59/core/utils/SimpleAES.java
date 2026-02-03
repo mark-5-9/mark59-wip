@@ -30,23 +30,27 @@ import com.mark59.core.JmeterFunctionsImpl;
 
 
 /**
- * ----------------------------------------------------------------------------------------
- * NOT LONGER IN USE - ALL REFERENCES HAVE BEEN CHANGED TO USE SecureAES
- * 
- * <p>The only use case would be to 'decrypt' an existing string when you have lost 
- * its actual value.  
- *   
- * <p>Pease refer to the JavaDoc in SecureAES for details 
- * ----------------------------------------------------------------------------------------
- * 
  * A simple encryption program to allow for non clear-case entry of passwords in scripts. <br>
  * It is <b>NOT</b> meant to be used when a high level of security is required.<br>
  * It is <b>NEVER TO BE USED IN A PRODUCTION IMPLEMENTATION</b><br>
  * Reference: https://howtodoinjava.com/security/java-aes-encryption-example
  *
+ *
+ * <p><b>This class does not handle modern cryptography standards.</b> As of version 5.6, 
+ * the preferred way to handle this is via the new {@link SecureAES} class.
+ * 
+ * <p>The only use case would be to 'decrypt' an existing string when you have lost 
+ * its actual value.
+ * 
+ * <p>This class <b>will be removed in the next release</b>, as it may become problematic for 
+ * automated security scans in future. 
+ * @deprecated
+ *
+ *
  * @author Philip Webb
  * Written: Australian Winter 2019
  */
+@Deprecated(since = "5.6", forRemoval = true)
 public class SimpleAES {
 
 	private static final Logger LOG = LogManager.getLogger(JmeterFunctionsImpl.class);
@@ -111,6 +115,7 @@ public class SimpleAES {
 
 	/**
 	 * Main method for encrypt/decrypt a string
+	 * @param args  none required
 	 */
 	public static void main(String[] args) {
 		String originalString = "My test string!";

@@ -91,7 +91,7 @@
 		<dependency>
 		    <groupId>commons-io</groupId>
 		    <artifactId>commons-io</artifactId>
-		    <version>2.20.0</version>
+		    <version>2.21.0</version>
 		</dependency>
 
 		<dependency>
@@ -121,25 +121,62 @@
 				<version>3.10.1</version>
 			</plugin>
 
-			<!-- Maven Assembly Plugin -->
-			<!-- phase/goals: clean package -->
-			<!-- Wraps all the project classes and non-provided dependencies into a single Jar
-			     (to be copied into the jmeter lib/ext folder -->
+			<!-- Maven Shade Plugin -->
+				<!-- phase/goals: clean package -->
+				<!-- Wraps all the project classes and non-provided dependencies into a single Jar
+				     (to be copied into the jmeter lib/ext folder) -->
+				<!-- Uses ServicesResourceTransformer to properly merge SPI files (META-INF/services/*)
+				     which is essential for Apache POI to find both HSSF and XSSF WorkbookFactory providers -->
 
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-assembly-plugin</artifactId>
-				<version>3.3.0</version>
+				<artifactId>maven-shade-plugin</artifactId>
+				<version>3.5.1</version>
 				<configuration>
-					<appendAssemblyId>false</appendAssemblyId>
-					<descriptorRefs>
-						<descriptorRef>jar-with-dependencies</descriptorRef>
-					</descriptorRefs>
+					<createDependencyReducedPom>false</createDependencyReducedPom>
+					<transformers>
+						<!-- Properly merges SPI files instead of overwriting them -->
+						<transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer"/>
+					</transformers>
+					<filters>
+						<filter>
+							<!-- Exclude signature files to avoid security exceptions -->
+							<artifact>*:*</artifact>
+							<excludes>
+								<exclude>META-INF/*.SF</exclude>
+								<exclude>META-INF/*.DSA</exclude>
+								<exclude>META-INF/*.RSA</exclude>
+							</excludes>
+						</filter>
+					</filters>
+					<relocations>
+						<!-- Relocate commons-io to avoid conflicts with JMeter's older version -->
+						<relocation>
+							<pattern>org.apache.commons.io</pattern>
+							<shadedPattern>mark59.shaded.commons.io</shadedPattern>
+						</relocation>
+						<!-- Relocate other Apache Commons libraries that might conflict -->
+						<relocation>
+							<pattern>org.apache.commons.codec</pattern>
+							<shadedPattern>mark59.shaded.commons.codec</shadedPattern>
+						</relocation>
+						<relocation>
+							<pattern>org.apache.commons.compress</pattern>
+							<shadedPattern>mark59.shaded.commons.compress</shadedPattern>
+						</relocation>
+						<!-- Relocate XML beans to avoid conflicts -->
+						<relocation>
+							<pattern>org.apache.xmlbeans</pattern>
+							<shadedPattern>mark59.shaded.xmlbeans</shadedPattern>
+						</relocation>
+					</relocations>
 				</configuration>
 				<executions>
 					<execution>
 						<phase>package</phase>
-						<goals><goal>single</goal></goals>
+						<goals>
+							<goal>shade</goal>
+						</goals>
 					</execution>
 				</executions>
 			</plugin>
@@ -147,5 +184,4 @@
 		</plugins>
 		<finalName>${project.artifactId}</finalName>
 	</build>
-
 </project>

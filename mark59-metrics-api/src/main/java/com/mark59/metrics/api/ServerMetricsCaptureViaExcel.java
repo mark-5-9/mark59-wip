@@ -169,14 +169,14 @@ public class ServerMetricsCaptureViaExcel extends AbstractJavaSamplerClient {
 			Sheet servercommandlinksSheet     = workbook.getSheet("SERVERCOMMANDLINKS");
 			Sheet commandsSheet               = workbook.getSheet("COMMANDS");
 			Sheet commandparserlinksSheet     = workbook.getSheet("COMMANDPARSERLINKS");
-			Sheet commandresponseparsersSheet = workbook.getSheet("COMMANDRESPONSEPARSERS");			
-			
+			Sheet commandresponseparsersSheet = workbook.getSheet("COMMANDRESPONSEPARSERS");
+
 			ServerProfilesDAO serverProfilesDAO                 = new ServerProfilesDAOexcelWorkbookImpl(serverprofilesSheet);
 			ServerCommandLinksDAO serverCommandLinksDAO         = new ServerCommandLinksDAOexcelWorkbookImpl(servercommandlinksSheet);
 			CommandsDAO commandsDAO                             = new CommandsDAOexcelWorkbookImpl(commandsSheet);
 			CommandParserLinksDAO commandParserLinksDAO         = new CommandParserLinksDAOexcelWorkbookImpl(commandparserlinksSheet);
 			CommandResponseParsersDAO commandResponseParsersDAO = new CommandResponseParsersDAOexcelWorkbookImpl(commandresponseparsersSheet);
-			
+
 			response = ServerProfileRunner.commandsResponse(reqServerProfileName, testModeNo, serverProfilesDAO,
 					serverCommandLinksDAO, commandsDAO, commandParserLinksDAO, commandResponseParsersDAO,
 					MetricsApiConstants.RUNNING_VIA_EXCEL);

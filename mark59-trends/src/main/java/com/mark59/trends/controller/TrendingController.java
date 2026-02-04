@@ -255,7 +255,7 @@ public class TrendingController {
 			List<String> listOfCdpTransactionNamesToGraph    = UtilsTrends.returnFilteredListOfTransactionNamesToGraph(listOfTransactionsToGraph, "Y");
 			List<String> listOfTransactionNamesToGraphTagged = UtilsTrends.returnListOfTxnIdsdFromListOfTransactions(listOfTransactionsToGraphTagged);
 
-			String txnsToGraphId = UtilsTrends.stringListToCommaDelimString(listOfTransactionNamesToGraphTagged);
+			String txnsToGraphId = transactionIdsToCommaDelimString(listOfTransactionNamesToGraphTagged);
 			model.addAttribute("txnsToGraphId", txnsToGraphId);
 			trendingForm.setChosenTxns(txnsToGraphId);
 
@@ -476,26 +476,26 @@ public class TrendingController {
 		List<String> cdpTaggedMissingTransactions = new SlaChecker().checkForMissingTransactionsWithDatabaseSLAs(application, latestRunTime, slaDAO  );
 		trxnIdsWithAnyFailedSla.addAll(cdpTaggedMissingTransactions);
 
-		model.addAttribute("trxnIdsWithAnyFailedSlaId", UtilsTrends.stringListToCommaDelimString(trxnIdsWithAnyFailedSla)  );
-		model.addAttribute("trxnIdsWithFailedSla90thResponseId", UtilsTrends.stringListToCommaDelimString(trxnIdsWithFailedSla90thResponse) );
-		model.addAttribute("trxnIdsWithFailedSla95thResponseId", UtilsTrends.stringListToCommaDelimString(trxnIdsWithFailedSla95thResponse) );
-		model.addAttribute("trxnIdsWithFailedSla99thResponseId", UtilsTrends.stringListToCommaDelimString(trxnIdsWithFailedSla99thResponse) );
-		model.addAttribute("trxnIdsWithFailedSlaFailPercentId", UtilsTrends.stringListToCommaDelimString(trxnIdsWithFailedSlaFailPercent) );
-		model.addAttribute("trxnIdsWithFailedSlaFailCount", UtilsTrends.stringListToCommaDelimString(trxnIdsWithFailedSlaFailCount) );
-		model.addAttribute("trxnIdsWithFailedSlaPassCount", UtilsTrends.stringListToCommaDelimString(trxnIdsWithFailedSlaPassCount) );
-		model.addAttribute("missingTransactionsId", UtilsTrends.stringListToCommaDelimString(cdpTaggedMissingTransactions) );
+		model.addAttribute("trxnIdsWithAnyFailedSlaId", transactionIdsToCommaDelimString(trxnIdsWithAnyFailedSla)  );
+		model.addAttribute("trxnIdsWithFailedSla90thResponseId", transactionIdsToCommaDelimString(trxnIdsWithFailedSla90thResponse) );
+		model.addAttribute("trxnIdsWithFailedSla95thResponseId", transactionIdsToCommaDelimString(trxnIdsWithFailedSla95thResponse) );
+		model.addAttribute("trxnIdsWithFailedSla99thResponseId", transactionIdsToCommaDelimString(trxnIdsWithFailedSla99thResponse) );
+		model.addAttribute("trxnIdsWithFailedSlaFailPercentId", transactionIdsToCommaDelimString(trxnIdsWithFailedSlaFailPercent) );
+		model.addAttribute("trxnIdsWithFailedSlaFailCount", transactionIdsToCommaDelimString(trxnIdsWithFailedSlaFailCount) );
+		model.addAttribute("trxnIdsWithFailedSlaPassCount", transactionIdsToCommaDelimString(trxnIdsWithFailedSlaPassCount) );
+		model.addAttribute("missingTransactionsId", transactionIdsToCommaDelimString(cdpTaggedMissingTransactions) );
 	}
 
 
 	private void populateIgnoredTransactionsList(String application, Model model){
 		List<String> cdpTaggedIgnoredTransactions = slaDAO.getListOfIgnoredTransactionsAddingCdpTags(application);
-		model.addAttribute("ignoredTransactionsId", UtilsTrends.stringListToCommaDelimString(cdpTaggedIgnoredTransactions) );
+		model.addAttribute("ignoredTransactionsId", transactionIdsToCommaDelimString(cdpTaggedIgnoredTransactions) );
 	}
 
 
 	private void populateDisabledSlasList(String application, Model model){
 		List<String> cdpTaggedDisabledSlas = slaDAO.getListOfDisabledSlasAddingCdpTags(application);
-		model.addAttribute("disabledSlasId", UtilsTrends.stringListToCommaDelimString(cdpTaggedDisabledSlas) );
+		model.addAttribute("disabledSlasId", transactionIdsToCommaDelimString(cdpTaggedDisabledSlas) );
 	}
 
 
@@ -535,9 +535,9 @@ public class TrendingController {
 				}
 			}
 		}
-		model.addAttribute("trxnIdsWithAnyFailedSlaId",					UtilsTrends.stringListToCommaDelimString(trxnIdsWithFailedSla));
-		model.addAttribute("trxnIdsWithFailedSlaForThisMetricMeasure", 	UtilsTrends.stringListToCommaDelimString(trxnIdsWithFailedSlaForThisMetricMeasure));
-		model.addAttribute("missingTransactionsId", UtilsTrends.stringListToCommaDelimString(missingSlaTransactions) );
+		model.addAttribute("trxnIdsWithAnyFailedSlaId",					transactionIdsToCommaDelimString(trxnIdsWithFailedSla));
+		model.addAttribute("trxnIdsWithFailedSlaForThisMetricMeasure", 	transactionIdsToCommaDelimString(trxnIdsWithFailedSlaForThisMetricMeasure));
+		model.addAttribute("missingTransactionsId", transactionIdsToCommaDelimString(missingSlaTransactions) );
 	}
 
 
@@ -549,7 +549,7 @@ public class TrendingController {
 		for (MetricSla metricSla : disabledMetricSlas) {
 			disabledMetricSlaNames.add(metricSla.getMetricName());
 		}
-		model.addAttribute("disabledSlasId", UtilsTrends.stringListToCommaDelimString(disabledMetricSlaNames));
+		model.addAttribute("disabledSlasId", transactionIdsToCommaDelimString(disabledMetricSlaNames));
 	}
 
 
@@ -574,6 +574,22 @@ public class TrendingController {
 		showCdpOptionsList.add(AppConstantsTrends.SHOW_SHOW_CDP);
 		showCdpOptionsList.add(AppConstantsTrends.SHOW_ONLY_CDP);
 		return showCdpOptionsList;
+	}
+
+
+	/**
+	 * Converts a list of transaction IDs to a comma-delimited string.
+	 * Replaces any commas in transaction IDs with dashes to prevent parsing issues
+	 * when the comma-delimited string is passed to trending.jsp.
+	 *
+	 * @param transactionIds list of transaction IDs (may contain commas)
+	 * @return comma-delimited string with sanitized transaction IDs (commas replaced with dashes)
+	 */
+	private String transactionIdsToCommaDelimString(List<String> transactionIds) {
+		List<String> sanitized = transactionIds.stream()
+			.map(id -> id.replace(',', '-'))
+			.collect(java.util.stream.Collectors.toList());
+		return UtilsTrends.stringListToCommaDelimString(sanitized);
 	}
 
 
@@ -628,7 +644,7 @@ public class TrendingController {
 		return sanitized;
 	}
 
-	
+
 	/**
 	 * Validates raw SQL input to prevent SQL injection attacks.
 	 * Only allows safe SELECT statements without dangerous operations.
@@ -694,7 +710,7 @@ public class TrendingController {
 
 		// Check for UNION (could be used to chain queries and extract data)
 		// Using indexOf to avoid ReDoS vulnerability from regex backtracking
-		if (sqlUpper.contains(" UNION ") || sqlUpper.contains("\tUNION\t") || 
+		if (sqlUpper.contains(" UNION ") || sqlUpper.contains("\tUNION\t") ||
 		    sqlUpper.contains("\tUNION ") || sqlUpper.contains(" UNION\t")) {
 			throw new IllegalArgumentException("UNION queries are not allowed");
 		}

@@ -207,7 +207,6 @@ public class ServerMetricsCaptureViaExcel extends AbstractJavaSamplerClient {
 		Log4jConfigurationHelper.init(Level.INFO);
 		org.apache.logging.log4j.core.config.Configurator.setLevel("org.apache.poi.util.XMLHelper", Level.ERROR);
 
-		//from test cases..
 		ServerMetricsCaptureViaExcel ostest = new ServerMetricsCaptureViaExcel();
 		additionalTestParametersMap.put(OVERRIDE_PROPERTY_MARK59_SERVER_PROFILES_EXCEL_FILE_PATH,
 				"./src/test/resources/hackedSampleXlsx/mark59serverprofiles.xlsx");

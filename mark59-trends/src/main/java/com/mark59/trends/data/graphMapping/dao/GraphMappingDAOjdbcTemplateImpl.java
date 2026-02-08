@@ -128,8 +128,7 @@ public class GraphMappingDAOjdbcTemplateImpl implements GraphMappingDAO
 	public void updateGraphMapping(GraphMapping graphMapping){
 
 		String sql = "UPDATE GRAPHMAPPING set LISTORDER = ?, TXN_TYPE = ?, VALUE_DERIVATION = ?, UOM_DESCRIPTION = ?, "
-				+ "BAR_RANGE_SQL = ?, BAR_RANGE_LEGEND = ?, COMMENT = ?"
-				+ "where GRAPH = ? ";
+				+ "BAR_RANGE_SQL = ?, BAR_RANGE_LEGEND = ?, COMMENT = ? where GRAPH = ? ";
 
 		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
 
@@ -156,7 +155,7 @@ public class GraphMappingDAOjdbcTemplateImpl implements GraphMappingDAO
 	@Override
 	public List<BarRange> getTransactionRangeBarDataForGraph(String application, String runTime, String graph) {
 
-		String  sqlObtainBarRangeSql = "SELECT BAR_RANGE_SQL FROM GRAPHMAPPING where graph = :graph ";
+		String  sqlObtainBarRangeSql = "SELECT BAR_RANGE_SQL FROM GRAPHMAPPING where GRAPH = :graph ";
 
 		MapSqlParameterSource sqlparameters = new MapSqlParameterSource()
 				.addValue("graph", graph);

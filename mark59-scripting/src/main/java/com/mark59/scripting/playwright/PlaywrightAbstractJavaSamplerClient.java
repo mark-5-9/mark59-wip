@@ -156,6 +156,7 @@ public abstract class PlaywrightAbstractJavaSamplerClient extends UiAbstractJava
 
 		staticMap.put(ScriptingConstants.PLAYWRIGHT_HAR_FILE_CREATION, String.valueOf(false));
 		staticMap.put(ScriptingConstants.PLAYWRIGHT_HAR_URL_FILTER, "");
+		staticMap.put(ScriptingConstants.PLAYWRIGHT_IGNORE_HTTPS_ERRORS, String.valueOf(false));
 
 		staticMap.put(ScriptingConstants.PLAYWRIGHT_PROXY_SERVER, "");
 		staticMap.put(ScriptingConstants.PLAYWRIGHT_PROXY_BYPASS, "");
@@ -428,6 +429,11 @@ public abstract class PlaywrightAbstractJavaSamplerClient extends UiAbstractJava
 		// Include the .har recording filter when set
 		if (StringUtils.isNotBlank(arguments.get(ScriptingConstants.PLAYWRIGHT_HAR_URL_FILTER))){
 			browserContextOptions.setRecordHarUrlFilter(arguments.get(ScriptingConstants.PLAYWRIGHT_HAR_URL_FILTER));
+		}
+
+		// Set ignoreHTTPSErrors option when specified
+		if (StringUtils.isNotBlank(arguments.get(ScriptingConstants.PLAYWRIGHT_IGNORE_HTTPS_ERRORS))){
+			browserContextOptions.setIgnoreHTTPSErrors(Boolean.parseBoolean(arguments.get(ScriptingConstants.PLAYWRIGHT_IGNORE_HTTPS_ERRORS)));
 		}
 
 		browserContext = browser.newContext(browserContextOptions);

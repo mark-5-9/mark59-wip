@@ -210,6 +210,15 @@ public class ScriptingConstants {
 
 
 	/**
+	 * "PLAYWRIGHT_IGNORE_HTTPS_ERRORS" - Whether to ignore HTTPS errors when sending network requests.
+	 * When set to 'true', allows testing sites with self-signed certificates or other SSL/TLS issues.
+	 * Default is 'false'. Use with caution in production environments.
+	 * @see Browser.NewContextOptions#setIgnoreHTTPSErrors(boolean)
+	 */
+	public static final String PLAYWRIGHT_IGNORE_HTTPS_ERRORS = "PLAYWRIGHT_IGNORE_HTTPS_ERRORS";
+
+
+	/**
 	 * "PLAYWRIGHT_TRACES_DIR" - If specified, traces are saved into this directory path
 	 *  @see BrowserType.LaunchOptions#setTracesDir(java.nio.file.Path)
 	 */

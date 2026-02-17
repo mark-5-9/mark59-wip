@@ -110,6 +110,7 @@ public class DataHunterLifecyclePvtScriptPlay  extends PlaywrightAbstractJavaSam
 		
 		jmeterAdditionalParameters.put(ScriptingConstants.PLAYWRIGHT_HAR_FILE_CREATION, String.valueOf(false));
 		jmeterAdditionalParameters.put(ScriptingConstants.PLAYWRIGHT_HAR_URL_FILTER, "");
+		jmeterAdditionalParameters.put(ScriptingConstants.PLAYWRIGHT_IGNORE_HTTPS_ERRORS, String.valueOf(false));		
 
 		jmeterAdditionalParameters.put(ScriptingConstants.PLAYWRIGHT_PROXY_SERVER, "");
 		jmeterAdditionalParameters.put(ScriptingConstants.PLAYWRIGHT_PROXY_BYPASS, "");

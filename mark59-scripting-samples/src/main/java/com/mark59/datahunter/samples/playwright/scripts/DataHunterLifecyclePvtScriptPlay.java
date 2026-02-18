@@ -108,9 +108,17 @@ public class DataHunterLifecyclePvtScriptPlay  extends PlaywrightAbstractJavaSam
 		jmeterAdditionalParameters.put(ScriptingConstants.PLAYWRIGHT_TRACES_DIR, "");
 		jmeterAdditionalParameters.put(ScriptingConstants.PLAYWRIGHT_OPEN_DEVTOOLS, String.valueOf(false));
 		
-		jmeterAdditionalParameters.put(ScriptingConstants.PLAYWRIGHT_HAR_FILE_CREATION, String.valueOf(false));
+		jmeterAdditionalParameters.put(ScriptingConstants.PLAYWRIGHT_HAR_FILE_CREATION, String.valueOf(true));
 		jmeterAdditionalParameters.put(ScriptingConstants.PLAYWRIGHT_HAR_URL_FILTER, "");
-		jmeterAdditionalParameters.put(ScriptingConstants.PLAYWRIGHT_IGNORE_HTTPS_ERRORS, String.valueOf(false));		
+		jmeterAdditionalParameters.put(ScriptingConstants.PLAYWRIGHT_IGNORE_HTTPS_ERRORS, String.valueOf(false));
+		jmeterAdditionalParameters.put(ScriptingConstants.PLAYWRIGHT_GEOLOCATION, "");
+		jmeterAdditionalParameters.put(ScriptingConstants.PLAYWRIGHT_EXTRA_HTTP_HEADERS, "");		// "X-API-Key:abc123,Authorization:Bearer token"
+		jmeterAdditionalParameters.put(ScriptingConstants.PLAYWRIGHT_HTTP_CREDENTIALS, ""); 		// "myuser,mypassword"
+		jmeterAdditionalParameters.put(ScriptingConstants.PLAYWRIGHT_LOCALE, "");  					// "en-US"
+		jmeterAdditionalParameters.put(ScriptingConstants.PLAYWRIGHT_TIMEZONE_ID, "");  			// "America/New_York"
+		jmeterAdditionalParameters.put(ScriptingConstants.PLAYWRIGHT_BYPASS_CSP, String.valueOf(false));
+		jmeterAdditionalParameters.put(ScriptingConstants.PLAYWRIGHT_OFFLINE, String.valueOf(false));
+		jmeterAdditionalParameters.put(ScriptingConstants.PLAYWRIGHT_STORAGE_STATE, "");			// "./storage-state.json"	
 
 		jmeterAdditionalParameters.put(ScriptingConstants.PLAYWRIGHT_PROXY_SERVER, "");
 		jmeterAdditionalParameters.put(ScriptingConstants.PLAYWRIGHT_PROXY_BYPASS, "");
@@ -119,7 +127,6 @@ public class DataHunterLifecyclePvtScriptPlay  extends PlaywrightAbstractJavaSam
 
 		jmeterAdditionalParameters.put(IpUtilities.RESTRICT_TO_ONLY_RUN_ON_IPS_LIST, "");			
 		jmeterAdditionalParameters.put(ScriptingConstants.EMULATE_NETWORK_CONDITIONS, "");			
-			
 
 		// optional log settings, defaults shown 
 		jmeterAdditionalParameters.put(JmeterFunctionsForPlaywrightScripts.LOG_SCREENSHOTS_AT_START_OF_TRANSACTIONS,Mark59LogLevels.DEFAULT.getName());

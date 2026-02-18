@@ -82,6 +82,15 @@ import com.microsoft.playwright.options.Proxy;
  * @see ScriptingConstants#PLAYWRIGHT_OPEN_DEVTOOLS
  * @see ScriptingConstants#PLAYWRIGHT_HAR_FILE_CREATION
  * @see ScriptingConstants#PLAYWRIGHT_HAR_URL_FILTER
+ * @see ScriptingConstants#PLAYWRIGHT_IGNORE_HTTPS_ERRORS
+ * @see ScriptingConstants#PLAYWRIGHT_GEOLOCATION
+ * @see ScriptingConstants#PLAYWRIGHT_EXTRA_HTTP_HEADERS
+ * @see ScriptingConstants#PLAYWRIGHT_HTTP_CREDENTIALS
+ * @see ScriptingConstants#PLAYWRIGHT_BYPASS_CSP
+ * @see ScriptingConstants#PLAYWRIGHT_LOCALE
+ * @see ScriptingConstants#PLAYWRIGHT_OFFLINE
+ * @see ScriptingConstants#PLAYWRIGHT_TIMEZONE_ID
+ * @see ScriptingConstants#PLAYWRIGHT_STORAGE_STATE
  * @see ScriptingConstants#PLAYWRIGHT_PROXY_SERVER
  * @see ScriptingConstants#PLAYWRIGHT_PROXY_BYPASS
  * @see ScriptingConstants#PLAYWRIGHT_PROXY_USERNAME
@@ -157,6 +166,14 @@ public abstract class PlaywrightAbstractJavaSamplerClient extends UiAbstractJava
 		staticMap.put(ScriptingConstants.PLAYWRIGHT_HAR_FILE_CREATION, String.valueOf(false));
 		staticMap.put(ScriptingConstants.PLAYWRIGHT_HAR_URL_FILTER, "");
 		staticMap.put(ScriptingConstants.PLAYWRIGHT_IGNORE_HTTPS_ERRORS, String.valueOf(false));
+		staticMap.put(ScriptingConstants.PLAYWRIGHT_GEOLOCATION, "");
+		staticMap.put(ScriptingConstants.PLAYWRIGHT_EXTRA_HTTP_HEADERS, "");
+		staticMap.put(ScriptingConstants.PLAYWRIGHT_HTTP_CREDENTIALS, "");
+		staticMap.put(ScriptingConstants.PLAYWRIGHT_BYPASS_CSP, String.valueOf(false));
+		staticMap.put(ScriptingConstants.PLAYWRIGHT_LOCALE, "");
+		staticMap.put(ScriptingConstants.PLAYWRIGHT_OFFLINE, String.valueOf(false));
+		staticMap.put(ScriptingConstants.PLAYWRIGHT_TIMEZONE_ID, "");
+		staticMap.put(ScriptingConstants.PLAYWRIGHT_STORAGE_STATE, "");
 
 		staticMap.put(ScriptingConstants.PLAYWRIGHT_PROXY_SERVER, "");
 		staticMap.put(ScriptingConstants.PLAYWRIGHT_PROXY_BYPASS, "");
@@ -222,6 +239,15 @@ public abstract class PlaywrightAbstractJavaSamplerClient extends UiAbstractJava
 	 * @see ScriptingConstants#PLAYWRIGHT_OPEN_DEVTOOLS
 	 * @see ScriptingConstants#PLAYWRIGHT_HAR_FILE_CREATION
 	 * @see ScriptingConstants#PLAYWRIGHT_HAR_URL_FILTER
+	 * @see ScriptingConstants#PLAYWRIGHT_IGNORE_HTTPS_ERRORS
+	 * @see ScriptingConstants#PLAYWRIGHT_GEOLOCATION
+	 * @see ScriptingConstants#PLAYWRIGHT_EXTRA_HTTP_HEADERS
+	 * @see ScriptingConstants#PLAYWRIGHT_HTTP_CREDENTIALS
+	 * @see ScriptingConstants#PLAYWRIGHT_BYPASS_CSP
+	 * @see ScriptingConstants#PLAYWRIGHT_LOCALE
+	 * @see ScriptingConstants#PLAYWRIGHT_OFFLINE
+	 * @see ScriptingConstants#PLAYWRIGHT_TIMEZONE_ID
+	 * @see ScriptingConstants#PLAYWRIGHT_STORAGE_STATE
 	 * @see ScriptingConstants#PLAYWRIGHT_PROXY_SERVER
 	 * @see ScriptingConstants#PLAYWRIGHT_PROXY_BYPASS
 	 * @see ScriptingConstants#PLAYWRIGHT_PROXY_USERNAME
@@ -434,6 +460,93 @@ public abstract class PlaywrightAbstractJavaSamplerClient extends UiAbstractJava
 		// Set ignoreHTTPSErrors option when specified
 		if (StringUtils.isNotBlank(arguments.get(ScriptingConstants.PLAYWRIGHT_IGNORE_HTTPS_ERRORS))){
 			browserContextOptions.setIgnoreHTTPSErrors(Boolean.parseBoolean(arguments.get(ScriptingConstants.PLAYWRIGHT_IGNORE_HTTPS_ERRORS)));
+		}
+
+		// Set Extra HTTP Headers when specified
+		if (StringUtils.isNotBlank(arguments.get(ScriptingConstants.PLAYWRIGHT_EXTRA_HTTP_HEADERS))){
+			String[] headerPairs = StringUtils.split(arguments.get(ScriptingConstants.PLAYWRIGHT_EXTRA_HTTP_HEADERS), ",");
+			Map<String, String> headers = new LinkedHashMap<>();
+			for (String headerPair : headerPairs) {
+				String[] parts = StringUtils.split(headerPair.trim(), ":");
+				if (parts.length == 2) {
+					headers.put(parts[0].trim(), parts[1].trim());
+				} else {
+					LOG.warn("Invalid PLAYWRIGHT_EXTRA_HTTP_HEADERS format for pair '" + headerPair + "' (expected 'Name:Value'). Pair ignored.");
+				}
+			}
+			if (!headers.isEmpty()) {
+				browserContextOptions.setExtraHTTPHeaders(headers);
+				LOG.debug("Extra HTTP headers set: " + headers.size() + " header(s)");
+			}
+		}
+
+		// Set HTTP Credentials when specified
+		if (StringUtils.isNotBlank(arguments.get(ScriptingConstants.PLAYWRIGHT_HTTP_CREDENTIALS))){
+			String[] credentials = StringUtils.split(arguments.get(ScriptingConstants.PLAYWRIGHT_HTTP_CREDENTIALS), ",");
+			if (credentials.length == 2) {
+				browserContextOptions.setHttpCredentials(credentials[0].trim(), credentials[1].trim());
+				LOG.debug("HTTP credentials set for user: " + credentials[0].trim());
+			} else {
+				LOG.warn("Invalid PLAYWRIGHT_HTTP_CREDENTIALS format (expected 'username,password'): "
+						+ arguments.get(ScriptingConstants.PLAYWRIGHT_HTTP_CREDENTIALS) + ". Option ignored.");
+			}
+		}
+
+		// Set Bypass CSP when specified
+		if (StringUtils.isNotBlank(arguments.get(ScriptingConstants.PLAYWRIGHT_BYPASS_CSP))){
+			browserContextOptions.setBypassCSP(Boolean.parseBoolean(arguments.get(ScriptingConstants.PLAYWRIGHT_BYPASS_CSP)));
+		}
+
+		// Set Locale when specified
+		if (StringUtils.isNotBlank(arguments.get(ScriptingConstants.PLAYWRIGHT_LOCALE))){
+			browserContextOptions.setLocale(arguments.get(ScriptingConstants.PLAYWRIGHT_LOCALE));
+			LOG.debug("Locale set to: " + arguments.get(ScriptingConstants.PLAYWRIGHT_LOCALE));
+		}
+
+		// Set Offline mode when specified
+		if (StringUtils.isNotBlank(arguments.get(ScriptingConstants.PLAYWRIGHT_OFFLINE))){
+			browserContextOptions.setOffline(Boolean.parseBoolean(arguments.get(ScriptingConstants.PLAYWRIGHT_OFFLINE)));
+		}
+
+		// Set Timezone ID when specified
+		if (StringUtils.isNotBlank(arguments.get(ScriptingConstants.PLAYWRIGHT_TIMEZONE_ID))){
+			browserContextOptions.setTimezoneId(arguments.get(ScriptingConstants.PLAYWRIGHT_TIMEZONE_ID));
+			LOG.debug("Timezone ID set to: " + arguments.get(ScriptingConstants.PLAYWRIGHT_TIMEZONE_ID));
+		}
+
+		// Set Storage State from file when specified
+		if (StringUtils.isNotBlank(arguments.get(ScriptingConstants.PLAYWRIGHT_STORAGE_STATE))){
+			try {
+				browserContextOptions.setStorageStatePath(new File(arguments.get(ScriptingConstants.PLAYWRIGHT_STORAGE_STATE)).toPath());
+				LOG.debug("Storage state loaded from: " + arguments.get(ScriptingConstants.PLAYWRIGHT_STORAGE_STATE));
+			} catch (Exception e) {
+				LOG.warn("Invalid PLAYWRIGHT_STORAGE_STATE path: " + arguments.get(ScriptingConstants.PLAYWRIGHT_STORAGE_STATE)
+						+ ". Option ignored. Error: " + e.getMessage());
+			}
+		}
+
+		// Set Geolocation when specified
+		if (StringUtils.isNotBlank(arguments.get(ScriptingConstants.PLAYWRIGHT_GEOLOCATION))){
+			String[] geolocationArray = StringUtils.split(arguments.get(ScriptingConstants.PLAYWRIGHT_GEOLOCATION), ",");
+			if (geolocationArray.length == 2) {
+				try {
+					double latitude = Double.parseDouble(geolocationArray[0].trim());
+					double longitude = Double.parseDouble(geolocationArray[1].trim());
+					if (latitude >= -90 && latitude <= 90 && longitude >= -180 && longitude <= 180) {
+						browserContextOptions.setGeolocation(latitude, longitude);
+						LOG.debug("Geolocation set to: latitude=" + latitude + ", longitude=" + longitude);
+					} else {
+						LOG.warn("Invalid PLAYWRIGHT_GEOLOCATION values (latitude must be -90 to 90, longitude -180 to 180): "
+								+ arguments.get(ScriptingConstants.PLAYWRIGHT_GEOLOCATION) + ". Option ignored.");
+					}
+				} catch (NumberFormatException e) {
+					LOG.warn("Invalid PLAYWRIGHT_GEOLOCATION format (must be two decimal numbers): "
+							+ arguments.get(ScriptingConstants.PLAYWRIGHT_GEOLOCATION) + ". Option ignored.");
+				}
+			} else {
+				LOG.warn("Invalid PLAYWRIGHT_GEOLOCATION format (expected 'latitude,longitude'): "
+						+ arguments.get(ScriptingConstants.PLAYWRIGHT_GEOLOCATION) + ". Option ignored.");
+			}
 		}
 
 		browserContext = browser.newContext(browserContextOptions);

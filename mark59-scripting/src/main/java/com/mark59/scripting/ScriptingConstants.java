@@ -219,6 +219,79 @@ public class ScriptingConstants {
 
 
 	/**
+	 * "PLAYWRIGHT_GEOLOCATION" - Sets the browser geolocation for the context.
+	 * Format: "latitude,longitude" (two comma-delimited decimal values).
+	 * Example: "37.7749,-122.4194" represents San Francisco, CA.
+	 * Latitude ranges from -90 to 90, longitude ranges from -180 to 180.
+	 * @see Browser.NewContextOptions#setGeolocation(double, double)
+	 */
+	public static final String PLAYWRIGHT_GEOLOCATION = "PLAYWRIGHT_GEOLOCATION";
+
+
+	/**
+	 * "PLAYWRIGHT_EXTRA_HTTP_HEADERS" - Sets custom HTTP headers to be sent with every request.
+	 * Format: "HeaderName1:HeaderValue1,HeaderName2:HeaderValue2" (colon-separated name:value pairs, comma-delimited).
+	 * Example: "X-API-Key:abc123,X-Client-Version:1.0"
+	 * @see Browser.NewContextOptions#setExtraHTTPHeaders(java.util.Map)
+	 */
+	public static final String PLAYWRIGHT_EXTRA_HTTP_HEADERS = "PLAYWRIGHT_EXTRA_HTTP_HEADERS";
+
+
+	/**
+	 * "PLAYWRIGHT_HTTP_CREDENTIALS" - Credentials for HTTP authentication.
+	 * Format: "username,password" (two comma-delimited values).
+	 * Example: "myuser,mypassword"
+	 * @see Browser.NewContextOptions#setHttpCredentials(String, String)
+	 */
+	public static final String PLAYWRIGHT_HTTP_CREDENTIALS = "PLAYWRIGHT_HTTP_CREDENTIALS";
+
+
+	/**
+	 * "PLAYWRIGHT_BYPASS_CSP" - Toggles bypassing Content-Security-Policy.
+	 * When set to 'true', bypasses page's Content-Security-Policy.
+	 * Default is 'false'.
+	 * @see Browser.NewContextOptions#setBypassCSP(boolean)
+	 */
+	public static final String PLAYWRIGHT_BYPASS_CSP = "PLAYWRIGHT_BYPASS_CSP";
+
+
+	/**
+	 * "PLAYWRIGHT_LOCALE" - Specify user locale, for example 'en-GB', 'de-DE', etc.
+	 * Locale will affect navigator.language value, Accept-Language request header and number/date formatting.
+	 * Example: "en-US"
+	 * @see Browser.NewContextOptions#setLocale(String)
+	 */
+	public static final String PLAYWRIGHT_LOCALE = "PLAYWRIGHT_LOCALE";
+
+
+	/**
+	 * "PLAYWRIGHT_OFFLINE" - Whether to emulate network being offline.
+	 * When set to 'true', emulates offline network.
+	 * Default is 'false'.
+	 * @see Browser.NewContextOptions#setOffline(boolean)
+	 */
+	public static final String PLAYWRIGHT_OFFLINE = "PLAYWRIGHT_OFFLINE";
+
+
+	/**
+	 * "PLAYWRIGHT_TIMEZONE_ID" - Changes the timezone of the context.
+	 * Example: "America/New_York", "Europe/London", "Asia/Tokyo"
+	 * See ICU's metaZones.txt for supported timezone IDs.
+	 * @see Browser.NewContextOptions#setTimezoneId(String)
+	 */
+	public static final String PLAYWRIGHT_TIMEZONE_ID = "PLAYWRIGHT_TIMEZONE_ID";
+
+
+	/**
+	 * "PLAYWRIGHT_STORAGE_STATE" - Populates context with given storage state.
+	 * Path to a file with previously saved storage state.
+	 * Can be used to initialize context with logged-in state.
+	 * @see Browser.NewContextOptions#setStorageStatePath(java.nio.file.Path)
+	 */
+	public static final String PLAYWRIGHT_STORAGE_STATE = "PLAYWRIGHT_STORAGE_STATE";
+
+
+	/**
 	 * "PLAYWRIGHT_TRACES_DIR" - If specified, traces are saved into this directory path
 	 *  @see BrowserType.LaunchOptions#setTracesDir(java.nio.file.Path)
 	 */

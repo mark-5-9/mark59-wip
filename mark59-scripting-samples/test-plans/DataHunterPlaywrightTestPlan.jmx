@@ -76,7 +76,7 @@
           <stringProp name="script">Properties systemProperties = System.getProperties();
 systemProperties.setProperty(&quot;mark59.log.directory&quot;, &quot;C:/temp/jmeter_test_logs_testplan_override/&quot;);
 systemProperties.setProperty(&quot;mark59.server.profiles.excel.file.path&quot;, &quot;./mark59serverprofiles.xlsx&quot;);
- 
+
 OUT.println (&quot;DataHunter Playwright Test Plan:  Mark59 properties directly set here : &quot;);
 OUT.println (&quot;mark59.log.directory                   : &quot; + systemProperties.getProperty(&quot;mark59.screenshot.directory&quot;));
 OUT.println (&quot;mark59.server.profiles.excel.file.path : &quot; + systemProperties.getProperty(&quot;mark59.server.profiles.excel.file.path&quot;));
@@ -102,16 +102,16 @@ log.info   (&quot;**** Operating system is  : &quot; + OS_NAME_LC );
 
 os = &quot;LINUX&quot;;
 if ( OS_NAME_LC.indexOf(&quot;win&quot;) &gt;= 0 ) {
-	os = &quot;WINDOWS&quot;; 
+	os = &quot;WINDOWS&quot;;
 } else if ( OS_NAME_LC.indexOf(&quot;mac&quot;) &gt;= 0 ) {
-	os = &quot;MAC&quot;; 
-}   
+	os = &quot;MAC&quot;;
+}
 
 // System Properties vs JMeterUtils - please review the mark59 User Guide if using JSR223 for Mark59 scripts
 System.getProperties().setProperty(&quot;LOCALHOST_OS&quot;, &quot;localhost_&quot; + os);
 
 SampleResult.setIgnore();
- 
+
 OUT.println(&quot;OS property has been set to : &quot; + os );
 log.info   (&quot;OS property has been set to : &quot; + os );</stringProp>
         </JSR223Sampler>
@@ -134,11 +134,11 @@ log.info   (&quot;OS property has been set to : &quot; + os );</stringProp>
           <stringProp name="filename"></stringProp>
           <stringProp name="parameters">${pacing}</stringProp>
           <boolProp name="resetInterpreter">false</boolProp>
-          <stringProp name="script">// &quot;Iteration Pacing Timer&quot; - a recommended timing option for mark59 
-// Please put your target iteration time (delay + script run time) in seconds in the &quot;Parameters&quot; field above, optionally followed by variance in secs eg:  20 5  
-long currentTimeMillis = System.currentTimeMillis(); 
+          <stringProp name="script">// &quot;Iteration Pacing Timer&quot; - a recommended timing option for mark59
+// Please put your target iteration time (delay + script run time) in seconds in the &quot;Parameters&quot; field above, optionally followed by variance in secs eg:  20 5
+long currentTimeMillis = System.currentTimeMillis();
 
-long interation_pacing_ms  = Long.valueOf(bsh.args[0]) * 1000; 
+long interation_pacing_ms  = Long.valueOf(bsh.args[0]) * 1000;
 
 long interation_variance_ms = 0;
 if (bsh.args.length &gt; 1){
@@ -146,7 +146,7 @@ if (bsh.args.length &gt; 1){
 }
 
 long interation_pacing_this_iter_ms = interation_pacing_ms - interation_variance_ms +  (int)( Math.random() * (interation_variance_ms*2 + 1));
-long delay = 0;  
+long delay = 0;
 
 //System.out.println(&quot; &quot;);
 //System.out.println(&quot;&gt;&gt;  pacer parm - interation_pacing_ms         : &quot; + interation_pacing_ms );
@@ -159,20 +159,20 @@ if (last_delay_ms_str != null){
     last_delay_ms = Long.valueOf(last_delay_ms_str);
 }
 //System.out.println(&quot;               - last_delay_ms                : &quot; + last_delay_ms) ;
-	
+
 String interation_start_time_ms_str = vars.get(&quot;interation_start_time_ms&quot;);
 
 if ( interation_start_time_ms_str != null ){
-//	System.out.println(&quot;               - (Prev) interation_start_time : &quot; + interation_start_time_ms_str + &quot;  -  &quot; + (new Date(Long.valueOf(interation_start_time_ms_str)).toString()) );     
-                                                                                                                               
+//	System.out.println(&quot;               - (Prev) interation_start_time : &quot; + interation_start_time_ms_str + &quot;  -  &quot; + (new Date(Long.valueOf(interation_start_time_ms_str)).toString()) );
+
 	delay = interation_pacing_this_iter_ms + Long.valueOf(interation_start_time_ms_str) + last_delay_ms - System.currentTimeMillis();
 	if (delay &lt; 0){
          log.info(&quot;  script execution time exceeded pacing by  : &quot; + (0-delay) + &quot; ms.&quot;  );
          delay = 0;
 	}
 } else {
-//	System.out.println(&quot;               - (Prev) interation_start_time : &quot; + interation_start_time_ms_str );    
-} 
+//	System.out.println(&quot;               - (Prev) interation_start_time : &quot; + interation_start_time_ms_str );
+}
 
 vars.put(&quot;interation_start_time_ms&quot;, &quot;&quot; + currentTimeMillis );
 vars.put(&quot;last_delay_ms&quot;, &quot;&quot; + delay );
@@ -253,8 +253,8 @@ return 0;</stringProp>
                 <stringProp name="Argument.value">false</stringProp>
                 <stringProp name="Argument.metadata">=</stringProp>
               </elementProp>
-              <elementProp name="ADDITIONAL_OPTIONS" elementType="Argument">
-                <stringProp name="Argument.name">ADDITIONAL_OPTIONS</stringProp>
+              <elementProp name="BROWSER_LAUNCH_ARGS" elementType="Argument">
+                <stringProp name="Argument.name">BROWSER_LAUNCH_ARGS</stringProp>
                 <stringProp name="Argument.value">${additionalOptions}</stringProp>
                 <stringProp name="Argument.metadata">=</stringProp>
               </elementProp>
@@ -521,8 +521,8 @@ return 0;</stringProp>
                 <stringProp name="Argument.value">${headlessModeIteratorTG}</stringProp>
                 <stringProp name="Argument.metadata">=</stringProp>
               </elementProp>
-              <elementProp name="ADDITIONAL_OPTIONS" elementType="Argument">
-                <stringProp name="Argument.name">ADDITIONAL_OPTIONS</stringProp>
+              <elementProp name="BROWSER_LAUNCH_ARGS" elementType="Argument">
+                <stringProp name="Argument.name">BROWSER_LAUNCH_ARGS</stringProp>
                 <stringProp name="Argument.value">${additionalOptions}</stringProp>
                 <stringProp name="Argument.metadata">=</stringProp>
               </elementProp>

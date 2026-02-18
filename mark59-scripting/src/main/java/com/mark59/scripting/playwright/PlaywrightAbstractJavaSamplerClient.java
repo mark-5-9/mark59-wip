@@ -70,7 +70,7 @@ import com.microsoft.playwright.options.Proxy;
  *
  * @see #additionalTestParameters()
  * @see ScriptingConstants#HEADLESS_MODE
- * @see ScriptingConstants#ADDITIONAL_OPTIONS
+ * @see ScriptingConstants#BROWSER_LAUNCH_ARGS
  * @see ScriptingConstants#PLAYWRIGHT_DEFAULT_TIMEOUT
  * @see ScriptingConstants#PLAYWRIGHT_VIEWPORT_SIZE
  * @see ScriptingConstants#OVERRIDE_PROPERTY_MARK59_BROWSER_EXECUTABLE
@@ -151,7 +151,7 @@ public abstract class PlaywrightAbstractJavaSamplerClient extends UiAbstractJava
 
 		staticMap.put("______________________ playwright settings: ________________________", "Refer Mark59 User Guide : http://mark59.com");
 		staticMap.put(ScriptingConstants.HEADLESS_MODE, 		 String.valueOf(true));
-		staticMap.put(ScriptingConstants.ADDITIONAL_OPTIONS,	 "");
+		staticMap.put(ScriptingConstants.BROWSER_LAUNCH_ARGS,	 "");
 		staticMap.put(ScriptingConstants.PLAYWRIGHT_DEFAULT_TIMEOUT, "");
 		staticMap.put(ScriptingConstants.PLAYWRIGHT_VIEWPORT_SIZE, "");
 		staticMap.put(ScriptingConstants.OVERRIDE_PROPERTY_MARK59_BROWSER_EXECUTABLE, "");
@@ -227,7 +227,7 @@ public abstract class PlaywrightAbstractJavaSamplerClient extends UiAbstractJava
 	 *
 	 * @see #additionalTestParameters()
 	 * @see ScriptingConstants#HEADLESS_MODE
-	 * @see ScriptingConstants#ADDITIONAL_OPTIONS
+	 * @see ScriptingConstants#BROWSER_LAUNCH_ARGS
 	 * @see ScriptingConstants#PLAYWRIGHT_DEFAULT_TIMEOUT
 	 * @see ScriptingConstants#PLAYWRIGHT_VIEWPORT_SIZE
 	 * @see ScriptingConstants#OVERRIDE_PROPERTY_MARK59_BROWSER_EXECUTABLE
@@ -393,10 +393,10 @@ public abstract class PlaywrightAbstractJavaSamplerClient extends UiAbstractJava
 			browserLaunchOptions.setHeadless(Boolean.parseBoolean(arguments.get(ScriptingConstants.HEADLESS_MODE)));
 		}
 
-		// Set additional option Arguments
-		if (StringUtils.isNotBlank(arguments.get(ScriptingConstants.ADDITIONAL_OPTIONS))){
-			browserLaunchOptions.setArgs(Arrays.asList(StringUtils.split(
-					arguments.get(ScriptingConstants.ADDITIONAL_OPTIONS), ",")));
+		// Set browser launch arguments
+		String browserArgs = arguments.get(ScriptingConstants.BROWSER_LAUNCH_ARGS);
+		if (StringUtils.isNotBlank(browserArgs)){
+			browserLaunchOptions.setArgs(Arrays.asList(StringUtils.split(browserArgs, ",")));
 		}
 
 		// Set option to auto open Devtools for tabs

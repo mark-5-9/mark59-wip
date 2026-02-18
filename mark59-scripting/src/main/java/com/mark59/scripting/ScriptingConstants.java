@@ -80,20 +80,26 @@ public class ScriptingConstants {
 
 
 	/**
-	 * <p>"ADDITIONAL_OPTIONS" - Caters for the direct setting of any additional driver options from the JMeter
-	 *  additional parameters.  Intended for use with the Chrome Driver (for Selenium and Playwright).</p>
+	 * <p>"BROWSER_LAUNCH_ARGS" allows the setting of browser launch arguments, primarily Chromium command-line switches.
+	 * Intended for use with Selenium and Playwright.</p>
 	 *
-	 * <p>The input string needs to be a comma delimited list for multiple options.
-	 * For example, to set a proxy pac url and activate the disable extensions option, the "ADDITIONAL OPTIONS"
+	 * <p>The behaviour of this parameter can vary between Selenium and Playwright, although in both frameworks
+	 * it primarily allows the setting of the Chromium command-line switches (see URL references below).
+	 *
+	 * <p>The input string needs to be a comma delimited list for multiple arguments.
+	 * For example, to set a proxy pac url and activate the disable extensions option, the "BROWSER_LAUNCH_ARGS"
 	 * parameter for the SeleniumAbstractJavaSamplerClient based test script can be entered as :
 	 * <br><br> <b> --proxy-pac-url=http://myawesomecompany.corp/proxy.pac,--disable-extensions</b> </p>
 	 *
-	 * <p>Note that a proxy override can be set using the "PROXY" parameters provided by Selenium and
-	 * Playwright (different structures), just shown here as an example.<br>
+	 * <p>A proxy override can be also set using explicit PROXY parameters provided by Selenium and
+	 * Playwright (different formats), it's just shown here as an example.<br>
 	 *
 	 * <p>Another example: to run Chrome in incognito mode and have DevTools open with the browser, you can set the
-	 *  "ADDITIONAL OPTIONS" parameter as :
+	 *  "BROWSER_LAUNCH_ARGS" parameter as :
 	 * <br><br> <b>--incognito,--auto-open-devtools-for-tabs</b> </p>
+	 *
+	 * <p>By the way, "--incognito" is an example of a switch that works differently between Selenium and Playwright
+	 * (it's unnecessary in Playwright as the BrowserContext already provides that isolation).
 	 *
 	 * <p>At the time of writing the best sources for the list of available options are:<br>
 	 *  <ul>
@@ -103,7 +109,7 @@ public class ScriptingConstants {
 	 *   			  https://chromium.googlesource.com/chromium/src/+/master/chrome/common/chrome_switches.cc</a></li>
 	 *  </ul>
 	 */
-	public static final String ADDITIONAL_OPTIONS = "ADDITIONAL_OPTIONS";
+	public static final String BROWSER_LAUNCH_ARGS = "BROWSER_LAUNCH_ARGS";
 
 
 	/**

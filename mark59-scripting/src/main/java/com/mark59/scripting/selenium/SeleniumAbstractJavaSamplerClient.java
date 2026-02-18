@@ -74,8 +74,8 @@ import com.mark59.scripting.selenium.interfaces.DriverFunctionsSelenium;
  * @see com.mark59.scripting.selenium.interfaces.DriverFunctionsSeleniumBuilder#setProxy(org.openqa.selenium.Proxy)
  * @see com.mark59.scripting.selenium.driversimpl.SeleniumDriverFactory#UNHANDLED_PROMPT_BEHAVIOUR
  * @see com.mark59.scripting.selenium.interfaces.DriverFunctionsSeleniumBuilder#setUnhandledPromptBehaviour(UnexpectedAlertBehaviour)
- * @see com.mark59.scripting.selenium.driversimpl.SeleniumDriverFactory#ADDITIONAL_OPTIONS
- * @see com.mark59.scripting.selenium.interfaces.DriverFunctionsSeleniumBuilder#setAdditionalOptions(java.util.List)
+ * @see com.mark59.scripting.selenium.driversimpl.SeleniumDriverFactory#BROWSER_LAUNCH_ARGS
+ * @see com.mark59.scripting.selenium.interfaces.DriverFunctionsSeleniumBuilder#setBrowserLaunchArgs(java.util.List)
  * @see com.mark59.scripting.selenium.driversimpl.SeleniumDriverFactory#WRITE_FFOX_BROWSER_LOGFILE
  * @see com.mark59.scripting.selenium.interfaces.DriverFunctionsSeleniumBuilder#setWriteBrowserLogfile(boolean)
  * @see com.mark59.scripting.selenium.driversimpl.SeleniumDriverFactory#BROWSER_EXECUTABLE
@@ -153,7 +153,7 @@ public abstract class SeleniumAbstractJavaSamplerClient extends UiAbstractJavaSa
 		staticMap.put(SeleniumDriverFactory.PAGE_LOAD_STRATEGY, 		PageLoadStrategy.NORMAL.toString());
 		staticMap.put(SeleniumDriverFactory.BROWSER_DIMENSIONS, 		Mark59Constants.DEFAULT_BROWSER_DIMENSIONS);
 		staticMap.put(SeleniumDriverFactory.PROXY, 						"");
-		staticMap.put(SeleniumDriverFactory.ADDITIONAL_OPTIONS, 		"");
+		staticMap.put(SeleniumDriverFactory.BROWSER_LAUNCH_ARGS, 		"");
 		staticMap.put(SeleniumDriverFactory.WRITE_FFOX_BROWSER_LOGFILE, String.valueOf(false));
 		staticMap.put(SeleniumDriverFactory.UNHANDLED_PROMPT_BEHAVIOUR, UnexpectedAlertBehaviour.IGNORE.toString());
 		staticMap.put(ScriptingConstants.OVERRIDE_PROPERTY_MARK59_BROWSER_EXECUTABLE, "");
@@ -217,8 +217,8 @@ public abstract class SeleniumAbstractJavaSamplerClient extends UiAbstractJavaSa
 	 * @see com.mark59.scripting.selenium.interfaces.DriverFunctionsSeleniumBuilder#setProxy(org.openqa.selenium.Proxy)
 	 * @see com.mark59.scripting.selenium.driversimpl.SeleniumDriverFactory#UNHANDLED_PROMPT_BEHAVIOUR
 	 * @see com.mark59.scripting.selenium.interfaces.DriverFunctionsSeleniumBuilder#setUnhandledPromptBehaviour(UnexpectedAlertBehaviour)
-	 * @see com.mark59.scripting.selenium.driversimpl.SeleniumDriverFactory#ADDITIONAL_OPTIONS
-	 * @see com.mark59.scripting.selenium.interfaces.DriverFunctionsSeleniumBuilder#setAdditionalOptions(java.util.List)
+	 * @see com.mark59.scripting.selenium.driversimpl.SeleniumDriverFactory#BROWSER_LAUNCH_ARGS
+	 * @see com.mark59.scripting.selenium.interfaces.DriverFunctionsSeleniumBuilder#setBrowserLaunchArgs(java.util.List)
 	 * @see com.mark59.scripting.selenium.driversimpl.SeleniumDriverFactory#WRITE_FFOX_BROWSER_LOGFILE
 	 * @see com.mark59.scripting.selenium.interfaces.DriverFunctionsSeleniumBuilder#setWriteBrowserLogfile(boolean)
 	 * @see com.mark59.scripting.selenium.driversimpl.SeleniumDriverFactory#BROWSER_EXECUTABLE

@@ -147,14 +147,14 @@ public interface DriverFunctionsSeleniumBuilder<O extends MutableCapabilities>	{
 	 * <br><b>&nbsp;&nbsp;&nbsp;&nbsp; httpProxy=http://myawesomecompany.corp:8080,sslProxy=http://myawesomecompany.corp:8080</b><br><br>
 	 * &nbsp;&nbsp;&nbsp;&nbsp; Note: for Chrome at time of writing server user/password entry is not catered for with http and ssl proxy server setup.</p>
 	 *
-	 * <p>Hint: To not use a proxy server and always make direct connections, use chrome option argument "--no-proxy-server" in the ADDITIONAL_OPTIONS
+	 * <p>Hint: To not use a proxy server and always make direct connections, use chrome option argument "--no-proxy-server" in the BROWSER_LAUNCH_ARGS
 	 * parameter</p>
 	 * <p>Hint: To reset the value to blank in the Java Request PROXY option in Jmeter (ie, no proxy override), just type a space into the PROXY value field.</p>
 	 *
 	 * @param proxy comma delimited list of proxy settings for WebDriver
 	 *
 	 * @see org.openqa.selenium.Proxy
-	 * @see #setAdditionalOptions(java.util.List)
+	 * @see #setBrowserLaunchArgs(java.util.List)
 	 * @see SeleniumAbstractJavaSamplerClient
 	 * @return this
 	 */
@@ -175,7 +175,7 @@ public interface DriverFunctionsSeleniumBuilder<O extends MutableCapabilities>	{
 	 * @param behaviour an UnexpectedAlertBehaviourr
 	 *
 	 * @see org.openqa.selenium.UnexpectedAlertBehaviour
-	 * @see #setAdditionalOptions(java.util.List)
+	 * @see #setBrowserLaunchArgs(java.util.List)
 	 * @see SeleniumAbstractJavaSamplerClient
 	 * @return this
 	 */
@@ -183,17 +183,18 @@ public interface DriverFunctionsSeleniumBuilder<O extends MutableCapabilities>	{
 
 
 	/**
-	 * <p>Caters for the direct setting of any additional driver options from the JMeter additional parameters.
-	 * Intended for use with the Chrome Driver.</p>
+	 * <p>Sets browser launch arguments (primarily Chromium command-line switches) from JMeter parameters.
+	 * Intended for use with Chrome Driver.</p>
 	 *
-	 * <p>The input string needs to be a comma delimited list for multiple options.
-	 * For example, to set a proxy pac url and activate the disable extensions option, the "ADDITIONAL OPTIONS" parameter
+	 * <p>The input string needs to be a comma delimited list for multiple arguments.
+	 * For example, to set a proxy pac url and activate the disable extensions option, the "BROWSER_LAUNCH_ARGS" parameter
 	 * for the SeleniumAbstractJavaSamplerClient based test script can be entered as :
 	 * <br><br> <b> --proxy-pac-url=http://myawesomecompany.corp/proxy.pac,--disable-extensions</b> </p>
 	 *
-	 * <p>(note that a proxy override can be set using the "PROXY" parameter, just shown here as an example)<br>
+	 * <p>A proxy override can also be set using the explicit PROXY parameter provided by Selenium,
+	 * it's just shown here as an example.</p>
 	 *
-	 * <p>Another example: to run Chrome in incognito mode and have DevTools open with the browser, you can set the "ADDITIONAL OPTIONS"
+	 * <p>Another example: to run Chrome in incognito mode and have DevTools open with the browser, you can set the "BROWSER_LAUNCH_ARGS"
 	 *  parameter as :
 	 * <br><br> <b>--incognito,--auto-open-devtools-for-tabs</b> </p>
 	 *
@@ -208,10 +209,10 @@ public interface DriverFunctionsSeleniumBuilder<O extends MutableCapabilities>	{
 	 * @see org.openqa.selenium.chrome.ChromeOptions#addArguments(java.util.List)
 	 * @see SeleniumAbstractJavaSamplerClient
 	 *
-	 * @param arguments options
+	 * @param arguments browser launch arguments
 	 * @return this
 	 */
-	DriverFunctionsSeleniumBuilder<?> setAdditionalOptions(java.util.List<java.lang.String> arguments);
+	DriverFunctionsSeleniumBuilder<?> setBrowserLaunchArgs(java.util.List<java.lang.String> arguments);
 
 
 	/**

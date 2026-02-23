@@ -10,11 +10,17 @@ This is the <b>WORK-IN-PROGRESS</b> repository for Mark59 - be aware it may NOT 
 <p>Release 6.5<br>
 
   <ul>
-   	<li>Extensive review of source code using AI (via Copilot),focusing on future-proofing source code scanning by
-   	fixing issues AI rated as critical or serious, securty issues (weak encryption, sql injection), improving documentation,
-   	improving error messaging, adding JUnit tests,	and implementing multiple coding solutions AI considered preferable.</li>
+   	<li>Extensive review of source code using AI (via Copilot),focusing on future-proofing source code scans by
+   	fixing issues AI rated as critical or serious, includes security problems (weak encryption, sql injection), improving documentation,
+   	improving error messaging, adding more JUnit tests, and implementing multiple coding solutions AI considered preferable.</li>
  	<li>Trends UI : (Bug) Fix Event and Graph Mapping Admin pages, had incorrect HTTP Mappings in the previous release</li>
- 	<li>Dependencies Updated: spring-boot to 4.0.2, selenium to 4.40.0 (chrome v144), playwright to 1.57.0</li>
+ 	<li>Trends UI : (Bug) Transaction names with commas did not work properly. Commas are now replaced with a dash.</li>
+ 	<li>Playwright Scripting : Several new options have been made available : PLAYWRIGHT_IGNORE_HTTPS_ERRORS,
+ 	PLAYWRIGHT_GEOLOCATION, PLAYWRIGHT_EXTRA_HTTP_HEADERS, PLAYWRIGHT_HTTP_CREDENTIALS, PLAYWRIGHT_BYPASS_CSP, PLAYWRIGHT_LOCALE,
+ 	PLAYWRIGHT_OFFLINE, PLAYWRIGHT_STORAGE_STATE (these are generally the Playwright BrowserContextOPtons that can be 
+ 	entered as strings (such as on the JMeter Java Request paramenters panel). See JavaDocs for details.       
+ 	</li>
+ 	<li>Dependencies Updated: poi to 5.5.1, spring-boot to 4.0.3, selenium to 4.40.0 (chrome v144), playwright to 1.57.0</li>
   </ul>
 
   <figure>
@@ -22,8 +28,15 @@ This is the <b>WORK-IN-PROGRESS</b> repository for Mark59 - be aware it may NOT 
  	<li>Trends UI : SQL inputs into 'Advanced Filters' are now sanitized, so input using various string and keyword combinations
  	will fail. For example, the strings "..test UPDATE set.."'and "..test EXEC sp.." will have the keywords removed and likely fail)</li>
  	<li>UI Scripting: The parameter ADDITIONAL_OPTIONS has been renamed to BROWSER_LAUNCH_ARGS for improved clarity.
- 	Please update your JMeter test scripts to use BROWSER_LAUNCH_ARGS instead.<br><br></li>
+ 	Please update your JMeter Playwright and Selenium test scripts to use BROWSER_LAUNCH_ARGS instead.<br><br></li>
   </figure>
+  
+   <figure>
+    <figcaption>Database Change
+ 	<li>Metrics Database: For existing implementations a script (see DataabseScripts folder in the Mark59 download file) should 
+ 	be executed to increase the length of the PASSWORD_CIPHER field of the SERVERPROFILES table, for MySQL and Postgres DBs. 
+  </figure> 
+  
 
 
 <p>Release 6.4<br>
@@ -35,7 +48,7 @@ This is the <b>WORK-IN-PROGRESS</b> repository for Mark59 - be aware it may NOT 
 	<li>Trends Load : New parameter 'maxNumberofruns' (n) : Maximum number of runs to be stored for this application id excluding baselines.
 	The oldest non-baseline run(s) will be removed from the database when this count is exceeded.  Set to '-1' or '0' to deactive.
 	Defaults to 500</li>
-	<li>DataHunter : (Bug) Remove an unnecessary SQL when processing Reusable Indexed' data</li>
+	<li>DataHunter : (Bug) Remove an unnecessary SQL when processing Reusable Indexed data</li>
 	<li>All Web Apps : Explicitly use GetMapping or PostMapping anotation instead of RequestMapping, plus many smaller code and JavaDocs tidy ups</li>
 	<li>Dependencies Updated: spring-boot to 3.5.4, selenium to 4.34.0 (to chrome v138), playwright to 1.53.0</li>
   </ul>
@@ -233,7 +246,7 @@ This is the <b>WORK-IN-PROGRESS</b> repository for Mark59 - be aware it may NOT 
 	<li>Metrics - Time taken for Profile execution is shown when running directly in the Web Application.</li>
 	<li>Metrics - Web Application TimeOut extended to 30 min (code change).</li>
 	<li>Metrics - Improved documentation on the Web Application's Overview Page.</li>
-	<li>Java 8 Compatability - Mark59 Projects refactored so that all artefacts that are deployed to JMeter are compatable with Java 8+.
+	<li>Java 8 Compatibility - Mark59 Projects refactored so that all artifacts that are deployed to JMeter are compatible with Java 8+.
 		Note that the Mark59 Web Applications are all built uses Java 17, and we suggest using Java 17 for JMeter instances as well if possible.</li>
 	<li>Multiple small improvements to JavaDocs</li>
 	<li>Selenium to 4.10.0 (chrome v114+), spring-boot to 3.1.0</li>

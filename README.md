@@ -23,22 +23,25 @@ This is the <b>WORK-IN-PROGRESS</b> repository for Mark59 - be aware it may NOT 
  	<li>Dependencies Updated: poi to 5.5.1, spring-boot to 4.0.3, selenium to 4.40.0 (chrome v144), playwright to 1.57.0</li>
   </ul>
 
-  <figure>
-    <figcaption>Summary of Changes with Potential Incompatibilities
+   <figure>
+    <figcaption>Summary of Changes with Potential Incompatibilities<br><br></figcaption>
+    <ul>
  	<li>Trends UI : SQL inputs into 'Advanced Filters' are now sanitized, so input using various string and keyword combinations
  	will fail. For example, the strings "..test UPDATE set.."'and "..test EXEC sp.." will have the keywords removed and likely fail)</li>
  	<li>UI Scripting: The parameter ADDITIONAL_OPTIONS has been renamed to BROWSER_LAUNCH_ARGS for improved clarity.
- 	Please update your JMeter Playwright and Selenium test scripts to use BROWSER_LAUNCH_ARGS instead.<br><br></li>
-  </figure>
-  
+ 	Please update your JMeter Playwright and Selenium test scripts to use BROWSER_LAUNCH_ARGS instead.</li>
+    </ul>
+   </figure>
+ 
    <figure>
-    <figcaption>Database Change
+    <figcaption>Database Change<br><br></figcaption>
+	<ul>
  	<li>Metrics Database: For existing implementations a script (see DataabseScripts folder in the Mark59 download file) should 
- 	be executed to increase the length of the PASSWORD_CIPHER field of the SERVERPROFILES table, for MySQL and Postgres DBs. 
+ 	be executed to increase the length of the PASSWORD_CIPHER field of the SERVERPROFILES table, for MySQL and Postgres DBs.
+	</ul>	
   </figure> 
-  
 
-
+<br>
 <p>Release 6.4<br>
 
   <ul>
@@ -54,8 +57,8 @@ This is the <b>WORK-IN-PROGRESS</b> repository for Mark59 - be aware it may NOT 
   </ul>
 
   <figure>
-    <figcaption>Summary of Changes with Potential Incompatibilities
-	<li>For UI scripting BROWSER_EXECUTABLE argument is no longer in use. Please use OVERRIDE_PROPERTY_MARK59_BROWSER_EXECUTABLE<br><br></li>
+    <figcaption>Summary of Changes with Potential Incompatibilities<br><br></figcaption>
+	<ul><li>For UI scripting BROWSER_EXECUTABLE argument is no longer in use. Please use OVERRIDE_PROPERTY_MARK59_BROWSER_EXECUTABLE<br><br></li></ul>
   </figure>
 
 

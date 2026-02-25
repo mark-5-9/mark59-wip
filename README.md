@@ -41,6 +41,27 @@ This is the <b>WORK-IN-PROGRESS</b> repository for Mark59 - be aware it may NOT 
 	</ul>	
   </figure> 
 
+   <figure>
+    <figcaption>Updating Encryption Ciphers<br></figcaption>
+	<ul>
+ 	<li>
+	<p>Migration from SimpleAES to SecureAES</p>
+	<p>Versions of Mark59 prior to this release use a weak encryption class SimpleAES. Encryptions created by this class will NOT work with the new SecureAES. 
+		You can use the SimpleAES class in mark59-core or SimpleAESUtility that ships in the mark59-scripting-samples project if you need to recover the original string for re-encryption.</p>
+	</li>
+	<li>	
+	<p>Encrypted String Usage within Mark59</p>
+	<p>The follow list are places where options to encrypt/decrypt are implemented
+	<ul>	
+      <li>TrendsLoad: encrypted MySql or Postgres database password, cmd line 'y' option</li>
+      <li>Metrics: 'Create Cipher' option when creating/editing a NIX or WMIC remote server connection</li>
+      <li>Metrics API: /api/pwd=stringtoencrypt as described above</li>
+	 </p>
+     </li>
+	</ul>	
+  </figure> 
+  
+
 <br>
 <p>Release 6.4<br>
 

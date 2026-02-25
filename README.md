@@ -55,7 +55,7 @@ This is the <b>WORK-IN-PROGRESS</b> repository for Mark59 - be aware it may NOT 
 	<ul>	
       <li>TrendsLoad: encrypted MySql or Postgres database password, cmd line 'y' option</li>
       <li>Metrics: 'Create Cipher' option when creating/editing a NIX or WMIC remote server connection</li>
-      <li>Metrics API: /api/pwd=stringtoencrypt as described above</li>
+      <li>Metrics API: url mark59-metrics/api/cipher?pwd=stringtoencrypt can be used to obtain an encrypted string</li>
 	 </p>
      </li>
 	</ul>	

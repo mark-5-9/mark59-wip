@@ -47,7 +47,8 @@ This is the <b>WORK-IN-PROGRESS</b> repository for Mark59 - be aware it may NOT 
  	<li>
 	<p>Migration from SimpleAES to SecureAES</p>
 	<p>Versions of Mark59 prior to this release use a weak encryption class SimpleAES. Encryptions created by this class will NOT work with the new SecureAES. 
-		You can use the SimpleAES class in mark59-core or SimpleAESUtility that ships in the mark59-scripting-samples project if you need to recover the original string for re-encryption.</p>
+		You can use the SimpleAES class in mark59-core or SimpleAESUtility that ships in the mark59-scripting-samples project if you need to recover the original string for re-encryption.
+		Documentation on usage of the new encryption algorithm is availble in the SecureAES class in mark59-core or SimpleAESUtility that ships in the mark59-scripting-samples project.</p>		
 	</li>
 	<li>	
 	<p>Encrypted String Usage within Mark59</p>

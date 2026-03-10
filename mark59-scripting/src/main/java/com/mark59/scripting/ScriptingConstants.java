@@ -89,7 +89,7 @@ public class ScriptingConstants {
 	 * <p>The input string needs to be a semicolon delimited list for multiple arguments.
 	 * For example, to set a proxy pac url and activate the disable extensions option, the "BROWSER_LAUNCH_ARGS"
 	 * parameter for the SeleniumAbstractJavaSamplerClient based test script can be entered as :
-	 * <br><br> <b> --proxy-pac-url=http://myawesomecompany.corp/proxy.pac;--disable-extensions</b> </p>
+	 * <br><br> <b> --proxy-pac-url=http://myawesomecompany.corp/proxy.pac,--disable-extensions</b> </p>
 	 *
 	 * <p>A proxy override can be also set using explicit PROXY parameters provided by Selenium and
 	 * Playwright (different formats), it's just shown here as an example.<br>
@@ -100,8 +100,8 @@ public class ScriptingConstants {
 	 *
 	 * <p>Note: Arguments that themselves contain comma-separated values (like --disable-features=feat1,feat2,feat3)
 	 * are supported since the semicolon delimiter is used to separate arguments.</p>
-	 *
-	 * <p>By the way, "--incognito" is an example of a switch that works differently between Selenium and Playwright
+	 * 
+	 * <p>Incidentally, "--incognito" is an example of a switch that works differently between Selenium and Playwright
 	 * (it's unnecessary in Playwright as the BrowserContext already provides that isolation).
 	 *
 	 * <p>At the time of writing the best sources for the list of available options are:<br>

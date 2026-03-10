@@ -393,7 +393,7 @@ public abstract class PlaywrightAbstractJavaSamplerClient extends UiAbstractJava
 			browserLaunchOptions.setHeadless(Boolean.parseBoolean(arguments.get(ScriptingConstants.HEADLESS_MODE)));
 		}
 
-		// Set browser launch arguments
+		// Set browser launch arguments - semicolon required to separate args
 		String browserArgs = arguments.get(ScriptingConstants.BROWSER_LAUNCH_ARGS);
 		if (StringUtils.isNotBlank(browserArgs)){
 			browserLaunchOptions.setArgs(Arrays.asList(StringUtils.split(browserArgs, ";")));

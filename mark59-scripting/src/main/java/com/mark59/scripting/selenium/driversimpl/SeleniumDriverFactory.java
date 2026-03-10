@@ -300,7 +300,7 @@ public class SeleniumDriverFactory {
 		}
 
 
-		// Set browser launch arguments
+		// Set browser launch arguments - semicolon required to separate args
 		String browserArgs = arguments.get(BROWSER_LAUNCH_ARGS);
 		if (StringUtils.isNotBlank(browserArgs)){
 			java.util.List<java.lang.String> argumentsList =  Arrays.asList(StringUtils.split(browserArgs, ";"));

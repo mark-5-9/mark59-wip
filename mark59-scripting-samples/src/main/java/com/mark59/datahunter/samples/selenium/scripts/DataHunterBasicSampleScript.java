@@ -114,6 +114,14 @@ public class DataHunterBasicSampleScript  extends SeleniumAbstractJavaSamplerCli
 		driver.get("chrome://version/");
 		SafeSleep.sleep(1000);
 
+		// Print out the Chrome launch arguments (for debugging purposes)
+		String commandLine = driver.findElement(By.id("command_line")).getText()  ; //.innerText();
+		System.out.println("=".repeat(120));
+		System.out.println("Chrome Command Line Arguments:");
+		System.out.println(commandLine.replace("--", "\n--") );
+		System.out.println("=".repeat(120));		
+		
+		
 		String dataHunterUrl 	= context.getParameter("DATAHUNTER_URL");
 		String application 		= context.getParameter("DATAHUNTER_APPLICATION_ID");
 		String user 			= context.getParameter("USER");

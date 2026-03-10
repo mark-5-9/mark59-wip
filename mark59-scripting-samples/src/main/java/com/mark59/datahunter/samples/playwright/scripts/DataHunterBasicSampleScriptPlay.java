@@ -77,9 +77,9 @@ public class DataHunterBasicSampleScriptPlay  extends PlaywrightAbstractJavaSamp
 		// Some mark59 predefined parameters for playwright.
 		// See DataHunterLifecyclePvtScriptPlay for a full list of available parameters for Playwright in Mark59
 		jmeterAdditionalParameters.put(ScriptingConstants.HEADLESS_MODE, String.valueOf(false));  // default is true
-		
+
 		jmeterAdditionalParameters.put(ScriptingConstants.BROWSER_LAUNCH_ARGS, "");
-		
+
 		// you can set the location of the browser executable on your machine either here or (better) in mark59.properties
 		jmeterAdditionalParameters.put(ScriptingConstants.OVERRIDE_PROPERTY_MARK59_BROWSER_EXECUTABLE, "");
 
@@ -104,8 +104,6 @@ public class DataHunterBasicSampleScriptPlay  extends PlaywrightAbstractJavaSamp
 		String lifecycle = "thread_" + thread;
 //		System.out.println("Thread " + thread + " is running with LOG level " + LOG.getLevel());
 
-		SafeSleep.sleep(1000);
-
 		String dataHunterUrl 	= context.getParameter("DATAHUNTER_URL");
 		String application 		= context.getParameter("DATAHUNTER_APPLICATION_ID");
 		String user 			= context.getParameter("USER");
@@ -114,7 +112,7 @@ public class DataHunterBasicSampleScriptPlay  extends PlaywrightAbstractJavaSamp
 		jm.bufferLog("kilroybuffer", "txt", "Kilroy was buffered here".getBytes());
 
 		jm.logAllLogsAtEndOfTransactions(Mark59LogLevels.WRITE);
-		
+
 		// A way to to check Chrome launch arguments (for debugging purposes)
 		page.navigate("chrome://version");
 		SafeSleep.sleep(1000);
@@ -123,7 +121,6 @@ public class DataHunterBasicSampleScriptPlay  extends PlaywrightAbstractJavaSamp
 		System.out.println("Chrome Command Line Arguments:");
 		System.out.println(commandLine.replace("--", "\n--") );
 		System.out.println("=".repeat(120));
-		LOG.info("Chrome launched with command line: " + commandLine);		
 
 // 		delete any existing policies for this application/thread combination
 		jm.startTransaction("DH_lifecycle_0001_loadInitialPage");

@@ -98,8 +98,10 @@ public class ScriptingConstants {
 	 *  "BROWSER_LAUNCH_ARGS" parameter as :
 	 * <br><br> <b>--incognito;--auto-open-devtools-for-tabs</b> </p>
 	 *
-	 * <p>Note: Arguments that themselves contain comma-separated values (like --disable-features=feat1,feat2,feat3)
-	 * are supported since the semicolon delimiter is used to separate arguments.</p>
+	 * <p>Note: Arguments that themselves contain comma-separated values (eg --disable-features=feat1,feat2,feat3)
+	 * are supported since the semicolon delimiter is used to separate arguments. For example to open DevTools and 
+	 * set list of disabled features, set the BROWSER_LAUNCH_ARGS" parameter as :
+	 * <br><br><b>--auto-open-devtools-for-tabs;--disable-features=LocalNetworkAccessChecks,ImprovedCookieControls</b></p>
 	 * 
 	 * <p>Incidentally, "--incognito" is an example of a switch that works differently between Selenium and Playwright
 	 * (it's unnecessary in Playwright as the BrowserContext already provides that isolation).

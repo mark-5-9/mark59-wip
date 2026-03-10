@@ -1,0 +1,237 @@
+/*
+ *  Copyright 2019 Mark59.com
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package com.mark59.trends.controller;
+
+
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
+
+import com.mark59.trends.application.AppConstantsTrends;
+import com.mark59.trends.application.UtilsTrends;
+import com.mark59.trends.data.application.dao.ApplicationDAO;
+import com.mark59.trends.data.beans.Application;
+import com.mark59.trends.data.metricSla.dao.MetricSlaDAO;
+import com.mark59.trends.data.run.dao.RunDAO;
+import com.mark59.trends.data.sla.dao.SlaDAO;
+import com.mark59.trends.data.transaction.dao.TransactionDAO;
+import com.mark59.trends.form.ApplicationDashboardEntry;
+import com.mark59.trends.form.CopyApplicationForm;
+
+
+/**
+ * @author Philip Webb
+ * Written: Australian Winter 2019
+ */
+
+@Controller
+public class ApplicationController {
+
+	@Autowired
+	ApplicationDAO  applicationDAO;
+
+	@Autowired
+	RunDAO  runDAO;
+
+	@Autowired
+	SlaDAO  slaDAO;
+
+	@Autowired
+	MetricSlaDAO metricSlaDAO;
+
+	@Autowired
+	TransactionDAO transactionDAO;
+
+
+	@GetMapping("/dashboard")
+	public ModelAndView dashboard(@RequestParam(required=false) String reqAppListSelector) {
+
+		List<Application> applicationList =  applicationDAO.findApplications(reqAppListSelector) ;
+		List<ApplicationDashboardEntry> dashboardList = new ArrayList<>();
+		List<String> dashboardAppList = new ArrayList<>();
+
+		for (Application app : applicationList) {
+			ApplicationDashboardEntry dashboardEntry = new ApplicationDashboardEntry();
+			String lastRunDateStr = runDAO.findLastRunDate(app.getApplication());
+			dashboardEntry.setApplication(app.getApplication());
+			dashboardEntry.setActive(app.getActive() );
+			dashboardEntry.setComment(app.getComment());
+			dashboardEntry.setSinceLastRun(calcTimeSinceLastRun(lastRunDateStr));
+			dashboardList.add(dashboardEntry);
+			dashboardAppList.add(app.getApplication());
+		}
+
+		List<String> appListSelectorList = new ArrayList<>();
+		appListSelectorList.add("Active");
+		appListSelectorList.add("All");
+
+		Map<String, Object> map = new HashMap<>();
+		map.put("dashboardList",dashboardList);
+		map.put("dashboardAppList",UtilsTrends.stringListToCommaDelimString(dashboardAppList));
+		map.put("reqAppListSelector",reqAppListSelector);
+		map.put("appListSelectorList",appListSelectorList);
+		return new ModelAndView("dashboard", "map", map);
+	}
+
+
+	@GetMapping("/editApplication")
+	public String editApplication(@RequestParam String reqApp, @RequestParam String reqAppListSelector,
+			@ModelAttribute Application application, Model model) {
+
+		application = applicationDAO.findApplication(reqApp);
+		model.addAttribute("application", application);
+
+		Map<String, Object> map = new HashMap<>();
+		List<String> activeYesNo = populateActiveYesNoDropdown();
+		map.put("activeYesNo",activeYesNo);
+		map.put("applicationId",reqApp);
+		map.put("reqAppListSelector",reqAppListSelector);
+		model.addAttribute("map", map);
+		return "editApplication";
+	}
+
+
+	@GetMapping("/copyApplication")
+	public ModelAndView copyApplication(@RequestParam(required = false) String reqApp,
+			@RequestParam(required = false) String reqAppListSelector, @RequestParam(required = false) String reqErr,
+			@ModelAttribute CopyApplicationForm copyApplicationForm, Model model) {
+
+		Map<String, Object> map = new HashMap<>();
+		map.put("reqApp",reqApp);
+		map.put("reqAppListSelector",reqAppListSelector);
+		model.addAttribute("map", map);
+		return new ModelAndView("copyApplication", "map", map);
+	}
+
+
+	@PostMapping("/duplicateApplication")
+	public Object copyApplication(@RequestParam String reqApp, @RequestParam String reqAppListSelector,
+			@ModelAttribute CopyApplicationForm copyApplicationForm ) {
+
+		Map<String, Object> map = new HashMap<>();
+		map.put("reqApp",reqApp);
+		map.put("reqAppListSelector",reqAppListSelector);
+
+		copyApplicationForm.setReqApp(reqApp);
+
+		if ( StringUtils.isEmpty(copyApplicationForm.getReqToApp())) {
+			map.put("reqErr", "Please enter the new Application name");
+			return new ModelAndView("copyApplication", "map", map);
+		}
+
+		if (StringUtils.containsWhitespace(copyApplicationForm.getReqToApp())){
+			map.put("reqErr", "New Application Name cannot contain whitespace ");
+			return new ModelAndView("copyApplication", "map", map);
+		}
+
+		if (!copyApplicationForm.getReqToApp().matches(AppConstantsTrends.ALLOWED_CHARS_APP_NAME) ){
+			map.put("reqErr", "New Application Name must contain alphanumerics, underlines, dashes and dots only");
+			return new ModelAndView("copyApplication", "map", map);
+		}
+
+		Application existingFromApp = applicationDAO.findApplication(copyApplicationForm.getReqApp());
+		if (existingFromApp == null) {
+			map.put("reqErr", "<b>Unexpected: " + copyApplicationForm.getReqApp() + " does not exist !</b>");
+			return new ModelAndView("copyApplication", "map", map);
+		}
+
+		Application existingToApp = applicationDAO.findApplication(copyApplicationForm.getReqToApp());
+		if (StringUtils.isNotEmpty(existingToApp.getApplication())){
+			map.put("reqErr","<b>"+copyApplicationForm.getReqToApp()+" already exists, delete it or chose another name</b>");
+			return new ModelAndView("copyApplication", "map", map);
+		}
+
+		try {
+			applicationDAO.duplicateEntireApplication(reqApp, copyApplicationForm.getReqToApp());
+		} catch (Exception e) {
+			map.put("reqErr", "The attempt to copy Application '" + reqApp + "' to '" + copyApplicationForm.getReqToApp() + "' has failed."
+					+ "<p>The database may be of been left in an invalid or partially completed state for Application "
+					+ copyApplicationForm.getReqToApp() + "."
+					+ "<p>Please review the error message below, the Trends application log if necessary, and if possible or after "
+					+ "correction re-attempt the copy."
+					+ "<p>Database tables that may be affected (in the order the copy is attempted) : APPLICATIONS, RUNS, TRANSACTION,"
+					+ " SLA, METRICSLA."
+					+ "<p> Error Msg : " + e.getMessage());
+			System.out.println("duplicateEntireApplication: fromApp " + reqApp + ", toApp " + copyApplicationForm.getReqToApp() + " failed") ;
+			e.printStackTrace();
+			return new ModelAndView("copyApplication", "map", map);
+		}
+
+		return "redirect:/editApplication?reqApp="+copyApplicationForm.getReqToApp()+"&reqAppListSelector=";
+	}
+
+
+	@PostMapping("/updateApplication")
+	public ModelAndView updateApplication(@RequestParam String reqAppListSelector, @ModelAttribute Application application){
+		System.out.println("@ updateApplication : app=" + application.getApplication() );
+		applicationDAO.updateApplication(application);
+		return new ModelAndView("redirect:/dashboard?reqAppListSelector=" + reqAppListSelector ) ;
+	}
+
+
+	@GetMapping("/deleteApplication")
+	public String deleteApplication(@RequestParam String reqApp) {
+		System.out.println("deleting all application data for: " + reqApp  );
+		runDAO.deleteAllForApplication(reqApp);
+		return "redirect:/dashboard?reqAppListSelector=All";
+	}
+
+
+	private String calcTimeSinceLastRun(String lastRunDateStr) {
+
+		if (StringUtils.isBlank(lastRunDateStr)){
+			return "n/a";
+		} else {
+
+			LocalDateTime lastRunDateTime = LocalDateTime.parse(lastRunDateStr, DateTimeFormatter.ofPattern("yyyyMMddHHmm"));
+			LocalDateTime now = LocalDateTime.now();
+
+			long daysBetween = Duration.between(lastRunDateTime, now).toDays();
+
+			if (daysBetween > 0 ) {
+				return  daysBetween + " days";
+			} else {
+				long hoursBetween = Duration.between(lastRunDateTime, now).toHours();
+				return  hoursBetween + " hours";
+			}
+		}
+	}
+
+
+	private List<String> populateActiveYesNoDropdown( ) {
+		List<String> activeYesNo = new ArrayList<>();
+		activeYesNo.add("Y");
+		activeYesNo.add("N");
+		return activeYesNo;
+	}
+
+
+}

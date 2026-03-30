@@ -37,6 +37,7 @@ import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.RegExUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.Strings;
 import org.apache.jmeter.protocol.java.sampler.JavaSamplerContext;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.threads.AbstractThreadGroup;
@@ -256,7 +257,7 @@ public class JmeterFunctionsImpl implements JmeterFunctions {
 			}
 
 		}
-		return StringUtils.removeEnd(leadingPartOfLogNames, "_");
+		return Strings.CS.removeEnd(leadingPartOfLogNames, "_");
 	}
 
 

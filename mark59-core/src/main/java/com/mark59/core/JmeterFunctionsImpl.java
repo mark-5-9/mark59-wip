@@ -37,7 +37,6 @@ import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.RegExUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.Strings;
 import org.apache.jmeter.protocol.java.sampler.JavaSamplerContext;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.threads.AbstractThreadGroup;
@@ -49,6 +48,7 @@ import com.mark59.core.utils.Mark59Constants;
 import com.mark59.core.utils.Mark59Constants.JMeterFileDatatypes;
 import com.mark59.core.utils.Mark59LogLevels;
 import com.mark59.core.utils.Mark59LoggingConfig;
+import com.mark59.core.utils.Mark59Utils;
 import com.mark59.core.utils.PropertiesKeys;
 import com.mark59.core.utils.StaticCounter;
 
@@ -257,7 +257,7 @@ public class JmeterFunctionsImpl implements JmeterFunctions {
 			}
 
 		}
-		return Strings.CS.removeEnd(leadingPartOfLogNames, "_");
+		return Mark59Utils.removeEnd(leadingPartOfLogNames, "_");
 	}
 
 

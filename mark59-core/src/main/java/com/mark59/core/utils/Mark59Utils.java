@@ -239,7 +239,54 @@ public class Mark59Utils {
 		}
 		return listOfStrings;
 	}
-
+	
+	
+    /**
+     * Removes a substring only if it is at the end of a source string,
+     * otherwise returns the source string.
+     * <pre>
+     * StringUtils.removeEnd(null, *)      = null
+     * StringUtils.removeEnd("", *)        = ""
+     * StringUtils.removeEnd(*, null)      = *
+     * StringUtils.removeEnd("www.domain.com", ".com.")  = "www.domain.com"
+     * StringUtils.removeEnd("www.domain.com", ".com")   = "www.domain"
+     * StringUtils.removeEnd("www.domain.com", "domain") = "www.domain.com"
+     * StringUtils.removeEnd("abc", "")    = "abc"
+     * </pre>
+     *
+     * @param str  the source String to search, may be null
+     * @param remove  the String to search for and remove, may be null
+     * @return the substring with the string removed if found, null if null String input
+     */
+    public static String removeEnd(final String str, final String remove) {
+        if (isEmpty(str) || isEmpty(remove)) {
+            return str;
+        }
+        if (str.endsWith(remove)) {
+            return str.substring(0, str.length() - remove.length());
+        }
+        return str;
+    }
+	
+    /**
+     * Checks if a CharSequence is empty ("") or null.
+     *
+     * <pre>
+     * StringUtils.isEmpty(null)      = true
+     * StringUtils.isEmpty("")        = true
+     * StringUtils.isEmpty(" ")       = false
+     * StringUtils.isEmpty("bob")     = false
+     * StringUtils.isEmpty("  bob  ") = false
+     * </pre>
+     * 
+     * @param cs  the CharSequence to check, may be null
+     * @return true if the CharSequence is empty or null
+     */
+    public static boolean isEmpty(final CharSequence cs) {
+        return cs == null || cs.length() == 0;
+    }
+	
+	
 
 	/**
 	 * LINUX is returned as the default, other options are WINDOWS and MAC

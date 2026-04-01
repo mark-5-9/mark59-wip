@@ -422,7 +422,7 @@ public class DataHunterRegressionScript  extends SeleniumAbstractJavaSamplerClie
 			assertEquals(policy.getLifecycle().trim(), addPolicyActionPage.lifecycle().getText());
 			assertEquals(policy.getUseability(), addPolicyActionPage.useability().getText());
 			assertEquals(policy.getOtherdata(), addPolicyActionPage.otherdata().getText());
-			assertTrue(StringUtils.isNumeric(addPolicyActionPage.epochtime().getText()));
+			assertTrue(Mark59Utils.isNumeric(addPolicyActionPage.epochtime().getText()));
 		}
 
 		private void confirmCountPoliciesActionPageOk(long expectedCount, CountPoliciesActionPage countPoliciesActionPage) {
@@ -443,7 +443,7 @@ public class DataHunterRegressionScript  extends SeleniumAbstractJavaSamplerClie
 			assertEquals(expectedPolicy.getLifecycle().trim(), printPolicyActionPage.lifecycle().getText());
 			assertEquals(expectedPolicy.getUseability(), printPolicyActionPage.useability().getText());
 			assertEquals(expectedPolicy.getOtherdata(), printPolicyActionPage.otherdata().getText());
-			assertTrue(StringUtils.isNumeric(printPolicyActionPage.epochtime().getText()));
+			assertTrue(Mark59Utils.isNumeric(printPolicyActionPage.epochtime().getText()));
 			assertEquals(1, Long.parseLong(printPolicyActionPage.rowsAffected().getText()));
 
 			assertEquals(expectedPolicy.getApplication().trim(), retrievedPolicy.getApplication());

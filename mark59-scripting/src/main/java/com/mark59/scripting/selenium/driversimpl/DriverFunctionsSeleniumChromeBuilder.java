@@ -222,9 +222,9 @@ public class DriverFunctionsSeleniumChromeBuilder implements DriverFunctionsSele
 				List<String> emulateNetworkConditionsArray = Mark59Utils.commaDelimStringToStringList(emulateNetworkConditions);
 				if (emulateNetworkConditionsArray.size() != 3 ) {
 					LOG.warn("Invalid EMULATE_NETWORK_CONDITIONS passed (3 comma-delimited values required) and will be ignored : " + emulateNetworkConditions);
-				} else if (	!StringUtils.isNumeric(emulateNetworkConditionsArray.get(0)) ||
-							!StringUtils.isNumeric(emulateNetworkConditionsArray.get(1)) ||
-							!StringUtils.isNumeric(emulateNetworkConditionsArray.get(2) )){
+				} else if (	!Mark59Utils.isNumeric(emulateNetworkConditionsArray.get(0)) ||
+							!Mark59Utils.isNumeric(emulateNetworkConditionsArray.get(1)) ||
+							!Mark59Utils.isNumeric(emulateNetworkConditionsArray.get(2) )){
 					LOG.warn("Invalid EMULATE_NETWORK_CONDITIONS passed (only integer values allowed) and will be ignored : " + emulateNetworkConditions);
 				} else {
 					Map<String, Object> map = new HashMap<>();

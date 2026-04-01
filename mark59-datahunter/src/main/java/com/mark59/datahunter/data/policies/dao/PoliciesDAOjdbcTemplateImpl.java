@@ -823,7 +823,7 @@ public class PoliciesDAOjdbcTemplateImpl implements PoliciesDAO
 				ixPolicyRow = policiesIxs.get(0);
 				validReuseIxPojo.setIxPolicy(ixPolicyRow);
 
-				if (StringUtils.isNumeric(ixPolicyRow.getOtherdata().trim())){
+				if (DataHunterUtils.isNumeric(ixPolicyRow.getOtherdata().trim())){
 					int currentIxCount = Integer.valueOf(ixPolicyRow.getOtherdata().trim());
 					validReuseIxPojo.setCurrentIxCount(currentIxCount);
 				} else {
@@ -1038,7 +1038,7 @@ public class PoliciesDAOjdbcTemplateImpl implements PoliciesDAO
 
 	private String limitSelector(PolicySelectionFilter policySelectionFilter, String sql) {
 		int limit = 100;
-		if (StringUtils.isNumeric(policySelectionFilter.getLimit())){
+		if (DataHunterUtils.isNumeric(policySelectionFilter.getLimit())){
 			limit = Integer.valueOf(policySelectionFilter.getLimit());
 			if (limit > 1000) {
 				limit = 1000;

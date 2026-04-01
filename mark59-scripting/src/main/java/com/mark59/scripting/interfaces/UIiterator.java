@@ -1,9 +1,9 @@
 package com.mark59.scripting.interfaces;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.logging.log4j.Logger;
 
+import com.mark59.core.utils.Mark59Utils;
 import com.mark59.scripting.playwright.PlaywrightIteratorAbstractJavaSamplerClient;
 import com.mark59.scripting.selenium.SeleniumIteratorAbstractJavaSamplerClient;
 
@@ -94,7 +94,7 @@ public interface UIiterator  {
 	public default Integer convertToInteger(String parameter) {
 		int convertedInt = 0;
 		if (parameter!= null){
-			if (StringUtils.isNumeric(parameter.trim())){
+			if (Mark59Utils.isNumeric(parameter.trim())){
 				convertedInt = Integer.parseInt(parameter.trim());
 			}
 		}

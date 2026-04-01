@@ -6,7 +6,6 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -207,7 +206,7 @@ public class UploadPoliciesFileController {
 			return formatLineLoadErrorMsg("The 'USEABILITY' value must be one of " + DataHunterConstants.USEABILITY_LIST,
 					line, errorLines, lineCount);
 		}
-		if (DataHunterUtils.isNotBlank(lineCols[5]) && !StringUtils.isNumeric((lineCols[5].trim()))){
+		if (DataHunterUtils.isNotBlank(lineCols[5]) && !DataHunterUtils.isNumeric((lineCols[5].trim()))){
 			return formatLineLoadErrorMsg("The 'EPOCHTIME' value must blank or a numeric", line, errorLines, lineCount);
 
 		}
@@ -233,7 +232,7 @@ public class UploadPoliciesFileController {
 		policy.setUseability(lineCols[3].trim());
 		policy.setOtherdata(lineCols[4]);
 
-		if (StringUtils.isNumeric(lineCols[5].trim())){
+		if (DataHunterUtils.isNumeric(lineCols[5].trim())){
 			policy.setEpochtime(Long.valueOf(lineCols[5].trim()));
 		} else {
 			policy.setEpochtime(System.currentTimeMillis());

@@ -561,7 +561,7 @@ public abstract class PlaywrightAbstractJavaSamplerClient extends UiAbstractJava
 		// Set browser dimensions
 		if (Mark59Utils.isNotBlank(arguments.get(ScriptingConstants.PLAYWRIGHT_VIEWPORT_SIZE))) {
 			String[] browserDimArray = StringUtils.split(arguments.get(ScriptingConstants.PLAYWRIGHT_VIEWPORT_SIZE), ",");
-			if ( browserDimArray.length == 2  && StringUtils.isNumeric(browserDimArray[0]) && StringUtils.isNumeric(browserDimArray[1])){
+			if ( browserDimArray.length == 2  && Mark59Utils.isNumeric(browserDimArray[0]) && Mark59Utils.isNumeric(browserDimArray[1])){
 				int width  = Integer.parseInt(browserDimArray[0]);
 				int height = Integer.parseInt(browserDimArray[1]);
 				playwrightPage.setViewportSize(width, height);
@@ -732,9 +732,9 @@ public abstract class PlaywrightAbstractJavaSamplerClient extends UiAbstractJava
 		List<String> emulateNetworkConditionsArray = Mark59Utils.commaDelimStringToStringList(emulateNetworkConditions);
 		if (emulateNetworkConditionsArray.size() != 3 ) {
 			LOG.warn("Invalid EMULATE_NETWORK_CONDITIONS passed (3 comma-delimited values required) and will be ignored : "+emulateNetworkConditions);
-		} else if (	!StringUtils.isNumeric(emulateNetworkConditionsArray.get(0)) ||
-					!StringUtils.isNumeric(emulateNetworkConditionsArray.get(1)) ||
-					!StringUtils.isNumeric(emulateNetworkConditionsArray.get(2) )){
+		} else if (	!Mark59Utils.isNumeric(emulateNetworkConditionsArray.get(0)) ||
+					!Mark59Utils.isNumeric(emulateNetworkConditionsArray.get(1)) ||
+					!Mark59Utils.isNumeric(emulateNetworkConditionsArray.get(2) )){
 			LOG.warn("Invalid EMULATE_NETWORK_CONDITIONS passed (only integer values allowed) and will be ignored : "+emulateNetworkConditions);
 		} else {
 			CDPSession cdp = browserContext.newCDPSession(page) ;

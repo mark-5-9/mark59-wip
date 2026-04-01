@@ -230,7 +230,81 @@ public final class DataHunterUtils  {
         return !isBlank(cs);
     }
 
+    /**
+     * Checks if a CharSequence is empty ("") or null.
+     *
+     * <pre>
+     * Mark59Utils.isEmpty(null)      = true
+     * Mark59Utils.isEmpty("")        = true
+     * Mark59Utils.isEmpty(" ")       = false
+     * Mark59Utils.isEmpty("bob")     = false
+     * Mark59Utils.isEmpty("  bob  ") = false
+     * </pre>
+     *
+     * @param cs  the CharSequence to check, may be null
+     * @return true if the CharSequence is empty or null
+     */
+    public static boolean isEmpty(final CharSequence cs) {
+        return cs == null || cs.length() == 0;
+    }
+
+    /**
+     * Checks if a CharSequence is not empty ("") and not null.
+     *
+     * <pre>
+     * Mark59Utils.isNotEmpty(null)      = false
+     * Mark59Utils.isNotEmpty("")        = false
+     * Mark59Utils.isNotEmpty(" ")       = true
+     * Mark59Utils.isNotEmpty("bob")     = true
+     * Mark59Utils.isNotEmpty("  bob  ") = true
+     * </pre>
+     *
+     * @param cs  the CharSequence to check, may be null
+     * @return true if the CharSequence is not empty and not null
+     */
+    public static boolean isNotEmpty(final CharSequence cs) {
+        return !isEmpty(cs);
+    }
 	
+    /**
+     * <p>Note : this method has been taken directly from Commons string utils 
+     * <p>Tests if the CharSequence contains only Unicode digits. A decimal point is not a Unicode digit and returns false.
+     * <p>null will return false. An empty CharSequence (length()=0) will return false.
+     * <p> Note that the method does not allow for a leading sign, either positive or negative. Also, if a String passes 
+     * the numeric test, it may still generate a NumberFormatException when parsed by Integer.parseInt or Long.parseLong, 
+     * e.g. if the value is outside the range for int or long respectively.
+     * </p>
+     *
+     * <pre>
+     * Mark59Utils.isNumeric(null)   = false
+     * Mark59Utils.isNumeric("")     = false
+     * Mark59Utils.isNumeric("  ")   = false
+     * Mark59Utils.isNumeric("123")  = true
+     * Mark59Utils.isNumeric("\u0967\u0968\u0969")  = true
+     * Mark59Utils.isNumeric("12 3") = false
+     * Mark59Utils.isNumeric("ab2c") = false
+     * Mark59Utils.isNumeric("12-3") = false
+     * Mark59Utils.isNumeric("12.3") = false
+     * Mark59Utils.isNumeric("-123") = false
+     * Mark59Utils.isNumeric("+123") = false
+     * </pre>
+     *
+     * @param cs the CharSequence to check, may be null.
+     * @return true if only contains digits, and is non-null.
+     */
+    public static boolean isNumeric(final CharSequence cs) {
+        if (isEmpty(cs)) {
+            return false;
+        }
+        final int sz = cs.length();
+        for (int i = 0; i < sz; i++) {
+            if (!Character.isDigit(cs.charAt(i))) {
+                return false;
+            }
+        }
+        return true;
+    }
+    
 	
 	
 }

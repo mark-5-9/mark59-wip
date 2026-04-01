@@ -163,7 +163,7 @@ public class PerformanceTest {
 		DateRangeBean filteredDateRangeBean = new DateRangeBean(dateRangeBean.getRunStartTime(), dateRangeBean.getRunEndTime(), false );
 
 		Long excludestartMsecs = 0L;
-		if (StringUtils.isNumeric(excludestart)) {
+		if (Mark59Utils.isNumeric(excludestart)) {
 			excludestartMsecs = TimeUnit.MINUTES.toMillis(Long.parseLong(excludestart));
 		}
 
@@ -175,7 +175,7 @@ public class PerformanceTest {
 			long filterEpochTimeFromMsecs = dateRangeBean.getRunStartTime() + excludestartMsecs;
 			Long filterEpochTimeToMsecs   = dateRangeBean.getRunEndTime();
 
-			if (StringUtils.isNumeric(captureperiod)){
+			if (Mark59Utils.isNumeric(captureperiod)){
 				filterEpochTimeToMsecs = filterEpochTimeFromMsecs + TimeUnit.MINUTES.toMillis(Long.parseLong(captureperiod));
 				System.out.print( ", for the following " + captureperiod	+ " mins ");
 			}

@@ -126,7 +126,7 @@ public class DataHunterRestController {
 			policies.setOtherdata(otherdata);
 		}
 
-		if (StringUtils.isNumeric(epochtime)){
+		if (DataHunterUtils.isNumeric(epochtime)){
 			policies.setEpochtime(Long.parseLong(epochtime)  );
 		} else {
 			policies.setEpochtime(System.currentTimeMillis());
@@ -655,7 +655,7 @@ public class DataHunterRestController {
 			policies.setOtherdata("");
 		}
 
-		if (StringUtils.isNumeric(epochtime)){
+		if (DataHunterUtils.isNumeric(epochtime)){
 			policies.setEpochtime(Long.parseLong(epochtime));
 		} else {
 			policies.setEpochtime(null); // DOA will set to current time
@@ -862,7 +862,7 @@ public class DataHunterRestController {
 		updateUseStateAndEpochTime.setUseability(useability);
 		updateUseStateAndEpochTime.setToUseability(toUseability);
 
-		if (StringUtils.isNumeric(toEpochTime)) {
+		if (DataHunterUtils.isNumeric(toEpochTime)) {
 			updateUseStateAndEpochTime.setToEpochTime(Long.parseLong(toEpochTime.trim()));
 		} else {
 			updateUseStateAndEpochTime.setToEpochTime(null); // DAO will not update epochtime

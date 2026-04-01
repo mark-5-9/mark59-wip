@@ -18,12 +18,12 @@ package com.mark59.trends;
 
 import java.sql.SQLException;
 
-import org.apache.commons.lang3.StringUtils;
 import org.h2.tools.Server;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import com.mark59.core.utils.Mark59Utils;
 import com.mark59.trends.data.application.dao.ApplicationDAO;
 import com.mark59.trends.data.application.dao.ApplicationDAOjdbcTemplateImpl;
 import com.mark59.trends.data.eventMapping.dao.EventMappingDAO;
@@ -132,7 +132,7 @@ public class ApplicationConfig {
     Server h2DatabaseServer() throws SQLException {
 
     	if ( "h2tcpserver".equalsIgnoreCase(currentDatabaseProfile())){
-    		if (StringUtils.isNumeric(h2Port())){
+    		if (Mark59Utils.isNumeric(h2Port())){
     			System.out.println("Starting H2 database using tcp port " + h2Port()  );
     	        return Server.createTcpServer("-tcp", "-tcpAllowOthers", "-tcpPort", h2Port());
     		} else {

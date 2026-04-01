@@ -361,7 +361,7 @@ public class JmeterRun extends PerformanceTest  {
 		String[] csvDataLineFields = csvReadNextLine(csvReader, inputCsvFileName);
 
 		// at this point, should be at the first line of data in the file
-		if  ( csvDataLineFields != null  && !StringUtils.isNumeric(csvDataLineFields[fieldPostimeStamp]) ) {
+		if  ( csvDataLineFields != null  && !Mark59Utils.isNumeric(csvDataLineFields[fieldPostimeStamp]) ) {
 			throw new RuntimeException("Error :  Only elapsed times in epoch (millisecond) format can be processed ! "
 				+ "\nFirst data line of file " + inputCsvFileName + " contains elapsed value of " + csvDataLineFields[fieldPostimeStamp]);
 		}

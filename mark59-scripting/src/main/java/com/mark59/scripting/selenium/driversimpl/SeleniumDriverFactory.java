@@ -267,7 +267,7 @@ public class SeleniumDriverFactory {
 		if (arguments.containsKey(BROWSER_DIMENSIONS) && Mark59Utils.isNotBlank(arguments.get(BROWSER_DIMENSIONS))) {
 			String[] browserDimArray = StringUtils.split(arguments.get(BROWSER_DIMENSIONS), ",");
 
-			if ( browserDimArray.length == 2  && StringUtils.isNumeric(browserDimArray[0]) && StringUtils.isNumeric(browserDimArray[1])){
+			if ( browserDimArray.length == 2  && Mark59Utils.isNumeric(browserDimArray[0]) && Mark59Utils.isNumeric(browserDimArray[1])){
 				int width  = Integer.parseInt(browserDimArray[0]);
 				int height = Integer.parseInt(browserDimArray[1]);
 				builder.setSize(width, height);

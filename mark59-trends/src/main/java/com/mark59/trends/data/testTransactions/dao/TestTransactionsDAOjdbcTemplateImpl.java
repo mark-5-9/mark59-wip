@@ -26,11 +26,11 @@ import java.util.Map;
 
 import javax.sql.DataSource;
 
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import com.mark59.core.utils.Mark59Constants;
+import com.mark59.core.utils.Mark59Utils;
 import com.mark59.trends.application.AppConstantsTrends;
 import com.mark59.trends.application.UtilsTrends;
 import com.mark59.trends.data.beans.DateRangeBean;
@@ -217,7 +217,7 @@ public class TestTransactionsDAOjdbcTemplateImpl implements TestTransactionsDAO
 	    String earliestTimestamp = jdbcTemplate.queryForObject(sql, String.class,
 	    		applicationn, AppConstantsTrends.RUN_TIME_YET_TO_BE_CALCULATED);
 
-	    if ( ! StringUtils.isNumeric(earliestTimestamp)) {
+	    if ( ! Mark59Utils.isNumeric(earliestTimestamp)) {
 	    	throw new RuntimeException(" A valid date range for the test was not found (possibly no transactions in output dataset?)."
 	    			+ "  Aborting run." + "(found run start time of " + earliestTimestamp + ")" );
 	    }
@@ -234,7 +234,7 @@ public class TestTransactionsDAOjdbcTemplateImpl implements TestTransactionsDAO
 	    String latestTimestamp = jdbcTemplate.queryForObject(sql, String.class,
 	    		applicationn, AppConstantsTrends.RUN_TIME_YET_TO_BE_CALCULATED);
 
-	    if ( ! StringUtils.isNumeric(latestTimestamp)) {
+	    if ( ! Mark59Utils.isNumeric(latestTimestamp)) {
 	    	throw new RuntimeException(" A valid date range for the test was not found (possibly no transactions in output dataset?)."
 	    			+ "  Aborting run." + "(found run end time of " + latestTimestamp + ")" );
 	    }

@@ -98,7 +98,7 @@ public class Mark59Utils {
 	 * @return boolean true or false
 	 */
 	public static boolean resolvesToTrue(final String str) {
-		if (StringUtils.isBlank(str)) {	return false;}
+		if (Mark59Utils.isBlank(str)) {	return false;}
 		if (str.trim().toLowerCase().startsWith("t")) {return true;}
 		return str.trim().toLowerCase().startsWith("y");
 	}
@@ -197,7 +197,7 @@ public class Mark59Utils {
 
 		String candidateTxnId = txnIdPrefix + reportedServerId;
 
-		if 	(StringUtils.isNotBlank(metricNameSuffix)){
+		if 	(Mark59Utils.isNotBlank(metricNameSuffix)){
 			candidateTxnId = candidateTxnId + "_" + metricNameSuffix;
 		}
 		return candidateTxnId;
@@ -221,7 +221,7 @@ public class Mark59Utils {
 	 */
 	public static List<String> commaDelimStringToStringList(String commaDelimitedString) {
 		List<String> listOfStrings = new ArrayList<>();
-		if ( StringUtils.isNotBlank(commaDelimitedString)){
+		if ( Mark59Utils.isNotBlank(commaDelimitedString)){
 			listOfStrings =  Arrays.asList(StringUtils.stripAll(StringUtils.split(commaDelimitedString, ",")));
 		}
 		return listOfStrings;
@@ -234,24 +234,24 @@ public class Mark59Utils {
 	 */
 	public static List<String> pipeDelimStringToStringList(String pipeDelimitedString) {
 		List<String> listOfStrings = new ArrayList<>();
-		if ( StringUtils.isNotBlank(pipeDelimitedString)){
+		if ( Mark59Utils.isNotBlank(pipeDelimitedString)){
 			listOfStrings =  Arrays.asList(StringUtils.stripAll(StringUtils.split(pipeDelimitedString, "|")));
 		}
 		return listOfStrings;
 	}
-	
-	
+
+
     /**
      * Removes a substring only if it is at the end of a source string,
      * otherwise returns the source string.
      * <pre>
-     * StringUtils.removeEnd(null, *)      = null
-     * StringUtils.removeEnd("", *)        = ""
-     * StringUtils.removeEnd(*, null)      = *
-     * StringUtils.removeEnd("www.domain.com", ".com.")  = "www.domain.com"
-     * StringUtils.removeEnd("www.domain.com", ".com")   = "www.domain"
-     * StringUtils.removeEnd("www.domain.com", "domain") = "www.domain.com"
-     * StringUtils.removeEnd("abc", "")    = "abc"
+     * Mark59UtilsremoveEnd(null, *)      = null
+     * Mark59Utils.removeEnd("", *)        = ""
+     * Mark59Utils.removeEnd(*, null)      = *
+     * Mark59Utils.removeEnd("www.domain.com", ".com.")  = "www.domain.com"
+     * Mark59Utils.removeEnd("www.domain.com", ".com")   = "www.domain"
+     * Mark59Utils.removeEnd("www.domain.com", "domain") = "www.domain.com"
+     * Mark59Utils.removeEnd("abc", "")    = "abc"
      * </pre>
      *
      * @param str  the source String to search, may be null
@@ -267,26 +267,114 @@ public class Mark59Utils {
         }
         return str;
     }
-	
+
     /**
      * Checks if a CharSequence is empty ("") or null.
      *
      * <pre>
-     * StringUtils.isEmpty(null)      = true
-     * StringUtils.isEmpty("")        = true
-     * StringUtils.isEmpty(" ")       = false
-     * StringUtils.isEmpty("bob")     = false
-     * StringUtils.isEmpty("  bob  ") = false
+     * Mark59Utils.isEmpty(null)      = true
+     * Mark59Utils.isEmpty("")        = true
+     * Mark59Utils.isEmpty(" ")       = false
+     * Mark59Utils.isEmpty("bob")     = false
+     * Mark59Utils.isEmpty("  bob  ") = false
      * </pre>
-     * 
+     *
      * @param cs  the CharSequence to check, may be null
      * @return true if the CharSequence is empty or null
      */
     public static boolean isEmpty(final CharSequence cs) {
         return cs == null || cs.length() == 0;
     }
-	
-	
+
+    /**
+     * Checks if a CharSequence is not empty ("") and not null.
+     *
+     * <pre>
+     * Mark59Utils.isNotEmpty(null)      = false
+     * Mark59Utils.isNotEmpty("")        = false
+     * Mark59Utils.isNotEmpty(" ")       = true
+     * Mark59Utils.isNotEmpty("bob")     = true
+     * Mark59Utils.isNotEmpty("  bob  ") = true
+     * </pre>
+     *
+     * @param cs  the CharSequence to check, may be null
+     * @return true if the CharSequence is not empty and not null
+     */
+    public static boolean isNotEmpty(final CharSequence cs) {
+        return !isEmpty(cs);
+    }
+
+    /**
+     * Checks if a CharSequence is empty (""), null or whitespace only.
+     *
+     * <pre>
+     * Mark59Utils.isBlank(null)      = true
+     * Mark59Utils.isBlank("")        = true
+     * Mark59Utils.isBlank(" ")       = true
+     * Mark59Utils.isBlank("bob")     = false
+     * Mark59Utils.isBlank("  bob  ") = false
+     * </pre>
+     *
+     * @param cs  the CharSequence to check, may be null
+     * @return true if the CharSequence is null, empty or whitespace only
+     */
+    public static boolean isBlank(final CharSequence cs) {
+        if (cs == null || cs.length() == 0) {
+            return true;
+        }
+        for (int i = 0; i < cs.length(); i++) {
+            if (!Character.isWhitespace(cs.charAt(i))) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * Checks if a CharSequence is not empty (""), not null and not whitespace only.
+     *
+     * <pre>
+     * Mark59Utils.isNotBlank(null)      = false
+     * Mark59Utils.isNotBlank("")        = false
+     * Mark59Utils.isNotBlank(" ")       = false
+     * Mark59Utils.isNotBlank("bob")     = true
+     * Mark59Utils.isNotBlank("  bob  ") = true
+     * </pre>
+     *
+     * @param cs  the CharSequence to check, may be null
+     * @return true if the CharSequence is not empty and not null and not whitespace only
+     */
+    public static boolean isNotBlank(final CharSequence cs) {
+        return !isBlank(cs);
+    }
+
+    /**
+     * Checks if a CharSequence contains a search CharSequence (case-sensitive).
+     * Returns false if either CharSequence is null.
+     *
+     * <pre>
+     * Mark59Utils.contains(null, *)          = false
+     * Mark59Utils.contains(*, null)          = false
+     * Mark59Utils.contains("", "")           = true
+     * Mark59Utils.contains("abc", "")        = true
+     * Mark59Utils.contains("abc", "a")       = true
+     * Mark59Utils.contains("abc", "z")       = false
+     * Mark59Utils.contains("abc", "ab")      = true
+     * Mark59Utils.contains("abc", "ABC")     = false
+     * </pre>
+     *
+     * @param cs  the CharSequence to check, may be null
+     * @param searchSeq  the CharSequence to find, may be null
+     * @return true if the CharSequence contains the search CharSequence (case-sensitive), false if not or either is null
+     */
+    public static boolean contains(final CharSequence cs, final CharSequence searchSeq) {
+        if (cs == null || searchSeq == null) {
+            return false;
+        }
+        return cs.toString().contains(searchSeq.toString());
+    }
+
+
 
 	/**
 	 * LINUX is returned as the default, other options are WINDOWS and MAC

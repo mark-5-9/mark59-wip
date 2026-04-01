@@ -30,8 +30,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.TimeZone;
 
-import org.apache.commons.lang3.StringUtils;
-
 import com.healthmarketscience.jackcess.Cursor;
 import com.healthmarketscience.jackcess.CursorBuilder;
 import com.healthmarketscience.jackcess.Database;
@@ -39,6 +37,7 @@ import com.healthmarketscience.jackcess.DatabaseBuilder;
 import com.healthmarketscience.jackcess.Row;
 import com.healthmarketscience.jackcess.Table;
 import com.mark59.core.utils.Mark59Constants;
+import com.mark59.core.utils.Mark59Utils;
 import com.mark59.trends.application.AppConstantsTrends;
 import com.mark59.trends.application.UtilsTrends;
 import com.mark59.trends.data.beans.DateRangeBean;
@@ -129,7 +128,7 @@ public class LrRunAccessDatabase {
 
 			// it appears the stored epoch time actually goes 1 hour ahead during Australian daylight savings, this 'hack' seems to cater for that
 
-			if (StringUtils.isBlank(timeZone)) {
+			if (Mark59Utils.isBlank(timeZone)) {
 				timeZone = new GregorianCalendar().getTimeZone().getID();
 				System.out.println("The 'timeZone'(z) parameter was blank! Assuming a timezone id of : " + timeZone);
 			}
@@ -338,7 +337,7 @@ public class LrRunAccessDatabase {
 				txnId = UtilsTrends.deriveEventTxnIdUsingEventMappingBoundaryRules(mdbEventName, mark59EventMapping);
 			}
 
-			if ( StringUtils.isNotBlank(txnId)){
+			if ( Mark59Utils.isNotBlank(txnId)){
 				lrEventNameMatched = true;
 				System.out.println("      matched LrEvent Id : " + mdbEventId + " (" + mdbEventType + ") to mapping entry \""
 						+ mark59EventMapping.getMatchWhenLike() + "\".  Mapped Txn type = " + mark59EventMapping.getTxnType() + ", Txn Id = " + txnId    );

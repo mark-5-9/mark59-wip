@@ -36,7 +36,6 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.RegExUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.protocol.java.sampler.JavaSamplerContext;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.threads.AbstractThreadGroup;
@@ -289,7 +288,7 @@ public class JmeterFunctionsImpl implements JmeterFunctions {
 	 */
 	@Override
 	public void startTransaction(String transactionLabel, JMeterFileDatatypes jMeterFileDatatypes) {
-		if (StringUtils.isBlank(transactionLabel)) {
+		if (Mark59Utils.isBlank(transactionLabel)) {
 			throw new IllegalArgumentException("transactionLabel cannot be null or empty");
 		}
 		if (transactionMap.containsKey(transactionLabel)) {
@@ -368,14 +367,14 @@ public class JmeterFunctionsImpl implements JmeterFunctions {
 	 * @return the JMeter subresult for this transaction - which includes the transaction time (getTime)
 	 */
 	public SampleResult endTransaction(String transactionLabel, Outcome result, String responseCode) {
-		if (StringUtils.isBlank(transactionLabel))
+		if (Mark59Utils.isBlank(transactionLabel))
 			throw new IllegalArgumentException("transactionLabel cannot be null or empty");
 
 		if (!transactionMap.containsKey(transactionLabel))
 			throw new NoSuchElementException(
 					"Could not find a transactionn to end matching the passed label : "	+ transactionLabel);
 
-		if (StringUtils.isBlank(responseCode))
+		if (Mark59Utils.isBlank(responseCode))
 			responseCode = result.getOutcomeResponseCode();
 
 		SampleResult subResult = transactionMap.get(transactionLabel);
@@ -403,14 +402,14 @@ public class JmeterFunctionsImpl implements JmeterFunctions {
 	 * @return the JMeter subresult for this transaction - which includes the transaction time (getTime)
 	 */
 	public SampleResult endTransactionTimingButDontRecordResult(String transactionLabel, Outcome result, String responseCode) {
-		if (StringUtils.isBlank(transactionLabel))
+		if (Mark59Utils.isBlank(transactionLabel))
 			throw new IllegalArgumentException("transactionLabel cannot be null or empty");
 
 		if (!transactionMap.containsKey(transactionLabel))
 			throw new NoSuchElementException(
 					"Could not find a transactionn to end matching the passed label : "	+ transactionLabel);
 
-		if (StringUtils.isBlank(responseCode))
+		if (Mark59Utils.isBlank(responseCode))
 			responseCode = result.getOutcomeResponseCode();
 
 		// timing is captured and returned but NOT added to the main Result
@@ -518,8 +517,8 @@ public class JmeterFunctionsImpl implements JmeterFunctions {
 	 * <pre><code>
 	 * jm.userDatatypeEntry("MyServersCPUUtilizationPercent", 40L, Mark59Constants.JMeterFileDatatypes.CPU_UTIL );
 	 * </code></pre>
-	 * 
-	 * @param dataPointName label for the data point 
+	 *
+	 * @param dataPointName label for the data point
 	 * @param dataPointValue the value of the data point
 	 * @param jMeterFileDatatypes the data type for the JMeter results file
 	 * @return SampleResult
@@ -550,9 +549,9 @@ public class JmeterFunctionsImpl implements JmeterFunctions {
 
 
 	private SampleResult createSubResult(String dataPointName, long dataPointValue, Outcome result, JMeterFileDatatypes jmeterFileDatatypes, String responseCode){
-		if (StringUtils.isBlank(dataPointName))
+		if (Mark59Utils.isBlank(dataPointName))
 			throw new IllegalArgumentException("dataPointName cannot be null or empty");
-		if (StringUtils.isBlank(responseCode))
+		if (Mark59Utils.isBlank(responseCode))
 			responseCode = result.getOutcomeResponseCode();
 
 		SampleResult subResult = new SampleResult();
@@ -816,7 +815,7 @@ public class JmeterFunctionsImpl implements JmeterFunctions {
 
 		List<String> inFlightTransactionsNames = new ArrayList<String>();
 		for (Entry<String, SampleResult> subResultEntry : transactionMap.entrySet()) {
-			if (StringUtils.isBlank(subResultEntry.getValue().getResponseMessage())){
+			if (Mark59Utils.isBlank(subResultEntry.getValue().getResponseMessage())){
 				inFlightTransactionsNames.add(subResultEntry.getValue().getSampleLabel());
 			}
 		}
@@ -833,7 +832,7 @@ public class JmeterFunctionsImpl implements JmeterFunctions {
 	public void failInFlightTransactions() {
 
 		for (Entry<String, SampleResult> subResultEntry : transactionMap.entrySet()) {
-			if (StringUtils.isBlank(subResultEntry.getValue().getResponseMessage())){
+			if (Mark59Utils.isBlank(subResultEntry.getValue().getResponseMessage())){
 				endTransaction(subResultEntry.getValue().getSampleLabel(), Outcome.FAIL);
 			}
 		}
@@ -1108,7 +1107,7 @@ public class JmeterFunctionsImpl implements JmeterFunctions {
 		String fullLogname = leadingPartOfLogNames;
 
 		if (loggingConfig.getLogNamesFormat().contains(Mark59Constants.LABEL)) {
-			if (StringUtils.isNotBlank(mostRecentTransactionStarted)){
+			if (Mark59Utils.isNotBlank(mostRecentTransactionStarted)){
 				String sanitizedLabel = sanitizeForFilename(mostRecentTransactionStarted, "noTxn");
 				fullLogname +=  "_" + sanitizedLabel;
 			} else {
@@ -1307,7 +1306,7 @@ public class JmeterFunctionsImpl implements JmeterFunctions {
 		for (int i = 0; i < sampleResult.length; i++) {
 			SampleResult subSR = sampleResult[i];
 
-			if (StringUtils.isBlank(subSR.getDataType())) {
+			if (Mark59Utils.isBlank(subSR.getDataType())) {
 				LOG.info(String.format("%-40s%-10s%-70s%-20s%-20s", threadName, i, subSR.getSampleLabel(),
 						subSR.getResponseMessage(), subSR.getTime()));
 			} else {
@@ -1328,7 +1327,7 @@ public class JmeterFunctionsImpl implements JmeterFunctions {
 		for (int i = 0; i < sampleResult.length; i++) {
 			SampleResult subSR = sampleResult[i];
 
-			if (StringUtils.isBlank(subSR.getDataType())) {
+			if (Mark59Utils.isBlank(subSR.getDataType())) {
 				System.out.println(String.format("%-40s%-10s%-70s%-20s%-20s", threadName, i, subSR.getSampleLabel(),
 						subSR.getResponseMessage(), subSR.getTime()));
 			} else {

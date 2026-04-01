@@ -23,12 +23,12 @@ import java.util.Map;
 
 import javax.sql.DataSource;
 
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 
+import com.mark59.core.utils.Mark59Utils;
 import com.mark59.trends.data.beans.BarRange;
 import com.mark59.trends.data.beans.GraphMapping;
 
@@ -171,7 +171,7 @@ public class GraphMappingDAOjdbcTemplateImpl implements GraphMappingDAO
 		Map<String, Object> onerow = onerows.get(0);
 		String rangeSql = (String)onerow.get("BAR_RANGE_SQL");
 
-		if (StringUtils.isBlank(rangeSql) ){
+		if (Mark59Utils.isBlank(rangeSql) ){
 			return new ArrayList<>();
 		} else {
 			return transactionsRangeBars(application, runTime, rangeSql);

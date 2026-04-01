@@ -219,12 +219,12 @@ public class SeleniumDriverFactory {
 		Path browserPath = null;
 		String pathMsg = "";
 
-		if (StringUtils.isNotBlank(pr.getProperty(PropertiesKeys.MARK59_PROP_BROWSER_EXECUTABLE))) {
+		if (Mark59Utils.isNotBlank(pr.getProperty(PropertiesKeys.MARK59_PROP_BROWSER_EXECUTABLE))) {
 			browserPath = new File(pr.getProperty(PropertiesKeys.MARK59_PROP_BROWSER_EXECUTABLE)).toPath();
 			builder.setAlternateBrowser(browserPath);
 			pathMsg = "Selenium script uses prop to set browser: " + pr.getProperty(PropertiesKeys.MARK59_PROP_BROWSER_EXECUTABLE);
 		}
-		if (StringUtils.isNotBlank(arguments.get(ScriptingConstants.OVERRIDE_PROPERTY_MARK59_BROWSER_EXECUTABLE))) {
+		if (Mark59Utils.isNotBlank(arguments.get(ScriptingConstants.OVERRIDE_PROPERTY_MARK59_BROWSER_EXECUTABLE))) {
 			try {
 				browserPath = new File(arguments.get(ScriptingConstants.OVERRIDE_PROPERTY_MARK59_BROWSER_EXECUTABLE)).toPath();
 				builder.setAlternateBrowser(browserPath);
@@ -243,7 +243,7 @@ public class SeleniumDriverFactory {
 			LOG.debug(pathMsg);
 
 		// throw error for the now deprecated unused BROWSER_EXECUTABLE argument
-		if (StringUtils.isNotBlank(arguments.get(BROWSER_EXECUTABLE))) {
+		if (Mark59Utils.isNotBlank(arguments.get(BROWSER_EXECUTABLE))) {
 			LOG.error("'BROWSER_EXECUTABLE' JMeter argument is no longer in use! Please use 'OVERRIDE_PROPERTY_MARK59_BROWSER_EXECUTABLE'");
 			throw new IllegalArgumentException("'OVERRIDE_PROPERTY_MARK59_BROWSER_EXECUTABLE' has replaced 'BROWSER_EXECUTABLE'" );
 		}
@@ -264,7 +264,7 @@ public class SeleniumDriverFactory {
 
 
 		// Set browser dimensions
-		if (arguments.containsKey(BROWSER_DIMENSIONS) && StringUtils.isNotBlank(arguments.get(BROWSER_DIMENSIONS))) {
+		if (arguments.containsKey(BROWSER_DIMENSIONS) && Mark59Utils.isNotBlank(arguments.get(BROWSER_DIMENSIONS))) {
 			String[] browserDimArray = StringUtils.split(arguments.get(BROWSER_DIMENSIONS), ",");
 
 			if ( browserDimArray.length == 2  && StringUtils.isNumeric(browserDimArray[0]) && StringUtils.isNumeric(browserDimArray[1])){
@@ -283,14 +283,14 @@ public class SeleniumDriverFactory {
 
 		// Set proxy settings
 		if (arguments.containsKey(PROXY)
-				&& StringUtils.isNotBlank(arguments.get(PROXY))) {
+				&& Mark59Utils.isNotBlank(arguments.get(PROXY))) {
 			setProxy(arguments, builder);
 		}
 
 
 		// Set UNHANDLED_PROMPT_BEHAVIOUR
 		if (arguments.containsKey(UNHANDLED_PROMPT_BEHAVIOUR)
-				&& StringUtils.isNotBlank(arguments.get(UNHANDLED_PROMPT_BEHAVIOUR))) {
+				&& Mark59Utils.isNotBlank(arguments.get(UNHANDLED_PROMPT_BEHAVIOUR))) {
 			UnexpectedAlertBehaviour behaviour = UnexpectedAlertBehaviour.fromString(arguments.get(UNHANDLED_PROMPT_BEHAVIOUR));
 			if (behaviour != null) {
 				builder.setUnhandledPromptBehaviour(behaviour);
@@ -302,7 +302,7 @@ public class SeleniumDriverFactory {
 
 		// Set browser launch arguments - semicolon required to separate args
 		String browserArgs = arguments.get(BROWSER_LAUNCH_ARGS);
-		if (StringUtils.isNotBlank(browserArgs)){
+		if (Mark59Utils.isNotBlank(browserArgs)){
 			java.util.List<java.lang.String> argumentsList =  Arrays.asList(StringUtils.split(browserArgs, ";"));
 			builder.setBrowserLaunchArgs(argumentsList);
 		}

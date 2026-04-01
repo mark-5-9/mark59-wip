@@ -75,7 +75,7 @@ public class TransactionDAOjdbcTemplateImpl implements TransactionDAO
 					+ "Avoid the use of commas if possible : " + transaction.getTxnId());
 			transaction.setTxnId(transaction.getTxnId().replace(",","-"));
 		}
-		
+
 		jdbcTemplate.update(sql,
 				transaction.getApplication(), transaction.getRunTime(),
 				transaction.getTxnId(), transaction.getTxnType(), transaction.getIsCdpTxn(),
@@ -505,7 +505,7 @@ public class TransactionDAOjdbcTemplateImpl implements TransactionDAO
 				if (!"%".equals(sqlSelectLike) ){
 					sql = sql + " AND TXN_ID LIKE :sqlSelectLike ";
 				}
-				if (StringUtils.isNotBlank(sqlSelectNotLike)){
+				if (Mark59Utils.isNotBlank(sqlSelectNotLike)){
 					sql = sql + " AND NOT (TXN_ID LIKE :sqlSelectNotLike ) ";
 				}
 				if (Mark59Constants.DatabaseTxnTypes.TRANSACTION.name().equals( graphMapping.getTxnType() )){
@@ -577,7 +577,7 @@ public class TransactionDAOjdbcTemplateImpl implements TransactionDAO
 		List<Datapoint> datapoints = new ArrayList<>();
 		Object datapointMetric;
 
-		if (StringUtils.isEmpty(chosenRuns) || (listOfStdTransactionNamesToGraph.size() + listOfCdpTransactionNamesToGraph.size()) == 0 ){
+		if (Mark59Utils.isEmpty(chosenRuns) || (listOfStdTransactionNamesToGraph.size() + listOfCdpTransactionNamesToGraph.size()) == 0 ){
 			return datapoints;
 		}
 
@@ -612,7 +612,7 @@ public class TransactionDAOjdbcTemplateImpl implements TransactionDAO
 		List<Map<String, Object>> rows = jdbcTemplate.queryForList(sql, sqlparameters);
 
 		int numRunsBeingGraphed = 0;   // eg, for initial request..
-		if (StringUtils.isNotBlank(chosenRuns)){
+		if (Mark59Utils.isNotBlank(chosenRuns)){
 			numRunsBeingGraphed = StringUtils.countMatches(chosenRuns, ",") + 1;
 		} else {
 			System.out.println(" ****** no chosen runs passed to findDatapointsToGraph!!!!!   Application was " + application);
@@ -686,7 +686,7 @@ public class TransactionDAOjdbcTemplateImpl implements TransactionDAO
 	 * @throws IllegalArgumentException if any value contains suspicious characters
 	 */
 	private String validateAndEscapeCommaDelimitedValues(String commaDelimitedValues, String fieldName) {
-		if (StringUtils.isBlank(commaDelimitedValues)) {
+		if (Mark59Utils.isBlank(commaDelimitedValues)) {
 			return "''";
 		}
 

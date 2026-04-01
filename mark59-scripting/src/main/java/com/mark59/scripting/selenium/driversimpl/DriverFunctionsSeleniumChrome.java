@@ -18,7 +18,6 @@ package com.mark59.scripting.selenium.driversimpl;
 
 import java.util.List;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.WebDriver;
@@ -26,6 +25,7 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.logging.LogEntry;
 import org.openqa.selenium.logging.LogType;
 
+import com.mark59.core.utils.Mark59Utils;
 import com.mark59.scripting.selenium.interfaces.DriverFunctionsSelenium;
 
 
@@ -79,7 +79,7 @@ public class DriverFunctionsSeleniumChrome extends DriverFunctionsSelenium<Chrom
 		}
 		String allEntriesLog = allEntriesLogBuilder.toString();
 
-		return StringUtils.isNotBlank(allEntriesLog) ? allEntriesLog.getBytes() : null;
+		return Mark59Utils.isNotBlank(allEntriesLog) ? allEntriesLog.getBytes() : null;
 	}
 
 

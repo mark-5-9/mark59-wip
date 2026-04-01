@@ -21,7 +21,6 @@ import java.nio.file.Path;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.Capabilities;
@@ -37,6 +36,7 @@ import org.openqa.selenium.remote.service.DriverService;
 
 import com.mark59.core.utils.Mark59Constants;
 import com.mark59.core.utils.Mark59LoggingConfig;
+import com.mark59.core.utils.Mark59Utils;
 import com.mark59.scripting.selenium.interfaces.DriverFunctionsSelenium;
 import com.mark59.scripting.selenium.interfaces.DriverFunctionsSeleniumBuilder;
 
@@ -137,7 +137,7 @@ public class DriverFunctionsSeleniumFirefoxBuilder implements DriverFunctionsSel
 	public DriverFunctionsSeleniumBuilder<FirefoxOptions> setWriteBrowserLogfile(boolean isWriteBrowserLogFile) {
 		String logsDirectory = Mark59LoggingConfig.getInstance().getLogDirectory().getName();
 
-		if (isWriteBrowserLogFile && StringUtils.isNotBlank(logsDirectory)) {
+		if (isWriteBrowserLogFile && Mark59Utils.isNotBlank(logsDirectory)) {
 			String firefoxBrowserLog =  logsDirectory + File.separator + Thread.currentThread().getName() + "_FirefoxBrowserLogfile.txt";
 			LOG.info("Note: FireFox driver logging directed to " + firefoxBrowserLog);
 			File firefoxBrowserLogFile = new File(firefoxBrowserLog);

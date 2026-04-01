@@ -32,6 +32,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.mark59.datahunter.application.DataHunterConstants;
+import com.mark59.datahunter.application.DataHunterUtils;
 import com.mark59.datahunter.application.SqlWithParms;
 import com.mark59.datahunter.data.beans.Policies;
 import com.mark59.datahunter.data.policies.dao.PoliciesDAO;
@@ -210,7 +211,7 @@ public class DataHunterRestController {
 
 		DataHunterRestApiResponsePojo response = new DataHunterRestApiResponsePojo();
 		response.setPolicies(Collections.singletonList(new Policies(application,null,lifecycle, useability, null, null)));
-		if (StringUtils.isNotBlank(useability) && !DataHunterConstants.USEABILITY_LIST.contains(useability)){
+		if (DataHunterUtils.isNotBlank(useability) && !DataHunterConstants.USEABILITY_LIST.contains(useability)){
 			return ResponseEntity.ok(UseabilityError(useability, response));
 		}
 
@@ -253,7 +254,7 @@ public class DataHunterRestController {
 			return ResponseEntity.ok(response);
 		}
 
-		if (StringUtils.isNotBlank(useability) && !DataHunterConstants.USEABILITY_LIST.contains(useability)){
+		if (DataHunterUtils.isNotBlank(useability) && !DataHunterConstants.USEABILITY_LIST.contains(useability)){
 			return ResponseEntity.ok(UseabilityError(useability, response));
 		}
 
@@ -403,7 +404,7 @@ public class DataHunterRestController {
 		policySelectionFilter.setLimit(limit);
 
 		DataHunterRestApiResponsePojo response = new DataHunterRestApiResponsePojo();
-		if (StringUtils.isNotBlank(useability) && !DataHunterConstants.USEABILITY_LIST.contains(useability)){
+		if (DataHunterUtils.isNotBlank(useability) && !DataHunterConstants.USEABILITY_LIST.contains(useability)){
 			return ResponseEntity.ok(UseabilityError(useability, response));
 		}
 		SqlWithParms sqlWithParms = policiesDAO.constructSelectPoliciesFilterSql(policySelectionFilter);
@@ -536,7 +537,7 @@ public class DataHunterRestController {
 
 		DataHunterRestApiResponsePojo response = new DataHunterRestApiResponsePojo();
 
-		if (StringUtils.isNotBlank(useability) && !DataHunterConstants.USEABILITY_LIST.contains(useability)){
+		if (DataHunterUtils.isNotBlank(useability) && !DataHunterConstants.USEABILITY_LIST.contains(useability)){
 			return ResponseEntity.ok(UseabilityError(useability, response));
 		}
 
@@ -648,7 +649,7 @@ public class DataHunterRestController {
 
 		policies.setUseability(useability);
 
-		if (StringUtils.isNotBlank(otherdata)){
+		if (DataHunterUtils.isNotBlank(otherdata)){
 			policies.setOtherdata(otherdata);
 		} else {
 			policies.setOtherdata("");
@@ -870,7 +871,7 @@ public class DataHunterRestController {
 
 		DataHunterRestApiResponsePojo response = new DataHunterRestApiResponsePojo();
 
-		if (StringUtils.isNotBlank(useability) && !DataHunterConstants.USEABILITY_LIST.contains(useability)){
+		if (DataHunterUtils.isNotBlank(useability) && !DataHunterConstants.USEABILITY_LIST.contains(useability)){
 			return ResponseEntity.ok(UseabilityError(useability, response));
 		}
 		if (!DataHunterConstants.USEABILITY_LIST.contains(toUseability)){
@@ -935,10 +936,10 @@ public class DataHunterRestController {
 			return ResponseEntity.ok(response);
 		}
 
-		if (StringUtils.isNotBlank(useability) && !DataHunterConstants.USEABILITY_LIST.contains(useability)){
+		if (DataHunterUtils.isNotBlank(useability) && !DataHunterConstants.USEABILITY_LIST.contains(useability)){
 			return ResponseEntity.ok(UseabilityError(useability, response));
 		}
-		if (StringUtils.isNotBlank(toUseability) &&  !DataHunterConstants.USEABILITY_LIST.contains(toUseability)){
+		if (DataHunterUtils.isNotBlank(toUseability) &&  !DataHunterConstants.USEABILITY_LIST.contains(toUseability)){
 			return ResponseEntity.ok(UseabilityError(toUseability, response));
 		}
 
@@ -973,7 +974,7 @@ public class DataHunterRestController {
 			return ResponseEntity.ok(response);
 		}
 
-		if (StringUtils.isNotBlank(toUseability)){
+		if (DataHunterUtils.isNotBlank(toUseability)){
 			try {
 				asyncMessageAnalyzerResultList = policiesDAO.updateMultiplePoliciesUseState(asyncMessageAnalyzerResultList, toUseability);
 			} catch (Exception e) {

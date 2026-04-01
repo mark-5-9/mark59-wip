@@ -218,7 +218,7 @@ public class DriverFunctionsSeleniumChromeBuilder implements DriverFunctionsSele
 
 			String emulateNetworkConditions = arguments.get(SeleniumDriverFactory.EMULATE_NETWORK_CONDITIONS);
 
-			if (StringUtils.isNotBlank(emulateNetworkConditions)) {
+			if (Mark59Utils.isNotBlank(emulateNetworkConditions)) {
 				List<String> emulateNetworkConditionsArray = Mark59Utils.commaDelimStringToStringList(emulateNetworkConditions);
 				if (emulateNetworkConditionsArray.size() != 3 ) {
 					LOG.warn("Invalid EMULATE_NETWORK_CONDITIONS passed (3 comma-delimited values required) and will be ignored : " + emulateNetworkConditions);

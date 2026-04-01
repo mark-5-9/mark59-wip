@@ -141,10 +141,10 @@ public final class DataHunterUtils  {
 	public static String commaDelimStringTrimAll(String commaDelimitedString) {
 		String trimmedStrings = "";
 		// note when an empty string is passed to the split, it creates a empty first element ...
-		if (StringUtils.isNotBlank(commaDelimitedString)){
+		if (isNotBlank(commaDelimitedString)){
 			String[] strippedStringAry = StringUtils.stripAll(StringUtils.split(commaDelimitedString, ","));
 			for (String strippedString : strippedStringAry){
-				if (StringUtils.isNotBlank(strippedString)){
+				if (isNotBlank(strippedString)){
 					trimmedStrings = trimmedStrings + strippedString + ",";
 				}
 			}
@@ -160,7 +160,7 @@ public final class DataHunterUtils  {
 	 */
 	public static Set<String> commaDelimStringToStringSet(String commaDelimitedString) {
 		List<String> listOfStrings = new ArrayList<>();
-		if ( StringUtils.isNotBlank(commaDelimitedString)){
+		if ( isNotBlank(commaDelimitedString)){
 			listOfStrings =  Arrays.asList(StringUtils.stripAll(StringUtils.split(commaDelimitedString, ",")));
 		}
 		return new HashSet<>(listOfStrings);
@@ -185,4 +185,52 @@ public final class DataHunterUtils  {
 		return null == str ? "" : str;
 	}
 
+	
+    /**
+     * Checks if a CharSequence is empty (""), null or whitespace only.
+     *
+     * <pre>
+     * Mark59Utils.isBlank(null)      = true
+     * Mark59Utils.isBlank("")        = true
+     * Mark59Utils.isBlank(" ")       = true
+     * Mark59Utils.isBlank("bob")     = false
+     * Mark59Utils.isBlank("  bob  ") = false
+     * </pre>
+     *
+     * @param cs  the CharSequence to check, may be null
+     * @return true if the CharSequence is null, empty or whitespace only
+     */
+    public static boolean isBlank(final CharSequence cs) {
+        if (cs == null || cs.length() == 0) {
+            return true;
+        }
+        for (int i = 0; i < cs.length(); i++) {
+            if (!Character.isWhitespace(cs.charAt(i))) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * Checks if a CharSequence is not empty (""), not null and not whitespace only.
+     *
+     * <pre>
+     * Mark59Utils.isNotBlank(null)      = false
+     * Mark59Utils.isNotBlank("")        = false
+     * Mark59Utils.isNotBlank(" ")       = false
+     * Mark59Utils.isNotBlank("bob")     = true
+     * Mark59Utils.isNotBlank("  bob  ") = true
+     * </pre>
+     *
+     * @param cs  the CharSequence to check, may be null
+     * @return true if the CharSequence is not empty and not null and not whitespace only
+     */
+    public static boolean isNotBlank(final CharSequence cs) {
+        return !isBlank(cs);
+    }
+
+	
+	
+	
 }

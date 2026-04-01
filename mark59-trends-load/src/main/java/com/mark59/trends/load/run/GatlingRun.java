@@ -27,7 +27,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.context.ApplicationContext;
 
 import com.mark59.core.utils.Mark59Constants;
@@ -127,7 +126,7 @@ public class GatlingRun extends PerformanceTest  {
 
 		String gatlingFormat = GATLING_FORMAT_UNKNOWN;
 
-		if (StringUtils.isNotBlank(simlogcustoM)) {
+		if (Mark59Utils.isNotBlank(simlogcustoM)) {
 			System.out.println("\n  A custom 'REQUEST' field layout has been requested for this Gatling file load !" );
 			System.out.println("\n  The 'RUN' (version info) line will be bypassed, and the first REQUEST start time in the simulation log will be used as the test start time.\n" );
 
@@ -138,7 +137,7 @@ public class GatlingRun extends PerformanceTest  {
 				if (RUN.equals(csvDataLineFields[0].trim())){
 					String gatlingVersion = csvDataLineFields[5].trim();
 					System.out.println("Gatling version: " + gatlingVersion);
-					if (StringUtils.isBlank(gatlingVersion)) {
+					if (Mark59Utils.isBlank(gatlingVersion)) {
 						System.out.println("\n  Info :  The version of Gatling being used could not be determined ! ");
 						System.out.println("\n  Proceeding on assumption the format is compatible with Gatling version " + GATLING_VER_LATEST_FORMAT);
 						System.out.println("\n  If the field positions for 'REQUEST' are incompatible the 'simlogcustoM' (m) parameter may be of assistance.\n" );
@@ -172,7 +171,7 @@ public class GatlingRun extends PerformanceTest  {
 			fieldPosTimeStampEnd = 5;
 			fieldPosSuccess = 6;
 			fieldPosRequestErrorMsg = 7;
-		} else if (StringUtils.isNotBlank(simlogcustoM)) {
+		} else if (Mark59Utils.isNotBlank(simlogcustoM)) {
 			List<String> mPos = Mark59Utils.commaDelimStringToStringList(simlogcustoM);
 			fieldPosTxnId            = Integer.parseInt(mPos.get(0));
 			fieldPosTimeStampStart   = Integer.parseInt(mPos.get(1));

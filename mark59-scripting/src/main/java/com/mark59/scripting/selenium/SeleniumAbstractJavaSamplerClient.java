@@ -26,7 +26,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.protocol.java.sampler.JavaSamplerContext;
 import org.apache.jmeter.samplers.SampleResult;
@@ -338,7 +337,7 @@ public abstract class SeleniumAbstractJavaSamplerClient extends UiAbstractJavaSa
 		}
 
 		String lastTxnStarted = jm.getMostRecentTransactionStarted();
-		if (StringUtils.isBlank(lastTxnStarted)){
+		if (Mark59Utils.isBlank(lastTxnStarted)){
 			lastTxnStarted =  "noTxn";
 		}
 

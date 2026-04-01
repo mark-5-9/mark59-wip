@@ -35,6 +35,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.mark59.core.utils.Mark59Utils;
 import com.mark59.trends.application.AppConstantsTrends;
 import com.mark59.trends.application.UtilsTrends;
 import com.mark59.trends.data.application.dao.ApplicationDAO;
@@ -142,7 +143,7 @@ public class ApplicationController {
 
 		copyApplicationForm.setReqApp(reqApp);
 
-		if ( StringUtils.isEmpty(copyApplicationForm.getReqToApp())) {
+		if ( Mark59Utils.isEmpty(copyApplicationForm.getReqToApp())) {
 			map.put("reqErr", "Please enter the new Application name");
 			return new ModelAndView("copyApplication", "map", map);
 		}
@@ -164,7 +165,7 @@ public class ApplicationController {
 		}
 
 		Application existingToApp = applicationDAO.findApplication(copyApplicationForm.getReqToApp());
-		if (StringUtils.isNotEmpty(existingToApp.getApplication())){
+		if (Mark59Utils.isNotEmpty(existingToApp.getApplication())){
 			map.put("reqErr","<b>"+copyApplicationForm.getReqToApp()+" already exists, delete it or chose another name</b>");
 			return new ModelAndView("copyApplication", "map", map);
 		}
@@ -207,7 +208,7 @@ public class ApplicationController {
 
 	private String calcTimeSinceLastRun(String lastRunDateStr) {
 
-		if (StringUtils.isBlank(lastRunDateStr)){
+		if (Mark59Utils.isBlank(lastRunDateStr)){
 			return "n/a";
 		} else {
 

@@ -26,7 +26,6 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.protocol.java.sampler.AbstractJavaSamplerClient;
 import org.apache.jmeter.protocol.java.sampler.JavaSamplerContext;
@@ -159,7 +158,7 @@ public class ServerMetricsCaptureViaWeb extends AbstractJavaSamplerClient {
 			HttpURLConnection con = (HttpURLConnection) url.openConnection();
 
 			con.setRequestMethod("GET");
-			if (StringUtils.isNotBlank(apiAuth)) {
+			if (Mark59Utils.isNotBlank(apiAuth)) {
 				con.setRequestProperty("Authorization", "Basic " + apiAuth);
 			}
 
@@ -198,7 +197,7 @@ public class ServerMetricsCaptureViaWeb extends AbstractJavaSamplerClient {
 	 * Expects server metrics web to be running on url and have profile(s) localhost_WINDOWS / localhost_LINUX
 	 * (or properly set SCRIPT profile)
 	 * <p>For an example of how to start the Metrics application so that a Basic Auth header is required by
-	 * the API, see StartMetricsFromTarget.bat/.sh sample startup in the root of the mark59-metrics project.   
+	 * the API, see StartMetricsFromTarget.bat/.sh sample startup in the root of the mark59-metrics project.
 	 *  @param args
 	 */
 	public static void main(String[] args) {

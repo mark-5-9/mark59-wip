@@ -29,6 +29,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.context.ApplicationContext;
 
 import com.mark59.core.utils.Mark59Constants;
+import com.mark59.core.utils.Mark59Utils;
 import com.mark59.trends.application.AppConstantsTrends;
 import com.mark59.trends.data.beans.DateRangeBean;
 import com.mark59.trends.data.beans.EventMapping;
@@ -198,7 +199,7 @@ public class PerformanceTest {
 
 
 	public boolean errorToBeIgnored(String errorMsg, List<String> ignoredErrorsList) {
-		if (StringUtils.isBlank(errorMsg))
+		if (Mark59Utils.isBlank(errorMsg))
 			return false;
 
 		boolean isErrorToBeIgnored = false;

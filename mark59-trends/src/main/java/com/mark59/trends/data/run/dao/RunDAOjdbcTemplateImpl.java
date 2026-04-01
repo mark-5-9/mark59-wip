@@ -24,12 +24,12 @@ import java.util.Map;
 
 import javax.sql.DataSource;
 
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 
+import com.mark59.core.utils.Mark59Utils;
 import com.mark59.trends.application.AppConstantsTrends;
 import com.mark59.trends.application.UtilsTrends;
 import com.mark59.trends.data.application.dao.ApplicationDAO;
@@ -64,7 +64,7 @@ public class RunDAOjdbcTemplateImpl implements RunDAO
 		jdbcTemplate.update(sql, run.getApplication(), run.getRunTime(), run.getIsRunIgnored(), run.getRunReference(),
 				run.getPeriod(), run.getDuration(), run.getBaselineRun(), run.getComment());
 
-		if (StringUtils.isBlank( applicationDAO.findApplication(run.getApplication()).getApplication())) {
+		if (Mark59Utils.isBlank( applicationDAO.findApplication(run.getApplication()).getApplication())) {
 //			System.out.println("RunDAO insertRun creating an application table entry for " + run.getApplication() );
 			Application application = new Application();
 			application.setApplication(run.getApplication());
@@ -285,7 +285,7 @@ public class RunDAOjdbcTemplateImpl implements RunDAO
 		String runsListSelectionSQLwithApp = "   where APPLICATION = :application order by RUN_TIME DESC ";
 		String runsListSelectionSQLnoApp   = "   order by APPLICATION  ASC, RUN_TIME DESC ";
 
-		if ( StringUtils.isEmpty(application)) {
+		if ( Mark59Utils.isEmpty(application)) {
 			runsListSelectionSQL = runsListSelectionSQL + runsListSelectionSQLnoApp;
 		} else {
 			runsListSelectionSQL = runsListSelectionSQL + runsListSelectionSQLwithApp;
@@ -493,7 +493,7 @@ public class RunDAOjdbcTemplateImpl implements RunDAO
 			if (!"%".equals(sqlSelectRunLike) ){
 				sql = sql + " AND r.RUN_TIME LIKE :sqlSelectRunLike ";
 			}
-			if (StringUtils.isNotBlank(reqSqlSelectRunNotLike)){
+			if (Mark59Utils.isNotBlank(reqSqlSelectRunNotLike)){
 				sql = sql  + " AND NOT ( r.RUN_TIME LIKE :reqSqlSelectRunNotLike ) ";
 			}
 			sql = sql  + "   order by r.RUN_TIME DESC ";

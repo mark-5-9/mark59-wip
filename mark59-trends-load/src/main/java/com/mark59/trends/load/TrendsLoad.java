@@ -185,7 +185,7 @@ public class TrendsLoad  implements CommandLineRunner
 			System.out.println();
 		}
 
-		if (StringUtils.isEmpty(argApplication) ||
+		if (Mark59Utils.isEmpty(argApplication) ||
 			StringUtils.containsWhitespace(argApplication) ||
 			!argApplication.matches(AppConstantsTrends.ALLOWED_CHARS_APP_NAME)){
 			throw new RuntimeException("The application id (a) argument must consist of only alphanumerics, underscores (_), dashes (-) and dots (.)."
@@ -227,7 +227,7 @@ public class TrendsLoad  implements CommandLineRunner
 			printSampleUsage();
 			throw new RuntimeException("The maxNumberofruns (n) argument must a number greater than or equal to '-1'");
 		}
-		if (StringUtils.isNotBlank(argsimlogcustoM)){
+		if (Mark59Utils.isNotBlank(argsimlogcustoM)){
 				List<String> mPos = Mark59Utils.commaDelimStringToStringList(argsimlogcustoM);
 				if ((mPos.size() != 5) ||
 					(!StringUtils.isNumeric(mPos.get(0)) || !StringUtils.isNumeric(mPos.get(1)) ||

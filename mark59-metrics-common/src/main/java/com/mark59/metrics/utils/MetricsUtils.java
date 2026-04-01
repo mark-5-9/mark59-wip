@@ -11,6 +11,7 @@ import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.ss.usermodel.Cell;
 
+import com.mark59.core.utils.Mark59Utils;
 import com.mark59.core.utils.SecureAES;
 import com.mark59.metrics.data.beans.ServerProfile;
 
@@ -108,7 +109,7 @@ public class MetricsUtils {
 
 	public static String actualPwd(ServerProfile serverProfile) {
 		String actualPwd = "";
-		if (StringUtils.isBlank(serverProfile.getPasswordCipher())) {
+		if (Mark59Utils.isBlank(serverProfile.getPasswordCipher())) {
 			actualPwd = serverProfile.getPassword();
 		} else {
 			try {

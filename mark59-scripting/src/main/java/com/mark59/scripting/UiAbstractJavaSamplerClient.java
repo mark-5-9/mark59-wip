@@ -127,7 +127,7 @@ public abstract class UiAbstractJavaSamplerClient extends AbstractJavaSamplerCli
 
 	/**
 	 * TreeMap that maintains natural ordering of transaction names.
-	 * Intended for use to output results table when running from a script Main() 
+	 * Intended for use to output results table when running from a script Main()
 	 */
 	protected static Map<String, List<Long>> resultsSummaryTable = new TreeMap<>();
 
@@ -469,7 +469,7 @@ public abstract class UiAbstractJavaSamplerClient extends AbstractJavaSamplerCli
 		if (jmeterResultsFile != null ) {
 			try (FileOutputStream jmeterResultsFOS = FileUtils.openOutputStream(jmeterResultsFile);
 			     OutputStreamWriter outputStreamWriter = new OutputStreamWriter(jmeterResultsFOS)) {
-				
+
 				csvPrintWriter = new PrintWriter(outputStreamWriter);
 
 				String csvLine = CsvUtil.toCsvString("timeStamp","elapsed","label","responseCode","responseMessage","threadName","dataType","success",
@@ -647,25 +647,25 @@ public abstract class UiAbstractJavaSamplerClient extends AbstractJavaSamplerCli
 	 * Add test results to this instance's summary table.
 	 */
 	private synchronized static void addResultsToSummaryTable(SampleResult testInstanceSampleResult) {
-		List<Long> summaryTableTxnData; 
-		
+		List<Long> summaryTableTxnData;
+
 		for (SampleResult subResult : testInstanceSampleResult.getSubResults()) {
 
 			String summaryTableTxn = subResult.getSampleLabel();
-			
-			if (StringUtils.isNotBlank(subResult.getDataType())){
+
+			if (Mark59Utils.isNotBlank(subResult.getDataType())){
 				summaryTableTxn = summaryTableTxn + " (" + subResult.getDataType() + ")";
-			}		
-		
+			}
+
 			summaryTableTxnData = resultsSummaryTable.get(summaryTableTxn);
 			if (summaryTableTxnData == null) {
 				summaryTableTxnData = new ArrayList<>(Arrays.asList(0L, 0L, 0L, Long.MAX_VALUE, 0L));
 			}
-			
+
 			if (Outcome.PASS.getOutcomeText().equalsIgnoreCase(subResult.getResponseMessage())){
 				summaryTableTxnData.set(POS_0_NUM_SAMPLES,       summaryTableTxnData.get(POS_0_NUM_SAMPLES)+1 );
 				summaryTableTxnData.set(POS_2_SUM_RESPONSE_TIME, summaryTableTxnData.get(POS_2_SUM_RESPONSE_TIME) + subResult.getTime());
-				
+
 				if (subResult.getTime() < summaryTableTxnData.get(POS_3_RESPONSE_TIME_MIN)){
 					summaryTableTxnData.set(POS_3_RESPONSE_TIME_MIN, subResult.getTime());
 				}
@@ -675,7 +675,7 @@ public abstract class UiAbstractJavaSamplerClient extends AbstractJavaSamplerCli
 			} else {
 				summaryTableTxnData.set(POS_1_NUM_FAIL, summaryTableTxnData.get(POS_1_NUM_FAIL)+1);
 			}
-			
+
 			resultsSummaryTable.put(summaryTableTxn, summaryTableTxnData);
 		}
 	}

@@ -40,6 +40,7 @@ import com.mark59.core.utils.IpUtilities;
 import com.mark59.core.utils.Log4jConfigurationHelper;
 import com.mark59.core.utils.Mark59Constants;
 import com.mark59.core.utils.Mark59LogLevels;
+import com.mark59.core.utils.Mark59Utils;
 import com.mark59.core.utils.SafeSleep;
 import com.mark59.datahunter.samples.dsl.datahunterSpecificPages.AddPolicyActionPage;
 import com.mark59.datahunter.samples.dsl.datahunterSpecificPages.AddPolicyPage;
@@ -374,7 +375,7 @@ public class DataHunterLifecyclePvtScript  extends SeleniumAbstractJavaSamplerCl
 		devToolsDsl.createDevToolsSession(driver);
 
 		devToolsDsl.addListenerRequestWillBeSent(jm
-				, req -> req.getDocumentURL().contains("_action") || StringUtils.contains(jm.getMostRecentTransactionStarted(), "loadInitialPage"));
+				, req -> req.getDocumentURL().contains("_action") || Mark59Utils.contains(jm.getMostRecentTransactionStarted(), "loadInitialPage"));
 
 		devToolsDsl.addListenerResponseReceived(jm
 				, res -> "Document".equalsIgnoreCase(res.getType().toJson()) && jm.getMostRecentTransactionStarted() != null

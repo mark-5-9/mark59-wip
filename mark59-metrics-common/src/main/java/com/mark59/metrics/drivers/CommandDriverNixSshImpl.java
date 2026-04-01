@@ -25,7 +25,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.text.StringSubstitutor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -129,19 +128,19 @@ public class CommandDriverNixSshImpl implements CommandDriver {
 			String preferredAuthentications = "publickey,keyboard-interactive,password";
 			if (MetricsConstants.KERBEROS.equals(serverProfile.getPassword())) {
 				preferredAuthentications = "gssapi-with-mic";
-			} else if (StringUtils.isNotEmpty(cmdParms.get(MetricsConstants.SSH_PREFERRED_AUTHENTICATIONS))) {
+			} else if (Mark59Utils.isNotEmpty(cmdParms.get(MetricsConstants.SSH_PREFERRED_AUTHENTICATIONS))) {
 				preferredAuthentications = cmdParms.get(MetricsConstants.SSH_PREFERRED_AUTHENTICATIONS);
 			}
 			connDesc += "<br>&nbsp;&nbsp;, PreferredAuthentications=" + preferredAuthentications;
 
-			if (StringUtils.isNotEmpty(cmdParms.get(MetricsConstants.SSH_KNOWN_HOSTS))) {
+			if (Mark59Utils.isNotEmpty(cmdParms.get(MetricsConstants.SSH_KNOWN_HOSTS))) {
 				String knownHosts = cmdParms.get(MetricsConstants.SSH_KNOWN_HOSTS);
 				connDesc += "<br>&nbsp;&nbsp;, KnownHosts =" + knownHosts;
 				jsch.setKnownHosts(knownHosts);
 			}
 
-			if (StringUtils.isNotEmpty(cmdParms.get(MetricsConstants.SSH_IDENTITY))
-					&& StringUtils.isEmpty(cmdParms.get(MetricsConstants.SSH_PASSPHRASE))) {
+			if (Mark59Utils.isNotEmpty(cmdParms.get(MetricsConstants.SSH_IDENTITY))
+					&& Mark59Utils.isEmpty(cmdParms.get(MetricsConstants.SSH_PASSPHRASE))) {
 				String identity = cmdParms.get(MetricsConstants.SSH_IDENTITY);
 				connDesc += " <br>&nbsp;&nbsp;, Identity=" + identity
 						+ " <br>&nbsp;&nbsp;&nbsp;&nbsp; (note: don't set a password in the serverProfile for a prv key connection."
@@ -149,8 +148,8 @@ public class CommandDriverNixSshImpl implements CommandDriver {
 				jsch.addIdentity(identity);
 			}
 
-			if (StringUtils.isNotEmpty(cmdParms.get(MetricsConstants.SSH_IDENTITY))
-					&& StringUtils.isNotEmpty(cmdParms.get(MetricsConstants.SSH_PASSPHRASE))) {
+			if (Mark59Utils.isNotEmpty(cmdParms.get(MetricsConstants.SSH_IDENTITY))
+					&& Mark59Utils.isNotEmpty(cmdParms.get(MetricsConstants.SSH_PASSPHRASE))) {
 				String identity = cmdParms.get(MetricsConstants.SSH_IDENTITY);
 				String passphrase = cmdParms.get(MetricsConstants.SSH_PASSPHRASE);
 				connDesc += " <br>&nbsp;&nbsp;, Identity=" + identity
@@ -161,7 +160,7 @@ public class CommandDriverNixSshImpl implements CommandDriver {
 			sesConnection = jsch.getSession(serverProfile.getUsername(), serverProfile.getServer(), Integer.parseInt(serverProfile.getConnectionPort()));
 
 			String actualPwd = MetricsUtils.actualPwd(serverProfile);
-			if (StringUtils.isNotEmpty(actualPwd)) {
+			if (Mark59Utils.isNotEmpty(actualPwd)) {
 				sesConnection.setPassword(actualPwd);
 				connDesc += "<br>&nbsp;&nbsp, Password set (from serverProfile details)";
 			} else {
@@ -255,7 +254,7 @@ public class CommandDriverNixSshImpl implements CommandDriver {
 			}
 			Thread.sleep(1000);
 		}
-		if (StringUtils.isNotBlank(outputBuffer.toString())) {
+		if (Mark59Utils.isNotBlank(outputBuffer.toString())) {
 			rawCommandResponseLines.add(outputBuffer.toString());
 		}
 		return rawCommandResponseLines;

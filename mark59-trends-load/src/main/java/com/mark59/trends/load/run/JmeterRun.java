@@ -133,7 +133,7 @@ public class JmeterRun extends PerformanceTest  {
 			return 0;
 
 		} else  if (firstLineOfFile.trim().startsWith("<")) {
-			if (StringUtils.isNotBlank(ignoredErrors)){
+			if (Mark59Utils.isNotBlank(ignoredErrors)){
 				System.out.println("   Warning : " + " the -e ('ignoredErrors') runtime option is not implemented for XML files");
 			}
 			return loadXMLFile(jmeterResultsFile, application);
@@ -515,7 +515,7 @@ public class JmeterRun extends PerformanceTest  {
 				BigDecimal valueMultiplier = new BigDecimal(1L);
 
 				String passedMultiplier = sampleLineDataType.replace(metricDataType, "").replace("_", "");
-				if (StringUtils.isNotBlank(passedMultiplier)) {
+				if (Mark59Utils.isNotBlank(passedMultiplier)) {
 					valueMultiplier = new BigDecimal(passedMultiplier);
 				}
 				return txnResultMsBigD.divide(valueMultiplier, 3, RoundingMode.HALF_UP);

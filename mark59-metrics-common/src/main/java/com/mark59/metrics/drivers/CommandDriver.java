@@ -73,7 +73,7 @@ public interface CommandDriver {
 				}
 			}
 
-		} else if (StringUtils.isNotEmpty(alternateServerId)) {
+		} else if (Mark59Utils.isNotEmpty(alternateServerId)) {
 			reportedServerId = alternateServerId;
 		}
 		return reportedServerId;

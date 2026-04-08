@@ -33,7 +33,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.protocol.java.sampler.JavaSamplerContext;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;

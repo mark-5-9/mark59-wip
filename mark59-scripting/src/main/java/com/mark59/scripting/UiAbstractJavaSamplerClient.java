@@ -46,7 +46,10 @@ import com.mark59.core.JmeterFunctionsImpl;
 import com.mark59.core.Outcome;
 import com.mark59.core.utils.IpUtilities;
 import com.mark59.core.utils.Log4jConfigurationHelper;
+import com.mark59.core.utils.Mark59Constants;
 import com.mark59.core.utils.Mark59Utils;
+import com.mark59.core.utils.PropertiesKeys;
+import com.mark59.core.utils.PropertiesReader;
 import com.mark59.core.utils.SafeSleep;
 import com.mark59.scripting.interfaces.JmeterFunctionsUi;
 import com.mark59.scripting.playwright.JmeterFunctionsForPlaywrightScripts;
@@ -82,6 +85,16 @@ public abstract class UiAbstractJavaSamplerClient extends AbstractJavaSamplerCli
 	/** log4J class logger */
 	public static final Logger LOG = LogManager.getLogger(UiAbstractJavaSamplerClient.class);
 
+	static {
+		try {
+			LOG.info("Mark59 version (scripting) : " + ScriptingConstants.MARK59_VERSION_SCRIPTING);
+			if (Mark59Constants.TRUE.equalsIgnoreCase(PropertiesReader.getInstance().getProperty(PropertiesKeys.MARK59_PRINT_STARTUP_CONSOLE_MESSAGES))){
+				System.out.println("Mark59 version (scripting) : " + ScriptingConstants.MARK59_VERSION_SCRIPTING);			
+			}
+		} catch (IOException e) {
+			System.out.println("UiAbstractJavaSamplerClient: Error reading property " + PropertiesKeys.MARK59_PRINT_STARTUP_CONSOLE_MESSAGES);
+		}
+	}
 
 	/** Parameter to control writing of buffered logs when an exception occurs.
 	 *  @see PlaywrightAbstractJavaSamplerClient#scriptExceptionHandling

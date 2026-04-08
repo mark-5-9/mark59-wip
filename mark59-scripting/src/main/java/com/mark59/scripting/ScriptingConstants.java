@@ -39,11 +39,14 @@ public class ScriptingConstants {
 		throw new AssertionError("ScriptingConstants is a utility class and should not be instantiated");
 	}
 
+	/** this Mark59 Version for Scripting */
+	public static final String MARK59_VERSION_SCRIPTING  = "6.6.6";
+
+	
 	/**
 	 * "HEADLESS_MODE" (default is 'true')
 	 */
 	public static final String HEADLESS_MODE = "HEADLESS_MODE";
-
 
 	/**
 	 * "PLAYWRIGHT_ENV_VAR_PWDEBUG" - A value of "1" enables Playwright tests to run in debug mode from the
@@ -99,10 +102,10 @@ public class ScriptingConstants {
 	 * <br><br> <b>--incognito;--auto-open-devtools-for-tabs</b> </p>
 	 *
 	 * <p>Note: Arguments that themselves contain comma-separated values (eg --disable-features=feat1,feat2,feat3)
-	 * are supported since the semicolon delimiter is used to separate arguments. For example to open DevTools and 
+	 * are supported since the semicolon delimiter is used to separate arguments. For example to open DevTools and
 	 * set list of disabled features, set the BROWSER_LAUNCH_ARGS" parameter as :
 	 * <br><br><b>--auto-open-devtools-for-tabs;--disable-features=LocalNetworkAccessChecks,ImprovedCookieControls</b></p>
-	 * 
+	 *
 	 * <p>Incidentally, "--incognito" is an example of a switch that works differently between Selenium and Playwright
 	 * (it's unnecessary in Playwright as the BrowserContext already provides that isolation).
 	 *

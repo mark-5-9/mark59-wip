@@ -23,6 +23,7 @@ import java.util.Map;
 import java.util.Objects;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.jmeter.protocol.java.sampler.JavaSamplerContext;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.logging.log4j.LogManager;
@@ -133,7 +134,7 @@ public class JmeterFunctionsForPlaywrightScripts extends AbstractJmeterFunctions
 	 * @param options Playwright ScreenshotOptions
 	 */
 	public void writePageScreenshot(Page page, String imageName, ScreenshotOptions options) {
-		writeLog(imageName,"jpg", page.screenshot(options));
+		writeLog(imageName,"jpg", pageScreenshot(page, options));
 	}
 
 
@@ -150,7 +151,7 @@ public class JmeterFunctionsForPlaywrightScripts extends AbstractJmeterFunctions
 	 * @see PlaywrightAbstractJavaSamplerClient#UiScriptExecutionAndExceptionsHandling(JavaSamplerContext, Map, String)
 	 */
 	public void bufferScreenshot(Page page, String imageName, ScreenshotOptions options) {
-		bufferLog(imageName,"jpg", page.screenshot(options));
+		bufferLog(imageName,"jpg", pageScreenshot(page,options));
 	}
 
 
@@ -167,7 +168,7 @@ public class JmeterFunctionsForPlaywrightScripts extends AbstractJmeterFunctions
 	public void writeScreenshot(String imageName) {
 		List<Page> ctxPages = listBrowserCtxPages();
 		for (int i = 0; i < ctxPages.size(); i++) {
-			writeLog(unique(imageName,ctxPages,i), "jpg", ctxPages.get(i).screenshot());
+			writeLog(unique(imageName,ctxPages,i), "jpg", pageScreenshot(ctxPages.get(i)));
 		}
 	}
 
@@ -187,7 +188,7 @@ public class JmeterFunctionsForPlaywrightScripts extends AbstractJmeterFunctions
 	public void bufferScreenshot(String imageName) {
 		List<Page> ctxPages = listBrowserCtxPages();
 		for (int i = 0; i < ctxPages.size(); i++) {
-			bufferLog(unique(imageName,ctxPages,i), "jpg", ctxPages.get(i).screenshot());
+			bufferLog(unique(imageName,ctxPages,i), "jpg", pageScreenshot(ctxPages.get(i)));
 		}
 	}
 
@@ -268,6 +269,49 @@ public class JmeterFunctionsForPlaywrightScripts extends AbstractJmeterFunctions
 	 */
 	public void stopPlayWrightTrace(String tracePath) {
 		page.context().tracing().stop(new Tracing.StopOptions().setPath(Paths.get(tracePath)));
+	}
+
+
+
+	/**
+	 * @return returns a byte array containing the screenshot for a page,
+	 * or the first 15 lines of Stack Trace if an exception was thrown
+	 */
+	private byte[] pageScreenshot(Page page) {
+		return pageScreenshot(page, null);
+	}
+
+
+	/**
+	 * @return returns a byte array containing the screenshot for a page,
+	 * or the first 15 lines of Stack Trace if an exception was thrown
+	 */
+	private byte[] pageScreenshot(Page page, ScreenshotOptions options) {
+		byte[] screenshotBytes = "".getBytes();
+		try {
+			screenshotBytes = page.screenshot(options);
+		} catch (Exception e) {
+			screenshotBytes = ("-- ScreenShot Failure --\n "+e.getMessage()+"\n"+getLimitedStackTrace(e, 15))
+					.getBytes();
+		}
+		return screenshotBytes;
+	}
+
+	/**
+	 * Captures a limited number of lines from an exception stack trace.
+	 *
+	 * @param e the exception to capture
+	 * @param maxLines maximum number of stack trace lines to include
+	 * @return a string containing the exception message and limited stack trace
+	 */
+	private String getLimitedStackTrace(Exception e, int maxLines) {
+		StringBuilder sb = new StringBuilder();
+		sb.append(e.toString()).append("\n");
+		StackTraceElement[] trace = e.getStackTrace();
+		for (int i = 0; i < Math.min(maxLines, trace.length); i++) {
+			sb.append("\tat ").append(trace[i]).append("\n");
+		}
+		return sb.toString();
 	}
 
 

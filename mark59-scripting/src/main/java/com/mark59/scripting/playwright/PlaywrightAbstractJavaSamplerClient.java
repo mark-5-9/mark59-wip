@@ -201,7 +201,7 @@ public abstract class PlaywrightAbstractJavaSamplerClient extends UiAbstractJava
 		staticMap.put(ScriptingConstants.EMULATE_NETWORK_CONDITIONS, "");
 
 		staticMap.put("___________________"       , "");
-		staticMap.put("script build information: ", "using mark59-scripting Version: " + Mark59Constants.MARK59_VERSION);
+		staticMap.put("script build information: ", "using mark59-scripting Version: " + ScriptingConstants.MARK59_VERSION_SCRIPTING);
 		return staticMap;
 	}
 

@@ -41,10 +41,9 @@ import com.mark59.core.interfaces.JmeterFunctions;
 import com.mark59.core.utils.IpUtilities;
 import com.mark59.core.utils.Log4jConfigurationHelper;
 import com.mark59.core.utils.Mark59Utils;
-import com.mark59.metrics.common.MetricsApiConstants;
+import com.mark59.metrics.api.utils.MetricsApiConstants;
 import com.mark59.metrics.pojos.ParsedCommandResponse;
 import com.mark59.metrics.pojos.WebServerMetricsResponsePojo;
-import com.mark59.metrics.utils.MetricsConstants;
 
 /**
  * @author Philip Webb
@@ -103,7 +102,7 @@ public class ServerMetricsCaptureViaWeb extends AbstractJavaSamplerClient {
 		staticMap.put("-",
 				"   to capture injector metrics use the machine name or an Excel 'localhost..' entry instead (see Mark59 User Guide)");
 		staticMap.put("___________________", "");
-		staticMap.put("build information: ", "mark59-metrics-api Version: " + MetricsConstants.MARK59_VERSION_METRICS);
+		staticMap.put("build information: ", "mark59-metrics-api Version: " +  MetricsApiConstants.MARK59_VERSION_METRICS_API);
 
 		defaultArgumentsMap = Collections.unmodifiableMap(staticMap);
 	}

@@ -23,7 +23,6 @@ import java.util.Map;
 import java.util.Objects;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.jmeter.protocol.java.sampler.JavaSamplerContext;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.logging.log4j.LogManager;
@@ -34,8 +33,8 @@ import com.mark59.core.utils.Mark59LogLevels;
 import com.mark59.scripting.AbstractJmeterFunctionsUiCommon;
 import com.microsoft.playwright.BrowserContext;
 import com.microsoft.playwright.Page;
-import com.microsoft.playwright.Tracing;
 import com.microsoft.playwright.Page.ScreenshotOptions;
+import com.microsoft.playwright.Tracing;
 
 /**
  * Playwright flavored extension of the Mark59 class {@link AbstractJmeterFunctionsUiCommon} ( whose primary purpose is to handle transaction

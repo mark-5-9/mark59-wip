@@ -16,6 +16,7 @@
 
 package com.mark59.scripting.playwright;
 
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
@@ -88,7 +89,11 @@ public class JmeterFunctionsForPlaywrightScripts extends AbstractJmeterFunctions
 
 	/** log4J class logger */
 	public static final Logger LOG = LogManager.getLogger(JmeterFunctionsForPlaywrightScripts.class);
+	
+	private static final String SCREENSHOT_FAILURE_MSG = "-- ScreenShot Failure --";
 
+	private enum LogMode { BUFFER, WRITE }
+	
 	private Page page;
 
 
@@ -161,14 +166,11 @@ public class JmeterFunctionsForPlaywrightScripts extends AbstractJmeterFunctions
 	 * <p>All pages associated with the {@link PlaywrightAbstractJavaSamplerClient#browser}, are screenshot, so
 	 * more than one file can potentially be written when invoking this method.
 	 *
-	 * @param imageName last part of the log filename (but excluding extension - which is set as '.jpg')
+	 * @param imageName last part of the log filename but excluding extension (which is set as '.jpg', or '.txt on failure)
 	 */
 	@Override
 	public void writeScreenshot(String imageName) {
-		List<Page> ctxPages = listBrowserCtxPages();
-		for (int i = 0; i < ctxPages.size(); i++) {
-			writeLog(unique(imageName,ctxPages,i), "jpg", pageScreenshot(ctxPages.get(i)));
-		}
+		takeScreenshot(imageName, LogMode.WRITE);
 	}
 
 
@@ -178,17 +180,14 @@ public class JmeterFunctionsForPlaywrightScripts extends AbstractJmeterFunctions
 	 * <p>All pages associated with the {@link PlaywrightAbstractJavaSamplerClient#browser} are screenshot, so
 	 * more than one file can potentially be buffered when invoking this method.
 	 *
-	 * @param imageName last part of the log filename (but excluding extension - which is set as '.jpg')
+	 * @param imageName last part of the log filename but excluding extension (which is set as '.jpg', or '.txt on failure)
 	 *
 	 * @see JmeterFunctionsImpl#writeBufferedArtifacts()
 	 * @see PlaywrightAbstractJavaSamplerClient#UiScriptExecutionAndExceptionsHandling(JavaSamplerContext, Map, String)
 	 */
 	@Override
 	public void bufferScreenshot(String imageName) {
-		List<Page> ctxPages = listBrowserCtxPages();
-		for (int i = 0; i < ctxPages.size(); i++) {
-			bufferLog(unique(imageName,ctxPages,i), "jpg", pageScreenshot(ctxPages.get(i)));
-		}
+		takeScreenshot(imageName, LogMode.BUFFER);
 	}
 
 
@@ -281,6 +280,32 @@ public class JmeterFunctionsForPlaywrightScripts extends AbstractJmeterFunctions
 	}
 
 
+	
+
+	/**
+	 * @param imageName last part of the log filename but excluding extension (which is set as '.jpg', or '.txt on failure)
+	 * @param logmode  whether to WRITE or BUFFER the screenshot
+	 */
+	private void takeScreenshot(String imageName, LogMode logmode){
+		byte[] screenshotBytes;
+		String filetype = "jpg";
+		List<Page> ctxPages = listBrowserCtxPages();
+
+		for (int i = 0; i < ctxPages.size(); i++) {
+			screenshotBytes = pageScreenshot(ctxPages.get(i));
+			if (screenshotBytes!=null && (new String(screenshotBytes, StandardCharsets.UTF_8)).startsWith(SCREENSHOT_FAILURE_MSG)){
+				filetype = "txt";
+				imageName=imageName+"_Screenshot_Error";
+			}
+			if (LogMode.WRITE.equals(logmode)) {
+				writeLog(unique(imageName,ctxPages,i), filetype, pageScreenshot(ctxPages.get(i)));
+			} else {
+				bufferLog(unique(imageName,ctxPages,i), filetype, pageScreenshot(ctxPages.get(i)));
+			}
+		}
+	}
+	
+	
 	/**
 	 * @return returns a byte array containing the screenshot for a page,
 	 * or the first 15 lines of Stack Trace if an exception was thrown
@@ -290,7 +315,7 @@ public class JmeterFunctionsForPlaywrightScripts extends AbstractJmeterFunctions
 		try {
 			screenshotBytes = page.screenshot(options);
 		} catch (Exception e) {
-			screenshotBytes = ("-- ScreenShot Failure --\n "+e.getMessage()+"\n"+getLimitedStackTrace(e, 15))
+			screenshotBytes = (SCREENSHOT_FAILURE_MSG+"\n"+e.getMessage()+"\n"+getLimitedStackTrace(e,15))
 					.getBytes();
 		}
 		return screenshotBytes;

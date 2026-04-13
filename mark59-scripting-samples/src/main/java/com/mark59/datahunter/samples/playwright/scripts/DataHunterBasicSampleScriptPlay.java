@@ -112,6 +112,7 @@ public class DataHunterBasicSampleScriptPlay  extends PlaywrightAbstractJavaSamp
 		jm.bufferLog("kilroybuffer", "txt", "Kilroy was buffered here".getBytes());
 
 		jm.logAllLogsAtEndOfTransactions(Mark59LogLevels.WRITE);
+//		jm.logAllLogsAtEndOfTransactions(Mark59LogLevels.BUFFER);
 
 		// A way to to check Chrome launch arguments (for debugging purposes)
 		page.navigate("chrome://version");

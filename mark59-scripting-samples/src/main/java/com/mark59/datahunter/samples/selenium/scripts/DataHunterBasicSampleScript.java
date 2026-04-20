@@ -82,7 +82,10 @@ public class DataHunterBasicSampleScript  extends SeleniumAbstractJavaSamplerCli
 		// mark59 predefined parameters
 		jmeterAdditionalParameters.put(SeleniumDriverFactory.DRIVER, Mark59Constants.CHROME);
 		jmeterAdditionalParameters.put(ScriptingConstants.HEADLESS_MODE, String.valueOf(false));  // default is true
-		jmeterAdditionalParameters.put(ScriptingConstants.BROWSER_LAUNCH_ARGS, "");
+
+		jmeterAdditionalParameters.put(ScriptingConstants.BROWSER_LAUNCH_ARGS, 	"");
+//		jmeterAdditionalParameters.put(ScriptingConstants.BROWSER_LAUNCH_ARGS, 	"--auto-open-devtools-for-tabs,--force-dark-mode");
+		
 		jmeterAdditionalParameters.put(IpUtilities.RESTRICT_TO_ONLY_RUN_ON_IPS_LIST, "");
 
 		jmeterAdditionalParameters.put(ON_EXCEPTION_WRITE_BUFFERED_LOGS,	String.valueOf(false)); // on exception defaults are true

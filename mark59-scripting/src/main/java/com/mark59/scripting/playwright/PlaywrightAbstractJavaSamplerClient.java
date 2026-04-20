@@ -22,7 +22,6 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.nio.file.Path;
 import java.text.MessageFormat;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -45,6 +44,7 @@ import com.mark59.core.utils.PropertiesKeys;
 import com.mark59.core.utils.PropertiesReader;
 import com.mark59.scripting.KeepBrowserOpen;
 import com.mark59.scripting.ScriptingConstants;
+import com.mark59.scripting.ScriptingUtils;
 import com.mark59.scripting.UiAbstractJavaSamplerClient;
 import com.mark59.scripting.interfaces.JmeterFunctionsUi;
 import com.microsoft.playwright.Browser;
@@ -393,15 +393,21 @@ public abstract class PlaywrightAbstractJavaSamplerClient extends UiAbstractJava
 			browserLaunchOptions.setHeadless(Boolean.parseBoolean(arguments.get(ScriptingConstants.HEADLESS_MODE)));
 		}
 
-		// Set browser launch arguments - semicolon required to separate args
-		String browserArgs = arguments.get(ScriptingConstants.BROWSER_LAUNCH_ARGS);
-		if (Mark59Utils.isNotBlank(browserArgs)){
-			browserLaunchOptions.setArgs(Arrays.asList(StringUtils.split(browserArgs, ";")));
+		// Set browser launch arguments  (note the separate condition for PLAYWRIGHT_OPEN_DEVTOOLS)
+
+		String browserLaunchArgs = arguments.get(ScriptingConstants.BROWSER_LAUNCH_ARGS);
+		List<String> browserLaunchArgsList = ScriptingUtils.splitBrowserLaunchArgs(browserLaunchArgs);
+	
+		// Set the launch arg to auto open Devtools for tabs.  Note that Playwright does not have a separate option for the
+		// auto opening of DevTools (it did but was removed in version-158), so we need to add --auto-open-devtools-for-tabs
+		// option to the list of other browser launch arguments
+		
+		if (Boolean.parseBoolean(arguments.get(ScriptingConstants.PLAYWRIGHT_OPEN_DEVTOOLS))){
+			browserLaunchArgsList.add("--auto-open-devtools-for-tabs");
 		}
 
-		// Set option to auto open Devtools for tabs
-		if (Mark59Utils.isNotBlank(arguments.get(ScriptingConstants.PLAYWRIGHT_OPEN_DEVTOOLS))){
-			browserLaunchOptions.setDevtools(Boolean.parseBoolean(arguments.get(ScriptingConstants.PLAYWRIGHT_OPEN_DEVTOOLS)));
+		if (!browserLaunchArgsList.isEmpty()){
+			browserLaunchOptions.setArgs(browserLaunchArgsList);
 		}
 
 		// Set Downloads directory path

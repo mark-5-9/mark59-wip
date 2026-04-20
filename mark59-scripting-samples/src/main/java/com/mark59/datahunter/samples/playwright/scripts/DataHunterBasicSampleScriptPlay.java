@@ -76,10 +76,14 @@ public class DataHunterBasicSampleScriptPlay  extends PlaywrightAbstractJavaSamp
 
 		// Some mark59 predefined parameters for playwright.
 		// See DataHunterLifecyclePvtScriptPlay for a full list of available parameters for Playwright in Mark59
+		
 		jmeterAdditionalParameters.put(ScriptingConstants.HEADLESS_MODE, String.valueOf(false));  // default is true
 
 		jmeterAdditionalParameters.put(ScriptingConstants.BROWSER_LAUNCH_ARGS, "");
+//		jmeterAdditionalParameters.put(ScriptingConstants.BROWSER_LAUNCH_ARGS, "--force-dark-mode");
 
+		jmeterAdditionalParameters.put(ScriptingConstants.PLAYWRIGHT_OPEN_DEVTOOLS, String.valueOf(false));		
+		
 		// you can set the location of the browser executable on your machine either here or (better) in mark59.properties
 		jmeterAdditionalParameters.put(ScriptingConstants.OVERRIDE_PROPERTY_MARK59_BROWSER_EXECUTABLE, "");
 
@@ -122,7 +126,7 @@ public class DataHunterBasicSampleScriptPlay  extends PlaywrightAbstractJavaSamp
 		System.out.println("Chrome Command Line Arguments:");
 		System.out.println(commandLine.replace("--", "\n--") );
 		System.out.println("=".repeat(120));
-
+		
 // 		delete any existing policies for this application/thread combination
 		jm.startTransaction("DH_lifecycle_0001_loadInitialPage");
 		page.navigate(dataHunterUrl + DslConstants.SELECT_MULTIPLE_POLICIES_URL_PATH + "?application=" + application);

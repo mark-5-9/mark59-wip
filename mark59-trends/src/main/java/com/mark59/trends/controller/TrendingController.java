@@ -23,6 +23,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -121,7 +122,6 @@ public class TrendingController {
 					throw new RuntimeException("Whoa !!  No Applications found " );
 				}
 			}
-
 			// At this point, applications list is guaranteed to have at least one item
 			reqApp = applications.get(0);
 		}
@@ -329,6 +329,30 @@ public class TrendingController {
 	public void processTrendingForm(@RequestParam(required = false) String reqApp,
 			@ModelAttribute TrendingForm trendingForm, Model model, HttpServletRequest request) {
 		// Method intentionally empty - annotation handles the response
+	}
+
+
+	@ExceptionHandler(IllegalArgumentException.class)
+	public String handleIllegalArgumentException(IllegalArgumentException ex, Model model) {
+		model.addAttribute("errorMessage", ex.getMessage());
+
+		TrendingForm trendingForm = new TrendingForm();
+		model.addAttribute(trendingForm);
+
+		List<String> appListSelectorList = new ArrayList<>();
+		appListSelectorList.add("Active");
+		appListSelectorList.add("All");
+		model.addAttribute("appListSelectors", appListSelectorList);
+
+		model.addAttribute("applications", populateApplicationDropdown(AppConstantsTrends.ACTIVE));
+		model.addAttribute("graphs", populateMetricsDropdown());
+		model.addAttribute("showCdpOptions", populateShowCdpOptionsDropdown());
+
+		GraphMapping graphMapping = graphMappingDAO.findGraphMapping(AppConstantsTrends.TXN_90TH_GRAPH);
+		model.addAttribute("barRangeLegendId", graphMapping.getBarRangeLegend());
+		model.addAttribute("txnTypedId", graphMapping.getTxnType());
+
+		return "trending";
 	}
 
 

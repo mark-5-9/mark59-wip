@@ -97,6 +97,13 @@ html, body {
 	</tr>
 </table> 
 
+<c:if test="${not empty errorMessage}">
+    <div class="alert alert-danger" role="alert">
+	
+	<strong>Invalid input:</strong> <c:out value="${errorMessage}"/>
+    </div>
+			
+</c:if>
 
 <table style="width:100%;">
   <tr style="width:100%;">

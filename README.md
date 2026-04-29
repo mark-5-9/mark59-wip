@@ -7,30 +7,28 @@ This is the <b>WORK-IN-PROGRESS</b> repository for Mark59 - be aware it may NOT 
 
 ## Releases
 
-<p>Release 6.5<br>
+<p>Release 6.6<br>
 
   <ul>
     <li>Java 17+ is now required for all Mark59 components</li>
+    
    	<li>UI Scripting : (Bug) Comma separation of BROWSER_LAUNCH_ARGS didn't allow for any Argument option that itself may contain multiple
    	comma-separated values.  Multiple arguments within BROWSER_LAUNCH_ARGS can now be separated by a semi-colon (;), or the characters 
    	",--" used to indicate the start of the next argument (white space between the comma and dashes allowed).  
-   	This allows commas to be used to separate values in a multi-value argument</li>
-   	
+   	This allows commas to be used to separate values in a multi-value argument.</li>
  	<li>UI Scripting and Metrics-API : Version numbers are printed for both the mark59-metrics-api and the first Mark59UI script
  	(on the classpath).Previously, a generic version number (actually for mark59-core) was printed, meaning there was no indication in 
- 	the printout if different Mark59 versions of a UI script and the mark59-metrics-api were present</li>. 
-
+ 	the printout if different Mark59 versions of a UI script and the mark59-metrics-api were present.</li>
+ 	<li>Trends Graph : Now displays a controlled error message when disallowed SQL is attempted, rather that the default error page.</li>
  	<li>Dependencies Updated: commons-lang3 added to Mark59-core (commons-lang3 has been removed from JMeter)</li> 	
- 	<li>Dependencies Updated: spring-boot to 4.0.x, selenium to 4.47.0 (chrome v147), playwright to 1.59.0</li>
+ 	<li>Dependencies Updated: spring-boot to 4.0.6, selenium to 4.47.0 (chrome v147), playwright to 1.59.0</li>
   </ul>
-
-   <figure>
-    <figcaption>Summary of Changes with Potential Incompatibilities<br><br></figcaption>
+  <figure>
+    <figcaption>Summary of Changes with Potential Incompatibilities</figcaption>
     <ul>
- 	<li>Trends UI :blah blah </li>
+ 	<li>SimpleAES has been removed. SecureAES should be new used for encryption.</li>
     </ul>
-   </figure>
- 
+  </figure> 	
    
 
 <br>

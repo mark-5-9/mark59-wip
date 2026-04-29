@@ -47,26 +47,25 @@ This is the <b>WORK-IN-PROGRESS</b> repository for Mark59 - be aware it may NOT 
  	</li>
  	<li>Dependencies Updated: poi to 5.5.1, spring-boot to 4.0.3, selenium to 4.40.0 (chrome v144), playwright to 1.57.0</li>
   </ul>
-
-   <figure>
-    <figcaption>Summary of Changes with Potential Incompatibilities<br><br></figcaption>
+  <figure>
+    <figcaption>Summary of Changes with Potential Incompatibilities<br></figcaption>
     <ul>
  	<li>Trends UI : SQL inputs into 'Advanced Filters' are now sanitized, so input using various string and keyword combinations
  	will fail. For example, the strings "..test UPDATE set.."'and "..test EXEC sp.." will have the keywords removed and likely fail)</li>
  	<li>UI Scripting: The parameter ADDITIONAL_OPTIONS has been renamed to BROWSER_LAUNCH_ARGS for improved clarity.
  	Please update your JMeter Playwright and Selenium test scripts to use BROWSER_LAUNCH_ARGS instead.</li>
     </ul>
-   </figure>
+  </figure>
  
-   <figure>
-    <figcaption>Database Change<br><br></figcaption>
+  <figure>
+    <figcaption>Database Change<br></figcaption>
 	<ul>
  	<li>Metrics Database: For existing implementations a script (see DataabseScripts folder in the Mark59 download file) should 
  	be executed to increase the length of the PASSWORD_CIPHER field of the SERVERPROFILES table, for MySQL and Postgres DBs.
 	</ul>	
   </figure> 
 
-   <figure>
+  <figure>
     <figcaption>Updating Encryption Ciphers<br></figcaption>
 	<ul>
  	<li>
@@ -102,9 +101,8 @@ This is the <b>WORK-IN-PROGRESS</b> repository for Mark59 - be aware it may NOT 
 	<li>All Web Apps : Explicitly use GetMapping or PostMapping anotation instead of RequestMapping, plus many smaller code and JavaDocs tidy ups</li>
 	<li>Dependencies Updated: spring-boot to 3.5.4, selenium to 4.34.0 (to chrome v138), playwright to 1.53.0</li>
   </ul>
-
   <figure>
-    <figcaption>Summary of Changes with Potential Incompatibilities<br><br></figcaption>
+    <figcaption>Summary of Changes with Potential Incompatibilities<br></figcaption>
 	<ul><li>For UI scripting BROWSER_EXECUTABLE argument is no longer in use. Please use OVERRIDE_PROPERTY_MARK59_BROWSER_EXECUTABLE<br><br></li></ul>
   </figure>
 
@@ -163,10 +161,9 @@ This is the <b>WORK-IN-PROGRESS</b> repository for Mark59 - be aware it may NOT 
 	<li>Dependencies Updated: JMeter to 5.6.3, spring-boot to 3.2.3, selenium to 4.18.1 (to chrome v122)</li>
 	<li>Dependency Added: playwright 1.41.2 (documented as being tested on chome 120/121. In our testing it appears to run well on chrome 122)</li>
    </ul>
-
    <figure>
     <figcaption>Summary of Changes with Potential Incompatibilities For this Release
-    <br><br>note most of these are relatively small changes mostly relating to implementing Playwright.<br></figcaption>
+    <br><br>Most of these are changes are relatively small relating to implementing Playwright.<br></figcaption>
     <ul>
 	<li>When you update pom entries for your mark59 projects, the com.mark59 dependency changes from
 		mark59-selenium-implementation to mark59-scripting, as well as changing the version to 6.0</li>
@@ -279,7 +276,7 @@ This is the <b>WORK-IN-PROGRESS</b> repository for Mark59 - be aware it may NOT 
   <ul>
 	<li>This release was built and tested using JMeter 5.5.
 	<br>There are incompatibilities with the recently released 5.6 version of JMeter, so please deploy to JMeter 5.5.
-	<br>We plan to work on a JMeter 5.6 compatible version of Mark59 as a priority for our next release.</li>
+	<br>A JMeter 5.6 compatible version of Mark59 planned on next release.</li>
   </ul>
 
   <ul>

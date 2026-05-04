@@ -80,12 +80,9 @@
 		
 		<!-- Other project dependencies -->
 
-		<!-- Note: Was common to SpringBoot and JMeter
-			- now from default v17 to 18 due to dependabot vunerability -->
 		<dependency>
 		    <groupId>org.apache.commons</groupId>
 		    <artifactId>commons-lang3</artifactId>
-		    <version>3.18.0</version><!--$NO-MVN-MAN-VER$-->
 		</dependency>
 
 		<dependency>

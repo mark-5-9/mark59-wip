@@ -66,7 +66,7 @@
 	        <artifactId>commons-io</artifactId>
 	        <version>2.21.0</version>
 	    </dependency>
-	    
+
 
 		<!-- added for usage of StringSubstitutorr in command parameterization-->
 		<dependency>
@@ -96,12 +96,14 @@
 		    <artifactId>json</artifactId>
 		    <version>20251224</version>
 		</dependency>
-		
+
 		<!-- added to simplify (Groovy) api scripting (eg  New Relic )-->
-		<!-- https://mvnrepository.com/artifact/com.squareup.okhttp3/okhttp -->
+		<!-- https://mvnrepository.com/artifact/com.squareup.okhttp3/okhttp-jvm -->
+		<!-- Note: OkHttp 5.x publishes separate JVM/Android artifacts; Maven cannot resolve Gradle module metadata
+		     so 'okhttp' (the metadata artifact) must be replaced with 'okhttp-jvm' for Maven builds -->
 		<dependency>
 		    <groupId>com.squareup.okhttp3</groupId>
-		    <artifactId>okhttp</artifactId>
+		    <artifactId>okhttp-jvm</artifactId>
 		    <version>5.3.2</version>
 		</dependency>
 

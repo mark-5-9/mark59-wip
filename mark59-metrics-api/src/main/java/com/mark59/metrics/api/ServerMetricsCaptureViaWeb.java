@@ -26,6 +26,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.protocol.java.sampler.AbstractJavaSamplerClient;
 import org.apache.jmeter.protocol.java.sampler.JavaSamplerContext;
@@ -157,7 +158,7 @@ public class ServerMetricsCaptureViaWeb extends AbstractJavaSamplerClient {
 			HttpURLConnection con = (HttpURLConnection) url.openConnection();
 
 			con.setRequestMethod("GET");
-			if (Mark59Utils.isNotBlank(apiAuth)) {
+			if (StringUtils.isNotBlank(apiAuth)) {
 				con.setRequestProperty("Authorization", "Basic " + apiAuth);
 			}
 

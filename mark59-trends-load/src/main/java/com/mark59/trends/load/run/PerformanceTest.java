@@ -25,10 +25,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.context.ApplicationContext;
 
 import com.mark59.core.utils.Mark59Constants;
-import com.mark59.core.utils.Mark59Utils;
 import com.mark59.trends.application.AppConstantsTrends;
 import com.mark59.trends.data.beans.DateRangeBean;
 import com.mark59.trends.data.beans.EventMapping;
@@ -162,7 +162,7 @@ public class PerformanceTest {
 		DateRangeBean filteredDateRangeBean = new DateRangeBean(dateRangeBean.getRunStartTime(), dateRangeBean.getRunEndTime(), false );
 
 		Long excludestartMsecs = 0L;
-		if (Mark59Utils.isNumeric(excludestart)) {
+		if (StringUtils.isNumeric(excludestart)) {
 			excludestartMsecs = TimeUnit.MINUTES.toMillis(Long.parseLong(excludestart));
 		}
 
@@ -174,7 +174,7 @@ public class PerformanceTest {
 			long filterEpochTimeFromMsecs = dateRangeBean.getRunStartTime() + excludestartMsecs;
 			Long filterEpochTimeToMsecs   = dateRangeBean.getRunEndTime();
 
-			if (Mark59Utils.isNumeric(captureperiod)){
+			if (StringUtils.isNumeric(captureperiod)){
 				filterEpochTimeToMsecs = filterEpochTimeFromMsecs + TimeUnit.MINUTES.toMillis(Long.parseLong(captureperiod));
 				System.out.print( ", for the following " + captureperiod	+ " mins ");
 			}
@@ -198,7 +198,7 @@ public class PerformanceTest {
 
 
 	public boolean errorToBeIgnored(String errorMsg, List<String> ignoredErrorsList) {
-		if (Mark59Utils.isBlank(errorMsg))
+		if (StringUtils.isBlank(errorMsg))
 			return false;
 
 		boolean isErrorToBeIgnored = false;

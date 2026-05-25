@@ -169,7 +169,7 @@ public class UploadIdsFileController {
 				" (" + rowsInserted + " inserts, " + rowsUpdated + " updates," + rowsDeleted + " deleted)");
 
 		if (rowsInserted+rowsUpdated == 0 ){
-			if (DataHunterUtils.isBlank(file.getOriginalFilename()) ) {
+			if (StringUtils.isBlank(file.getOriginalFilename()) ) {
 				model.addAttribute("sqlResultText", "sql execution OK, but no rows where affected."
 						+ "<br>Did you forget to select the file?");
 			} else {

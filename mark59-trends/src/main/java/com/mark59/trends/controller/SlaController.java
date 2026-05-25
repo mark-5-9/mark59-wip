@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -33,7 +34,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.mark59.core.utils.Mark59Utils;
 import com.mark59.trends.application.AppConstantsTrends;
 import com.mark59.trends.data.beans.Run;
 import com.mark59.trends.data.beans.Sla;
@@ -162,7 +162,7 @@ public class SlaController {
 		copyApplicationForm.setReqApp(reqApp);
 		copyApplicationForm.setValidForm("N");
 
-		if ( Mark59Utils.isNotEmpty( copyApplicationForm.getReqToApp())) {
+		if ( StringUtils.isNotEmpty( copyApplicationForm.getReqToApp())) {
 			copyApplicationForm.setValidForm("Y");
 			//do the copy
 			List<Sla> slaList = slaDao.getSlaList(reqApp);
@@ -245,7 +245,7 @@ public class SlaController {
 
 	private String referenceOfLastBaselineRun(String reqApp) {
 		String reference = "";
-		if (Mark59Utils.isNotBlank(reqApp)){
+		if (StringUtils.isNotBlank(reqApp)){
 			Run lastBaseLineRun = runDAO.findLastBaselineRun(reqApp);
 			if (lastBaseLineRun != null) {
 				reference = lastBaseLineRun.getRunReference();
@@ -279,13 +279,13 @@ public class SlaController {
 
 	private ModelAndView buildSlaListModelAndView(String reqApp) {
 		List<String> applicationList = populateSlaApplicationDropdown();
-		if (Mark59Utils.isBlank(reqApp) && applicationList.size() > 0) {
+		if (StringUtils.isBlank(reqApp) && applicationList.size() > 0) {
 			// when no application request parameter has been sent, take the first application
 			reqApp = applicationList.get(0);
 		}
 
 		List<Sla> slaList;
-		if (Mark59Utils.isBlank(reqApp)) {
+		if (StringUtils.isBlank(reqApp)) {
 			slaList = slaDao.getSlaList();
 		} else {
 			slaList = slaDao.getSlaList(reqApp);

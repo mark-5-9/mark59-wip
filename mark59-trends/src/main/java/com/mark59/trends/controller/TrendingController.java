@@ -32,7 +32,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 import com.mark59.core.utils.Mark59Constants;
-import com.mark59.core.utils.Mark59Utils;
 import com.mark59.trends.application.AppConstantsTrends;
 import com.mark59.trends.application.UtilsTrends;
 import com.mark59.trends.data.application.dao.ApplicationDAO;
@@ -402,7 +401,7 @@ public class TrendingController {
 			if (runComment == null) {
 				runComment = run.getComment();
 			}
-			if (Mark59Utils.isNotBlank(runComment)) {
+			if (StringUtils.isNotBlank(runComment)) {
 				if (runComment.length() > 20) {
 					runDescriptionsb.append(" ").append(runComment.replace(',', ' '), 0, 20);
 				} else {
@@ -436,7 +435,7 @@ public class TrendingController {
 
 			runDescriptionsb.append(run.getRunReference().replace(',', ' '));
 
-			if (Mark59Utils.isNotBlank(run.getComment())) {
+			if (StringUtils.isNotBlank(run.getComment())) {
 				if (run.getComment().length() > 20 && !UtilsTrends.stringContainsHtmlTags(run.getComment())  ) {
 					runDescriptionsb.append("<br><br><div style='color:grey;'>").append(run.getComment().replace(',', ' '), 0, 20).append("..</div>");
 				} else {

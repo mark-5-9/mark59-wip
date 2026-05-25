@@ -22,6 +22,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -32,7 +33,6 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.mark59.core.utils.Mark59Constants;
-import com.mark59.core.utils.Mark59Utils;
 import com.mark59.trends.application.UtilsTrends;
 import com.mark59.trends.data.beans.MetricSla;
 import com.mark59.trends.data.beans.Sla;
@@ -64,7 +64,7 @@ public class TransactionController {
 	@GetMapping("/transactionList")
 	public ModelAndView getTransactionList(@RequestParam(required=false) String reqApp) {
 		List<String> applicationList = populateApplicationDropdown();
-		if (Mark59Utils.isBlank(reqApp) && applicationList.size() > 1  ){
+		if (StringUtils.isBlank(reqApp) && applicationList.size() > 1  ){
 			// when no application request parameter has been sent, take the first application
 			reqApp = applicationList.get(0);
 		}
@@ -98,7 +98,7 @@ public class TransactionController {
 		System.out.println("@ transactionRenameValidate : Form=" + transactionRenameForm  );
 		transactionRenameForm.setPassedValidation("Y");
 
-		if (Mark59Utils.isBlank(transactionRenameForm.getToTxnId())){
+		if (StringUtils.isBlank(transactionRenameForm.getToTxnId())){
 			transactionRenameForm.setPassedValidation("N");
 			transactionRenameForm.setValidationMsg("<p style='color:red'>Blank transaction name not allowed</p>");
 			return new ModelAndView("transactionRenameValidate", "transactionRenameForm" , transactionRenameForm  );

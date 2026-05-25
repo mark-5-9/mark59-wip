@@ -32,7 +32,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.mark59.datahunter.application.DataHunterConstants;
-import com.mark59.datahunter.application.DataHunterUtils;
 import com.mark59.datahunter.application.SqlWithParms;
 import com.mark59.datahunter.data.beans.Policies;
 import com.mark59.datahunter.data.policies.dao.PoliciesDAO;
@@ -126,7 +125,7 @@ public class DataHunterRestController {
 			policies.setOtherdata(otherdata);
 		}
 
-		if (DataHunterUtils.isNumeric(epochtime)){
+		if (StringUtils.isNumeric(epochtime)){
 			policies.setEpochtime(Long.parseLong(epochtime)  );
 		} else {
 			policies.setEpochtime(System.currentTimeMillis());
@@ -211,7 +210,7 @@ public class DataHunterRestController {
 
 		DataHunterRestApiResponsePojo response = new DataHunterRestApiResponsePojo();
 		response.setPolicies(Collections.singletonList(new Policies(application,null,lifecycle, useability, null, null)));
-		if (DataHunterUtils.isNotBlank(useability) && !DataHunterConstants.USEABILITY_LIST.contains(useability)){
+		if (StringUtils.isNotBlank(useability) && !DataHunterConstants.USEABILITY_LIST.contains(useability)){
 			return ResponseEntity.ok(UseabilityError(useability, response));
 		}
 
@@ -254,7 +253,7 @@ public class DataHunterRestController {
 			return ResponseEntity.ok(response);
 		}
 
-		if (DataHunterUtils.isNotBlank(useability) && !DataHunterConstants.USEABILITY_LIST.contains(useability)){
+		if (StringUtils.isNotBlank(useability) && !DataHunterConstants.USEABILITY_LIST.contains(useability)){
 			return ResponseEntity.ok(UseabilityError(useability, response));
 		}
 
@@ -404,7 +403,7 @@ public class DataHunterRestController {
 		policySelectionFilter.setLimit(limit);
 
 		DataHunterRestApiResponsePojo response = new DataHunterRestApiResponsePojo();
-		if (DataHunterUtils.isNotBlank(useability) && !DataHunterConstants.USEABILITY_LIST.contains(useability)){
+		if (StringUtils.isNotBlank(useability) && !DataHunterConstants.USEABILITY_LIST.contains(useability)){
 			return ResponseEntity.ok(UseabilityError(useability, response));
 		}
 		SqlWithParms sqlWithParms = policiesDAO.constructSelectPoliciesFilterSql(policySelectionFilter);
@@ -537,7 +536,7 @@ public class DataHunterRestController {
 
 		DataHunterRestApiResponsePojo response = new DataHunterRestApiResponsePojo();
 
-		if (DataHunterUtils.isNotBlank(useability) && !DataHunterConstants.USEABILITY_LIST.contains(useability)){
+		if (StringUtils.isNotBlank(useability) && !DataHunterConstants.USEABILITY_LIST.contains(useability)){
 			return ResponseEntity.ok(UseabilityError(useability, response));
 		}
 
@@ -649,13 +648,13 @@ public class DataHunterRestController {
 
 		policies.setUseability(useability);
 
-		if (DataHunterUtils.isNotBlank(otherdata)){
+		if (StringUtils.isNotBlank(otherdata)){
 			policies.setOtherdata(otherdata);
 		} else {
 			policies.setOtherdata("");
 		}
 
-		if (DataHunterUtils.isNumeric(epochtime)){
+		if (StringUtils.isNumeric(epochtime)){
 			policies.setEpochtime(Long.parseLong(epochtime));
 		} else {
 			policies.setEpochtime(null); // DOA will set to current time
@@ -862,7 +861,7 @@ public class DataHunterRestController {
 		updateUseStateAndEpochTime.setUseability(useability);
 		updateUseStateAndEpochTime.setToUseability(toUseability);
 
-		if (DataHunterUtils.isNumeric(toEpochTime)) {
+		if (StringUtils.isNumeric(toEpochTime)) {
 			updateUseStateAndEpochTime.setToEpochTime(Long.parseLong(toEpochTime.trim()));
 		} else {
 			updateUseStateAndEpochTime.setToEpochTime(null); // DAO will not update epochtime
@@ -871,7 +870,7 @@ public class DataHunterRestController {
 
 		DataHunterRestApiResponsePojo response = new DataHunterRestApiResponsePojo();
 
-		if (DataHunterUtils.isNotBlank(useability) && !DataHunterConstants.USEABILITY_LIST.contains(useability)){
+		if (StringUtils.isNotBlank(useability) && !DataHunterConstants.USEABILITY_LIST.contains(useability)){
 			return ResponseEntity.ok(UseabilityError(useability, response));
 		}
 		if (!DataHunterConstants.USEABILITY_LIST.contains(toUseability)){
@@ -936,10 +935,10 @@ public class DataHunterRestController {
 			return ResponseEntity.ok(response);
 		}
 
-		if (DataHunterUtils.isNotBlank(useability) && !DataHunterConstants.USEABILITY_LIST.contains(useability)){
+		if (StringUtils.isNotBlank(useability) && !DataHunterConstants.USEABILITY_LIST.contains(useability)){
 			return ResponseEntity.ok(UseabilityError(useability, response));
 		}
-		if (DataHunterUtils.isNotBlank(toUseability) &&  !DataHunterConstants.USEABILITY_LIST.contains(toUseability)){
+		if (StringUtils.isNotBlank(toUseability) &&  !DataHunterConstants.USEABILITY_LIST.contains(toUseability)){
 			return ResponseEntity.ok(UseabilityError(toUseability, response));
 		}
 
@@ -974,7 +973,7 @@ public class DataHunterRestController {
 			return ResponseEntity.ok(response);
 		}
 
-		if (DataHunterUtils.isNotBlank(toUseability)){
+		if (StringUtils.isNotBlank(toUseability)){
 			try {
 				asyncMessageAnalyzerResultList = policiesDAO.updateMultiplePoliciesUseState(asyncMessageAnalyzerResultList, toUseability);
 			} catch (Exception e) {

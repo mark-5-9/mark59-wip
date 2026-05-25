@@ -33,6 +33,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.protocol.java.sampler.JavaSamplerContext;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
@@ -43,7 +44,6 @@ import org.openqa.selenium.WebElement;
 
 import com.mark59.core.JmeterFunctionsImpl;
 import com.mark59.core.utils.Log4jConfigurationHelper;
-import com.mark59.core.utils.Mark59Utils;
 import com.mark59.core.utils.SafeSleep;
 import com.mark59.datahunter.samples.dsl.datahunterSpecificPages.AddPolicyActionPage;
 import com.mark59.datahunter.samples.dsl.datahunterSpecificPages.AddPolicyPage;
@@ -197,7 +197,7 @@ public class DataHunterRegressionScript  extends SeleniumAbstractJavaSamplerClie
 			addPolicyPage.lifecycle().type(policy.getLifecycle());
 			addPolicyPage.useability().selectByVisibleText(policy.getUseability());
 			addPolicyPage.otherdata().type(policy.getOtherdata());
-			if (Mark59Utils.isNotBlank(policy.getEpochtime())){
+			if (StringUtils.isNotBlank(policy.getEpochtime())){
 				addPolicyPage.epochtime().type(policy.getEpochtime());
 			}
 			addPolicyPage.submit().submit();
@@ -210,10 +210,10 @@ public class DataHunterRegressionScript  extends SeleniumAbstractJavaSamplerClie
 			driver.get(dataHunterUrl + DslConstants.COUNT_POLICIES_URL_PATH + DslConstants.URL_PARM_APPLICATION + selectionCriteria.getApplication());
 			CountPoliciesPage countPoliciesPage = new CountPoliciesPage(driver);
 			CountPoliciesActionPage countPoliciesActionPage = new CountPoliciesActionPage(driver);
-			if (Mark59Utils.isNotBlank(selectionCriteria.getLifecycle())){
+			if (StringUtils.isNotBlank(selectionCriteria.getLifecycle())){
 				countPoliciesPage.lifecycle().type(selectionCriteria.getLifecycle());
 			}
-			if (Mark59Utils.isNotBlank(selectionCriteria.getUseability())){
+			if (StringUtils.isNotBlank(selectionCriteria.getUseability())){
 				countPoliciesPage.useability().selectByVisibleText(selectionCriteria.getUseability());
 			}
 			countPoliciesPage.submit().submit();
@@ -233,10 +233,10 @@ public class DataHunterRegressionScript  extends SeleniumAbstractJavaSamplerClie
 			CountPoliciesBreakdownActionPage countPoliciesBreakdownActionPage = new CountPoliciesBreakdownActionPage(driver);
 
 			countPoliciesBreakdownPage.applicationStartsWithOrEquals().selectByVisibleText(selectionCriteria.getApplicationStartsWithOrEquals());
-			if (Mark59Utils.isNotBlank(selectionCriteria.getLifecycle())){
+			if (StringUtils.isNotBlank(selectionCriteria.getLifecycle())){
 				countPoliciesBreakdownPage.lifecycle().type(selectionCriteria.getLifecycle());
 			}
-			if (Mark59Utils.isNotBlank(selectionCriteria.getUseability())){
+			if (StringUtils.isNotBlank(selectionCriteria.getUseability())){
 				countPoliciesBreakdownPage.useability().selectByVisibleText(selectionCriteria.getUseability());
 				assertEquals(selectionCriteria.getUseability(), countPoliciesBreakdownPage.useability().getSelectedOptionValue());
 			}
@@ -259,7 +259,7 @@ public class DataHunterRegressionScript  extends SeleniumAbstractJavaSamplerClie
 			PrintPolicyPage printPolicyPage = new PrintPolicyPage(driver);
 			PrintPolicyActionPage printPolicyActionPage = new PrintPolicyActionPage(driver);
 			printPolicyPage.identifier().type(policySelection.getIdentifier());
-			if (Mark59Utils.isNotBlank(policySelection.getLifecycle())){
+			if (StringUtils.isNotBlank(policySelection.getLifecycle())){
 				printPolicyPage.lifecycle().type(policySelection.getLifecycle());
 			}
 			printPolicyPage.submit().submit();
@@ -322,7 +322,7 @@ public class DataHunterRegressionScript  extends SeleniumAbstractJavaSamplerClie
 			DeletePolicyPage deletePolicyPage = new DeletePolicyPage(driver);
 			DeletePolicyActionPage deletePolicyActionPage = new DeletePolicyActionPage(driver);
 			deletePolicyPage.identifier().type(policySelection.getIdentifier());
-			if (Mark59Utils.isNotBlank(policySelection.getLifecycle())){
+			if (StringUtils.isNotBlank(policySelection.getLifecycle())){
 				deletePolicyPage.lifecycle().type(policySelection.getLifecycle());
 			}
 			deletePolicyPage.submit().submit();
@@ -340,7 +340,7 @@ public class DataHunterRegressionScript  extends SeleniumAbstractJavaSamplerClie
 			MultiplePoliciesPage multiplePoliciesPage = new MultiplePoliciesPage(driver);
 			MultiplePoliciesActionPage multiplePoliciesActionPage = new MultiplePoliciesActionPage(driver);
 
-			if (Mark59Utils.isNotBlank(policySelection.getLifecycle())){
+			if (StringUtils.isNotBlank(policySelection.getLifecycle())){
 				multiplePoliciesPage.lifecycle().type(policySelection.getLifecycle());
 			}
 			multiplePoliciesPage.submit().submit().waitUntilClickable( multiplePoliciesActionPage.backLink() );
@@ -391,7 +391,7 @@ public class DataHunterRegressionScript  extends SeleniumAbstractJavaSamplerClie
 			UpdatePoliciesUseStatePage updatePoliciesUseStatePage = new UpdatePoliciesUseStatePage(driver);
 			UpdatePoliciesUseStateActionPage updatePoliciesUseStateActionPage = new UpdatePoliciesUseStateActionPage(driver);
 
-			if (Mark59Utils.isNotBlank(updateUseStateAndEpochTime.getIdentifier())){
+			if (StringUtils.isNotBlank(updateUseStateAndEpochTime.getIdentifier())){
 				updatePoliciesUseStatePage.identifier().type(updateUseStateAndEpochTime.getIdentifier());
 			}
 			updatePoliciesUseStatePage.useability().selectByVisibleText(updateUseStateAndEpochTime.getUseability());
@@ -421,7 +421,7 @@ public class DataHunterRegressionScript  extends SeleniumAbstractJavaSamplerClie
 			assertEquals(policy.getLifecycle().trim(), addPolicyActionPage.lifecycle().getText());
 			assertEquals(policy.getUseability(), addPolicyActionPage.useability().getText());
 			assertEquals(policy.getOtherdata(), addPolicyActionPage.otherdata().getText());
-			assertTrue(Mark59Utils.isNumeric(addPolicyActionPage.epochtime().getText()));
+			assertTrue(StringUtils.isNumeric(addPolicyActionPage.epochtime().getText()));
 		}
 
 		private void confirmCountPoliciesActionPageOk(long expectedCount, CountPoliciesActionPage countPoliciesActionPage) {
@@ -442,7 +442,7 @@ public class DataHunterRegressionScript  extends SeleniumAbstractJavaSamplerClie
 			assertEquals(expectedPolicy.getLifecycle().trim(), printPolicyActionPage.lifecycle().getText());
 			assertEquals(expectedPolicy.getUseability(), printPolicyActionPage.useability().getText());
 			assertEquals(expectedPolicy.getOtherdata(), printPolicyActionPage.otherdata().getText());
-			assertTrue(Mark59Utils.isNumeric(printPolicyActionPage.epochtime().getText()));
+			assertTrue(StringUtils.isNumeric(printPolicyActionPage.epochtime().getText()));
 			assertEquals(1, Long.parseLong(printPolicyActionPage.rowsAffected().getText()));
 
 			assertEquals(expectedPolicy.getApplication().trim(), retrievedPolicy.getApplication());

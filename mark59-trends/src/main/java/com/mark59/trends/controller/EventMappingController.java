@@ -23,6 +23,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -33,7 +34,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.mark59.core.utils.Mark59Constants;
-import com.mark59.core.utils.Mark59Utils;
 import com.mark59.trends.application.AppConstantsTrends;
 import com.mark59.trends.data.beans.EventMapping;
 import com.mark59.trends.data.eventMapping.dao.EventMappingDAO;
@@ -58,14 +58,14 @@ public class EventMappingController {
 		// note 'Metric Source' has precedence  and will wipe out any 'tool' selector, as at this point the Metric Source value is unique and determines the tool
 		List<EventMapping> eventMappingList = new ArrayList<>();
 
-		if (Mark59Utils.isEmpty(reqPerformanceTool) && Mark59Utils.isEmpty(reqMetricSource) ){
+		if (StringUtils.isEmpty(reqPerformanceTool) && StringUtils.isEmpty(reqMetricSource) ){
 			eventMappingList = eventMappingDAO.findEventMappings();
 
-		} else if (!Mark59Utils.isEmpty(reqMetricSource)){
+		} else if (!StringUtils.isEmpty(reqMetricSource)){
 			eventMappingList = eventMappingDAO.findEventMappings("METRIC_SOURCE", reqMetricSource);
 			reqPerformanceTool = "";
 
-		} else if ( !Mark59Utils.isEmpty(reqPerformanceTool)){
+		} else if ( !StringUtils.isEmpty(reqPerformanceTool)){
 			eventMappingList = eventMappingDAO.findEventMappings("PERFORMANCE_TOOL", reqPerformanceTool);
 			reqMetricSource = "";
 		}

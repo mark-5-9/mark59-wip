@@ -19,7 +19,7 @@ package com.mark59.scripting;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.mark59.core.utils.Mark59Utils;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * Contains utility methods to be used within mark59-scripting 
@@ -64,7 +64,7 @@ public final class ScriptingUtils  {
 	public static List<String> splitBrowserLaunchArgs(String browserLaunchArgs) {
 
 		List<String> browserLaunchArgsList = new ArrayList<String>();
-		if (Mark59Utils.isNotBlank(browserLaunchArgs)){
+		if (StringUtils.isNotBlank(browserLaunchArgs)){
 			String[] parts = browserLaunchArgs.split(";|,(?=\\s*--)");
 			for (String part : parts) {
 				String trimmed = part.trim();	

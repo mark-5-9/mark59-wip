@@ -133,7 +133,7 @@ public class JmeterRun extends PerformanceTest  {
 			return 0;
 
 		} else  if (firstLineOfFile.trim().startsWith("<")) {
-			if (Mark59Utils.isNotBlank(ignoredErrors)){
+			if (StringUtils.isNotBlank(ignoredErrors)){
 				System.out.println("   Warning : " + " the -e ('ignoredErrors') runtime option is not implemented for XML files");
 			}
 			return loadXMLFile(jmeterResultsFile, application);
@@ -361,7 +361,7 @@ public class JmeterRun extends PerformanceTest  {
 		String[] csvDataLineFields = csvReadNextLine(csvReader, inputCsvFileName);
 
 		// at this point, should be at the first line of data in the file
-		if  ( csvDataLineFields != null  && !Mark59Utils.isNumeric(csvDataLineFields[fieldPostimeStamp]) ) {
+		if  ( csvDataLineFields != null  && !StringUtils.isNumeric(csvDataLineFields[fieldPostimeStamp]) ) {
 			throw new RuntimeException("Error :  Only elapsed times in epoch (millisecond) format can be processed ! "
 				+ "\nFirst data line of file " + inputCsvFileName + " contains elapsed value of " + csvDataLineFields[fieldPostimeStamp]);
 		}
@@ -515,7 +515,7 @@ public class JmeterRun extends PerformanceTest  {
 				BigDecimal valueMultiplier = new BigDecimal(1L);
 
 				String passedMultiplier = sampleLineDataType.replace(metricDataType, "").replace("_", "");
-				if (Mark59Utils.isNotBlank(passedMultiplier)) {
+				if (StringUtils.isNotBlank(passedMultiplier)) {
 					valueMultiplier = new BigDecimal(passedMultiplier);
 				}
 				return txnResultMsBigD.divide(valueMultiplier, 3, RoundingMode.HALF_UP);

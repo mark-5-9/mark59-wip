@@ -505,7 +505,7 @@ public class TransactionDAOjdbcTemplateImpl implements TransactionDAO
 				if (!"%".equals(sqlSelectLike) ){
 					sql = sql + " AND TXN_ID LIKE :sqlSelectLike ";
 				}
-				if (Mark59Utils.isNotBlank(sqlSelectNotLike)){
+				if (StringUtils.isNotBlank(sqlSelectNotLike)){
 					sql = sql + " AND NOT (TXN_ID LIKE :sqlSelectNotLike ) ";
 				}
 				if (Mark59Constants.DatabaseTxnTypes.TRANSACTION.name().equals( graphMapping.getTxnType() )){
@@ -577,7 +577,7 @@ public class TransactionDAOjdbcTemplateImpl implements TransactionDAO
 		List<Datapoint> datapoints = new ArrayList<>();
 		Object datapointMetric;
 
-		if (Mark59Utils.isEmpty(chosenRuns) || (listOfStdTransactionNamesToGraph.size() + listOfCdpTransactionNamesToGraph.size()) == 0 ){
+		if (StringUtils.isEmpty(chosenRuns) || (listOfStdTransactionNamesToGraph.size() + listOfCdpTransactionNamesToGraph.size()) == 0 ){
 			return datapoints;
 		}
 
@@ -612,7 +612,7 @@ public class TransactionDAOjdbcTemplateImpl implements TransactionDAO
 		List<Map<String, Object>> rows = jdbcTemplate.queryForList(sql, sqlparameters);
 
 		int numRunsBeingGraphed = 0;   // eg, for initial request..
-		if (Mark59Utils.isNotBlank(chosenRuns)){
+		if (StringUtils.isNotBlank(chosenRuns)){
 			numRunsBeingGraphed = StringUtils.countMatches(chosenRuns, ",") + 1;
 		} else {
 			System.out.println(" ****** no chosen runs passed to findDatapointsToGraph!!!!!   Application was " + application);
@@ -686,7 +686,7 @@ public class TransactionDAOjdbcTemplateImpl implements TransactionDAO
 	 * @throws IllegalArgumentException if any value contains suspicious characters
 	 */
 	private String validateAndEscapeCommaDelimitedValues(String commaDelimitedValues, String fieldName) {
-		if (Mark59Utils.isBlank(commaDelimitedValues)) {
+		if (StringUtils.isBlank(commaDelimitedValues)) {
 			return "''";
 		}
 

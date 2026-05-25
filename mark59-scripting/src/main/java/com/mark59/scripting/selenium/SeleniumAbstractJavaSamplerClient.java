@@ -1,4 +1,4 @@
-/*
+	/*
  *  Copyright 2019 Mark59.com
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
@@ -25,6 +25,8 @@ import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+
+import org.apache.commons.lang3.StringUtils;
 
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.protocol.java.sampler.JavaSamplerContext;
@@ -337,7 +339,7 @@ public abstract class SeleniumAbstractJavaSamplerClient extends UiAbstractJavaSa
 		}
 
 		String lastTxnStarted = jm.getMostRecentTransactionStarted();
-		if (Mark59Utils.isBlank(lastTxnStarted)){
+		if (StringUtils.isBlank(lastTxnStarted)){
 			lastTxnStarted =  "noTxn";
 		}
 

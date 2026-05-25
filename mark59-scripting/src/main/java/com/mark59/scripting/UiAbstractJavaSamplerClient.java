@@ -666,7 +666,7 @@ public abstract class UiAbstractJavaSamplerClient extends AbstractJavaSamplerCli
 
 			String summaryTableTxn = subResult.getSampleLabel();
 
-			if (Mark59Utils.isNotBlank(subResult.getDataType())){
+			if (StringUtils.isNotBlank(subResult.getDataType())){
 				summaryTableTxn = summaryTableTxn + " (" + subResult.getDataType() + ")";
 			}
 

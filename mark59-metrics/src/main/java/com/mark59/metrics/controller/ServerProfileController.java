@@ -28,6 +28,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.TreeMap;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.DataFormat;
@@ -52,7 +53,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.mark59.core.utils.Mark59Utils;
 import com.mark59.metrics.PropertiesConfiguration;
 import com.mark59.metrics.data.base.dao.BaseDAO;
 import com.mark59.metrics.data.beans.Command;
@@ -274,7 +274,7 @@ public class ServerProfileController {
 
 		ServerProfile serverProfile = serverProfileEditingForm.getServerProfile();
 
-		if (Mark59Utils.isBlank(serverProfile.getExecutor())){
+		if (StringUtils.isBlank(serverProfile.getExecutor())){
 			map.put("serverProfileEditingForm", serverProfileEditingForm);
 			map.put("reqErr", "You must select a Command Executor from the dropdown");
 			model.addAttribute("map", map);
@@ -346,7 +346,7 @@ public class ServerProfileController {
 
 		serverProfile.setParameters(createParmsMap(serverProfileEditingForm.getCommandParameters()));
 
-		if (Mark59Utils.isBlank(serverProfile.getServerProfileName())){
+		if (StringUtils.isBlank(serverProfile.getServerProfileName())){
 			map.put("serverProfileEditingForm", serverProfileEditingForm);
 			map.put("reqErr", "ServerProfile Name is required");
 			model.addAttribute("map", map);
@@ -381,7 +381,7 @@ public class ServerProfileController {
 	public ModelAndView serverProfileList(@RequestParam(required=false) String reqExecutor) {
 		List<ServerProfile> serverProfileList;
 
-		if (!Mark59Utils.isEmpty(reqExecutor)){
+		if (!StringUtils.isEmpty(reqExecutor)){
 			serverProfileList = serverProfilesDAO.findServerProfiles("EXECUTOR", reqExecutor);
 		} else {
 			serverProfileList = serverProfilesDAO.findServerProfiles();

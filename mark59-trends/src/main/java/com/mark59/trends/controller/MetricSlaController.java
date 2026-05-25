@@ -22,6 +22,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -32,7 +33,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.mark59.core.utils.Mark59Constants;
-import com.mark59.core.utils.Mark59Utils;
 import com.mark59.trends.application.AppConstantsTrends;
 import com.mark59.trends.data.beans.MetricSla;
 import com.mark59.trends.data.metricSla.dao.MetricSlaDAO;
@@ -53,13 +53,13 @@ public class MetricSlaController {
 	@GetMapping("/metricSlaList")
 	public ModelAndView getMetricSlaList(@RequestParam(required=false) String reqApp) {
 		List<String> applicationList = populateApplicationDropdown();
-		if (Mark59Utils.isBlank(reqApp)  && applicationList.size() > 0  ){
+		if (StringUtils.isBlank(reqApp)  && applicationList.size() > 0  ){
 			// when no application request parameter has been sent, take the first application
 			reqApp = applicationList.get(1);
 		}
 
 		List<MetricSla> metricSlaList;
-		if (Mark59Utils.isBlank(reqApp) ){
+		if (StringUtils.isBlank(reqApp) ){
 			metricSlaList = metricSlaDAO.getMetricSlaList();
 		} else {
 			metricSlaList = metricSlaDAO.getMetricSlaList(reqApp);
@@ -92,13 +92,13 @@ public class MetricSlaController {
 		if (existingMetricSla == null ){  //not trying to add something already there, so go ahead..
 			metricSlaDAO.insertData(metricSla);
 			List<String> applicationList = populateApplicationDropdown();
-			if (Mark59Utils.isBlank(reqApp)  && applicationList.size() > 0  ){
+			if (StringUtils.isBlank(reqApp)  && applicationList.size() > 0  ){
 				// when no application request parameter has been sent, take the first application
 				reqApp = applicationList.get(1);
 			}
 
 			List<MetricSla> metricSlaList;
-			if (Mark59Utils.isBlank(reqApp) ){
+			if (StringUtils.isBlank(reqApp) ){
 				metricSlaList = metricSlaDAO.getMetricSlaList();
 			} else {
 				metricSlaList = metricSlaDAO.getMetricSlaList(reqApp);
@@ -178,7 +178,7 @@ public class MetricSlaController {
 		copyApplicationForm.setReqApp(reqApp);
 		copyApplicationForm.setValidForm("N");
 
-		if ( Mark59Utils.isNotEmpty( copyApplicationForm.getReqToApp())) {
+		if ( StringUtils.isNotEmpty( copyApplicationForm.getReqToApp())) {
 			copyApplicationForm.setValidForm("Y");
 			//do the copy
 			List<MetricSla> slaList = metricSlaDAO.getMetricSlaList(reqApp);

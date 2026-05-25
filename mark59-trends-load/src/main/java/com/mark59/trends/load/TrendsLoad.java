@@ -185,7 +185,7 @@ public class TrendsLoad  implements CommandLineRunner
 			System.out.println();
 		}
 
-		if (Mark59Utils.isEmpty(argApplication) ||
+		if (StringUtils.isEmpty(argApplication) ||
 			StringUtils.containsWhitespace(argApplication) ||
 			!argApplication.matches(AppConstantsTrends.ALLOWED_CHARS_APP_NAME)){
 			throw new RuntimeException("The application id (a) argument must consist of only alphanumerics, underscores (_), dashes (-) and dots (.)."
@@ -212,27 +212,27 @@ public class TrendsLoad  implements CommandLineRunner
 			printSampleUsage();
 			throw new RuntimeException("The Keeprawresults (k) argument must be set to 'true' or 'false' ! (or not used, in which case 'false' is assumed)");
 		}
-		if (!Mark59Utils.isNumeric(argeXcludestart) ) {
+		if (!StringUtils.isNumeric(argeXcludestart) ) {
 			formatter.printHelp( "TrendsLoad", options );
 			printSampleUsage();
 			throw new RuntimeException("The eXcludestart (x) argument must be numeric");
 		}
-		if (!Mark59Utils.isNumeric(argCaptureperiod) && !argCaptureperiod.equalsIgnoreCase(AppConstantsTrends.ALL) ) {
+		if (!StringUtils.isNumeric(argCaptureperiod) && !argCaptureperiod.equalsIgnoreCase(AppConstantsTrends.ALL) ) {
 			formatter.printHelp( "TrendsLoad", options );
 			printSampleUsage();
 			throw new RuntimeException("The Captureperiod (c) argument must be numeric or '" + AppConstantsTrends.ALL + "'" );
 		}
-		if (!Mark59Utils.isNumeric(argmaxNumberofruns) || Integer.parseInt(argmaxNumberofruns) < -1){
+		if (!StringUtils.isNumeric(argmaxNumberofruns) || Integer.parseInt(argmaxNumberofruns) < -1){
 			formatter.printHelp( "TrendsLoad", options );
 			printSampleUsage();
 			throw new RuntimeException("The maxNumberofruns (n) argument must a number greater than or equal to '-1'");
 		}
-		if (Mark59Utils.isNotBlank(argsimlogcustoM)){
+		if (StringUtils.isNotBlank(argsimlogcustoM)){
 				List<String> mPos = Mark59Utils.commaDelimStringToStringList(argsimlogcustoM);
 				if ((mPos.size() != 5) ||
-					(!Mark59Utils.isNumeric(mPos.get(0)) || !Mark59Utils.isNumeric(mPos.get(1)) ||
-					 !Mark59Utils.isNumeric(mPos.get(2)) || !Mark59Utils.isNumeric(mPos.get(3)) ||
-					 !Mark59Utils.isNumeric(mPos.get(4)) )){
+					(!StringUtils.isNumeric(mPos.get(0)) || !StringUtils.isNumeric(mPos.get(1)) ||
+					 !StringUtils.isNumeric(mPos.get(2)) || !StringUtils.isNumeric(mPos.get(3)) ||
+					 !StringUtils.isNumeric(mPos.get(4)) )){
 				formatter.printHelp( "TrendsLoad", options );
 				printSampleUsage();
 				throw new RuntimeException("The simlogcustoM (m) argument must blank or 5 comma-delimited integers") ;

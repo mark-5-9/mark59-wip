@@ -27,6 +27,7 @@ import java.util.Locale;
 import java.util.regex.Pattern;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -101,11 +102,11 @@ public class Mark59LoggingConfig {
 		File logDirectory = null;
 		logDirectoryPathName = PropertiesReader.getInstance().getProperty(PropertiesKeys.MARK59_PROP_LOG_DIRECTORY);
 
-		if (Mark59Utils.isBlank(logDirectoryPathName)){
+		if (StringUtils.isBlank(logDirectoryPathName)){
 			logDirectoryPathName = setLogDirUsingDeprecatedProperty();
 		}
 
-		if (Mark59Utils.isNotBlank(logDirectoryPathName)) {
+		if (StringUtils.isNotBlank(logDirectoryPathName)) {
 			logDirectoryPathName = logDirectoryPathName + File.separator + lowestLevelLogDirTemporalFormatter();
 			clearLogDir(logDirectoryPathName);
 			logDirectory = new File(logDirectoryPathName);
@@ -123,7 +124,7 @@ public class Mark59LoggingConfig {
 	@SuppressWarnings("deprecation")
 	private String setLogDirUsingDeprecatedProperty() throws IOException {
 		String logDirectoryPathnameDeprecatedProp = PropertiesReader.getInstance().getProperty(PropertiesKeys.MARK59_PROP_SCREENSHOT_DIRECTORY);
-		if (Mark59Utils.isNotBlank(logDirectoryPathnameDeprecatedProp)){
+		if (StringUtils.isNotBlank(logDirectoryPathnameDeprecatedProp)){
 			LOG.warn(PropertiesKeys.MARK59_PROP_SCREENSHOT_DIRECTORY + " is deprecated and will be removed in a future release."
 					+ " Please use "	+ PropertiesKeys.MARK59_PROP_LOG_DIRECTORY + " instead.");
 			System.out.println(PropertiesKeys.MARK59_PROP_SCREENSHOT_DIRECTORY + " is deprecated and will be removed in a future release."
@@ -138,7 +139,7 @@ public class Mark59LoggingConfig {
 		String directorySuffixFormat = PropertiesReader.getInstance()
 				.getProperty(PropertiesKeys.MARK59_PROP_LOG_DIRECTORY_SUFFIX);
 
-		if (Mark59Utils.isBlank(directorySuffixFormat)) {
+		if (StringUtils.isBlank(directorySuffixFormat)) {
 			LOG.info("Property " + PropertiesKeys.MARK59_PROP_LOG_DIRECTORY_SUFFIX + " not set. '"
 					+ Mark59Constants.DATE + "' will be assumed.");
 			directoryTemporalName = LocalDate.now().toString();

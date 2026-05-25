@@ -20,6 +20,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -30,7 +31,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.mark59.core.utils.Mark59Constants;
-import com.mark59.core.utils.Mark59Utils;
 import com.mark59.metrics.data.beans.CommandResponseParser;
 import com.mark59.metrics.data.commandResponseParsers.dao.CommandResponseParsersDAO;
 
@@ -63,7 +63,7 @@ public class CommandResponseParserController {
 		Map<String, Object> map = createMapOfDropdowns();
 		map.put("reqMetricTxnType",reqMetricTxnType);
 
-		if (Mark59Utils.isEmpty(commandResponseParser.getParserName())) {
+		if (StringUtils.isEmpty(commandResponseParser.getParserName())) {
 			map.put("commandResponseParser", commandResponseParser);
 			map.put("reqErr", "Parser Name is required");
 			return new ModelAndView("registerCommandResponseParser", "map", map);
@@ -91,7 +91,7 @@ public class CommandResponseParserController {
 
 		List<CommandResponseParser> commandResponseParserList;
 
-		if (!Mark59Utils.isEmpty(reqMetricTxnType)){
+		if (!StringUtils.isEmpty(reqMetricTxnType)){
 			commandResponseParserList = commandResponseParsersDAO.findCommandResponseParsers("METRIC_TXN_TYPE", reqMetricTxnType);
 		} else {
 			commandResponseParserList = commandResponseParsersDAO.findCommandResponseParsers();

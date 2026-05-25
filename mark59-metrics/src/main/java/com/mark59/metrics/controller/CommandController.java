@@ -34,7 +34,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.mark59.core.utils.Mark59Utils;
 import com.mark59.metrics.data.beans.Command;
 import com.mark59.metrics.data.beans.CommandParserLink;
 import com.mark59.metrics.data.beans.CommandResponseParser;
@@ -96,7 +95,7 @@ public class CommandController {
 
 		Command command = commandEditingForm.getCommand();
 
-		if (Mark59Utils.isEmpty(command.getCommandName()) || Mark59Utils.isEmpty(command.getExecutor())   ) {
+		if (StringUtils.isEmpty(command.getCommandName()) || StringUtils.isEmpty(command.getExecutor())   ) {
 			map.put("commandEditingForm", commandEditingForm);
 			model.addAttribute("map", map);
 			if ("copy".equals(fromAction)) {
@@ -141,7 +140,7 @@ public class CommandController {
 
 		List<Command> commandList;
 
-		if (!Mark59Utils.isEmpty(reqExecutor)){
+		if (!StringUtils.isEmpty(reqExecutor)){
 			commandList = commandsDAO.findCommands("EXECUTOR", reqExecutor);
 		} else {
 			commandList = commandsDAO.findCommands();
@@ -196,7 +195,7 @@ public class CommandController {
 		commandEditingForm.setParamNamesTextboxFormat(MetricsUtils.listToTextboxFormat(command.getParamNames()));
 
 		String spanTag = "<span style='font-size: 10px'>&nbsp;&nbsp;&nbsp;";
-		if (Mark59Utils.isNotBlank(reqLastSavedTimestamp)){
+		if (StringUtils.isNotBlank(reqLastSavedTimestamp)){
 			commandEditingForm.setLastSavedTimestamp(" Last saved " + reqLastSavedTimestamp);
 			commandEditingForm.setLastSavedTimestamp(spanTag + "Last saved "+reqLastSavedTimestamp+"</span>");
 		} else {

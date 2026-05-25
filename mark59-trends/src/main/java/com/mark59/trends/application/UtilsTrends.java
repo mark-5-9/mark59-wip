@@ -60,7 +60,7 @@ public class UtilsTrends  {
 
 	public static List<String> commaDelimStringToStringList(String commaDelimitedString) {
 		List<String> listOfStrings = new ArrayList<>();
-		if (Mark59Utils.isNotBlank(commaDelimitedString)){
+		if (StringUtils.isNotBlank(commaDelimitedString)){
 			listOfStrings =  Arrays.asList(StringUtils.stripAll(StringUtils.split(commaDelimitedString, ",")));
 		}
 		return listOfStrings;
@@ -69,7 +69,7 @@ public class UtilsTrends  {
 
 	public static String[] commaDelimStringToSortedStringArray(String commaDelimitedString, Comparator<Object> comparator) {
 		// when an empty string is passed to the split, it creates a empty first element ... not what we want ..
-		if (Mark59Utils.isNotBlank(commaDelimitedString)){
+		if (StringUtils.isNotBlank(commaDelimitedString)){
 			String[] strings = StringUtils.stripAll(StringUtils.split(commaDelimitedString, ","));
 			Arrays.sort(strings, comparator);
 			return strings;
@@ -82,11 +82,11 @@ public class UtilsTrends  {
 
 	public static String deriveEventTxnIdUsingEventMappingBoundaryRules(String sourceTxnId,	EventMapping eventMapping) {
 		String txnId;
-		if ( Mark59Utils.isBlank(eventMapping.getTargetNameLB()) && Mark59Utils.isBlank(eventMapping.getTargetNameRB()) ){
+		if ( StringUtils.isBlank(eventMapping.getTargetNameLB()) && StringUtils.isBlank(eventMapping.getTargetNameRB()) ){
 			txnId =  sourceTxnId;
-		} else	if ( Mark59Utils.isBlank(eventMapping.getTargetNameLB())){
+		} else	if ( StringUtils.isBlank(eventMapping.getTargetNameLB())){
 			txnId =  StringUtils.substringBefore(sourceTxnId, eventMapping.getTargetNameRB());
-		} else if ( Mark59Utils.isBlank(eventMapping.getTargetNameRB())){
+		} else if ( StringUtils.isBlank(eventMapping.getTargetNameRB())){
 			txnId =  StringUtils.substringAfterLast(sourceTxnId, eventMapping.getTargetNameLB());
 		} else {
 			txnId =  StringUtils.substringBetween(sourceTxnId, eventMapping.getTargetNameLB(), eventMapping.getTargetNameRB() );
@@ -112,7 +112,7 @@ public class UtilsTrends  {
 	}
 
 	public static String defaultIfBlank(String value, String defaultValue ) {
-		if (Mark59Utils.isBlank(value)) {
+		if (StringUtils.isBlank(value)) {
 			return defaultValue;
 		} else {
 			return value;
@@ -236,7 +236,7 @@ public class UtilsTrends  {
 
 
 	public static String removeCdpTags(String cdpTaggedTransactionString) {
-		if (Mark59Utils.isNotBlank(cdpTaggedTransactionString)) {
+		if (StringUtils.isNotBlank(cdpTaggedTransactionString)) {
 			cdpTaggedTransactionString = cdpTaggedTransactionString.replace(AppConstantsTrends.CDP_TAG, "");
 		}
 		return cdpTaggedTransactionString;

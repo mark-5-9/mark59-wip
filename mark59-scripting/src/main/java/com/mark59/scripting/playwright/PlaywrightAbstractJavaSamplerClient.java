@@ -351,11 +351,11 @@ public abstract class PlaywrightAbstractJavaSamplerClient extends UiAbstractJava
 		Path browserPath = null;
 		String pathMsg = "";
 
-		if (Mark59Utils.isNotBlank(pr.getProperty(PropertiesKeys.MARK59_PROP_BROWSER_EXECUTABLE))) {
+		if (StringUtils.isNotBlank(pr.getProperty(PropertiesKeys.MARK59_PROP_BROWSER_EXECUTABLE))) {
 			browserPath = new File(pr.getProperty(PropertiesKeys.MARK59_PROP_BROWSER_EXECUTABLE)).toPath();
 			pathMsg = "Playwright script uses prop to set browser: " + pr.getProperty(PropertiesKeys.MARK59_PROP_BROWSER_EXECUTABLE);
 		}
-		if (Mark59Utils.isNotBlank(arguments.get(ScriptingConstants.OVERRIDE_PROPERTY_MARK59_BROWSER_EXECUTABLE))) {
+		if (StringUtils.isNotBlank(arguments.get(ScriptingConstants.OVERRIDE_PROPERTY_MARK59_BROWSER_EXECUTABLE))) {
 			try {
 				browserPath = new File(arguments.get(ScriptingConstants.OVERRIDE_PROPERTY_MARK59_BROWSER_EXECUTABLE)).toPath();
 				pathMsg = "Playwright script uses override arg to set browser: "
@@ -383,13 +383,13 @@ public abstract class PlaywrightAbstractJavaSamplerClient extends UiAbstractJava
 			LOG.debug(pathMsg);
 
 		// throw error for the now deprecated unused BROWSER_EXECUTABLE argument
-		if (Mark59Utils.isNotBlank(arguments.get(ScriptingConstants.BROWSER_EXECUTABLE))) {
+		if (StringUtils.isNotBlank(arguments.get(ScriptingConstants.BROWSER_EXECUTABLE))) {
 			LOG.error("'BROWSER_EXECUTABLE' JMeter argument is no longer in use! Please use 'OVERRIDE_PROPERTY_MARK59_BROWSER_EXECUTABLE'");
 			throw new IllegalArgumentException("'OVERRIDE_PROPERTY_MARK59_BROWSER_EXECUTABLE' has replaced 'BROWSER_EXECUTABLE'" );
 		}
 
 		// Turn driver headless mode on or off. Default: ON
-		if (Mark59Utils.isNotBlank(arguments.get(ScriptingConstants.HEADLESS_MODE))){
+		if (StringUtils.isNotBlank(arguments.get(ScriptingConstants.HEADLESS_MODE))){
 			browserLaunchOptions.setHeadless(Boolean.parseBoolean(arguments.get(ScriptingConstants.HEADLESS_MODE)));
 		}
 
@@ -411,38 +411,38 @@ public abstract class PlaywrightAbstractJavaSamplerClient extends UiAbstractJava
 		}
 
 		// Set Downloads directory path
-		if (Mark59Utils.isNotBlank(arguments.get(ScriptingConstants.PLAYWRIGHT_DOWNLOADS_PATH))){
+		if (StringUtils.isNotBlank(arguments.get(ScriptingConstants.PLAYWRIGHT_DOWNLOADS_PATH))){
 			browserLaunchOptions.setDownloadsPath(new File(arguments.get(ScriptingConstants.PLAYWRIGHT_DOWNLOADS_PATH)).toPath());
 		}
 
 		// Set Proxy Server and additional optional Proxy parameters
-		if (Mark59Utils.isNotBlank(arguments.get(ScriptingConstants.PLAYWRIGHT_PROXY_SERVER))){
+		if (StringUtils.isNotBlank(arguments.get(ScriptingConstants.PLAYWRIGHT_PROXY_SERVER))){
 			Proxy proxy = new Proxy(arguments.get(ScriptingConstants.PLAYWRIGHT_PROXY_SERVER));
 
-			if (Mark59Utils.isNotBlank(arguments.get(ScriptingConstants.PLAYWRIGHT_PROXY_BYPASS))){
+			if (StringUtils.isNotBlank(arguments.get(ScriptingConstants.PLAYWRIGHT_PROXY_BYPASS))){
 				proxy.setBypass(arguments.get(ScriptingConstants.PLAYWRIGHT_PROXY_BYPASS));
 			}
-			if (Mark59Utils.isNotBlank(arguments.get(ScriptingConstants.PLAYWRIGHT_PROXY_USERNAME))){
+			if (StringUtils.isNotBlank(arguments.get(ScriptingConstants.PLAYWRIGHT_PROXY_USERNAME))){
 				proxy.setUsername(arguments.get(ScriptingConstants.PLAYWRIGHT_PROXY_USERNAME));
 			}
-			if (Mark59Utils.isNotBlank(arguments.get(ScriptingConstants.PLAYWRIGHT_PROXY_PASSWORD))){
+			if (StringUtils.isNotBlank(arguments.get(ScriptingConstants.PLAYWRIGHT_PROXY_PASSWORD))){
 				proxy.setPassword(arguments.get(ScriptingConstants.PLAYWRIGHT_PROXY_PASSWORD));
 			}
 			browserLaunchOptions.setProxy(proxy);
 		}
 
 		// Set Playwright slowed down (milliseconds)
-		if (Mark59Utils.isNotBlank(arguments.get(ScriptingConstants.PLAYWRIGHT_SLOW_MO))){
+		if (StringUtils.isNotBlank(arguments.get(ScriptingConstants.PLAYWRIGHT_SLOW_MO))){
 			browserLaunchOptions.setSlowMo(Double.parseDouble(arguments.get(ScriptingConstants.PLAYWRIGHT_SLOW_MO)));
 		}
 
 		// Set Maximum time in milliseconds to wait for the browser instance to start
-		if (Mark59Utils.isNotBlank(arguments.get(ScriptingConstants.PLAYWRIGHT_TIMEOUT_BROWSER_INIT))){
+		if (StringUtils.isNotBlank(arguments.get(ScriptingConstants.PLAYWRIGHT_TIMEOUT_BROWSER_INIT))){
 			browserLaunchOptions.setTimeout(Double.parseDouble(arguments.get(ScriptingConstants.PLAYWRIGHT_TIMEOUT_BROWSER_INIT)));
 		}
 
 		// If specified, traces are saved into this directory path
-		if (Mark59Utils.isNotBlank(arguments.get(ScriptingConstants.PLAYWRIGHT_TRACES_DIR))){
+		if (StringUtils.isNotBlank(arguments.get(ScriptingConstants.PLAYWRIGHT_TRACES_DIR))){
 			browserLaunchOptions.setTracesDir(new File(arguments.get(ScriptingConstants.PLAYWRIGHT_TRACES_DIR)).toPath());
 		}
 
@@ -459,17 +459,17 @@ public abstract class PlaywrightAbstractJavaSamplerClient extends UiAbstractJava
 		}
 
 		// Include the .har recording filter when set
-		if (Mark59Utils.isNotBlank(arguments.get(ScriptingConstants.PLAYWRIGHT_HAR_URL_FILTER))){
+		if (StringUtils.isNotBlank(arguments.get(ScriptingConstants.PLAYWRIGHT_HAR_URL_FILTER))){
 			browserContextOptions.setRecordHarUrlFilter(arguments.get(ScriptingConstants.PLAYWRIGHT_HAR_URL_FILTER));
 		}
 
 		// Set ignoreHTTPSErrors option when specified
-		if (Mark59Utils.isNotBlank(arguments.get(ScriptingConstants.PLAYWRIGHT_IGNORE_HTTPS_ERRORS))){
+		if (StringUtils.isNotBlank(arguments.get(ScriptingConstants.PLAYWRIGHT_IGNORE_HTTPS_ERRORS))){
 			browserContextOptions.setIgnoreHTTPSErrors(Boolean.parseBoolean(arguments.get(ScriptingConstants.PLAYWRIGHT_IGNORE_HTTPS_ERRORS)));
 		}
 
 		// Set Extra HTTP Headers when specified
-		if (Mark59Utils.isNotBlank(arguments.get(ScriptingConstants.PLAYWRIGHT_EXTRA_HTTP_HEADERS))){
+		if (StringUtils.isNotBlank(arguments.get(ScriptingConstants.PLAYWRIGHT_EXTRA_HTTP_HEADERS))){
 			String[] headerPairs = StringUtils.split(arguments.get(ScriptingConstants.PLAYWRIGHT_EXTRA_HTTP_HEADERS), ",");
 			Map<String, String> headers = new LinkedHashMap<>();
 			for (String headerPair : headerPairs) {
@@ -487,7 +487,7 @@ public abstract class PlaywrightAbstractJavaSamplerClient extends UiAbstractJava
 		}
 
 		// Set HTTP Credentials when specified
-		if (Mark59Utils.isNotBlank(arguments.get(ScriptingConstants.PLAYWRIGHT_HTTP_CREDENTIALS))){
+		if (StringUtils.isNotBlank(arguments.get(ScriptingConstants.PLAYWRIGHT_HTTP_CREDENTIALS))){
 			String[] credentials = StringUtils.split(arguments.get(ScriptingConstants.PLAYWRIGHT_HTTP_CREDENTIALS), ",");
 			if (credentials.length == 2) {
 				browserContextOptions.setHttpCredentials(credentials[0].trim(), credentials[1].trim());
@@ -499,29 +499,29 @@ public abstract class PlaywrightAbstractJavaSamplerClient extends UiAbstractJava
 		}
 
 		// Set Bypass CSP when specified
-		if (Mark59Utils.isNotBlank(arguments.get(ScriptingConstants.PLAYWRIGHT_BYPASS_CSP))){
+		if (StringUtils.isNotBlank(arguments.get(ScriptingConstants.PLAYWRIGHT_BYPASS_CSP))){
 			browserContextOptions.setBypassCSP(Boolean.parseBoolean(arguments.get(ScriptingConstants.PLAYWRIGHT_BYPASS_CSP)));
 		}
 
 		// Set Locale when specified
-		if (Mark59Utils.isNotBlank(arguments.get(ScriptingConstants.PLAYWRIGHT_LOCALE))){
+		if (StringUtils.isNotBlank(arguments.get(ScriptingConstants.PLAYWRIGHT_LOCALE))){
 			browserContextOptions.setLocale(arguments.get(ScriptingConstants.PLAYWRIGHT_LOCALE));
 			LOG.debug("Locale set to: " + arguments.get(ScriptingConstants.PLAYWRIGHT_LOCALE));
 		}
 
 		// Set Offline mode when specified
-		if (Mark59Utils.isNotBlank(arguments.get(ScriptingConstants.PLAYWRIGHT_OFFLINE))){
+		if (StringUtils.isNotBlank(arguments.get(ScriptingConstants.PLAYWRIGHT_OFFLINE))){
 			browserContextOptions.setOffline(Boolean.parseBoolean(arguments.get(ScriptingConstants.PLAYWRIGHT_OFFLINE)));
 		}
 
 		// Set Timezone ID when specified
-		if (Mark59Utils.isNotBlank(arguments.get(ScriptingConstants.PLAYWRIGHT_TIMEZONE_ID))){
+		if (StringUtils.isNotBlank(arguments.get(ScriptingConstants.PLAYWRIGHT_TIMEZONE_ID))){
 			browserContextOptions.setTimezoneId(arguments.get(ScriptingConstants.PLAYWRIGHT_TIMEZONE_ID));
 			LOG.debug("Timezone ID set to: " + arguments.get(ScriptingConstants.PLAYWRIGHT_TIMEZONE_ID));
 		}
 
 		// Set Storage State from file when specified
-		if (Mark59Utils.isNotBlank(arguments.get(ScriptingConstants.PLAYWRIGHT_STORAGE_STATE))){
+		if (StringUtils.isNotBlank(arguments.get(ScriptingConstants.PLAYWRIGHT_STORAGE_STATE))){
 			try {
 				browserContextOptions.setStorageStatePath(new File(arguments.get(ScriptingConstants.PLAYWRIGHT_STORAGE_STATE)).toPath());
 				LOG.debug("Storage state loaded from: " + arguments.get(ScriptingConstants.PLAYWRIGHT_STORAGE_STATE));
@@ -532,7 +532,7 @@ public abstract class PlaywrightAbstractJavaSamplerClient extends UiAbstractJava
 		}
 
 		// Set Geolocation when specified
-		if (Mark59Utils.isNotBlank(arguments.get(ScriptingConstants.PLAYWRIGHT_GEOLOCATION))){
+		if (StringUtils.isNotBlank(arguments.get(ScriptingConstants.PLAYWRIGHT_GEOLOCATION))){
 			String[] geolocationArray = StringUtils.split(arguments.get(ScriptingConstants.PLAYWRIGHT_GEOLOCATION), ",");
 			if (geolocationArray.length == 2) {
 				try {
@@ -560,14 +560,14 @@ public abstract class PlaywrightAbstractJavaSamplerClient extends UiAbstractJava
 		playwrightPage = browserContext.newPage();
 
 		//  default maximum time in milliseconds for timeout option
-		if (Mark59Utils.isNotBlank(arguments.get(ScriptingConstants.PLAYWRIGHT_DEFAULT_TIMEOUT))){
+		if (StringUtils.isNotBlank(arguments.get(ScriptingConstants.PLAYWRIGHT_DEFAULT_TIMEOUT))){
 			playwrightPage.setDefaultTimeout(Double.parseDouble(arguments.get(ScriptingConstants.PLAYWRIGHT_DEFAULT_TIMEOUT)));
 		}
 
 		// Set browser dimensions
-		if (Mark59Utils.isNotBlank(arguments.get(ScriptingConstants.PLAYWRIGHT_VIEWPORT_SIZE))) {
+		if (StringUtils.isNotBlank(arguments.get(ScriptingConstants.PLAYWRIGHT_VIEWPORT_SIZE))) {
 			String[] browserDimArray = StringUtils.split(arguments.get(ScriptingConstants.PLAYWRIGHT_VIEWPORT_SIZE), ",");
-			if ( browserDimArray.length == 2  && Mark59Utils.isNumeric(browserDimArray[0]) && Mark59Utils.isNumeric(browserDimArray[1])){
+			if ( browserDimArray.length == 2  && StringUtils.isNumeric(browserDimArray[0]) && StringUtils.isNumeric(browserDimArray[1])){
 				int width  = Integer.parseInt(browserDimArray[0]);
 				int height = Integer.parseInt(browserDimArray[1]);
 				playwrightPage.setViewportSize(width, height);
@@ -578,7 +578,7 @@ public abstract class PlaywrightAbstractJavaSamplerClient extends UiAbstractJava
 
 		// creates a Network.emulateNetworkConditions CDP session
 		String emulateNetworkConditions = arguments.get(ScriptingConstants.EMULATE_NETWORK_CONDITIONS);
-		if (Mark59Utils.isNotBlank(emulateNetworkConditions)){
+		if (StringUtils.isNotBlank(emulateNetworkConditions)){
 			emulateNetworkConditionsCDPSession(browserContext, playwrightPage, emulateNetworkConditions);
 		}
 
@@ -640,7 +640,7 @@ public abstract class PlaywrightAbstractJavaSamplerClient extends UiAbstractJava
 		}
 
 		String lastTxnStarted = jm.getMostRecentTransactionStarted();
-		if (Mark59Utils.isBlank(lastTxnStarted)){
+		if (StringUtils.isBlank(lastTxnStarted)){
 			lastTxnStarted =  "noTxn";
 		}
 
@@ -738,9 +738,9 @@ public abstract class PlaywrightAbstractJavaSamplerClient extends UiAbstractJava
 		List<String> emulateNetworkConditionsArray = Mark59Utils.commaDelimStringToStringList(emulateNetworkConditions);
 		if (emulateNetworkConditionsArray.size() != 3 ) {
 			LOG.warn("Invalid EMULATE_NETWORK_CONDITIONS passed (3 comma-delimited values required) and will be ignored : "+emulateNetworkConditions);
-		} else if (	!Mark59Utils.isNumeric(emulateNetworkConditionsArray.get(0)) ||
-					!Mark59Utils.isNumeric(emulateNetworkConditionsArray.get(1)) ||
-					!Mark59Utils.isNumeric(emulateNetworkConditionsArray.get(2) )){
+		} else if (	!StringUtils.isNumeric(emulateNetworkConditionsArray.get(0)) ||
+					!StringUtils.isNumeric(emulateNetworkConditionsArray.get(1)) ||
+					!StringUtils.isNumeric(emulateNetworkConditionsArray.get(2) )){
 			LOG.warn("Invalid EMULATE_NETWORK_CONDITIONS passed (only integer values allowed) and will be ignored : "+emulateNetworkConditions);
 		} else {
 			CDPSession cdp = browserContext.newCDPSession(page) ;

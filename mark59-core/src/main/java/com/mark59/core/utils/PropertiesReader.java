@@ -25,6 +25,7 @@ import java.util.Properties;
 import java.util.StringTokenizer;
 
 import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -221,11 +222,11 @@ public class PropertiesReader {
 	 */
 	@SuppressWarnings("deprecation")
 	private void setMark59property(String mark59PropertyKey, boolean isExecutable, boolean isDeprecated) {
-		if (Mark59Utils.isNotEmpty(System.getProperty(mark59PropertyKey))) {
+		if (StringUtils.isNotEmpty(System.getProperty(mark59PropertyKey))) {
 			properties.setProperty(mark59PropertyKey, System.getProperty(mark59PropertyKey));
 			substitutePredfinedStringsIfNecessary(mark59PropertyKey, properties.getProperty(mark59PropertyKey),	isExecutable);
 			LOG.info("    " + mark59PropertyKey + " has been set from System properties  : " + properties.getProperty(mark59PropertyKey));
-		} else if (Mark59Utils.isNotEmpty(properties.getProperty(mark59PropertyKey))) {
+		} else if (StringUtils.isNotEmpty(properties.getProperty(mark59PropertyKey))) {
 			substitutePredfinedStringsIfNecessary(mark59PropertyKey, properties.getProperty(mark59PropertyKey),	isExecutable);
 			LOG.info("    " + mark59PropertyKey + " has been set from " + MARK59_PROPERTIES + " : "	+ properties.getProperty(mark59PropertyKey));
 		} else {
@@ -236,8 +237,8 @@ public class PropertiesReader {
 
 		// Specific message for the the use of deprecated 'mark59.screenshot.directory'property
 		if (PropertiesKeys.MARK59_PROP_SCREENSHOT_DIRECTORY.equals(mark59PropertyKey)
-				&& (Mark59Utils.isNotEmpty(System.getProperty(mark59PropertyKey))
-						|| Mark59Utils.isNotEmpty(properties.getProperty(mark59PropertyKey)))) {
+				&& (StringUtils.isNotEmpty(System.getProperty(mark59PropertyKey))
+						|| StringUtils.isNotEmpty(properties.getProperty(mark59PropertyKey)))) {
 			LOG.warn("!   " + PropertiesKeys.MARK59_PROP_SCREENSHOT_DIRECTORY + " is deprecated and will be removed in a future release."
 					+ " Please delete. Use property key value "	+ PropertiesKeys.MARK59_PROP_LOG_DIRECTORY + " instead.");
 		}

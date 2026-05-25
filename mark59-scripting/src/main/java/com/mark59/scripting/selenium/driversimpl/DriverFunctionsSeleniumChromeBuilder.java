@@ -26,6 +26,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.Capabilities;
@@ -217,13 +218,13 @@ public class DriverFunctionsSeleniumChromeBuilder implements DriverFunctionsSele
 
 			String emulateNetworkConditions = arguments.get(SeleniumDriverFactory.EMULATE_NETWORK_CONDITIONS);
 
-			if (Mark59Utils.isNotBlank(emulateNetworkConditions)) {
+			if (StringUtils.isNotBlank(emulateNetworkConditions)) {
 				List<String> emulateNetworkConditionsArray = Mark59Utils.commaDelimStringToStringList(emulateNetworkConditions);
 				if (emulateNetworkConditionsArray.size() != 3 ) {
 					LOG.warn("Invalid EMULATE_NETWORK_CONDITIONS passed (3 comma-delimited values required) and will be ignored : " + emulateNetworkConditions);
-				} else if (	!Mark59Utils.isNumeric(emulateNetworkConditionsArray.get(0)) ||
-							!Mark59Utils.isNumeric(emulateNetworkConditionsArray.get(1)) ||
-							!Mark59Utils.isNumeric(emulateNetworkConditionsArray.get(2) )){
+				} else if (	!StringUtils.isNumeric(emulateNetworkConditionsArray.get(0)) ||
+							!StringUtils.isNumeric(emulateNetworkConditionsArray.get(1)) ||
+							!StringUtils.isNumeric(emulateNetworkConditionsArray.get(2) )){
 					LOG.warn("Invalid EMULATE_NETWORK_CONDITIONS passed (only integer values allowed) and will be ignored : " + emulateNetworkConditions);
 				} else {
 					Map<String, Object> map = new HashMap<>();

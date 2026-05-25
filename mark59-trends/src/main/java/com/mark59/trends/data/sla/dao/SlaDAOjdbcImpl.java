@@ -23,13 +23,13 @@ import java.util.Map;
 
 import javax.sql.DataSource;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 
 import com.mark59.core.utils.Mark59Constants;
-import com.mark59.core.utils.Mark59Utils;
 import com.mark59.trends.application.AppConstantsTrends;
 import com.mark59.trends.data.beans.Sla;
 import com.mark59.trends.form.BulkApplicationPassCountsForm;
@@ -136,7 +136,7 @@ public class SlaDAOjdbcImpl implements SlaDAO {
 				existingSla.setSlaPassCount((Long)row.get("TXN_PASS"));
 
 				if (AppConstantsTrends.APPLY_TO_ALL_SLAS.equalsIgnoreCase(bulkApplication.getApplyRefUrlOption())
-						&& Mark59Utils.isNotEmpty(passedSlaRefUrl)) {
+						&& StringUtils.isNotEmpty(passedSlaRefUrl)) {
 					existingSla.setSlaRefUrl(passedSlaRefUrl);
 				}
 				if (existingSla.getSlaPassCount() == null){

@@ -85,7 +85,7 @@ public class PoliciesDAOjdbcTemplateImpl implements PoliciesDAO
 				+ "  AND IDENTIFIER = :identifier "
 				+ "  AND LIFECYCLE = :lifecycle ";
 
-		if (DataHunterUtils.isBlank(policySelect.getLifecycle())) {
+		if (StringUtils.isBlank(policySelect.getLifecycle())) {
 			policySelect.setLifecycle("");
 		}
 
@@ -240,11 +240,11 @@ public class PoliciesDAOjdbcTemplateImpl implements PoliciesDAO
 			sql += " APPLICATION = :application ";
 		}
 
-		if (DataHunterUtils.isNotBlank(policySelect.getIdentifier())){
+		if (StringUtils.isNotBlank(policySelect.getIdentifier())){
 			sqlparameters.addValue("identifier", policySelect.getIdentifier());
 			sql += " AND IDENTIFIER = :identifier ";
 		}
-		if (DataHunterUtils.isNotBlank(policySelect.getUseability())){
+		if (StringUtils.isNotBlank(policySelect.getUseability())){
 			sqlparameters.addValue("useability", policySelect.getUseability());
 			sql += " AND USEABILITY = :useability ";
 		}
@@ -275,12 +275,12 @@ public class PoliciesDAOjdbcTemplateImpl implements PoliciesDAO
 		String sql = "";
 		MapSqlParameterSource sqlparameters = new MapSqlParameterSource();
 
-		if (DataHunterUtils.isBlank(policySelect.getLifecycle()) && DataHunterUtils.isBlank(policySelect.getUseability())){
+		if (StringUtils.isBlank(policySelect.getLifecycle()) && StringUtils.isBlank(policySelect.getUseability())){
 			// do nothing, sql done
-		} else if (DataHunterUtils.isBlank(policySelect.getUseability())) { 	// only lifecycle has a value
+		} else if (StringUtils.isBlank(policySelect.getUseability())) { 	// only lifecycle has a value
 			sqlparameters.addValue("lifecycle", policySelect.getLifecycle());
 			sql += " AND LIFECYCLE = :lifecycle ";
-		} else if (DataHunterUtils.isBlank(policySelect.getLifecycle())) {  	// only usability has a value
+		} else if (StringUtils.isBlank(policySelect.getLifecycle())) {  	// only usability has a value
 			sqlparameters.addValue("useability", policySelect.getUseability().trim());
 			sql += " AND USEABILITY = :useability ";
 		} else {																// both have a value set
@@ -509,15 +509,15 @@ public class PoliciesDAOjdbcTemplateImpl implements PoliciesDAO
 		}
 		sql += " WHERE APPLICATION = :application ";
 
-		if (DataHunterUtils.isNotBlank(updateUse.getLifecycle())) {
+		if (StringUtils.isNotBlank(updateUse.getLifecycle())) {
 			sqlparameters.addValue("lifecycle", updateUse.getLifecycle());
 			sql += " AND LIFECYCLE = :lifecycle ";
 		}
-		if (DataHunterUtils.isNotBlank(updateUse.getIdentifier())) {
+		if (StringUtils.isNotBlank(updateUse.getIdentifier())) {
 			sqlparameters.addValue("identifier", updateUse.getIdentifier());
 			sql += " AND IDENTIFIER = :identifier ";
 		}
-		if (DataHunterUtils.isNotBlank(updateUse.getUseability())) {
+		if (StringUtils.isNotBlank(updateUse.getUseability())) {
 			sqlparameters.addValue("useability", updateUse.getUseability());
 			sql += " AND USEABILITY = :useability ";
 		}
@@ -717,7 +717,7 @@ public class PoliciesDAOjdbcTemplateImpl implements PoliciesDAO
 			sql = sql + " AND NOT IDENTIFIER REGEXP '[^0-9]' ";
 		}
 
-		if (DataHunterUtils.isBlank(policySelect.getLifecycle())) {
+		if (StringUtils.isBlank(policySelect.getLifecycle())) {
 			policySelect.setLifecycle("");
 		}
 		MapSqlParameterSource sqlparameters = new MapSqlParameterSource()
@@ -763,7 +763,7 @@ public class PoliciesDAOjdbcTemplateImpl implements PoliciesDAO
 			sql = sql + " OR IDENTIFIER REGEXP '[^0-9]' ) ";
 		}
 
-		if (DataHunterUtils.isBlank(lifecycle)){
+		if (StringUtils.isBlank(lifecycle)){
 			lifecycle = "";
 		}
 		MapSqlParameterSource sqlparameters = new MapSqlParameterSource()
@@ -823,7 +823,7 @@ public class PoliciesDAOjdbcTemplateImpl implements PoliciesDAO
 				ixPolicyRow = policiesIxs.get(0);
 				validReuseIxPojo.setIxPolicy(ixPolicyRow);
 
-				if (DataHunterUtils.isNumeric(ixPolicyRow.getOtherdata().trim())){
+				if (StringUtils.isNumeric(ixPolicyRow.getOtherdata().trim())){
 					int currentIxCount = Integer.valueOf(ixPolicyRow.getOtherdata().trim());
 					validReuseIxPojo.setCurrentIxCount(currentIxCount);
 				} else {
@@ -1003,7 +1003,7 @@ public class PoliciesDAOjdbcTemplateImpl implements PoliciesDAO
 
 
 	private String orderBySelector(PolicySelectionFilter policySelectionFilter, String sql) {
-		if (DataHunterUtils.isBlank(policySelectionFilter.getSelectOrder())) {
+		if (StringUtils.isBlank(policySelectionFilter.getSelectOrder())) {
 			sql += " ORDER BY APPLICATION, IDENTIFIER, LIFECYCLE ";
 		} else if (DataHunterConstants.KEY.equals(policySelectionFilter.getSelectOrder()) && DataHunterConstants.ASC.equals(policySelectionFilter.getOrderDirection())){
 			sql += " ORDER BY APPLICATION, IDENTIFIER, LIFECYCLE ";
@@ -1038,7 +1038,7 @@ public class PoliciesDAOjdbcTemplateImpl implements PoliciesDAO
 
 	private String limitSelector(PolicySelectionFilter policySelectionFilter, String sql) {
 		int limit = 100;
-		if (DataHunterUtils.isNumeric(policySelectionFilter.getLimit())){
+		if (StringUtils.isNumeric(policySelectionFilter.getLimit())){
 			limit = Integer.valueOf(policySelectionFilter.getLimit());
 			if (limit > 1000) {
 				limit = 1000;

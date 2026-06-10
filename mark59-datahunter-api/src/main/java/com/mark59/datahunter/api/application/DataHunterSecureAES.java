@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.mark59.core.utils;
+package com.mark59.datahunter.api.application;
 
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
@@ -104,19 +104,19 @@ import org.apache.logging.log4j.Logger;
  * Versions of Mark59 prior to 6.5 used a weak encryption class SimpleAES. Encryptions created by 
  * this class will NOT work with SecureAES.  Please review the mark59 'xtras' github repo for 
  * details:<br>https://github.com/mark-5-9/mark59-xtras<br><br> 
- *  * 
+ *   
  * <p><b>SecureAES algorithm in the Mark59 datahunter projects</b></p>
- * From Mark59 version 6.6, the SecureAES algorithm has been copied into mark59-datahunter and mark59-datahunter-api 
- * (to allow encrypted passwords to be stored).  While the versions of this class in the datahunter projects do not 
- * need to be kept in line with this class, when any change made in this class, the SecureAES based classes in 
- * the datahunter projects should at lease be reviewed.<br><br>  * 
+ * From Mark59 version 6.6, the SecureAES algorithm was into mark59-datahunter and mark59-datahunter-api projects 
+ * (to allow encrypted passwords to be stored) from mark59-core.  While the versions of this class in the datahunter
+ * projects do not need to be kept in line with the mark59-core SecureAES class, <b>they should be kept in line 
+ * with each other</b>, and the mark59-core SecureAES class reviewed.<br><br>  
  * 
  * @author Philip Webb
  * Written: Australian Spring 2025
  */
-public class SecureAES {
+public class DataHunterSecureAES {
 
-	private static final Logger LOG = LogManager.getLogger(SecureAES.class);
+	private static final Logger LOG = LogManager.getLogger(DataHunterSecureAES.class);
 
 	// Algorithm constants
 	private static final String ALGORITHM = "AES";
@@ -144,7 +144,7 @@ public class SecureAES {
 	 * Private constructor to prevent instantiation of this utility class.
 	 * This class contains only static methods and should not be instantiated.
 	 */
-	private SecureAES() {
+	private DataHunterSecureAES() {
 		// Utility class - no instances should be created
 	}
 
@@ -324,8 +324,8 @@ public class SecureAES {
 	 */
 	public static void main(String[] args) {
 		String originalString = "My test string!";
-		String encryptedString = SecureAES.encrypt(originalString);
-		String decryptedString = SecureAES.decrypt(encryptedString);
+		String encryptedString = DataHunterSecureAES.encrypt(originalString);
+		String decryptedString = DataHunterSecureAES.decrypt(encryptedString);
 
 		System.out.println(originalString);
 		System.out.println(encryptedString);
@@ -333,7 +333,7 @@ public class SecureAES {
 		
 		System.out.println();
 		System.out.println();
-		String newKey = SecureAES.generateSecureKey();
+		String newKey = DataHunterSecureAES.generateSecureKey();
 		System.out.println("Here's a newly generated encryption key"
 				+ " you may choose to use :");
 		System.out.println("------------------------------------------------");
@@ -341,6 +341,5 @@ public class SecureAES {
 		System.out.println("------------------------------------------------");		
 		System.out.println();
 	}
-
 
 }

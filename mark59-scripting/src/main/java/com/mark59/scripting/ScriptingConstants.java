@@ -145,7 +145,6 @@ public class ScriptingConstants {
 
 	/**
 	 * "PLAYWRIGHT_DEVTOOLS" - "true" / "false"
-	 *  ////////////////////////////  this has chauged : BrowserType.LaunchOptions#setDevtools(boolean)
 	 */
 	public static final String PLAYWRIGHT_OPEN_DEVTOOLS = "PLAYWRIGHT_OPEN_DEVTOOLS";
 

@@ -121,11 +121,13 @@ public class DataHunterBasicSampleScriptPlay  extends PlaywrightAbstractJavaSamp
 		// A way to to check Chrome launch arguments (for debugging purposes)
 		page.navigate("chrome://version");
 		SafeSleep.sleep(1000);
-		String commandLine = page.locator("#command_line").innerText();
-		System.out.println("=".repeat(120));
-		System.out.println("Chrome Command Line Arguments:");
-		System.out.println(commandLine.replace("--", "\n--") );
-		System.out.println("=".repeat(120));
+		/*
+		 * String commandLine = page.locator("#command_line").innerText();
+		 * System.out.println("=".repeat(120));
+		 * System.out.println("Chrome Command Line Arguments:");
+		 * System.out.println(commandLine.replace("--", "\n--") );
+		 * System.out.println("=".repeat(120));
+		 */
 		
 // 		delete any existing policies for this application/thread combination
 		jm.startTransaction("DH_lifecycle_0001_loadInitialPage");
@@ -190,7 +192,7 @@ public class DataHunterBasicSampleScriptPlay  extends PlaywrightAbstractJavaSamp
 
 
 	/**
-	 * A main method to assist with script testing outside JMeter.  The samples below demonstrate three ways of running the script: <br><br>
+	 * A main method to assist with script testing outside JMeter.  The samples below demonstrate multiple ways of running the script: <br><br>
 	 * 1.  Run a simple single instance, without extra thread-based parameterization (KeepBrowserOpen enumeration is optionally available).<br>
 	 * 2.  Run multiple instances of the script, without extra thread-based parameterization <br>
 	 * 3.  Run multiple instances of the script, with extra thread-based parameterization, represented as a map with parameter name as key,

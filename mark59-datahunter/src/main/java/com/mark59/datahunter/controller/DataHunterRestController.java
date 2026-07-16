@@ -24,7 +24,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.locks.ReentrantLock;
 
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -74,8 +73,11 @@ import com.mark59.datahunter.pojo.ValidReuseIxPojo;
 @RequestMapping("/api")
 public class DataHunterRestController {
 
-	@Autowired
-	PoliciesDAO policiesDAO;
+	private final PoliciesDAO policiesDAO;
+
+	public DataHunterRestController(PoliciesDAO policiesDAO) {
+		this.policiesDAO = policiesDAO;
+	}
 
 	/**
 	 * Lock map for fine-grained synchronization per application/lifecycle/useability combination.
@@ -97,7 +99,7 @@ public class DataHunterRestController {
 		String lockKey = application + "|" + (lifecycle != null ? lifecycle : "") + "|" + useability;
 		return policyLocks.computeIfAbsent(lockKey, k -> new ReentrantLock());
 	}
-	
+
 
 	@GetMapping(path =  "/cipher")
 	public ResponseEntity<Object> cipher(@RequestParam(required=true) String pwd) {
@@ -109,8 +111,8 @@ public class DataHunterRestController {
 		//LOG.debug("     cipher response is : [" + encrypted +"]");
         return ResponseEntity.ok(encrypted);
 	}
-	
-	
+
+
 	/**
 	 * Add an Item to DataHunter
 	 * <br>The Item key is application|identifier|lifecycle, and must be unique

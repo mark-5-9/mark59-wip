@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,8 +29,11 @@ import com.mark59.datahunter.model.UploadIdsFile;
 @Controller
 public class UploadIdsFileController {
 
-	@Autowired
-	PoliciesDAO policiesDAO;
+	private final PoliciesDAO policiesDAO;
+
+	public UploadIdsFileController(PoliciesDAO policiesDAO) {
+		this.policiesDAO = policiesDAO;
+	}
 
 
 	@GetMapping("/upload_ids")

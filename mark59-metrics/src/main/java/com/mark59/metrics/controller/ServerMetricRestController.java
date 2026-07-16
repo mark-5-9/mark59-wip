@@ -25,7 +25,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Strings;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -63,24 +62,23 @@ public class ServerMetricRestController {
 
 	private static final Logger LOG = LogManager.getLogger(ServerMetricRestController.class);
 
-	@Autowired
-	ServerProfilesDAO serverProfilesDAO;
+	private final ServerProfilesDAO serverProfilesDAO;
+	private final ServerCommandLinksDAO serverCommandLinksDAO;
+	private final CommandsDAO commandsDAO;
+	private final CommandParserLinksDAO commandParserLinksDAO;
+	private final CommandResponseParsersDAO commandResponseParsersDAO;
+	private final PropertiesConfiguration springBootConfiguration;
 
-	@Autowired
-	ServerCommandLinksDAO serverCommandLinksDAO;
-
-	@Autowired
-	CommandsDAO commandsDAO;
-
-	@Autowired
-	CommandParserLinksDAO commandParserLinksDAO;
-
-	@Autowired
-	CommandResponseParsersDAO commandResponseParsersDAO;
-
-	@Autowired
-	PropertiesConfiguration springBootConfiguration;
-
+	public ServerMetricRestController(ServerProfilesDAO serverProfilesDAO, ServerCommandLinksDAO serverCommandLinksDAO,
+			CommandsDAO commandsDAO, CommandParserLinksDAO commandParserLinksDAO,
+			CommandResponseParsersDAO commandResponseParsersDAO, PropertiesConfiguration springBootConfiguration) {
+		this.serverProfilesDAO = serverProfilesDAO;
+		this.serverCommandLinksDAO = serverCommandLinksDAO;
+		this.commandsDAO = commandsDAO;
+		this.commandParserLinksDAO = commandParserLinksDAO;
+		this.commandResponseParsersDAO = commandResponseParsersDAO;
+		this.springBootConfiguration = springBootConfiguration;
+	}
 
 	/**
 	 *  <p>Invoke Server Profile execution for a mark59-metrics-api call.

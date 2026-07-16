@@ -24,7 +24,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -45,8 +44,11 @@ import com.mark59.trends.data.eventMapping.dao.EventMappingDAO;
 @Controller
 public class EventMappingController {
 
-	@Autowired
-	EventMappingDAO eventMappingDAO;
+	private final EventMappingDAO eventMappingDAO;
+
+	public EventMappingController(EventMappingDAO eventMappingDAO) {
+		this.eventMappingDAO = eventMappingDAO;
+	}
 
 	/**
 	 * Note that for the selectors 'Metric Source' and 'Tool' simply wipe each other out (i.e. the are not additive )

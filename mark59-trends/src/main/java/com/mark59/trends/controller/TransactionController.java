@@ -23,7 +23,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -51,15 +50,17 @@ import com.mark59.trends.form.TransactionRenameForm;
 @Controller
 public class TransactionController {
 
-	@Autowired
-	TransactionDAO transactionDAO;
-	@Autowired
-	RunDAO runDAO;
-	@Autowired
-	SlaDAO slaDAO;
-	@Autowired
-	MetricSlaDAO metricSlaDAO;
+	private final TransactionDAO transactionDAO;
+	private final RunDAO runDAO;
+	private final SlaDAO slaDAO;
+	private final MetricSlaDAO metricSlaDAO;
 
+	public TransactionController(TransactionDAO transactionDAO, RunDAO runDAO, SlaDAO slaDAO, MetricSlaDAO metricSlaDAO) {
+		this.transactionDAO = transactionDAO;
+		this.runDAO = runDAO;
+		this.slaDAO = slaDAO;
+		this.metricSlaDAO = metricSlaDAO;
+	}
 
 	@GetMapping("/transactionList")
 	public ModelAndView getTransactionList(@RequestParam(required=false) String reqApp) {

@@ -21,7 +21,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -43,8 +42,11 @@ import com.mark59.metrics.data.commandResponseParsers.dao.CommandResponseParsers
 @Controller
 public class CommandResponseParserController {
 
-	@Autowired
-	CommandResponseParsersDAO commandResponseParsersDAO;
+	private final CommandResponseParsersDAO commandResponseParsersDAO;
+
+	public CommandResponseParserController(CommandResponseParsersDAO commandResponseParsersDAO) {
+		this.commandResponseParsersDAO = commandResponseParsersDAO;
+	}
 
 	@GetMapping("/registerCommandResponseParser")
 	public ModelAndView registerCommandResponseParser(@RequestParam(required=false) String reqMetricTxnType, @RequestParam(required=false) String reqErr,

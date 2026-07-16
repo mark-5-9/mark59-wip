@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,9 +29,11 @@ import com.opencsv.CSVParser;
 @Controller
 public class UploadPoliciesFileController {
 
+	private final PoliciesDAO policiesDAO;
 
-	@Autowired
-	PoliciesDAO policiesDAO;
+	public UploadPoliciesFileController(PoliciesDAO policiesDAO) {
+		this.policiesDAO = policiesDAO;
+	}
 
 	public static final int MAX_ERRORS_REPORTED = 50;
 	public static final int NUM_OF_EXPECTED_COLS = 6;

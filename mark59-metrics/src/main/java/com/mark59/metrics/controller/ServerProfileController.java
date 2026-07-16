@@ -39,7 +39,6 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -80,27 +79,26 @@ import com.mark59.metrics.utils.MetricsConstants.CommandExecutorDatatypes;
 @Controller
 public class ServerProfileController {
 
-	@Autowired
-	ServerProfilesDAO serverProfilesDAO;
+	private final ServerProfilesDAO serverProfilesDAO;
+	private final ServerCommandLinksDAO serverCommandLinksDAO;
+	private final CommandsDAO commandsDAO;
+	private final CommandParserLinksDAO commandParserLinksDAO;
+	private final CommandResponseParsersDAO commandResponseParsersDAO;
+	private final BaseDAO baseDAO;
+	private final PropertiesConfiguration springBootConfiguration;
 
-	@Autowired
-	ServerCommandLinksDAO  serverCommandLinksDAO;
-
-	@Autowired
-	CommandsDAO commandsDAO;
-
-	@Autowired
-	CommandParserLinksDAO commandParserLinksDAO;
-
-	@Autowired
-	CommandResponseParsersDAO commandResponseParsersDAO;
-
-	@Autowired
-	BaseDAO baseDAO;
-
-	@Autowired
-	PropertiesConfiguration springBootConfiguration;
-
+	public ServerProfileController(ServerProfilesDAO serverProfilesDAO, ServerCommandLinksDAO serverCommandLinksDAO,
+			CommandsDAO commandsDAO, CommandParserLinksDAO commandParserLinksDAO,
+			CommandResponseParsersDAO commandResponseParsersDAO, BaseDAO baseDAO,
+			PropertiesConfiguration springBootConfiguration) {
+		this.serverProfilesDAO = serverProfilesDAO;
+		this.serverCommandLinksDAO = serverCommandLinksDAO;
+		this.commandsDAO = commandsDAO;
+		this.commandParserLinksDAO = commandParserLinksDAO;
+		this.commandResponseParsersDAO = commandResponseParsersDAO;
+		this.baseDAO = baseDAO;
+		this.springBootConfiguration = springBootConfiguration;
+	}
 
 	@GetMapping("/downloadServerProfiles")
 	public ResponseEntity<ByteArrayResource> downloadServerProfiles() {

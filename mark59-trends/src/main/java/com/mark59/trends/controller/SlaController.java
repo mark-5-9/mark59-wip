@@ -24,7 +24,6 @@ import java.util.Map;
 import java.util.Objects;
 
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -52,12 +51,13 @@ import com.mark59.trends.form.CopyApplicationForm;
 @Controller
 public class SlaController {
 
-	@Autowired
-	SlaDAO slaDao;
+	private final SlaDAO slaDao;
+	private final RunDAO runDAO;
 
-	@Autowired
-	RunDAO runDAO;
-
+	public SlaController(SlaDAO slaDao, RunDAO runDAO) {
+		this.slaDao = slaDao;
+		this.runDAO = runDAO;
+	}
 
 	@GetMapping("/slaList")
 	public ModelAndView getSlaList(@RequestParam(required=false) String reqApp) {

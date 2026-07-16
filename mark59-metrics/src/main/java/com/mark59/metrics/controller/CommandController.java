@@ -25,7 +25,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -55,16 +54,16 @@ import com.mark59.metrics.utils.MetricsUtils;
 @Controller
 public class CommandController {
 
-	@Autowired
-	CommandsDAO commandsDAO;
+	private final CommandsDAO commandsDAO;
+	private final CommandParserLinksDAO commandParserLinksDAO;
+	private final CommandResponseParsersDAO commandResponseParsersDAO;
 
-	@Autowired
-	CommandParserLinksDAO commandParserLinksDAO;
-
-
-	@Autowired
-	CommandResponseParsersDAO commandResponseParsersDAO;
-
+	public CommandController(CommandsDAO commandsDAO, CommandParserLinksDAO commandParserLinksDAO,
+			CommandResponseParsersDAO commandResponseParsersDAO) {
+		this.commandsDAO = commandsDAO;
+		this.commandParserLinksDAO = commandParserLinksDAO;
+		this.commandResponseParsersDAO = commandResponseParsersDAO;
+	}
 
 	@GetMapping("/registerCommand")
 	public ModelAndView registerCommand(@RequestParam(required=false) String reqExecutor, @RequestParam(required=false) String reqErr,

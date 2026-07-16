@@ -20,7 +20,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -64,23 +63,27 @@ import jakarta.servlet.http.HttpServletRequest;
 @Controller
 public class TrendingController {
 
-	@Autowired
-	ApplicationDAO applicationDAO;
-	@Autowired
-	RunDAO runDAO;
-	@Autowired
-	TransactionDAO transactionDAO;
-	@Autowired
-	SlaDAO slaDAO;
-	@Autowired
-	MetricSlaDAO metricSlaDAO;
-	@Autowired
-	GraphMappingDAO graphMappingDAO;
-	@Autowired
-	VisGraphicDataProductionInterface visGraphicDataProduction;
-	@Autowired
-	SlaIconColourCodesInterface slaIconColourCodes;
+	private final ApplicationDAO applicationDAO;
+	private final RunDAO runDAO;
+	private final TransactionDAO transactionDAO;
+	private final SlaDAO slaDAO;
+	private final MetricSlaDAO metricSlaDAO;
+	private final GraphMappingDAO graphMappingDAO;
+	private final VisGraphicDataProductionInterface visGraphicDataProduction;
+	private final SlaIconColourCodesInterface slaIconColourCodes;
 
+	public TrendingController(ApplicationDAO applicationDAO, RunDAO runDAO, TransactionDAO transactionDAO,
+			SlaDAO slaDAO, MetricSlaDAO metricSlaDAO, GraphMappingDAO graphMappingDAO,
+			VisGraphicDataProductionInterface visGraphicDataProduction, SlaIconColourCodesInterface slaIconColourCodes) {
+		this.applicationDAO = applicationDAO;
+		this.runDAO = runDAO;
+		this.transactionDAO = transactionDAO;
+		this.slaDAO = slaDAO;
+		this.metricSlaDAO = metricSlaDAO;
+		this.graphMappingDAO = graphMappingDAO;
+		this.visGraphicDataProduction = visGraphicDataProduction;
+		this.slaIconColourCodes = slaIconColourCodes;
+	}
 
 	@GetMapping("/trending")
 	public String loadTrendingPage( @RequestParam(required=false) String reqApp,

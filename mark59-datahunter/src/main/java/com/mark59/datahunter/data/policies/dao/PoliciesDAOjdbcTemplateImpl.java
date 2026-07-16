@@ -28,7 +28,6 @@ import java.util.stream.Stream;
 import javax.sql.DataSource;
 
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -53,11 +52,13 @@ import com.mark59.datahunter.pojo.ValidReuseIxPojo;
 public class PoliciesDAOjdbcTemplateImpl implements PoliciesDAO
 {
 
-	@Autowired
-	private DataSource dataSource;
+	private final DataSource dataSource;
+	private final String currentDatabaseProfile;
 
-    @Autowired
-    private String currentDatabaseProfile;
+	public PoliciesDAOjdbcTemplateImpl(DataSource dataSource, String currentDatabaseProfile) {
+		this.dataSource = dataSource;
+		this.currentDatabaseProfile = currentDatabaseProfile;
+	}
 
 
 	@Override

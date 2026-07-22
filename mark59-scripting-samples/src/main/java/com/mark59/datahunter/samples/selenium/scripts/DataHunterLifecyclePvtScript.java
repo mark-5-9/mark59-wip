@@ -23,7 +23,6 @@ import java.util.Properties;
 import java.util.concurrent.ThreadLocalRandom;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.Strings;
 import org.apache.jmeter.protocol.java.sampler.JavaSamplerContext;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.logging.log4j.Level;
@@ -373,9 +372,10 @@ public class DataHunterLifecyclePvtScript  extends SeleniumAbstractJavaSamplerCl
 	private void startCdpListeners(JmeterFunctionsForSeleniumScripts jm, WebDriver driver) {
 		DevToolsDSL devToolsDsl = new DevToolsDSL();
 		devToolsDsl.createDevToolsSession(driver);
-
+		
+    	// for JMeter 6:  StringUtils.contains -> Strings.CS.contains
 		devToolsDsl.addListenerRequestWillBeSent(jm
-				, req -> req.getDocumentURL().contains("_action") || Strings.CS.contains(jm.getMostRecentTransactionStarted(), "loadInitialPage"));
+				, req -> req.getDocumentURL().contains("_action") || StringUtils.contains(jm.getMostRecentTransactionStarted(), "loadInitialPage"));
 
 		devToolsDsl.addListenerResponseReceived(jm
 				, res -> "Document".equalsIgnoreCase(res.getType().toJson()) && jm.getMostRecentTransactionStarted() != null

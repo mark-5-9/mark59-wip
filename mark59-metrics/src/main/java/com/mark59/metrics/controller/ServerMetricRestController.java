@@ -22,7 +22,6 @@ import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.Strings;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.http.HttpStatus;
@@ -173,14 +172,17 @@ public class ServerMetricRestController {
 	}
 
 
+	@SuppressWarnings("deprecation")
 	private boolean authenticateApi(String authHeader, String authRequired, String apiUser, String apiPass) {
 		if (!String.valueOf(true).equalsIgnoreCase(authRequired)){
 			return true;
 		}
 		try {
-			String decoded = new String(Base64.getDecoder().decode(Strings.CI.removeStart(authHeader,"Basic ")),StandardCharsets.UTF_8);
+			// warning resolved in JMeter 6:  StringUtils.removeStartIgnoreCase -> Strings.CI.removeStart
+			String decoded = new String(Base64.getDecoder().decode(StringUtils.removeStartIgnoreCase(authHeader,"Basic ")),StandardCharsets.UTF_8);
 			String[] credsAry = StringUtils.split(decoded, ":", 2);
-			if (Strings.CS.equals(apiUser, credsAry[0]) && Strings.CS.equals(apiPass, credsAry[1])) {
+			// warning resolved in JMeter 6:  StringUtils.equals -> Strings.CS.equals
+			if (StringUtils.equals(apiUser, credsAry[0]) && StringUtils.equals(apiPass, credsAry[1])) {
 				return true;
 			} else {
 				LOG.error("Invalid credentials for api auth. Header token : " + authHeader );

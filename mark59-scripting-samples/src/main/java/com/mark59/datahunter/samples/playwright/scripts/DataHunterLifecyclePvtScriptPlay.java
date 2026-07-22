@@ -24,7 +24,6 @@ import java.util.Properties;
 import java.util.concurrent.ThreadLocalRandom;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.Strings;
 import org.apache.jmeter.protocol.java.sampler.JavaSamplerContext;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.logging.log4j.Level;
@@ -327,7 +326,8 @@ public class DataHunterLifecyclePvtScriptPlay  extends PlaywrightAbstractJavaSam
         // page.onRequest(req -> { System.out.println( "ON_REQ Url: "+req.url()+", Type: "+req.resourceType()+", Method: "+req.method());});
 
         page.onRequestFinished(res -> {
-			if ((res.url().contains("_action") || Strings.CS.contains(jm.getMostRecentTransactionStarted(), "loadInitialPage"))
+        	// for JMeter 6:  StringUtils.contains -> Strings.CS.contains
+			if ((res.url().contains("_action") || StringUtils.contains(jm.getMostRecentTransactionStarted(), "loadInitialPage"))
 					&& "Document".equalsIgnoreCase(res.resourceType())
 					&& jm.getMostRecentTransactionStarted() != null){
         		//System.out.println( "Req Finished Url: "+res.url()+" , Timing: " + res.timing().startTime);
